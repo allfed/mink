@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/grass/!svn/ver/32527/grass/branches/develbranch_6/raster/r.in.arc
+END
+gethead.c
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/grass/!svn/ver/32527/grass/branches/develbranch_6/raster/r.in.arc/gethead.c
+END
+local_proto.h
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/grass/!svn/ver/32527/grass/branches/develbranch_6/raster/r.in.arc/local_proto.h
+END
+main.c
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/grass/!svn/ver/32527/grass/branches/develbranch_6/raster/r.in.arc/main.c
+END
+description.html
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/grass/!svn/ver/31661/grass/branches/develbranch_6/raster/r.in.arc/description.html
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/grass/!svn/ver/31141/grass/branches/develbranch_6/raster/r.in.arc/Makefile
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/grass/!svn/ver/31141/grass/branches/develbranch_6/raster/r.in.arc/README
+END
