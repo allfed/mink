@@ -1,0 +1,8 @@
+Bootstrap: docker
+From: centos:7
+
+%post
+    yum -y update
+
+    # more setup commands
+    yum install -y git
