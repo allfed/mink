@@ -1,0 +1,12 @@
+We need to get grass and gdal working. Had to clone these:
+
+git submodule add https://github.com/OSGeo/GDAL.git
+git submodule add https://github.com/OSGeo/grass.git
+
+in the dependencies.
+
+Mink includes direct modifications to the grass repository and thus the source code is needed to get grass to work. Therefore I've added a git submodule to include the grass pull when git is pulled.
+
+somewhat useful: https://git.wiki.kernel.org/index.php/GitSubmoduleTutorial
+
+more useful: https://www.w3docs.com/snippets/git/how-to-add-a-submodule-in-git.html

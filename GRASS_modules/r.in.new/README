@@ -1,3 +1,6 @@
+This addition to the GRASS including some custom functionality was originally written 04 feb 2011 by Ricky.
+
+====
 
 Module to import ARC/INFO ascii raster files 
 

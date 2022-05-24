@@ -1,0 +1,6 @@
+[submodule "GRASS_program/grass"]
+	path = GRASS_program/grass
+	url = https://github.com/OSGeo/grass.git
+[submodule "GRASS_dependencies/GDAL"]
+	path = GRASS_dependencies/GDAL
+	url = https://github.com/OSGeo/GDAL.git
