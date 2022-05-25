@@ -1,5 +1,5 @@
-FROM grass_nopdal
-ARG GRASS_PREFIX=/usr/local/grass83
+FROM mundialis/grass-py3-pdal:8.0.2-ubuntu
+ARG GRASS_PREFIX=/usr/local/grass
 
 USER root
 

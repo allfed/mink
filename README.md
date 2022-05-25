@@ -7,10 +7,16 @@ This is a fully open source global gridded crop model using DSSAT. The top layer
 ## Install
 
 - Clone this repository
+- Build the mink container with `docker build -t mink .`.
+- Optionally, create the singularity container, `mink.sif`, by running `build_singularity.sh`
+
+### GRASS docker build install
+
+For reference.
+
 - Run `git submodule update` to clone the `grass` repository into the `GRASS_program` folder.
   - Note: Currently need change line 107 in `GRASS_program/grass/Dockerfile` to `--without-pdal \` to avoid dependency issue; see https://github.com/OSGeo/grass/issues/2400
 - Build the GRASS and mink docker containers by running `install.sh`.
-- Optionally, create the singularity container, `mink.sif`, by running `build_singularity.sh`
 
 ## Running
 
@@ -34,7 +40,7 @@ This will be passed as an environement variable to the modules files at install 
 
 ### Debugging docker build
 
-Start a root session in the docker container wth `docker run -it --rm --volume $(pwd):/data --env HOME=/data/ mink /bin/bash`
+Start a root session in the docker container wth `docker run -it --rm --volume $(pwd):/data --env --user=$(id -u):$(id -g) HOME=/data/ mink /bin/bash`
 
 
 ## Reference
