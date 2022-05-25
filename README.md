@@ -1,14 +1,58 @@
+# ALLFED MINK
+
+> A fully open-source global gridded crop model using DSSAT
+
 This is a fully open source global gridded crop model using DSSAT. The top layer (mink) has been in development for over 10 years at IFPRI/CGIAR. There are several useful scripts enabling full control over the crop model process and modular runs, as well as several useful analysis and visualization tools. At ALLFED, we've taken that setup and put it online for anyone to use much more easily than if it were sitting on IFPRI's offline cluster. This crop model was built with the intention of understand the food production system and how it could be improved for the purposes of food security, and the development of tools to make the results more resilient.
 
-# Setup summary
+## Install
+
+- Clone this repository
+- Run `git submodule update` to clone the `grass` repository into the `GRASS_program` folder.
+  - Note: Currently need change line 107 in `GRASS_program/grass/Dockerfile` to `--without-pdal \` to avoid dependency issue; see https://github.com/OSGeo/grass/issues/2400
+- Build the GRASS and mink docker containers by running `install.sh`.
+- Optionally, create the singularity container, `mink.sif`, by running `build_singularity.sh`
+
+## Running
+
+### Running with Docker
+
+TODO
+
+### Running with Singularity
+
+TODO
+
+
+## Development
+
+### Upstream development of GRASS
+
+Updates to the release verison of GRASS will result in it being installed in a different directory.
+After building the GRASS docker container, the location of the install directory can be found by running `docker run -t grassgis ls /usr/local` and locating `grassXX` where `XX` is the version suffix, eg. `grass83`.
+This directory needs to be updated in the `Dockerfile` by setting `ARG GRASS_PREFIX=/usr/local/grassXX`.
+This will be passed as an environement variable to the modules files at install time.
+
+### Debugging docker build
+
+Start a root session in the docker container wth `docker run -it --rm --volume $(pwd):/data --env HOME=/data/ mink /bin/bash`
+
+
+## Reference
+
+- [Singularity user guide](https://sylabs.io/guides/3.5/user-guide/index.html)
+
+===================
+
+## Setup summary
 NOTE: see "grass git submodule setup", you probably don't have the grass code pulled in the repo yet.
 
 The basic steps to run your own crop model with your climate data of interest are:
-    Get access to a cluster that can run singularity and batch processing, preferably SLURM 
-        If you don't have access, you could use an AWS server, although launching all the nodes can get expensive quickly.
-    Install singularity
-    Clone this repo
-    Gather together the climate data, examples of the required format can be found in the []!!! document.
+
+- Get access to a cluster that can run singularity and batch processing, preferably SLURM 
+- If you don't have access, you could use an AWS server, although launching all the nodes can get expensive quickly.
+- Install singularity
+- Clone this repo
+- Gather together the climate data, examples of the required format can be found in the []!!! document.
 
 # Setup in more detail:
 ## Download DSSAT modules
@@ -80,3 +124,4 @@ Run the script [? not sure yet which one to run].
 
 Download and view the results back on your local machine.
     [more details go here...]
+

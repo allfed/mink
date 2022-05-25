@@ -1,8 +1,4 @@
-#MODULE_TOPDIR = /PROJECTS/GRASS_program/grass-6.4.svn_src_snapshot_2011_02_12
-
-MODULE_TOPDIR =  /mnt/GRASS_program/grass
-
-#MODULE_TOPDIR = ../..
+MODULE_TOPDIR =  ${GRASS_PREFIX}
 
 PGM = r.in.new
 
