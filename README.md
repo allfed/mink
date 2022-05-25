@@ -33,6 +33,8 @@ TODO
 
 ### Upstream development of GRASS
 
+The following isn't relevant if using the grass dockerhub image to build mink, it only matters if building from the grass repo Dockerfile.
+
 Updates to the release verison of GRASS will result in it being installed in a different directory.
 After building the GRASS docker container, the location of the install directory can be found by running `docker run -t grassgis ls /usr/local` and locating `grassXX` where `XX` is the version suffix, eg. `grass83`.
 This directory needs to be updated in the `Dockerfile` by setting `ARG GRASS_PREFIX=/usr/local/grassXX`.
