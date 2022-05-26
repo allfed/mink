@@ -30,7 +30,9 @@ To build the MINK singularity container:
 
 ## Running
 
-To run MINK use `singularity exec -B ~/.Xauthority mink.sif grass
+To run MINK use `singularity exec -B ~/.Xauthority mink.sif grass` and hit ENTER.
+
+TODO: add more details and a toy dataset?
 
 
 ## Troubleshooting
