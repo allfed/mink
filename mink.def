@@ -2,14 +2,19 @@ Bootstrap: docker
 From: centos:7
 
 %setup
-   mkdir ${SINGULARITY_ROOTFS}/tmp/grass_modules
+   mkdir -p ${SINGULARITY_ROOTFS}/build/grass_modules
+   mkdir -p ${SINGULARITY_ROOTFS}/build/grass_program
    
 %files
-    ./GRASS_program/grass-6 /mnt/grass
-    ./GRASS_modules /tmp/grass_modules
+    ./GRASS_modules/* /build/grass_modules
+    ./GRASS_program/* /build/grass_program
 
 %environment
     export GRASS_PREFIX=/usr/local/grass-6.5.svn/
+    export LANG=C.UTF-8
+    export LC_ALL=C.UTF-8
+    export SHELL=/bin/bash
+    export LD_LIBRARY_PATH="/usr/local/lib"
     
 %post
     mkdir /mnt/data
@@ -22,20 +27,14 @@ From: centos:7
         mesa-libGLU-devel libXmu-devel libX11-devel tcl-devel tk-devel geos \
 	fftw-devel libtiff-devel lesstif-devel python-devel numpy wxPython wxGTK-devel \
 	gcc gcc-c++ bison flex ncurses-devel proj-epsg proj-nad xml2 subversion \
-	geos-devel blas-devel lapack-devel
+	geos-devel blas-devel lapack-devel xorg-x11-xauth
 	     
     # add okay repo, install gpg key and then ffmpeg
     rpm -ivh http://repo.okay.com.mx/centos/7/x86_64/release/okay-release-1-5.el7.noarch.rpm \
     && yum install -y ffmpeg-devel
 
-    # # build GDAL
-    # cd /tmp
-    # git clone --depth 1 --branch v2.4.4 https://github.com/OSGeo/gdal.git gdal_buil
-    # cd gdal_build/gdal && ./configure && make -j$(nproc) && make -j$(nproc) install
-
     # build GRASS
-    mkdir /tmp/grass_build && cd /tmp/grass_build
-    svn co https://svn.osgeo.org/grass/grass/branches/develbranch_6/ .
+    cd /build/grass_program
     ./configure \
         --with-cxx \
 	--with-gdal=/usr/bin/gdal-config \
@@ -48,16 +47,37 @@ From: centos:7
 	--with-freetype --with-freetype-includes=/usr/include/freetype2 \
 	--enable-largefile \
 	--without-odbc \
-	--with-fftw
-	--with-blas
-	--with-lapack
-	
+	--with-fftw \
+	--with-blas \
+	--with-lapack 
     make -j$(nproc) && make -j$(nproc) install
 
-    # build custom modules
-    
+    # Create generic GRASS GIS binary name regardless of version number
+    ln -sf `find /usr/local/bin -name "grass??" | sort | tail -n 1` /usr/local/bin/grass
 
-    # clean up
-    # rm -rf /tmp/gdal_build
-    # rm -rf /tmp/grass_build
+
+    # build custom modules
+    cd /build/grass_modules
+    # enter each module directory and make
+    export GRASS_PREFIX=/usr/local/grass-6.5.svn/
+    for m in {r.in.new,r.intersection,r.out.new,r.pixelarea}; do
+        cd $m; make; cd ../
+    done
+    # cd r.in.new
+    # make
+    # cd ../r.intersection
+    # make
+    # cd ../r.out.new
+    # make
+    # cd ../r.pixelarea
+    # make
+	
+    # # clean up
+    cd 
+    rm -rf /build
+    yum clean all
+
+%runscript
+    grass --version
+
     

@@ -1,63 +1,15 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>GRASS GIS manual: r.out.new</title>
+<title>GRASS GIS Manual: r.out.new</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
 <body bgcolor="white">
-
 <img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
-
 <h2>NAME</h2>
-<em><b>r.out.new</b></em>  - Converts a raster map layer into a cute data table
-dropping all the missing values. The header info is
-stored in basename_header.txt, the data in basename_data.txt,
-and the row/col/lat/long information in basename_geog.txt
+<em><b>r.out.new</b></em>
 
-The header file will be the same as the ARC ASCII
-format. The data are strung out like -1 format from r.out.arc,
-just with nothing written down for missing values. The geography/location
-file has a row-to-row correspondence with the data file.
-Its columns are (in order) row, column, latitude, longitude
-(more precisely, northing and easting of the center of the grid cell).
-<h2>KEYWORDS</h2>
-raster
-<h2>SYNOPSIS</h2>
-<b>r.out.new</b><br>
-<b>r.out.new help</b><br>
-<b>r.out.new</b> [-<b>lcn</b>] <b>input</b>=<em>name</em>[,<i>name</i>,...] <b>output</b>=<em>string</em>  [<b>dp</b>=<em>integer</em>]   [--<b>verbose</b>]  [--<b>quiet</b>] 
-
-<h3>Flags:</h3>
-<DL>
-<DT><b>-l</b></DT>
-<DD>report north/east along with row/col</DD>
-
-<DT><b>-c</b></DT>
-<DD>use commas for delimiter instead of tab (not easily imported yet)</DD>
-
-<DT><b>-n</b></DT>
-<DD>make the first column a counter for number of valid pixels so far</DD>
-
-<DT><b>--verbose</b></DT>
-<DD>Verbose module output</DD>
-<DT><b>--quiet</b></DT>
-<DD>Quiet module output</DD>
-</DL>
-
-<h3>Parameters:</h3>
-<DL>
-<DT><b>input</b>=<em>name[,<i>name</i>,...]</em></DT>
-<DD>Names of raster maps to be patched together</DD>
-
-<DT><b>output</b>=<em>string</em></DT>
-<DD>Base name of where to write output</DD>
-
-<DT><b>dp</b>=<em>integer</em></DT>
-<DD>Number of decimal places</DD>
-<DD>Default: <em>8</em></DD>
-
-</DL>
 <h2>DESCRIPTION</h2>
 
 
@@ -119,6 +71,6 @@ U.S.Army Construction Engineering Research Laboratory
 <p><i>Last changed: $Date: 2008-05-16 15:09:06 -0400 (Fri, 16 May 2008) $</i>
 <HR>
 <P><a href="index.html">Main index</a> - <a href="raster.html">raster index</a> - <a href="full_index.html">Full index</a></P>
-<P>&copy; 2003-2010 <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
+<P>&copy; 2003-2014 <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
 </body>
 </html>

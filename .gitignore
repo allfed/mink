@@ -96,3 +96,9 @@ target/
 # Singularity builds
 *sandbox*
 *.sif
+
+# GRASS source code
+GRASS_program/
+
+# object file directories
+GRASS_modles/*/OBJ*/
