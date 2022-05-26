@@ -1,0 +1,63 @@
+Bootstrap: docker
+From: centos:7
+
+%setup
+   mkdir ${SINGULARITY_ROOTFS}/tmp/grass_modules
+   
+%files
+    ./GRASS_program/grass-6 /mnt/grass
+    ./GRASS_modules /tmp/grass_modules
+
+%environment
+    export GRASS_PREFIX=/usr/local/grass-6.5.svn/
+    
+%post
+    mkdir /mnt/data
+
+    # install GRASS dependencies
+    yum -y update \
+    && yum groupinstall -y "Development Tools" \
+    && yum install -y epel-release
+    yum install -y proj-devel gdal-devel sqlite-devel mesa-libGL-devel \
+        mesa-libGLU-devel libXmu-devel libX11-devel tcl-devel tk-devel geos \
+	fftw-devel libtiff-devel lesstif-devel python-devel numpy wxPython wxGTK-devel \
+	gcc gcc-c++ bison flex ncurses-devel proj-epsg proj-nad xml2 subversion \
+	geos-devel blas-devel lapack-devel
+	     
+    # add okay repo, install gpg key and then ffmpeg
+    rpm -ivh http://repo.okay.com.mx/centos/7/x86_64/release/okay-release-1-5.el7.noarch.rpm \
+    && yum install -y ffmpeg-devel
+
+    # # build GDAL
+    # cd /tmp
+    # git clone --depth 1 --branch v2.4.4 https://github.com/OSGeo/gdal.git gdal_buil
+    # cd gdal_build/gdal && ./configure && make -j$(nproc) && make -j$(nproc) install
+
+    # build GRASS
+    mkdir /tmp/grass_build && cd /tmp/grass_build
+    svn co https://svn.osgeo.org/grass/grass/branches/develbranch_6/ .
+    ./configure \
+        --with-cxx \
+	--with-gdal=/usr/bin/gdal-config \
+	--with-proj --with-proj-share=/usr/share/proj \
+	--with-sqlite \
+	--with-nls \
+	--with-geos \
+	--with-wxwidgets=/usr/bin/wx-config \
+	--with-python=/usr/bin/python-config \
+	--with-freetype --with-freetype-includes=/usr/include/freetype2 \
+	--enable-largefile \
+	--without-odbc \
+	--with-fftw
+	--with-blas
+	--with-lapack
+	
+    make -j$(nproc) && make -j$(nproc) install
+
+    # build custom modules
+    
+
+    # clean up
+    # rm -rf /tmp/gdal_build
+    # rm -rf /tmp/grass_build
+    

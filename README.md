@@ -44,11 +44,19 @@ This will be passed as an environement variable to the modules files at install 
 
 Start a root session in the docker container wth `docker run -it --rm --volume $(pwd):/data --env --user=$(id -u):$(id -g) HOME=/data/ mink /bin/bash`
 
+### Debugging singularty build
+
+Running as a sandox:
+
+- Create sandox directory: `mkdir mink_sandbox`
+- Build into that directory: `sudo singularity build --sandbox mink_sandbox mink.def`
+- Run the sandbox as a writable image:  `sudo singularity shell --writable --bind $PWD:/mnt/data mink_sandbox`
+
 
 ## Reference
 
 - [Singularity user guide](https://sylabs.io/guides/3.5/user-guide/index.html)
-
+- [GRASS GIS 6 on Fedora](https://grasswiki.osgeo.org/wiki/Compile_and_Install#GRASS_GIS_6_on_Fedora) (Used as reference for centos 7 singularity container.
 ===================
 
 ## Setup summary
