@@ -1,82 +1,65 @@
-This is a fully open source global gridded crop model using DSSAT. The top layer (mink) has been in development for over 10 years at IFPRI/CGIAR. There are several useful scripts enabling full control over the crop model process and modular runs, as well as several useful analysis and visualization tools. At ALLFED, we've taken that setup and put it online for anyone to use much more easily than if it were sitting on IFPRI's offline cluster. This crop model was built with the intention of understand the food production system and how it could be improved for the purposes of food security, and the development of tools to make the results more resilient.
+# MINK
 
-# Setup summary
-NOTE: see "grass git submodule setup", you probably don't have the grass code pulled in the repo yet.
+> A fully open-source global gridded crop model using DSSAT.
 
-The basic steps to run your own crop model with your climate data of interest are:
-    Get access to a cluster that can run singularity and batch processing, preferably SLURM 
-        If you don't have access, you could use an AWS server, although launching all the nodes can get expensive quickly.
-    Install singularity
-    Clone this repo
-    Gather together the climate data, examples of the required format can be found in the []!!! document.
+The top layer (mink) has been in development for over 10 years at IFPRI/CGIAR. There are several useful scripts enabling full control over the crop model process and modular runs, as well as several useful analysis and visualization tools. At ALLFED, we've taken that setup and put it online for anyone to use much more easily than if it were sitting on IFPRI's offline cluster. This crop model was built with the intention of understand the food production system and how it could be improved for the purposes of food security, and the development of tools to make the results more resilient.
 
-# Setup in more detail:
-## Download DSSAT modules
-     [document this]
-## Download GRASS modules
-### F git submodule setup
-### git submodule setup
-The GRASS_Program/grass repo and GRASS_dependencies/GDAL repos are git "submodules".
+## Quick Start
 
-to get GRASS source code submodules to your local, you need to run:
+You can access the pre-built Singularity container here ...
 
-$ git submodule init
+TODO: add details of where to get the complied container, if it's made available publically
 
-to get the actual module, run:
+... otherwise, you can build the container yourself using the documentation below.
 
-$ git submodule update
+## Dependencies
 
-now if you run:
+MINK leverages Singularity to create a containerised environment from which to run the model.
+Install singularity by following the [Singularity Installation instructions](https://sylabs.io/guides/3.0/user-guide/installation.html).
 
-$ git config -l
+Dependencies for the build are fully handled in the Singularity container and can be viewed in ~mink.def~. 
+For reference, however, MINK depends on the [GRASS v6.5 development branch](https://svn.osgeo.org/grass/grass/branches/develbranch_6/).
 
-you should see the grass and GDAL programs there (somewhere in there, something like:
-"submodule.GRASS_program/grass.url=https://github.com/OSGeo/grass.git
-submodule.GRASS_program/grass.active=true
-submodule.GRASS_dependencies/GDAL.url=https://github.com/OSGeo/GDAL.git
-submodule.GRASS_dependencies/GDAL.active=true").
+## Build
 
-requirements (for grass):
-    gdal3.0.4
-    proj7.2.0
-    [document this]
+To build the MINK singularity container:
 
-## Install and build Singularity
+- Clone this repository.
+- Build the singularity container by running `build_singularity.sh`. This will build the `mink.sif` singularity container.
+- TODO: details of the DSSAT modules if required
 
-Singularity allows for everyone to be running the same version of linux, prevents versioning issues and means you can use "sudo" even on your shared HPC.
+## Running
 
-Useful resource: https://sdsc.edu/education_and_training/tutorials1/singularity_old.html
+To run MINK use `singularity exec -B ~/.Xauthority mink.sif grass` and hit ENTER.
 
-The singularity install instructions are here:
-https://sylabs.io/guides/3.0/user-guide/installation.html
+TODO: add more details and a toy dataset?
 
-Build singularity image (pulls the default Docker centos7 repository):
 
-#export SINGULARITY_BINDPATH="/data/$USER,/fdb,/lscratch"
-#--bind $PWD:/mnt
-#https://hpc.nih.gov/apps/singularity.html
-$ sudo singularity build --sandbox centos7_img.sif centos7_def.def
+## Troubleshooting
 
-Note: above command has several important installation steps required for crop modelling. You may need to alter the commands in the %post and %run sections of the definition if they are not working for you. If they aren't working, delete every line after "yum -y" and run 
+### ~/.Xauthority issues
 
-$ sudo singularity shell --writable --bind $PWD:/mnt centos7_img.sif
+If this file doesn't exist, the dedicated location may be stored in the `$XAUTHORITY` variable and `-B $XAUTHORITY` must be used instead ([reference](https://pawseysc.github.io/singularity-containers/42-x11-gnuplot/index.html)).
 
-if that worked and you're in the singularity directory, run
 
-$ cd /mnt
+## Development
 
+### Debugging singularty build
+
+Running as a sandox:
+
+- Create sandox directory: `mkdir mink_sandbox`
+- Build into that directory: `sudo singularity build --sandbox mink_sandbox mink.def`
+- Run the sandbox as a writable image:  `sudo singularity shell --writable --bind $PWD:/mnt/data mink_sandbox`
 
 This will allow you to interactively try each command to see where the problem arises without having to redo all the commands each container build. However, you need run these "one-by-one" commands in an environment where you have root priviledges
 
-### Further singularity editing
+## Reference
 
-By default, singularity doesn't have access to the files in the directory and needs to be mounted. To play around with this, navigat to the root of the git folder and try the command:
+- [Singularity user guide](https://sylabs.io/guides/3.5/user-guide/index.html)
+- [GRASS GIS 6 on Fedora](https://grasswiki.osgeo.org/wiki/Compile_and_Install#GRASS_GIS_6_on_Fedora) (Used as reference for centos 7 singularity container.)
+- [GRASS v6.5.svn Programmer's Manual](https://grass.osgeo.org/programming6/index.html) 
 
-$ singularity shell --bind $PWD:/mnt centos7_img.sif
+## Contributing
 
-# Running the crop model
-
-Run the script [? not sure yet which one to run].
-
-Download and view the results back on your local machine.
-    [more details go here...]
+TODO: add details as/if required

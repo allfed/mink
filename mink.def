@@ -1,0 +1,83 @@
+Bootstrap: docker
+From: centos:7
+
+%setup
+   mkdir -p ${SINGULARITY_ROOTFS}/build/grass_modules
+   mkdir -p ${SINGULARITY_ROOTFS}/build/grass_program
+   
+%files
+    ./GRASS_modules/* /build/grass_modules
+    ./GRASS_program/* /build/grass_program
+
+%environment
+    export GRASS_PREFIX=/usr/local/grass-6.5.svn/
+    export LANG=C.UTF-8
+    export LC_ALL=C.UTF-8
+    export SHELL=/bin/bash
+    export LD_LIBRARY_PATH="/usr/local/lib"
+    
+%post
+    mkdir /mnt/data
+
+    # install GRASS dependencies
+    yum -y update \
+    && yum groupinstall -y "Development Tools" \
+    && yum install -y epel-release
+    yum install -y proj-devel gdal-devel sqlite-devel mesa-libGL-devel \
+        mesa-libGLU-devel libXmu-devel libX11-devel tcl-devel tk-devel geos \
+	fftw-devel libtiff-devel lesstif-devel python-devel numpy wxPython wxGTK-devel \
+	gcc gcc-c++ bison flex ncurses-devel proj-epsg proj-nad xml2 subversion \
+	geos-devel blas-devel lapack-devel xorg-x11-xauth
+	     
+    # add okay repo, install gpg key and then ffmpeg
+    rpm -ivh http://repo.okay.com.mx/centos/7/x86_64/release/okay-release-1-5.el7.noarch.rpm \
+    && yum install -y ffmpeg-devel
+
+    # build GRASS
+    cd /build/grass_program
+    ./configure \
+        --with-cxx \
+	--with-gdal=/usr/bin/gdal-config \
+	--with-proj --with-proj-share=/usr/share/proj \
+	--with-sqlite \
+	--with-nls \
+	--with-geos \
+	--with-wxwidgets=/usr/bin/wx-config \
+	--with-python=/usr/bin/python-config \
+	--with-freetype --with-freetype-includes=/usr/include/freetype2 \
+	--enable-largefile \
+	--without-odbc \
+	--with-fftw \
+	--with-blas \
+	--with-lapack 
+    make -j$(nproc) && make -j$(nproc) install
+
+    # Create generic GRASS GIS binary name regardless of version number
+    ln -sf `find /usr/local/bin -name "grass??" | sort | tail -n 1` /usr/local/bin/grass
+
+
+    # build custom modules
+    cd /build/grass_modules
+    # enter each module directory and make
+    export GRASS_PREFIX=/usr/local/grass-6.5.svn/
+    for m in {r.in.new,r.intersection,r.out.new,r.pixelarea}; do
+        cd $m; make; cd ../
+    done
+    # cd r.in.new
+    # make
+    # cd ../r.intersection
+    # make
+    # cd ../r.out.new
+    # make
+    # cd ../r.pixelarea
+    # make
+	
+    # # clean up
+    cd 
+    rm -rf /build
+    yum clean all
+
+%runscript
+    grass --version
+
+    
