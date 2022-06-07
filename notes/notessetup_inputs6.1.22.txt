@@ -1,0 +1,1 @@
+/usr/local/grass-6.5.svn is the GISBASE with etc, bin, and lib.

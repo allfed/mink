@@ -1,0 +1,8 @@
+now that we have GRASS setup, with a working singularity container which can run grass with its custom modules, we are trying to import an example of daily weather with grass so that it can be run by DSSAT. We also need to configure DSSAT. However, we do not yet have the scripts required to run DSSAT on the cluster.
+
+The "PERMANENT" mapset is an excessively large high resolution elevation dataset. GRASS needs a PERMANENT mapset inside each of its "locations". so, this is for a basic latitude/longitude world.  Permanent may not actually be needed.
+
+DSSAT_essentials contains information on fertilizer, pesticides, and soil conditions for different crops. This will be needed.
+
+https://grass.osgeo.org/programming6/index.html
+https://grasswiki.osgeo.org/wiki/GRASS_and_Shell

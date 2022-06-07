@@ -1,0 +1,72 @@
+*POTATO CULTIVAR COEFFICIENTS: PTSUB046 MODEL
+
+! COEFF       DEFINITIONS
+! ========    ===========
+! VAR#        Identification code or number for a specific cultivar
+! VAR-NAME    Name of cultivar
+! EXPNO       Number of experiments used to estimate cultivar parameters
+! ECO#        Ecotype code or this cultivar, points to the Ecotype in the
+!             ECO file (currently not used).
+! G2          Leaf area expansion rate after tuber initiation (cm2/m2 d)
+! G3          Potential tuber growth rate (g/m2 d)
+! PD          Index that supresses tuber growth during the period
+!             that immediately follows tuber induction
+! P2          Tuber initiation sensitivity to long photoperiods
+! TC          Upper critical temperature for tuber initiation (C)
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! revisions courtesy of Rubi Raymundo & Ulrich Kleinwecther & Senthold Asseng 
+! email 4feb14 2:27pm EST
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! and with some additional parameters for rubi's super potato model (heat sensitive)
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+! TC+         Offset for upper critical temperature at which progression stops
+! P5          Index that affects senescence in stage 2
+
+!VAR#  VAR-NAME........ EXPNO   ECO#    G2    G3    G4    PD    P2    TC
+
+!@VAR#  VAR-NAME........ EXPNO   ECO#    G2    G3    PD    P2    TC   Tc+    P5
+! russet burbank was originall G2=2000; in table from writeup, G2=1100
+!IB0003 RUSSET BURBANK       . IB0001 1100.  26.0   0.9   0.6  17.0   8.0   0.9
+!RUBY01 Russet Bur [145]     . IB0001  1100  26.0   0.9   0.6  17.0
+
+!IB0013 BINTJIE              . IB0001 1000.  30.0   0.8   0.1  18.8   8.0   0.9!PD was 0.1 PD 0.8...Bintje with 30 (G3) works fine (1000Ideal usar un PD de 0.2 para bintje)
+!RUBY02 Bintje     [150]     . IB0001  1600  25.0   0.8   0.3  19.0
+
+!IB0009 LT-1                 . IB0001 2000.  25.0   0.9   0.8  17.0   8.0   0.9! TC 21
+!RUBY03 LT1        [115]     . IB0001  2000  25.0   0.9   0.8  21.0
+!IB0009 LT-1                 . IB0001 2000.  25.0   0.9   0.8  17.0   8.0   0.9! TC 21
+
+!IP0014 K BAHAR              . IB0001 2000.  21.0  0.9   0.8  23.0   8.0   0.9
+!IB0024 KUFRI BAHAR          . IB0001 2000.  21.0  0.9   0.8  23.0   8.0   0.9
+!RUBY04 Kufri Bahar[113]     . IB0001  2000  21.0   0.9   0.8  23.0
+
+!RUBY05 Yungay     [118]     . IB0001  2000  23.0   0.2   0.8  18.0
+
+!IB0008 DESIREE              . IB0001 2000.  25.0   0.9   0.6  16.0   8.0   0.9
+!RUBY06 Desiree    [ 90]     . IB0001  2000  25.0   0.9   0.6  17.0
+
+@VAR#  VAR-NAME........ EXPNO   ECO#    G2    G3    PD    P2    TC   Tc+    P5
+RUBY01 RUSSET BURBANK       . IB0001  1100  26.0   0.9   0.6  17.0   8.0   0.9
+! rubi told me to change PD from 0.8 to 0.9 for Bintjie; at this point (27jan16) PD and P5 should be about the same.
+! that correspondence will be examined later.....
+RUBY02 BINTJIE              . IB0001  1000  30.0   0.9   0.1  18.8   8.0   0.9  !PD was 0.1 PD 0.8...Bintje with 30 (G3) works fine (1000Ideal usar un PD de 0.2 para bintje)
+RUBY03 LT-1                 . IB0001  2000  25.0   0.9   0.8  17.0   8.0   0.9  ! TC 21
+RUBY04 KUFRI BAHAR          . IB0001  2000  21.0   0.9   0.8  23.0   8.0   0.9
+RUBY05 Yungay     [118]     . IB0001  2000  23.0   0.2   0.8  18.0   8.0   0.2
+RUBY06 DESIREE              . IB0001  2000  25.0   0.9   0.6  16.0   8.0   0.9
+
+! making some heat tolerant attempts. the initial theory was to make the
+! TC go to 21 for all cultivars, but it seems that some are already
+! above that. so let us give each, say, a 3-degree boost on that?
+
+!RUBY11 Russet Bur [145]     . IB0001  1100  26.0   0.9   0.6  20.0
+!RUBY12 Bintje     [150]     . IB0001  1600  25.0   0.8   0.3  22.0
+!RUBY13 LT1        [115]     . IB0001  2000  25.0   0.9   0.8  24.0
+!RUBY14 Kufri Bahar[113]     . IB0001  2000  21.0   0.9   0.8  27.0
+!RUBY15 Yungay     [118]     . IB0001  2000  23.0   0.2   0.8  21.0
+!RUBY16 Desiree    [ 90]     . IB0001  2000  25.0   0.9   0.6  20.0
+

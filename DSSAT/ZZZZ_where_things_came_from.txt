@@ -1,0 +1,157 @@
+03apr15
+executables from ~rdrobert/DSSAT_source/dssat_from_github/dssat-csm-develop
+specifically: debug_dssat_02apr15.exe and fast_dssat_02apr15.exe
+
+they will probably need to be renamed to be like dscsm046.exe to actually be used.
+
+then, all the files (not directories) in
+~rdrobert/DSSAT_source/dssat_from_github/dssat-csm-develop/Data
+(DSSATPRO.v46 was initially forgotten)
+
+and the files in
+~rdrobert/DSSAT_source/dssat_from_github/dssat-csm-develop/Data/Genotype
+~rdrobert/DSSAT_source/dssat_from_github/dssat-csm-develop/Data/StandardData
+
+
+DSSATPRO.v46 was edited to change everything from "C:\" to "./"
+DSSATPRO.v46 was copied to DSSATPRO.L46
+
+now, we may be having a problem with Simulation.cde not being SIMULATION.CDE,
+so i am changing that.
+
+yes!
+
+ok, now i need to copy my cultivars into the appropriate cultivar files...
+so, i really want to first compare the CUL/ECO/SPE to see which have
+changed significantly such that my varieties would get screwed up.
+
+RI rice --> all seem the same except phyllochron interval seems to be
+            commented out in 4.6
+WH wheat --> CUL is same, but ECO and SPE are different versus even the newer
+             4.5; against the one we used for the "sika paper", the CUL is
+             the same and the ECO and SPE have some big differences
+MZ maize --> all seem ok, i need to copy over desired varieties
+PN groundnuts/peanuts --> ECO seems the same, in SPE, the phosphorus has been
+                          updated along with a few other things like rootrad
+SB soybeans --> is exactly the same
+SG sorghum --> phosphorus and rootrad changed
+PT potatoes --> appears exactly the same
+
+CS cassava --> totally different. whoo-hoo! maybe. i hope.
+CH chickpea --> there appear to be significant differences...
+
+
+-----------------
+08apr15
+
+trying to do a comparison of wheat/maize/groundnuts between my old 4.5
+versions and this new nearly official 4.6
+
+but... wheat is very different, so i first had to copy in the
+global futures cultivars (which is fine), except they use a different
+ECO code, so i will be trying to see what to do about that. likely
+a copy/paste solution if possible.
+
+they are sufficiently different that i will just reset the ecotype to
+"default" in the CUL file since that is where it came from in the first
+place....
+
+
+
+-----------------
+09apr15
+
+i decided to modify the OPSUM.for file to get rid of the DAYLA and YPPM
+running into their predecessors. that seems to be working nicely now,
+but it did require a re-compilation...
+
+
+
+=======================
+
+07jan16
+
+now, in theory there is a new version of DSSAT and the CIAT folks want
+to use it for rice and beans. so, i have tried to compile it. we also
+have a new cluster, so i re-installed the intel compiler in "evaluate
+and activate later" mode since it didn't want to accept the serial number
+anymore (you know, since we already used it once, probably).
+
+i downloaded the latest DSSAT source a couple days ago and managed to get
+it to compile with minimal changes (like, just telling it i wanted linux
+options instead of windows ones). i am now trying to get it set up to see
+if i can get it running and if it breaks my system due to new formatting
+or anything....
+
+so, the source code is in
+~rdrobert/DSSAT_source/dssat_from_github/dssat-csm-develop
+(the old stuff got renamed as dssat-csm-develop_02apr15).
+
+all i had to do was add "WH_module.f90" to the list of things to compile
+first.
+
+now, i am going to try to copy in all the supporting files we need.
+(including the standalone weather generator...)
+
+the weather generator needs: CO2_standalone.WDA and MODEL.ERR (the MODEL.ERR
+will be overwritten by the new version...).
+
+
+for the "code" files, i did this:
+
+[rdrobert@ifpri2 Data]$ pwd
+/export/home/rdrobert/DSSAT_source/dssat_from_github/dssat-csm-develop/Data
+[rdrobert@ifpri2 Data]$ cp *.CDE *.cde
+~/sge_Mink3classic/actual_program_4.6_07jan16/
+
+we need to rename the simulation.cde to "SIMULATION.CDE" or something.
+
+also, let's dos2unix everything....
+
+the "DSSATPRO.v46" file seems to be the same order and values as before, so i
+will copy what i had previously with all the dos/windows paths cut out and
+replaced by ./ and stuff.
+
+[rdrobert@ifpri2 Data]$ cp ~/sge_Mink3classic/actual_program_real4.6/DSSATPRO.* ~/sge_Mink3classic/actual_program_4.6_07jan16/
+
+
+and a new file of dubious need?
+
+[rdrobert@ifpri2 Data]$ pwd
+/export/home/rdrobert/DSSAT_source/dssat_from_github/dssat-csm-develop/Data
+[rdrobert@ifpri2 Data]$ cp DSCSM046.CTR ~/sge_Mink3classic/actual_program_4.6_07jan16/
+
+
+
+of course, we need all the new cultivar/eco/species files [and then need to
+check how much they have changed....].
+
+[rdrobert@ifpri2 Genotype]$ pwd
+/export/home/rdrobert/DSSAT_source/dssat_from_github/dssat-csm-develop/Data/Genotype
+[rdrobert@ifpri2 Genotype]$ cp * ~/sge_Mink3classic/actual_program_4.6_07jan16/
+
+
+skipping the pest files because i don't think we need them...
+
+i think we will be ok skipping the soils, too, as long as we copy over our
+custom soil profiles.
+
+and the standard data....
+
+[rdrobert@ifpri2 StandardData]$ pwd
+/export/home/rdrobert/DSSAT_source/dssat_from_github/dssat-csm-develop/Data/StandardData
+[rdrobert@ifpri2 StandardData]$ cp *
+~rdrobert/sge_Mink3classic/actual_program_4.6_07jan16/
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,33 @@
+--- provenance started at Tue Jun  7 15:04:17 EDT 2022 ---
+this dir: /mnt/data
+this script: ./build_dailystyle_NOCLIMATE_for_DSSAT_05jun14.sh
+nonclimate_list below
+soil_profile_number_int@DSSAT_essentials_12may11,deleteme_planting_month,deleteme_N_to_use,deleteme_initial_N,deleteme_initial_root_weight,deleteme_initial_surface_weight,first_weather_mask@ricky_DSSAT_cat_0
+
+     1	soil_profile_number_int@DSSAT_essentials_12may11
+     2	deleteme_planting_month
+     3	deleteme_N_to_use
+     4	deleteme_initial_N
+     5	deleteme_initial_root_weight
+     6	deleteme_initial_surface_weight
+     7	first_weather_mask@ricky_DSSAT_cat_0
+
+
+output_file = to_DSSAT/catdailyB_
+region_to_use = n=90 s=-90 w=-180 e=180 nsres=2.5 ewres=2.5
+weather_mask = first_weather_mask@ricky_DSSAT_cat_0
+calendar_mapset=deltaPIKnov_from_daily_c
+soils_raster=soil_profile_number_int@DSSAT_essentials_12may11
+
+minimum_physical_area=0.0001
+growing_radius=0
+
+month_shifter_list=
+
+0
+
+
+main_control_list=
+
+deleteme_all	maize	eitherN250	250	1	initial_soil_nitrogen_mass_13mar14@DSSAT_essentials_12may11	initial_root_mass@DSSAT_essentials_12may11	initial_surface_residue_mass@DSSAT_essentials_12may11
+
