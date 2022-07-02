@@ -40,7 +40,7 @@ From: centos:7
    export GRASS_HEIGHT=1200
    
    export GRASS_VERSION="6.5.svn"
-   MYGISDBASE=/mnt/grassdata/grassdata/
+   MYGISDBASE=/mnt/data/grassdata
    MYMAPSET=ricky_DSSAT_cat_0
    MYLOC=world
 MYGISRC="$HOME/.grassrc.$GRASS_VERSION.$$"
@@ -89,10 +89,10 @@ g.list rast
     && yum install -y epel-release
     yum install -y proj-devel gdal-devel sqlite-devel mesa-libGL-devel \
         mesa-libGLU-devel libXmu-devel libX11-devel tcl-devel tk-devel geos \
-	fftw-devel libtiff-devel lesstif-devel python-devel numpy wxPython wxGTK-devel \
-	gcc gcc-c++ bison flex ncurses-devel proj-epsg proj-nad xml2 subversion \
-	geos-devel blas-devel lapack-devel xorg-x11-xauth
-	     
+    fftw-devel libtiff-devel lesstif-devel python-devel numpy wxPython wxGTK-devel \
+    gcc gcc-c++ bison flex ncurses-devel proj-epsg proj-nad xml2 subversion \
+    geos-devel blas-devel lapack-devel xorg-x11-xauth
+         
     # add okay repo, install gpg key and then ffmpeg
     rpm -ivh http://repo.okay.com.mx/centos/7/x86_64/release/okay-release-1-5.el7.noarch.rpm \
     && yum install -y ffmpeg-devel
@@ -101,19 +101,19 @@ g.list rast
     cd /build/grass_program
     ./configure \
         --with-cxx \
-	--with-gdal=/usr/bin/gdal-config \
-	--with-proj --with-proj-share=/usr/share/proj \
-	--with-sqlite \
-	--with-nls \
-	--with-geos \
-	--with-wxwidgets=/usr/bin/wx-config \
-	--with-python=/usr/bin/python-config \
-	--with-freetype --with-freetype-includes=/usr/include/freetype2 \
-	--enable-largefile \
-	--without-odbc \
-	--with-fftw \
-	--with-blas \
-	--with-lapack 
+    --with-gdal=/usr/bin/gdal-config \
+    --with-proj --with-proj-share=/usr/share/proj \
+    --with-sqlite \
+    --with-nls \
+    --with-geos \
+    --with-wxwidgets=/usr/bin/wx-config \
+    --with-python=/usr/bin/python-config \
+    --with-freetype --with-freetype-includes=/usr/include/freetype2 \
+    --enable-largefile \
+    --without-odbc \
+    --with-fftw \
+    --with-blas \
+    --with-lapack 
     make -j$(nproc) && make -j$(nproc) install
 
     # Create generic GRASS GIS binary name regardless of version number
@@ -135,7 +135,7 @@ g.list rast
     # make
     # cd ../r.pixelarea
     # make
-	
+    
     # # clean up
     cd 
     rm -rf /build
