@@ -14,19 +14,20 @@ TODO: add details of where to get the complied container, if it's made available
 
 ## Requirements
 
-Disk space:
+Disk space once fully installed:
 
-2.1Gb grassdata
-294Mb grassdata.zip
+```bash
+mink/
+    1.4Gb grassdata/
+    205Mb GRASS_program
+    15Mb  DSSAT
+    1.1Gb mink_sandbox
+        64Mb mink_sandbox/usr/local/grass-6.5.svn
 
-205Mb GRASS_program
+TOTAL: 2.6Gb required
 
-15Mb  DSSAT
-
-2.3Gb mink_sandbox
-breakdown:
-    64Mb mink_sandbox/usr/local/grass-6.5.svn
-
+```
+plus 294Mb for the temporary grassdata.zip
 
 
 ## Dependencies
