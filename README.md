@@ -24,6 +24,20 @@ Make sure to follow the instructions carefully.
 Dependencies for the build are fully handled in the Singularity container and can be viewed in ~mink.def~. 
 For reference, however, MINK depends on the [GRASS v6.5 development branch](https://svn.osgeo.org/grass/grass/branches/develbranch_6/).
 
+To test that both are properly installed, run the commands
+
+```bash
+singularity --version
+```
+You should get "2.6.1-dist" or later version.
+
+To test that subversion is installed, run
+
+```bash
+svn --version
+```
+
+You should get "svn, version 1.9.3 (r1718519)" or similar.
 
 ## Build
 
@@ -38,7 +52,6 @@ To build the MINK singularity container:
 To run MINK use `singularity exec -B ~/.Xauthority mink.sif grass` and hit ENTER.
 
 TODO: add more details and a toy dataset?
-
 
 ## Troubleshooting
 
