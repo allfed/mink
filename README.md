@@ -12,6 +12,23 @@ TODO: add details of where to get the complied container, if it's made available
 
 ... otherwise, you can build the container yourself using the documentation below.
 
+## Requirements
+
+Disk space:
+
+2.1Gb grassdata
+294Mb grassdata.zip
+
+205Mb GRASS_program
+
+15Mb  DSSAT
+
+2.3Gb mink_sandbox
+breakdown:
+    64Mb mink_sandbox/usr/local/grass-6.5.svn
+
+
+
 ## Dependencies
 
 ### Singularity
@@ -42,6 +59,10 @@ svn --version
 
 You should get "svn, version 1.9.3 (r1718519)" or similar.
 
+### Setup 
+
+First, you'll want to clone this git repository. Then there are a few steps to set things up.
+
 ### grassdata
 
 There are some custom grass data files to be included in your repository.
@@ -51,29 +72,84 @@ https://drive.google.com/drive/folders/1uWCqUG5vt9ETtpb0sWbIXzcTtBFqCmUv
 
 You will need to unzip this folder and place it in the root of the mink/ git directory. The folder should be called "grassdata"
 
-### Singularity build
+### Grass permissions table
 
-It is likely you will want to build a sandbox to test out singularity first, and insure everything is installed properly.
+There are a few permission modifications needed to run grass.
+To make these modifications, you first need to know your username.
 
-Running as a sandox:
+First, type the command
+```bash
+whoami
+```
+That will tell you your username.
 
-- Create sandox directory: `mkdir mink_sandbox`
-- Build into that directory: `sudo singularity build --sandbox mink_sandbox mink.def`
-    - You should see: "Singularity container built: mink_sandbox"
-- Run the sandbox as a writable image:  `sudo singularity shell --writable --bind $PWD:/mnt/data mink_sandbox`
+Now, from the mink/ root directory, enter the commands (replacing the username with yours).
 
-This will allow you to interactively try each command to see where the problem arises without having to redo all the commands each container build. However, you need run these "one-by-one" commands in an environment where you have root priviledges
+```bash
+cd grassdata/
+sudo chown root:root world
+cd world/
+sudo chown root:your_username *
+```
 
-## Feeling Confident Build
+#### Singularity build in a sandbox
 
-If you are feeling extremely confident, you can build the MINK singularity container without testing slowly with the sandbox:
+It is likely you will want to build a sandbox to test out singularity first, and ensure everything is installed properly.
 
-- Clone this repository.
-- Build the singularity container by running `build_singularity.sh`. This will build the `mink.sif` singularity container.
-   - This might take a few minutes to run.
-- TODO: details of the DSSAT modules if required
+To do so, run the following:
 
-## Running
+```bash
+sudo ./build_singularity.sh
+```
+
+You should see the output: "Singularity container built: mink_sandbox" as one of the last few lines of a long outputh.
+
+Next, run the sandbox as a writable image:  
+
+```bash
+sudo singularity shell --writable --bind $PWD:/mnt/data mink_sandbox
+```
+
+This will allow you to interactively try each command to see where the problem arises without having to redo all the commands each container build. 
+
+You should now be in a shell. To test out whether everything worked, run the following within the shell:
+
+```bash
+cd /mnt/data
+./build_dailystyle_NOCLIMATE_for_DSSAT_05jun14.sh
+```
+
+You should see the following:
+
+```bash
+    ++ making an ALL raster ++
+
+
+
+ CHECK THE SPAM RASTERS: should be the 30may14 ones... 
+
+
+
+outputs being placed in = [to_DSSAT]
+-- creating mask for deleteme_all Wed Jul  6 15:03:50 PDT 2022 --
+Removing raster <MASK>
+Raster map <MASK> not found
+<MASK> nothing removed
+    ++ masking ++
+      __ masking pin-prick __
+0..4..8..11..15..18..22..25..29..33..36..40..43..47..50..54..58..61..65..68..72..75..79..83..86..90..93..97..100
+    ++ N/inits ++
+0..4..8..11..15..18..22..25..29..33..36..40..43..47..50..54..58..61..65..68..72..75..79..83..86..90..93..97..100
+real output
+to_DSSAT/catdailyB__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
+ -- exporting 1_noGCMcalendar_p0 maize eitherN250 Wed Jul  6 15:03:51 PDT 2022 --
+0..4..8..11..15..18..22..25..29..33..36..40..43..47..50..54..58..61..65..68..72..75..79..83..86..90..93..97..100
+Removing raster <MASK>
+```
+
+## Feeling Confident (Run Directly)
+
+If you are feeling extremely confident, you can run MINK singularity container without testing slowly with the sandbox:
 
 To run MINK use `singularity exec -B ~/.Xauthority mink.sif grass` and hit ENTER.
 
