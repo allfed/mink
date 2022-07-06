@@ -27,7 +27,7 @@ mink/
 TOTAL: 2.6Gb required
 
 ```
-plus 294Mb for the temporary grassdata.zip
+plus 294Mb for the temporary grassdata.zip, and another 140Mb for the singularity installation.
 
 
 ## Dependencies
