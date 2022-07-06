@@ -20,6 +20,12 @@ Install singularity by following the [Singularity Installation instructions](htt
 Dependencies for the build are fully handled in the Singularity container and can be viewed in ~mink.def~. 
 For reference, however, MINK depends on the [GRASS v6.5 development branch](https://svn.osgeo.org/grass/grass/branches/develbranch_6/).
 
+You will likely need to install, for Debian/ubuntu, using the following section:
+
+"Install the Debian/Ubuntu package using apt"
+
+Make sure to follow the instructions carefully.
+
 ## Build
 
 To build the MINK singularity container:
