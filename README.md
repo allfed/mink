@@ -60,7 +60,7 @@ svn --version
 
 You should get "svn, version 1.9.3 (r1718519)" or similar.
 
-### Setup 
+## Setup 
 
 First, you'll want to clone this git repository. Then there are a few steps to set things up.
 
