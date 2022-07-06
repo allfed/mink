@@ -14,6 +14,7 @@ TODO: add details of where to get the complied container, if it's made available
 
 ## Dependencies
 
+### Singularity
 MINK leverages Singularity to create a containerised environment from which to run the model.
 Install singularity by following the [Singularity Installation instructions](https://sylabs.io/guides/3.0/user-guide/installation.html).
 
@@ -21,15 +22,17 @@ Note for Debian/ubuntu:  Using the following section in the installation user gu
 "Install the Debian/Ubuntu package using apt"
 Make sure to follow the instructions carefully.
 
-Dependencies for the build are fully handled in the Singularity container and can be viewed in ~mink.def~. 
-For reference, however, MINK depends on the [GRASS v6.5 development branch](https://svn.osgeo.org/grass/grass/branches/develbranch_6/).
-
-To test that both are properly installed, run the commands
+To test that singularity is properly installed, run the command
 
 ```bash
 singularity --version
 ```
 You should get "2.6.1-dist" or later version.
+
+### Subversion
+
+Dependencies for the build are fully handled in the Singularity container and can be viewed in ~mink.def~. 
+For reference, however, MINK depends on the [GRASS v6.5 development branch](https://svn.osgeo.org/grass/grass/branches/develbranch_6/).
 
 To test that subversion is installed, run
 
@@ -39,12 +42,35 @@ svn --version
 
 You should get "svn, version 1.9.3 (r1718519)" or similar.
 
-## Build
+### grassdata
 
-To build the MINK singularity container:
+There are some custom grass data files to be included in your repository.
+
+These can be downloaded from here:
+https://drive.google.com/drive/folders/1uWCqUG5vt9ETtpb0sWbIXzcTtBFqCmUv
+
+You will need to unzip this folder and place it in the root of the mink/ git directory. The folder should be called "grassdata"
+
+### Singularity build
+
+It is likely you will want to build a sandbox to test out singularity first, and insure everything is installed properly.
+
+Running as a sandox:
+
+- Create sandox directory: `mkdir mink_sandbox`
+- Build into that directory: `sudo singularity build --sandbox mink_sandbox mink.def`
+    - You should see: "Singularity container built: mink_sandbox"
+- Run the sandbox as a writable image:  `sudo singularity shell --writable --bind $PWD:/mnt/data mink_sandbox`
+
+This will allow you to interactively try each command to see where the problem arises without having to redo all the commands each container build. However, you need run these "one-by-one" commands in an environment where you have root priviledges
+
+## Feeling Confident Build
+
+If you are feeling extremely confident, you can build the MINK singularity container without testing slowly with the sandbox:
 
 - Clone this repository.
 - Build the singularity container by running `build_singularity.sh`. This will build the `mink.sif` singularity container.
+   - This might take a few minutes to run.
 - TODO: details of the DSSAT modules if required
 
 ## Running
@@ -61,16 +87,6 @@ If this file doesn't exist, the dedicated location may be stored in the `$XAUTHO
 
 
 ## Development
-
-### Debugging singularty build
-
-Running as a sandox:
-
-- Create sandox directory: `mkdir mink_sandbox`
-- Build into that directory: `sudo singularity build --sandbox mink_sandbox mink.def`
-- Run the sandbox as a writable image:  `sudo singularity shell --writable --bind $PWD:/mnt/data mink_sandbox`
-
-This will allow you to interactively try each command to see where the problem arises without having to redo all the commands each container build. However, you need run these "one-by-one" commands in an environment where you have root priviledges
 
 ## Reference
 
