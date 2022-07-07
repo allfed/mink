@@ -1,4 +1,4 @@
---- provenance started at Fri Jul  1 14:45:21 PDT 2022 ---
+--- provenance started at Wed Jul  6 15:03:51 PDT 2022 ---
 this dir: /mnt/data
 this script: ./build_dailystyle_NOCLIMATE_for_DSSAT_05jun14.sh
 nonclimate_list below

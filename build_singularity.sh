@@ -13,5 +13,5 @@ else
 fi
 
 echo "Building singularity"
-singularity build --fakeroot mink.sif mink.def
+sudo singularity build mink.sif mink.def
 
