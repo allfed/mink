@@ -13,5 +13,5 @@ else
 fi
 
 echo "Building singularity"
-sudo singularity build mink.sif mink.def
-
+mkdir mink_sandbox
+sudo singularity build --sandbox mink_sandbox mink.def
