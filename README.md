@@ -103,7 +103,7 @@ To do so, run the following:
 sudo ./build_singularity.sh
 ```
 
-You should see the output: "Singularity container built: mink_sandbox" as one of the last few lines of a long outputh.
+You should see the output: "Singularity container built: mink_sandbox" as one of the last few lines of a long output.
 
 Next, run the sandbox as a writable image:  
 
