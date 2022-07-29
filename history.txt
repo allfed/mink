@@ -1,0 +1,933 @@
+    1  ssh morganr@sci5.jasmin.ac.uk
+    2  pwd
+    3  ls
+    4  logout
+    5  pwd
+    6  mkdir Apps
+    7  ls
+    8  exit
+    9  ssh sci5.jasmin.ac.uk
+   10  exit
+   11  ls
+   12  cd Apps
+   13  ls
+   14  tar xvzf Model_DSSAT4.6.tar.gz 
+   15  ls
+   16  mkdir DSSAT
+   17  mv * DSSAT/
+   18  ls
+   19  mv DSSAT/*.tar.gz .
+   20  ls
+   21  mv DSSAT/*.zip .
+   22  ls
+   23  cd DSSAT
+   24  ls
+   25  cd ..
+   26  ls
+   27  mv -rf DSSAT ../scrath/
+   28  mv -r DSSAT ../scrath/
+   29  mv DSSAT ../scrath/
+   30  ls
+   31  cd ..
+   32  cd scrath/
+   33  ls
+   34  cd DSSAT
+   35  ls
+   36  ./dscsm046.exe n DSSBatch.v46
+   37  exit
+   38  ls
+   39  mv GRASS_modules.zip Apps
+   40  mv *.tar.gz Apps
+   41  ls
+   42  cd Apps
+   43  ls
+   44  cd ..
+   45  mkdir scrath
+   46  pwd
+   47  ssh sci5.jasmin.ac.uk
+   48  exit
+   49  pwd
+   50  ls
+   51  ssh morganr@sci1.jasmin.ac.uk
+   52  ssh morganr@sci5.jasmin.ac.uk
+   53  pwd
+   54  his
+   55  history
+   56  squene
+   57  squeue
+   58  pwd
+   59  ls
+   60  cd scrath/
+   61  ls
+   62  cd DSSAT
+   63  cat BACER046.CUL 
+   64  vi XXXX.SNX 
+   65  ./dscsm046.exe n DSSBatch.v46 
+   66  vi DSSBatch
+   67  vi DSSBatch.v46 
+   68  ./dscsm046.exe n DSSBatch.v46 
+   69  exit
+   70  history
+   71  1  ssh morganr@sci5.jasmin.ac.uk
+   72      2  pwd
+   73      3  ls
+   74      4  logout
+   75      5  pwd
+   76      6  mkdir Apps
+   77      7  ls
+   78      8  exit
+   79      9  ssh sci5.jasmin.ac.uk
+   80     10  exit
+   81     11  ls
+   82     12  cd Apps
+   83     13  ls
+   84     14  tar xvzf Model_DSSAT4.6.tar.gz
+   85     15  ls
+   86     16  mkdir DSSAT
+   87     17  mv * DSSAT/
+   88     18  ls
+   89     19  mv DSSAT/*.tar.gz .
+   90     20  ls
+   91     21  mv DSSAT/*.zip .
+   92     22  ls
+   93     23  cd DSSAT
+   94     24  ls
+   95     25  cd ..
+   96     26  ls
+   97     27  mv -rf DSSAT ../scrath/
+   98     28  mv -r DSSAT ../scrath/
+   99     29  mv DSSAT ../scrath/
+  100     30  ls
+  101     31  cd ..
+  102     32  cd scrath/
+  103     33  ls
+  104     34  cd DSSAT
+  105     35  ls
+  106     36  ./dscsm046.exe n DSSBatch.v46
+  107     37  exit
+  108     38  ls
+  109     39  mv GRASS_modules.zip Apps
+  110     40  mv *.tar.gz Apps
+  111     41  ls
+  112     42  cd Apps
+  113     43  ls
+  114     44  cd ..
+  115     45  mkdir scrath
+  116     46  pwd
+  117     47  ssh sci5.jasmin.ac.uk
+  118     48  exit
+  119     49  pwd
+  120     50  ls
+  121     51  ssh morganr@sci1.jasmin.ac.uk
+  122     52  ssh morganr@sci5.jasmin.ac.uk
+  123     53  pwd
+  124     54  his
+  125     55  history
+  126     56  squene
+  127     57  squeue
+  128     58  pwd
+  129     59  history
+  130  ssh sci5.jasmin.ac.uk
+  131  exit
+  132  module load jasr
+  133  r
+  134  R
+  135  ls
+  136  display myplot.png
+  137  module load jaspy/3.7
+  138  python
+  139  ls
+  140  vi test.sbatch
+  141  ls
+  142  sbatch test.sbatch
+  143  squeue -u morganr
+  144  los
+  145  ls
+  146  cd scrath/
+  147  ls
+  148  cd ..
+  149  ls
+  150  vi test.sbatch 
+  151  exit
+  152  ssh sci5.jasmin.ac.uk
+  153  exit
+  154  ls
+  155  vi test.sbatch
+  156  sabtch test.sbatch
+  157  sbatch test.sbatch
+  158  squeue -u morganr
+  159  pwd
+  160  cd ls
+  161  pwd
+  162  ls
+  163  cat 32852127.err
+  164  pwd
+  165  vi test.sbatch 
+  166  squeue -u morganr 
+  167  rm 32852127.*
+  168  ls
+  169  cd Apps/
+  170  ls
+  171  tar xvzf GRASS_modules.zip ../scrath/
+  172  unzip 
+  173  unzip GRASS_modules.zip ../scrath/
+  174  unzip GRASS_modules.zip
+  175  ls
+  176  mv -r GRASS_modules ../scrath/
+  177  mv GRASS_modules ../scrath/
+  178  ls
+  179  cd ..
+  180  cs scrath/
+  181  ls
+  182  cd scrath/
+  183  ls
+  184  cd GRASS_modules/
+  185  ls
+  186  ls -l
+  187  cd r.in.new/
+  188  ls
+  189  cd ..
+  190  module load GRASS
+  191  ls
+  192  cd r.intersection/
+  193  ls
+  194  cd ..
+  195  cd r.out.new/
+  196  ls
+  197  cd ..
+  198  cd r.pixelarea/
+  199  ls
+  200  cd ..
+  201  ls
+  202  cat 32931444.err
+  203  ls
+  204  cd scrath/DSSAT/
+  205  LS
+  206  ls
+  207  cat Summary.OUT
+  208  cd ..
+  209  xit
+  210  exit
+  211  history
+  212  ssh sci5.jasmin.ac.uk
+  213  exit
+  214  ssh sci2.jasmin.ac.uk
+  215  ls
+  216  vi test.sbatch
+  217  cd Apps
+  218  ls
+  219  cd ..
+  220  cd scrath/
+  221  ls
+  222  cd DSSAT
+  223  ls
+  224  ./dscsm046.exe n DSSBatch.v46
+  225  cd ..
+  226  pwd
+  227  cd ..
+  228  pwd
+  229  ssh sci2.jasmin.ac.uk
+  230  ls
+  231  sbatch test.sbatch
+  232  squeue
+  233  squeue -u morganr
+  234  ssh sci2.jasmin.ac.uk
+  235  ls
+  236  cd scrath/
+  237  ls
+  238  cd ..
+  239  lss
+  240  ls
+  241  cd Apps
+  242  ls
+  243  cd ..
+  244  cd scrath/
+  245  cd DSSAT
+  246  LS
+  247  ls
+  248  ./dscsm046.exe n DSSBatch.v46 
+  249  cd ..
+  250  squeue -u morganr
+  251  ls
+  252  sbatch test.sbatch 
+  253  squeue -u morganr
+  254  vi 32931444.out
+  255  ssh morganr@sci5.jasmin.ac.uk
+  256  ls
+  257  pwd
+  258  ls
+  259  cd Apps/
+  260  ls
+  261  cd ..
+  262  cd scrath/
+  263  ls
+  264  cd GRASS_modules/
+  265  l
+  266  ls
+  267  cd ..
+  268  ls
+  269  cd DSSAT/
+  270  ls
+  271  cd ..
+  272  ls
+  273  vim result.out 
+  274  cd ..
+  275  ls
+  276  cd -
+  277  cd GRASS_modules/
+  278  ls
+  279  cd r.out.new/
+  280  ls
+  281  cd ..
+  282  ls
+  283  cd ..
+  284  ls
+  285  cd GRASS_modules/
+  286  ls
+  287  cd r.in.new/
+  288  ls
+  289  vi README 
+  290  cd M
+  291  vi Makefile 
+  292  cd ..
+  293  ls
+  294  cd ..
+  295  ls
+  296  mkdir notes
+  297  cd notes/
+  298  ls
+  299  touch notes5.11.22.txt
+  300  touch notes5.4.22.txt
+  301  vi notes5.4.22.txt 
+  302  ls
+  303  cd ..
+  304  ls
+  305  cd DSSAT/
+  306  ls
+  307  cd ..
+  308  ls
+  309  cd GRASS_modules/
+  310  ls
+  311  cd ..
+  312  echo $(find . -type f -name 'test*')
+  313  cd ..
+  314  echo $(find . -type f -name 'test*')
+  315  ls
+  316  vi test.sbatch 
+  317  cd no
+  318  cd notes
+  319  la
+  320  ls
+  321  cd Apps/
+  322  ls
+  323  cd ..
+  324  cd notes
+  325  ls
+  326  cd Apps/
+  327  ls
+  328  cd ..
+  329  cd scrath/
+  330  ls
+  331  mv notes/ ..
+  332  cd ..
+  333  cd notes/
+  334  ls
+  335  vi notes5.22.txt
+  336  vi notes5.4.22.txt 
+  337  ls
+  338  cd ..
+  339  ls
+  340  display myplot.png 
+  341  ls
+  342  cd ..
+  343  ls
+  344  cd -
+  345  ls
+  346  cd notes/
+  347  ls
+  348  vi notes5.11.22.txt 
+  349  ls
+  350  cd ..
+  351  ls
+  352  cd Apps/
+  353  ls
+  354  cd ..
+  355  cd scrath/
+  356  cd ..
+  357  mv scrath/ scratch/
+  358  ls
+  359  cd scratch/
+  360  ls
+  361  cd GRASS_modules/
+  362  ls
+  363  module avail
+  364  module avail singularity
+  365  module avail docker
+  366  module avail containerd
+  367  module avail container
+  368  module avail kubernetes
+  369  cd /apps/jasmin
+  370  ls
+  371  cd modulefiles/
+  372  ls
+  373  cd ../supported/
+  374  ls
+  375  cd ceda_mip_tools/
+  376  ls
+  377  cd ..
+  378  ls
+  379  cd community/
+  380  ls
+  381  cd ..
+  382  cd jaspy/
+  383  ls
+  384  cd ..
+  385  cd metomi/
+  386  ls
+  387  cd ~
+  388  pwd
+  389  echo $HOME
+  390  module avail
+  391  module avail | grep rke
+  392  lw
+  393  ls
+  394  module avail
+  395  ls
+  396  cd Apps/
+  397  ls
+  398  cd ..
+  399  cd scratch/
+  400  ls
+  401  cd GRASS_modules/
+  402  ls
+  403  cd r.in.new/
+  404  ls
+  405  vi Makefile 
+  406  pwd
+  407  cd ..
+  408  ls
+  409  cd -
+  410  cd r.in.new/
+  411  ls
+  412  vi Makefile 
+  413  cd ..
+  414  ls
+  415  cd ..
+  416  ls
+  417  cd ..
+  418  ls
+  419  mkdir projects
+  420  cd projects/
+  421  ls
+  422  pwd
+  423  cd ..
+  424  ls
+  425  cd Apps/
+  426  ls
+  427  cd ..
+  428  ls
+  429  cd scratch/
+  430  ls
+  431  cd GRASS_modules/
+  432  ls
+  433  cd r.in.new
+  434  ls
+  435  vi Makefile 
+  436  echo $GISLIB
+  437  ssh sci3.jasmin.ac.uk
+  438  ssh morganr@sci3.jasmin.ac.uk
+  439  ssh morganr@sci1.jasmin.ac.uk
+  440  ssh -A morganr@sci1.jasmin.ac.uk 
+  441  ssh morganr@sci5.jasmin.ac.uk
+  442  ls
+  443  history
+  444  ls
+  445  module avail
+  446  ssh morganr@sci1.jasmin.ac.uk
+  447  ssh morganr@sci4.jasmin.ac.uk
+  448  ssh morganr@sci2.jasmin.ac.uk
+  449  ls
+  450  ls -a
+  451  cd .ssh
+  452  ls
+  453  cd ..
+  454  ls
+  455  ssh morganr@sci8.jasmin.ac.uk
+  456  ssh morganr@sci6.jasmin.ac.uk
+  457  ssh morganr@sci5.jasmin.ac.uk
+  458  docker
+  459  ssh sci5.jasmin.ac.uk
+  460  ls
+  461  module avail
+  462  module-git
+  463  git
+  464  singularity
+  465  ssh sci5.jasmin.ac.uk
+  466  ssh sci5.jasmin.ac.uk 
+  467  ls
+  468  cd scratch/
+  469  ls
+  470  du -sh
+  471  du -sh *
+  472  cd ..
+  473  ls
+  474  cd projects/
+  475  ;s
+  476  ls
+  477  cd ..
+  478  cd Apps/
+  479  ls
+  480  cd ..
+  481  ls
+  482  ssh -p 61025 dmrivers@73.167.195.179
+  483  ls
+  484  scp -p 61025 scratch/DSSAT/ dmrivers@73.167.195.179:~
+  485  ls
+  486  scp -P 61025 scratch/DSSAT/ dmrivers@73.167.195.179:~
+  487  scp -r -P 61025 scratch/DSSAT/ dmrivers@73.167.195.179:~/DSSAT
+  488  ls
+  489  cd scratch/
+  490  ls
+  491  history
+  492  ssh sci5.jasmin.ac.uk
+  493  ls
+  494  cd scratch/
+  495  ls
+  496  cd ..
+  497  ls
+  498  cd notes
+  499  ls
+  500  vi notes5.4.22.txt 
+  501  ls
+  502  cd ..
+  503  ls
+  504  vi test.sbatch 
+  505  ls
+  506  scp -r -P 61025 scratch/myplot.png dmrivers@73.167.195.179:~
+  507  scp -r -P 61025 myplot.png dmrivers@73.167.195.179:~
+  508  ls
+  509  cd Apps/
+  510  ls
+  511  cd ..
+  512  cd projects/
+  513  ls
+  514  cd ..
+  515  ls
+  516  cd scratch/
+  517  ls
+  518  cd DSSAT/
+  519  ls
+  520  cd ..
+  521  ls
+  522  cd ..
+  523  ls
+  524  git
+  525  ls
+  526  cat test.sbatch 
+  527  git
+  528  exit
+  529  ssh sci5.jasmin.ac.uk
+  530  ssh sci3.jasmin.ac.uk
+  531  exit
+  532  git
+  533  singularity
+  534  exit
+  535  ssh sci3.jasmin.ac.uk
+  536  exit
+  537  ssh sci3.jasmin.ac.uk
+  538  singularity
+  539  singularity --version
+  540  ls
+  541  fakeroot
+  542  ls
+  543  vi mink.def
+  544  singularity build --fakeroot mink.sif mink.def
+  545  singularity config fakeroot
+  546  singularity config fakeroot --add morganr
+  547  ls
+  548  cd scratch/
+  549  ls
+  550  cd DSSAT/
+  551  ls
+  552  cd ..
+  553  ls
+  554  cd GRASS_modules/
+  555  ls
+  556  cd ..
+  557  ls
+  558  cd DSSAT/
+  559  ls
+  560  cd ..
+  561  ls
+  562  cd projects/
+  563  ls
+  564  cd ..
+  565  s test.sbatch 
+  566  nano test.sbatch 
+  567  ls
+  568  cd scratch/
+  569  ls
+  570  cd DSSAT/
+  571  ls
+  572  cat ../../test.sbatch 
+  573  vi DSSBatch.v46 
+  574  cat DSSBatch.v46 
+  575  ls
+  576  vi XXXX.SNX 
+  577  nano XXXX.SNX 
+  578  cd ..
+  579  ls
+  580  cd ..
+  581  ls
+  582  cd scratch/
+  583  ls
+  584  cat result.out 
+  585  nano result.out 
+  586  ls
+  587  cd ..
+  588  ls
+  589  ./test.sbatch
+  590  s test.sbatch 
+  591  sbatch test.sbatch 
+  592  squeue
+  593  squeue | grep morganr
+  594  s test.sbatch 
+  595  vi test.sbatch 
+  596  squeue | grep morganr
+  597  ls
+  598  cd scratch/
+  599  ls
+  600  mv result.out result.outOLD
+  601  cd ..
+  602  sbatch test.sbatch 
+  603  squeue | grep morganr
+  604  ls
+  605  cd scratch/
+  606  ls
+  607  cd ..
+  608  squeue | grep morganr
+  609  skill 7310725
+  610  squeue | grep morganr
+  611  scancel 7310725
+  612  squeue | grep morganr
+  613  ls
+  614  vi test.sbatch 
+  615  cd scratch
+  616  ls
+  617  cd ..
+  618  vi test.sbatch 
+  619  cd scratch/
+  620  ls
+  621  cd DSSAT/
+  622  ls
+  623  # ./dscsm046.exe n 
+  624  ls
+  625  cd ..
+  626  ls
+  627  cd -
+  628  ls
+  629  cd ..
+  630  ls
+  631  cat test.sbatch 
+  632  cd -
+  633  cd DSSAT/
+  634   ./dscsm046.exe n DSSBatch.v46 
+  635  ls
+  636  cd ..
+  637  ls
+  638  cd -
+  639  ls r*
+  640  ls
+  641  cat ZZZZ_where_things_came_from.txt 
+  642  ls
+  643  cd ..
+  644  ls
+  645  cd ..
+  646  ls
+  647  ssh sci3.jasmin.ac.uk
+  648  eval `ssh-agent -s`
+  649  ssh-add ~/.ssh/mink
+  650  cd ~/.ssh
+  651  mkdir mink
+  652  ssh-add ~/.ssh/mink
+  653  cd mink
+  654  cd ..
+  655  ls
+  656  rmdir mink
+  657  ls
+  658  cd ..
+  659  git clone git@github.com:allfed/mink
+  660  mkdir mink
+  661  git clone git@github.com:allfed/mink
+  662  cd ~/.ssh
+  663  ssh-keygen -t ed25519 -C "danielmorganrivers@gmail.com"
+  664  cd ..
+  665  eval `ssh-agent -s`
+  666  ssh-add ~/.ssh/mink
+  667  git clone git@github.com:allfed/mink
+  668  cd ~/.ssh
+  669  ls
+  670  cd mink
+  671  rm mink
+  672  rm mink.pub
+  673  ssh-keygen -t ed25519 -C "ines.jimenez01@yahoo.fr"
+  674  rm mink
+  675  rm mink.pub
+  676  ls
+  677  ssh-keygen -t ed25519 -C "ines.jimenez01@yahoo.fr"
+  678  ssh-add ~/.ssh/id_ed25519
+  679  cat ~/.ssh//id_ed25519.pub
+  680  cd ..
+  681  git clone git@github.com:allfed/mink
+  682  eval `ssh-agent -s`
+  683  ssh-add ~/.ssh/id_ed25519
+  684  ls
+  685  mkdir mink
+  686  git clone git@github.com:allfed/mink
+  687  ssh-keygen -t ed25519 -C "ines.jimenez01@yahoo.fr"
+  688  mv mink_key ~
+  689  mv mink_key.pub ~
+  690  cat mink_key.pub
+  691  cd mink
+  692  mkdir mink
+  693  cd mink
+  694  eval `ssh-agent -s`
+  695  ssh-add ~/mink
+  696  cd ..
+  697  cd mink
+  698  ls
+  699  cd ..
+  700  ls
+  701  chmod 600 mink_key
+  702  ssh-add ~/mink
+  703  ssh-add ~/mink_key
+  704  git clone git@github.com:allfed/mink
+  705  git clone git@github.com:allfed/mink.git
+  706  git clone --verbose git@github.com:allfed/mink.git 
+  707  git clone https://github.com/allfed/mink
+  708  ls
+  709  ls -l
+  710  cd scratch
+  711  git clone git@github.com:allfed/mink.git
+  712  ping google.com
+  713  ssh sci5.jasmin.ac.uk
+  714  exit
+  715  ssh sci3.jasmin.ac.uk
+  716  ssh sci5.jasmin.ac.uk
+  717  ls
+  718  ping google.com
+  719  git clone git@github.com:allfed/mink.git
+  720  eval `ssh-agent -s`
+  721  ssh-add ~/mink_key
+  722  git clone git@github.com:allfed/mink.git
+  723  df -h
+  724  ssh sci5.jasmin.ac.uk
+  725  ls
+  726  cd mink
+  727  ls
+  728  hostname -I
+  729  wget
+  730  wget https://drive.google.com/drive/folders/1QgLWV1hmutd4pXyOsVSE9fbNmhW511CA?usp=sharing
+  731  ls
+  732  cd 1QgLWV1hmutd4pXyOsVSE9fbNmhW511CA?usp=sharing
+  733  rm 1QgLWV1hmutd4pXyOsVSE9fbNmhW511CA?usp=sharing
+  734  wget https://drive.google.com/drive/folders/1QgLWV1hmutd4pXyOsVSE9fbNmhW511CA?usp=sharing
+  735  cd 1QgLWV1hmutd4pXyOsVSE9fbNmhW511CA?usp=sharing
+  736  wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=1QgLWV1hmutd4pXyOsVSE9fbNmhW511CA' -O test_folder
+  737  wget https://drive.google.com/drive/folders/1QgLWV1hmutd4pXyOsVSE9fbNmhW511CA?usp=sharing
+  738  wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1QgLWV1hmutd4pXyOsVSE9fbNmhW511CA' -O test_folder
+  739  ping google.com
+  740  wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1QgLWV1hmutd4pXyOsVSE9fbNmhW511CA' -O test_folder/
+  741  ls
+  742  cd test_folder
+  743  cd test_folder/
+  744  rm test_folder 
+  745  wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1QgLWV1hmutd4pXyOsVSE9fbNmhW511CA' -O test_folder/
+  746  ls
+  747  rm 1QgLWV1hmutd4pXyOsVSE9fbNmhW511CA?usp=sharing
+  748  rm 1QgLWV1hmutd4pXyOsVSE9fbNmhW511CA?usp=sharing.1
+  749  wget https://drive.google.com/drive/folders/1QgLWV1hmutd4pXyOsVSE9fbNmhW511CA?usp=sharing
+  750  wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=12-tYuFH_j39dqoUsnOrpXdMxjWIqemxS' -O test123 
+  751  ls
+  752  cat test123
+  753  ssh sci5.jasmin.ac.uk
+  754  sinfo
+  755  ls
+  756  cat test.sbatch
+  757  hostname
+  758  1 > testfile.txt
+  759  "1" > testfile.txt
+  760  echo "1" > testfile.txt
+  761  echo "2" >> testfile.txt
+  762  cat testfile.txt
+  763  rm testfile.txt 
+  764  echo "echo "1" > testfile.txt
+  765  cat testfile.txt
+  766  echo "echo "1"" > testfile.txt
+  767  cat testfile.txt
+  768  rm testfile.txt 
+  769  echo "echo "1"" > testscript.sh
+  770  bash testscript.sh 
+  771  rm testscript.sh 
+  772  ls
+  773  echo "test" > test2.sbatch
+  774  cat test2.sbatch 
+  775  cat test.sbatch
+  776  rm test2.sbatch
+  777  cp test.sbatch test1.sbatch
+  778  ls
+  779  cat test1.sbatch
+  780  cat test.sbatch
+  781  echo "echo 1" >> test1.sbatch
+  782  cat test1.sbatch
+  783  vi test1.sbatch
+  784  cat test1.sbatch
+  785  vi test1.sbatch
+  786  rm test1.sbatch
+  787  cat test1.sbatch
+  788  > test1.sbatch
+  789  ls
+  790  nano test1.sbatch 
+  791  pwd
+  792  ls
+  793  exit
+  794  ssh sci5
+  795  ssh sci5.jasmin.ac.uk
+  796  ls
+  797  ssh sci5.jasmin.ac.uk
+  798  ls
+  799  pwd
+  800  exit
+  801  ls
+  802  exit
+  803  ls
+  804  cd grassdata
+  805  ls
+  806  cd world
+  807  ls
+  808  cd ..
+  809  ssh sci5.jasmin.ac.uk
+  810  cat test1.sbatch
+  811  cat test1.sbatch.save
+  812  rm test1.sbatch
+  813  mv test1.sbatch.save test1.sbatch
+  814  ls
+  815  cat test1.sbatch.save.1
+  816  rm test1.sbatch.save.1 
+  817  cat test1.sbatch
+  818  sbatch test1.sbatch
+  819  squeue
+  820  squeue --user=morganr
+  821  scontrol show job 9007523
+  822  ls
+  823  cat 32931444.out
+  824  cat 33546554.out
+  825  33556960.out
+  826  cat 33556960.out
+  827  cat 7310794.out
+  828  cat 9007523.out
+  829  exit
+  830  ls
+  831  cd mink
+  832  cd basics_15jun22
+  833  ls
+  834  rm test_script.sh 
+  835  exit
+  836  ls
+  837  cd mink
+  838  ls
+  839  git pull
+  840  eval `ssh-agent -s`
+  841  ssh-add ~/.ssh/mink
+  842  ssh-add ../mink
+  843  ssh-add ../mink_key
+  844  git pull
+  845  cd basics_15jun22/
+  846  ls
+  847  cd ../..
+  848  ls
+  849  cat 32931444.out
+  850  java
+  851  ls
+  852  cd mink
+  853  ls
+  854  cd ..
+  855  ls
+  856  cd mink
+  857  ls
+  858  cd basics_15jun22/
+  859  ls
+  860  du -sh '' .
+  861  du -sh -- .
+  862  du -sh -- ..
+  863  du -sh -- (
+  864  du -sh -- *
+  865  cd ../DSSAT/
+  866  ls
+  867  ./dscsm046.exe deleteme.v45 
+  868  ls
+  869  ./dscsm046.exe deleteme.v45 
+  870  ./dscsm046.exe n deleteme.v45 
+  871  vi deleteme.v45 
+  872  ls
+  873  cat XXXX.SNX 
+  874  ./dscsm046.exe n XXXX.SNX 
+  875  ./dscsm046.exe XXXX.SNX 
+  876  top
+  877  cd ../basics_15jun22/
+  878  ls
+  879  ls -al
+  880  cd sge_Mink3daily/
+  881  ls
+  882  git log
+  883  ls
+  884  mkdir to_GRASS
+  885  vi SRDL_helper_catA.sh 
+  886  cd ..
+  887  ls
+  888  cd ..
+  889  ls
+  890  cd to_DSSAT/
+  891  ls
+  892  cp D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE* ../basics_15jun22/sge_Mink3daily/from_GRASS/
+  893  cd ..-
+  894  cd ../
+  895  ls
+  896  cd basics_15jun22/
+  897  ls
+  898  cd sge_Mink3daily/
+  899  ls
+  900  vi SRDL_helper_catA.sh 
+  901  cd ../..
+  902  cd ..
+  903  ls
+  904  cat test.sbatch
+  905  cat test1.sbatch
+  906  ls
+  907  cd scratch/
+  908  ls
+  909  cd ..
+  910  cp test.sbatch test2.sbatch
+  911  vi test2.sbatch 
+  912  sbatch test2.sbatch
+  913  squeue --user=morganr
+  914  squeue
+  915  squeue --partition=test
+  916  squeue --user=morganr
+  917  ssh sci5.jasmin.ac.uk
+  918  ssh sci3.jasmin.ac.uk
+  919  ssh sci8.jasmin.ac.uk
+  920  sbatch test2.sbatch
+  921  squeue 
+  922  squeue --user=morganr
+  923  ls
+  924  vi test2.sbatch 
+  925  df -h
+  926  squeue --user=morganr
+  927  ls
+  928  exit
+  929  ls
+  930  cd mink
+  931  ls
+  932  history
+  933  history > history.txt

@@ -1,0 +1,39 @@
+[ 02sep15 ]
+
+i'm going to start with maize. i want to define several automatic irrigation schemes.
+
+mzMMMrrrainfed.SNX	rainfed (of course)
+mzMMMirrigated.SNX	automatic to refill (based on soil moisture at 20cm, 40-100%)
+
+then automatic (fixed amounts)
+
+mzMMMirrig010.SNX	applying 10mm when too dry
+mzMMMirrig020.SNX	applying 20mm when too dry
+mzMMMirrig030.SNX	applying 30mm when too dry
+mzMMMirrig040.SNX	applying 40mm when too dry
+
+
+
+[ 05oct15 ]
+
+i'm going to use rainfed, 0.5 (1o2 = 1 over 2 = 1/2), 1, and 5 mm as the
+irrigation application rates.
+
+and, now i get to extend these to a whole stack of crops...
+
+
+
+[ 28dec15 ]
+
+now, i am trying out three different maize varieties as proxies for
+"local", "composite", and "hybrid"; this is based on advice from
+kindie tesfaye (26dec15, 6:13am "RE: Malawi modeling questions")
+
+hybrid = SC513
+composite/opv = ZM521
+local = some coefficients he put together, i am calling it MZLOCA
+
+
+
+
+

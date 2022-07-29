@@ -1,0 +1,24 @@
+START [29104_039519000] at Wed Aug  5 14:03:27 EDT 2015
+    CWD          [29104_039519000]: /home/transfer
+    command used [29104_039519000]: ./BACK_up_cluster_to_GISbox_extra.sh 
+END   [29104_039519000] at Wed Aug  5 14:04:50 EDT 2015
+START [9298_480089000] at Mon Aug 17 19:16:41 EDT 2015
+    CWD          [9298_480089000]: /home/transfer
+    command used [9298_480089000]: ./BACK_up_cluster_to_GISbox_extra.sh 
+END   [9298_480089000] at Mon Aug 17 19:18:08 EDT 2015
+START [24089_183676000] at Thu Aug 20 20:48:03 EDT 2015
+    CWD          [24089_183676000]: /home/transfer
+    command used [24089_183676000]: ./BACK_up_cluster_to_GISbox_extra.sh 
+END   [24089_183676000] at Thu Aug 20 20:49:26 EDT 2015
+START [20315_084763000] at Mon Aug 31 23:05:34 EDT 2015
+    CWD          [20315_084763000]: /home/transfer
+    command used [20315_084763000]: ./BACK_up_cluster_to_GISbox_extra.sh 
+END   [20315_084763000] at Mon Aug 31 23:06:57 EDT 2015
+START [6186_735012000] at Thu Sep 17 09:45:58 EDT 2015
+    CWD          [6186_735012000]: /home/transfer
+    command used [6186_735012000]: ./BACK_up_cluster_to_GISbox_extra.sh 
+END   [6186_735012000] at Thu Sep 17 09:47:28 EDT 2015
+START [16000_319819000] at Mon Oct 19 15:28:35 EDT 2015
+    CWD          [16000_319819000]: /home/transfer
+    command used [16000_319819000]: ./BACK_up_cluster_to_GISbox_extra.sh 
+END   [16000_319819000] at Mon Oct 19 15:30:09 EDT 2015
