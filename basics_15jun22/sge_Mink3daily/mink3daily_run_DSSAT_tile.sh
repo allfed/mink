@@ -29,6 +29,7 @@ if [ $# -lt 8 ]; then
 
 fi
 
+echo "reached 1 in run DSSAT"
 
   data_file_base_name=$1
          daily_to_use=$2
@@ -142,7 +143,8 @@ copy_block=`$java_to_use -cp $headnode_classpath $daily_weather_copier_classname
   else
     time_to_delay=0.1s
   fi
-echo "reached 1"
+
+echo "reached 2"
 
 # write out the job script....
 echo "#!/bin/bash
@@ -199,7 +201,7 @@ echo "#!/bin/bash
   echo \"$keepRealDaysToMaturity\"      >> $runner_init_file
   
   
-
+echo "reached 3"
 ###################
 ### do the work ###
 ###################
@@ -314,7 +316,8 @@ echo "SUBMIT: R${chunk_index}_r${quasi_random_code}; #$n_before_me sleeping $tim
 
 #eval $Q_command
 echo $Q_command
-sbatch test2.sbatch
+echo "reached 4"
+#sbatch test2.sbatch
 exit
 # now do the delaying to stagger the first few...
 
