@@ -25,7 +25,7 @@ java_on_computenode=$java_on_headnode
 
 #changes by IJ:
 #           on_node_home=/mink/on_node_home_folder/DSSAT_dailyreal46_${quasi_random_code}/
-          on_node_home=/home/users/inesj/mink/basics_15jun22/
+          on_node_home=/home/users/inesj/mink/
 
 #uncomment as needed based on user (IJ)
 #  BASE=/home/users/morganr/mink/basics_15jun22/sge_Mink3daily/
@@ -39,7 +39,7 @@ BASE=/home/users/inesj/mink/basics_15jun22/sge_Mink3daily/
 
 
 # doesn't exist (IJ)
-  staging_directory=${BASE}/staging_area/
+  staging_directory=${BASE}staging_area/
 #the staging area directory seems empty... (IJ)
   runner_archive_path=${staging_directory}runner_archive_${quasi_random_code}.zip
    DSSAT_archive_path=${staging_directory}DSSAT_program_${quasi_random_code}.zip
@@ -104,7 +104,7 @@ BASE=/home/users/inesj/mink/basics_15jun22/sge_Mink3daily/
 
 # confused on the role of these directories and whether they exist (IJ)
        on_node_DSSAT_dir=${on_node_home}DSSAT/
-      on_node_runner_dir=${on_node_home}small_java_programs/
+      on_node_runner_dir=${on_node_home}basics_15jun22/small_java_programs/
 
      on_node_weather_dir=${on_node_home}dailyweather/
   on_node_input_data_dir=${on_node_home}from_GRASS/
