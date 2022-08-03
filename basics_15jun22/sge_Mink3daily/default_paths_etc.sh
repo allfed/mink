@@ -13,7 +13,7 @@
   original_runner_dir=~rdrobert/small_java_programs/
 
 #   java_on_headnode=~rdrobert/jres/jre1.8.0_40/bin/java
-   java_on_headnode=~/usr/bin/java
+   java_on_headnode=/usr/bin/java
 java_on_computenode=$java_on_headnode
 
 
