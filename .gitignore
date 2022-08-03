@@ -101,7 +101,7 @@ target/
 GRASS_program/
 
 # object file directories
-GRASS_modles/*/OBJ*/
+GRASS_modules/*/OBJ*/
 
 # MINK data 
 catastrophe_mink/

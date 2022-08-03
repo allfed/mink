@@ -16,16 +16,20 @@
    java_on_headnode=~/usr/bin/java
 java_on_computenode=$java_on_headnode
 
-
+#original values by Ricky:
 #            on_node_home=/state/partition1/DSSAT_full_${quasi_random_code}/
 #            on_node_home=/state/partition1/RAM_1024/RRR/DSSAT_full_${quasi_random_code}/
 #            on_node_home=/dev/shm/RRR/JJJ/DSSAT_dailyreal46_${quasi_random_code}/
 #            on_node_home=/dev/shm/RRR/DDD/DSSAT_dailyreal46_${quasi_random_code}/
 #            on_node_home=/state/partition1/RRR/DDD/DSSAT_dailyreal46_${quasi_random_code}/
-           on_node_home=/mink/on_node_home_folder/DSSAT_dailyreal46_${quasi_random_code}/
 
-  BASE=/home/users/morganr/mink/basics_15jun22/sge_Mink3daily/
+#changes by IJ:
+#           on_node_home=/mink/on_node_home_folder/DSSAT_dailyreal46_${quasi_random_code}/
+          on_node_home=/home/users/inesj/mink/basics_15jun22/
 
+#uncomment as needed based on user (IJ)
+#  BASE=/home/users/morganr/mink/basics_15jun22/sge_Mink3daily/
+BASE=/home/users/inesj/mink/basics_15jun22/sge_Mink3daily/
 
 
 
@@ -34,9 +38,9 @@ java_on_computenode=$java_on_headnode
 
 
 
-
+# doesn't exist (IJ)
   staging_directory=${BASE}/staging_area/
-
+#the staging area directory seems empty... (IJ)
   runner_archive_path=${staging_directory}runner_archive_${quasi_random_code}.zip
    DSSAT_archive_path=${staging_directory}DSSAT_program_${quasi_random_code}.zip
  X_files_archive_path=${staging_directory}X_files_${quasi_random_code}.zip
@@ -64,7 +68,7 @@ java_on_computenode=$java_on_headnode
 # this does not seem to exist or else i just over-wrote it on 12oct21
 #      original_DSSAT_dir=${BASE}/actual_program_4.7.5.11
 
-# latest and greatest as of 12oct21
+# latest and greatest as of 12oct21 (checked correct by IJ)
       original_DSSAT_dir=${BASE}/actual_program_4.7.5.11
 
 
@@ -83,6 +87,7 @@ java_on_computenode=$java_on_headnode
 #echo "!!! original X files directory changed for the moment !!!"
 #    original_X_files_dir=${BASE}SNX_files/meta_templates/full_wheat_search/
 
+#doesn't exist on Github- except for from_GRASS and logs (IJ). Others are still there on Morgan's JASMIN account
           input_data_dir=${BASE}from_GRASS/
   chunked_input_data_dir=${BASE}chunks_from_GRASS/
          output_data_dir=${BASE}to_GRASS/
@@ -96,7 +101,8 @@ java_on_computenode=$java_on_headnode
   
 #            on_node_home=/dev/shm/RRR/DSSAT_r2.45_${quasi_random_code}/
 #            on_node_home=/state/partition1/RAM_1024/DSSAT_r2.45_${quasi_random_code}/
- 
+
+# confused on the role of these directories and whether they exist (IJ)
        on_node_DSSAT_dir=${on_node_home}DSSAT/
       on_node_runner_dir=${on_node_home}small_java_programs/
 
