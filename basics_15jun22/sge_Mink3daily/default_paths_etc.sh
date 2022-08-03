@@ -10,7 +10,7 @@
 
 
 
-  original_runner_dir=~rdrobert/small_java_programs/
+  original_runner_dir="$PWD/../small_java_programs/"
 
 #   java_on_headnode=~rdrobert/jres/jre1.8.0_40/bin/java
    java_on_headnode=/usr/bin/java
@@ -33,7 +33,7 @@ on_node_home="$PWD/../../"
 #  BASE=/home/users/morganr/mink/basics_15jun22/sge_Mink3daily/
 
 # BASE is now the folder where default_paths is located (DMR)
-BASE=$PWD 
+BASE="$PWD" 
 
 
 
@@ -43,7 +43,8 @@ BASE=$PWD
 
 
 # doesn't exist (IJ)
-  staging_directory=${BASE}staging_area/
+# update: now does exist (DMR). Added a hidden file that keeps the folder around.
+  staging_directory=${BASE}/staging_area
 #the staging area directory seems empty... (IJ)
   runner_archive_path=${staging_directory}runner_archive_${quasi_random_code}.zip
    DSSAT_archive_path=${staging_directory}DSSAT_program_${quasi_random_code}.zip
@@ -73,6 +74,7 @@ BASE=$PWD
 #      original_DSSAT_dir=${BASE}/actual_program_4.7.5.11
 
 # latest and greatest as of 12oct21 (checked correct by IJ)
+# (WARNING: actual program folder removed by DMR to save space on the repo, may need to be reinstated at some point)
       original_DSSAT_dir=${BASE}/actual_program_4.7.5.11
 
 
