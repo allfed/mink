@@ -201,7 +201,7 @@ echo "#!/bin/bash
   echo \"$keepRealDaysToMaturity\"      >> $runner_init_file
   
   
-echo "reached 3"
+echo \"reached 3\"
 ###################
 ### do the work ###
 ###################

@@ -25,11 +25,15 @@ java_on_computenode=$java_on_headnode
 
 #changes by IJ:
 #           on_node_home=/mink/on_node_home_folder/DSSAT_dailyreal46_${quasi_random_code}/
-          on_node_home=/home/users/inesj/mink/
+
+# this should be the mink/ directory at the root of the git repo (DMR)
+on_node_home="$PWD/../../" 
 
 #uncomment as needed based on user (IJ)
 #  BASE=/home/users/morganr/mink/basics_15jun22/sge_Mink3daily/
-BASE=/home/users/inesj/mink/basics_15jun22/sge_Mink3daily/
+
+# BASE is now the folder where default_paths is located (DMR)
+BASE=$PWD 
 
 
 
