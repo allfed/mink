@@ -107,7 +107,7 @@ memory_string="-mx1400M"
 
 log_file=${log_file/___/_${chunk_index}_}
 
-script_to_run_in_job=${staging_directory}/script_to_run_${chunk_index}_r${quasi_random_code}.sh
+script_to_run_in_job=${staging_directory}script_to_run_${chunk_index}_r${quasi_random_code}.sh
 
 
    if [ -n "$use_old_string" ]; then
@@ -131,6 +131,13 @@ script_to_run_in_job=${staging_directory}/script_to_run_${chunk_index}_r${quasi_
 #echo "-- before copy block --"
 #echo $java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot
 #echo "-- after copy block --"
+echo $daily_weather_copier_classname
+
+echo ""
+echo "this is me trying to get the java program to run(DMR)"
+$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution 
+echo "well, did it run then?"
+echo ""
 copy_block=`$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution | uniq`
 
   we_need_to_delay=`echo "if($n_before_me > -2 && $n_before_me <= $number_of_initial_cases_to_stagger) {1} else {0}" | bc`
@@ -145,9 +152,10 @@ copy_block=`$java_to_use -cp $headnode_classpath $daily_weather_copier_classname
   fi
 
 echo "reached 2"
-
+echo $script_to_run_in_job
 # write out the job script....
 echo "#!/bin/bash
+  echo \"Looks like the script is printing out\"
   echo \"running on \$HOSTNAME at \`date\`\"
 
   echo \"CASE $X_template ${daily_to_use##*/} $co2_level ${data_file_base_name##*/CZX*_*XZC_}\"
@@ -233,7 +241,12 @@ echo \"------ moving/unpacking ; \`date\` ------\"
   cp $runner_init_file         ${on_node_runner_init_file}
 
   # copy the daily weather
+echo \"\"
+echo \"about to copy\"
 $copy_block
+echo \"\"
+echo \"finished copying\"
+echo \"\"
 
 # check if things copied ok.
 #if [ \$? -ne 0 ]; then
@@ -303,6 +316,18 @@ echo \"------ running          ; \`date\` ------\"
 
         " > $script_to_run_in_job # end of ssh command....
 
+# IF YOU SEE THIS, DELETE IT RIGHT AWAY! >>>>
+# # added this in order to see what was being printed
+# myfunc() {
+#   echo "Content sent to stdout as defined at invocation time"
+#   # echo "Content sent to original stdout" >&"$myfunc_stdout_fd";
+# }
+ 
+# myfunc_out=$(myfunc)
+ 
+# declare -p myfunc_out
+
+# <<<<<<<<<
 
 # do the submission to the grid system...
 
@@ -316,10 +341,8 @@ echo "SUBMIT: R${chunk_index}_r${quasi_random_code}; #$n_before_me sleeping $tim
 
 #eval $Q_command
 echo $Q_command
-echo "reached 4"
+echo "reached 4: this means that we were able to run the sbatch"
 #sbatch test2.sbatch
-exit
 # now do the delaying to stagger the first few...
-
 sleep $time_to_delay
 

@@ -27,7 +27,7 @@ java_on_computenode=$java_on_headnode
 #           on_node_home=/mink/on_node_home_folder/DSSAT_dailyreal46_${quasi_random_code}/
 
 # this should be the mink/ directory at the root of the git repo (DMR)
-on_node_home="$PWD/../../" 
+on_node_home="$PWD/../../on_node_home/" 
 
 #uncomment as needed based on user (IJ)
 #  BASE=/home/users/morganr/mink/basics_15jun22/sge_Mink3daily/
@@ -44,7 +44,7 @@ BASE="$PWD"
 
 # doesn't exist (IJ)
 # update: now does exist (DMR). Added a hidden file that keeps the folder around.
-  staging_directory=${BASE}/staging_area
+  staging_directory=${BASE}/staging_area/
 #the staging area directory seems empty... (IJ)
   runner_archive_path=${staging_directory}runner_archive_${quasi_random_code}.zip
    DSSAT_archive_path=${staging_directory}DSSAT_program_${quasi_random_code}.zip
