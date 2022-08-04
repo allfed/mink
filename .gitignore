@@ -1,7 +1,8 @@
 # exclude built singularity image
 *.sif
 grassdata/
-basics_15jun22/sge_Mink3daily/actual_program_4.7.5.11/
+# turns out, we need this actual program thing... for dssat
+# basics_15jun22/sge_Mink3daily/actual_program_4.7.5.11/
 basics_15jun22/sge_Mink3daily/staging_area/*.sh
 # Byte-compiled / optimized / DLL files
 __pycache__/
