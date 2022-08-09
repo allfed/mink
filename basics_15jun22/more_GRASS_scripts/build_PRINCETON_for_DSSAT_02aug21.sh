@@ -44,14 +44,14 @@
 
 
 #output_file=to_DSSAT/coldhatnub_ ; region_to_use="n=24 s=-25 w=-125 e=180 res=1:45 -a" # let's try the whole world...
-#output_file=to_DSSAT/coldharp_ ; region_to_use="n=65 s=-55 w=-125 e=180 res=1:15 -a" # let's try the whole world...
+output_file=to_DSSAT/coldharp_ ; region_to_use="n=65 s=-55 w=-125 e=180 res=1:15 -a" # let's try the whole world...
 
-#output_file=to_DSSAT/isimipharp_ ; region_to_use="n=65 s=-55 w=-125 e=180 res=1:15 -a" # let's try the whole world...
+# output_file=to_DSSAT/isimipharp_ ; region_to_use="n=65 s=-55 w=-125 e=180 res=1:15 -a" # let's try the whole world...
 #output_file=to_DSSAT/isimipharpcoarser_ ; region_to_use="n=66.5 s=-56 w=-126 e=178.5 res=3:30 -a" # let's try the whole world...
 
 #output_file=to_DSSAT/trillium_ ; region_to_use="n=65.25 s=-56.25 w=-126 e=180 res=2.25 -a" # let's try the whole world...
 #output_file=to_DSSAT/toothwort_ ; region_to_use="n=65.25 s=-56.25 w=-126 e=180 res=2.25 -a" # let's try the whole world...
-output_file=to_DSSAT/ktest_ ; region_to_use="n=70 s=-55 w=-180 e=180 res=0:30 -a" # let's try the whole world...
+# output_file=to_DSSAT/ktest_ ; region_to_use="n=70 s=-55 w=-180 e=180 res=0:30 -a" # let's try the whole world...
 
 
  climate_mapset=deltaONpgfXXI # which mapset contains all the climate data we are going to use
@@ -247,180 +247,180 @@ r.mapcalc deleteme_all = "100000" 2>&1 | grep -v % # some big number
 #    crop residues left on the field prior to this season. the units are kg/ha
 #
 
-simple_initial="initial_soil_nitrogen_mass@DSSAT_essentials_12may11	initial_root_mass@DSSAT_essentials_12may11	initial_surface_residue_mass@DSSAT_essentials_12may11"
-wheat_simple_initial="2*initial_soil_nitrogen_mass@DSSAT_essentials_12may11	initial_root_mass@DSSAT_essentials_12may11	initial_surface_residue_mass@DSSAT_essentials_12may11"
-old_wheat_revised_initial="initial_soil_nitrogen_mass_07may13@DSSAT_essentials_12may11	initial_root_mass@DSSAT_essentials_12may11	initial_surface_residue_mass@DSSAT_essentials_12may11"
-wheat_revised_initial="initial_soil_nitrogen_mass_23may13@DSSAT_essentials_12may11	initial_root_mass@DSSAT_essentials_12may11	initial_surface_residue_mass@DSSAT_essentials_12may11"
+simple_initial="initial_soil_nitrogen_mass@DSSAT_essentials_12may11 initial_root_mass@DSSAT_essentials_12may11  initial_surface_residue_mass@DSSAT_essentials_12may11"
+wheat_simple_initial="2*initial_soil_nitrogen_mass@DSSAT_essentials_12may11 initial_root_mass@DSSAT_essentials_12may11  initial_surface_residue_mass@DSSAT_essentials_12may11"
+old_wheat_revised_initial="initial_soil_nitrogen_mass_07may13@DSSAT_essentials_12may11  initial_root_mass@DSSAT_essentials_12may11  initial_surface_residue_mass@DSSAT_essentials_12may11"
+wheat_revised_initial="initial_soil_nitrogen_mass_23may13@DSSAT_essentials_12may11  initial_root_mass@DSSAT_essentials_12may11  initial_surface_residue_mass@DSSAT_essentials_12may11"
 
-maize_initial="initial_soil_nitrogen_mass_13mar14@DSSAT_essentials_12may11	initial_root_mass@DSSAT_essentials_12may11	initial_surface_residue_mass@DSSAT_essentials_12may11"
+maize_initial="initial_soil_nitrogen_mass_13mar14@DSSAT_essentials_12may11  initial_root_mass@DSSAT_essentials_12may11  initial_surface_residue_mass@DSSAT_essentials_12may11"
 
-paleo_initial="40	1000	1000"
+paleo_initial="40   1000    1000"
 
 
 
 a_bunch_of_good_stuff=\
 "
-BEAN.A_physical_area@spam2005_v3	beans	rainfed	0	1	$wheat_revised_initial
-BEAN.A_physical_area@spam2005_v3	beans	irrigated	0	1	$wheat_revised_initial
+BEAN.A_physical_area@spam2005_v3    beans   rainfed 0   1   $wheat_revised_initial
+BEAN.A_physical_area@spam2005_v3    beans   irrigated   0   1   $wheat_revised_initial
 
-CHIC.A_physical_area@spam2005_v3	chickpeas	rainfed	0	1	$wheat_revised_initial
-CHIC.A_physical_area@spam2005_v3	chickpeas	irrigated	0	1	$wheat_revised_initial
+CHIC.A_physical_area@spam2005_v3    chickpeas   rainfed 0   1   $wheat_revised_initial
+CHIC.A_physical_area@spam2005_v3    chickpeas   irrigated   0   1   $wheat_revised_initial
 
-GROU.A_physical_area@spam2005_v3	groundnuts	rainfed	0	1	$wheat_revised_initial
-GROU.A_physical_area@spam2005_v3	groundnuts	irrigated	0	1	$wheat_revised_initial
+GROU.A_physical_area@spam2005_v3    groundnuts  rainfed 0   1   $wheat_revised_initial
+GROU.A_physical_area@spam2005_v3    groundnuts  irrigated   0   1   $wheat_revised_initial
 
-MAIZ.A_physical_area@spam2005_v3	maize	rainfed	N_for_maize_RF_13mar14@DSSAT_essentials_12may11	1	$maize_initial
-MAIZ.A_physical_area@spam2005_v3	maize	irrigated	N_for_maize_IR_13mar14@DSSAT_essentials_12may11	1	$maize_initial
+MAIZ.A_physical_area@spam2005_v3    maize   rainfed N_for_maize_RF_13mar14@DSSAT_essentials_12may11 1   $maize_initial
+MAIZ.A_physical_area@spam2005_v3    maize   irrigated   N_for_maize_IR_13mar14@DSSAT_essentials_12may11 1   $maize_initial
 
-POTA.A_physical_area@spam2005_v3	potatoes	irrigated	N_for_potatoes_IR_03may16@ricky_DSSAT_pt_develop3	1	$wheat_revised_initial
-POTA.A_physical_area@spam2005_v3	potatoes	rainfed	N_for_potatoes_RF_03may16@ricky_DSSAT_pt_develop3	1	$wheat_revised_initial
+POTA.A_physical_area@spam2005_v3    potatoes    irrigated   N_for_potatoes_IR_03may16@ricky_DSSAT_pt_develop3   1   $wheat_revised_initial
+POTA.A_physical_area@spam2005_v3    potatoes    rainfed N_for_potatoes_RF_03may16@ricky_DSSAT_pt_develop3   1   $wheat_revised_initial
 
-RICE.A_physical_area@spam2005_v3	rice	rainfed	N_for_rice_RF_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
-RICE.A_physical_area@spam2005_v3	rice	irrigated	N_for_rice_IR_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
+RICE.A_physical_area@spam2005_v3    rice    rainfed N_for_rice_RF_12aug13@DSSAT_essentials_12may11  1   $wheat_revised_initial
+RICE.A_physical_area@spam2005_v3    rice    irrigated   N_for_rice_IR_12aug13@DSSAT_essentials_12may11  1   $wheat_revised_initial
 
-SORG.A_physical_area@spam2005_v3	sorghum	rainfed	N_for_sorghum_RF_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
-SORG.A_physical_area@spam2005_v3	sorghum	irrigated	N_for_sorghum_IR_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
+SORG.A_physical_area@spam2005_v3    sorghum rainfed N_for_sorghum_RF_12aug13@DSSAT_essentials_12may11   1   $wheat_revised_initial
+SORG.A_physical_area@spam2005_v3    sorghum irrigated   N_for_sorghum_IR_12aug13@DSSAT_essentials_12may11   1   $wheat_revised_initial
 
-SOYB.A_physical_area@spam2005_v3	soybeans	rainfed	0	1	$wheat_revised_initial
-SOYB.A_physical_area@spam2005_v3	soybeans	irrigated	0	1	$wheat_revised_initial
+SOYB.A_physical_area@spam2005_v3    soybeans    rainfed 0   1   $wheat_revised_initial
+SOYB.A_physical_area@spam2005_v3    soybeans    irrigated   0   1   $wheat_revised_initial
 
-WHEA.A_physical_area@spam2005_v3	springwheat	rainfed	N_for_wheat_RF_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
-WHEA.A_physical_area@spam2005_v3	springwheat	irrigated	N_for_wheat_IR_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
+WHEA.A_physical_area@spam2005_v3    springwheat rainfed N_for_wheat_RF_12aug13@DSSAT_essentials_12may11 1   $wheat_revised_initial
+WHEA.A_physical_area@spam2005_v3    springwheat irrigated   N_for_wheat_IR_12aug13@DSSAT_essentials_12may11 1   $wheat_revised_initial
 
-WHEA.A_physical_area@spam2005_v3	winterwheat	rainfed	N_for_wheat_RF_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
-WHEA.A_physical_area@spam2005_v3	winterwheat	irrigated	N_for_wheat_IR_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
+WHEA.A_physical_area@spam2005_v3    winterwheat rainfed N_for_wheat_RF_12aug13@DSSAT_essentials_12may11 1   $wheat_revised_initial
+WHEA.A_physical_area@spam2005_v3    winterwheat irrigated   N_for_wheat_IR_12aug13@DSSAT_essentials_12may11 1   $wheat_revised_initial
 
-SUGC.A_physical_area@spam2005_v3	sugarcane	rainfed	0	1	$wheat_revised_initial
-SUGC.A_physical_area@spam2005_v3	sugarcane	irrigated	0	1	$wheat_revised_initial
+SUGC.A_physical_area@spam2005_v3    sugarcane   rainfed 0   1   $wheat_revised_initial
+SUGC.A_physical_area@spam2005_v3    sugarcane   irrigated   0   1   $wheat_revised_initial
 
-VEGE.A_physical_area@spam2005_v3	tomatoes	rainfed	100	1	$wheat_revised_initial
-VEGE.A_physical_area@spam2005_v3	tomatoes	irrigated	150	1	$wheat_revised_initial
+VEGE.A_physical_area@spam2005_v3    tomatoes    rainfed 100 1   $wheat_revised_initial
+VEGE.A_physical_area@spam2005_v3    tomatoes    irrigated   150 1   $wheat_revised_initial
 
-VEGE.A_physical_area@spam2005_v3	cabbage	rainfed	175	1	$wheat_revised_initial
-VEGE.A_physical_area@spam2005_v3	cabbage	irrigated	200	1	$wheat_revised_initial
+VEGE.A_physical_area@spam2005_v3    cabbage rainfed 175 1   $wheat_revised_initial
+VEGE.A_physical_area@spam2005_v3    cabbage irrigated   200 1   $wheat_revised_initial
 
-RAPE.A_physical_area@spam2005_v3	canola	rainfed	175	1	$wheat_revised_initial
-RAPE.A_physical_area@spam2005_v3	canola	irrigated	200	1	$wheat_revised_initial
+RAPE.A_physical_area@spam2005_v3    canola  rainfed 175 1   $wheat_revised_initial
+RAPE.A_physical_area@spam2005_v3    canola  irrigated   200 1   $wheat_revised_initial
 
-CASS.A_physical_area@spam2005_v3	cassava	rainfed	10	1	$wheat_revised_initial
-CASS.A_physical_area@spam2005_v3	cassava	irrigated	10	1	$wheat_revised_initial
+CASS.A_physical_area@spam2005_v3    cassava rainfed 10  1   $wheat_revised_initial
+CASS.A_physical_area@spam2005_v3    cassava irrigated   10  1   $wheat_revised_initial
 
 
-COTT.A_physical_area@spam2005_v3	cotton	rainfed	200	1	$wheat_revised_initial
-COTT.A_physical_area@spam2005_v3	cotton	irrigated	200	1	$wheat_revised_initial
+COTT.A_physical_area@spam2005_v3    cotton  rainfed 200 1   $wheat_revised_initial
+COTT.A_physical_area@spam2005_v3    cotton  irrigated   200 1   $wheat_revised_initial
 
-BARL.A_physical_area@spam2005_v3	barley	rainfed	N_for_wheat_RF_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
-BARL.A_physical_area@spam2005_v3	barley	irrigated	N_for_wheat_IR_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
+BARL.A_physical_area@spam2005_v3    barley  rainfed N_for_wheat_RF_12aug13@DSSAT_essentials_12may11 1   $wheat_revised_initial
+BARL.A_physical_area@spam2005_v3    barley  irrigated   N_for_wheat_IR_12aug13@DSSAT_essentials_12may11 1   $wheat_revised_initial
 
-VEGE.A_physical_area@spam2005_v3	greenbeans	rainfed	50	1	$wheat_revised_initial
-VEGE.A_physical_area@spam2005_v3	greenbeans	irrigated	50	1	$wheat_revised_initial
+VEGE.A_physical_area@spam2005_v3    greenbeans  rainfed 50  1   $wheat_revised_initial
+VEGE.A_physical_area@spam2005_v3    greenbeans  irrigated   50  1   $wheat_revised_initial
 
-BARL.A_physical_area@spam2005_v3	barley	rainfed	N_for_wheat_RF_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
-BARL.A_physical_area@spam2005_v3	barley	irrigated	N_for_wheat_IR_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
+BARL.A_physical_area@spam2005_v3    barley  rainfed N_for_wheat_RF_12aug13@DSSAT_essentials_12may11 1   $wheat_revised_initial
+BARL.A_physical_area@spam2005_v3    barley  irrigated   N_for_wheat_IR_12aug13@DSSAT_essentials_12may11 1   $wheat_revised_initial
 
-PMIL.A_physical_area@spam2005_v3	pearlmillet	rainfed	20	1	$wheat_revised_initial
-PMIL.A_physical_area@spam2005_v3	pearlmillet	irrigated	20	1	$wheat_revised_initial
+PMIL.A_physical_area@spam2005_v3    pearlmillet rainfed 20  1   $wheat_revised_initial
+PMIL.A_physical_area@spam2005_v3    pearlmillet irrigated   20  1   $wheat_revised_initial
 
-VEGE.A_physical_area@spam2005_v3	peppers	rainfed	100	1	$wheat_revised_initial
-VEGE.A_physical_area@spam2005_v3	peppers	irrigated	100	1	$wheat_revised_initial
+VEGE.A_physical_area@spam2005_v3    peppers rainfed 100 1   $wheat_revised_initial
+VEGE.A_physical_area@spam2005_v3    peppers irrigated   100 1   $wheat_revised_initial
 
-SUGB.A_physical_area@spam2005_v3	sugarbeets	rainfed	300	1	$wheat_revised_initial
-SUGB.A_physical_area@spam2005_v3	sugarbeets	irrigated	300	1	$wheat_revised_initial
+SUGB.A_physical_area@spam2005_v3    sugarbeets  rainfed 300 1   $wheat_revised_initial
+SUGB.A_physical_area@spam2005_v3    sugarbeets  irrigated   300 1   $wheat_revised_initial
 
-SUNF.A_physical_area@spam2005_v3	sunflowers	rainfed	180	1	$wheat_revised_initial
-SUNF.A_physical_area@spam2005_v3	sunflowers	irrigated	180	1	$wheat_revised_initial
+SUNF.A_physical_area@spam2005_v3    sunflowers  rainfed 180 1   $wheat_revised_initial
+SUNF.A_physical_area@spam2005_v3    sunflowers  irrigated   180 1   $wheat_revised_initial
 "
 
 
 some_good_junk=\
 "
-deleteme_all	maize	rainfed	N_for_maize_RF_13mar14@DSSAT_essentials_12may11	1	$maize_initial
-deleteme_all	maize	irrigated	N_for_maize_IR_13mar14@DSSAT_essentials_12may11	1	$maize_initial
+deleteme_all    maize   rainfed N_for_maize_RF_13mar14@DSSAT_essentials_12may11 1   $maize_initial
+deleteme_all    maize   irrigated   N_for_maize_IR_13mar14@DSSAT_essentials_12may11 1   $maize_initial
 
-deleteme_all	springwheat	rainfed	N_for_wheat_RF_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
-deleteme_all	springwheat	irrigated	N_for_wheat_IR_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
+deleteme_all    springwheat rainfed N_for_wheat_RF_12aug13@DSSAT_essentials_12may11 1   $wheat_revised_initial
+deleteme_all    springwheat irrigated   N_for_wheat_IR_12aug13@DSSAT_essentials_12may11 1   $wheat_revised_initial
 
-deleteme_all	winterwheat	rainfed	N_for_wheat_RF_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
-deleteme_all	winterwheat	irrigated	N_for_wheat_IR_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
+deleteme_all    winterwheat rainfed N_for_wheat_RF_12aug13@DSSAT_essentials_12may11 1   $wheat_revised_initial
+deleteme_all    winterwheat irrigated   N_for_wheat_IR_12aug13@DSSAT_essentials_12may11 1   $wheat_revised_initial
 
-deleteme_all	potatoes	irrigated	N_for_potatoes_IR_03may16@ricky_DSSAT_pt_develop3	1	$wheat_revised_initial
-deleteme_all	potatoes	rainfed	N_for_potatoes_RF_03may16@ricky_DSSAT_pt_develop3	1	$wheat_revised_initial
+deleteme_all    potatoes    irrigated   N_for_potatoes_IR_03may16@ricky_DSSAT_pt_develop3   1   $wheat_revised_initial
+deleteme_all    potatoes    rainfed N_for_potatoes_RF_03may16@ricky_DSSAT_pt_develop3   1   $wheat_revised_initial
 
-deleteme_all	rice	rainfed	N_for_rice_RF_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
-deleteme_all	rice	irrigated	N_for_rice_IR_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
+deleteme_all    rice    rainfed N_for_rice_RF_12aug13@DSSAT_essentials_12may11  1   $wheat_revised_initial
+deleteme_all    rice    irrigated   N_for_rice_IR_12aug13@DSSAT_essentials_12may11  1   $wheat_revised_initial
 
-deleteme_all	sorghum	rainfed	N_for_sorghum_RF_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
-deleteme_all	sorghum	irrigated	N_for_sorghum_IR_12aug13@DSSAT_essentials_12may11	1	$wheat_revised_initial
+deleteme_all    sorghum rainfed N_for_sorghum_RF_12aug13@DSSAT_essentials_12may11   1   $wheat_revised_initial
+deleteme_all    sorghum irrigated   N_for_sorghum_IR_12aug13@DSSAT_essentials_12may11   1   $wheat_revised_initial
 
-deleteme_all	soybeans	rainfed	0	1	$wheat_revised_initial
-deleteme_all	soybeans	irrigated	0	1	$wheat_revised_initial
+deleteme_all    soybeans    rainfed 0   1   $wheat_revised_initial
+deleteme_all    soybeans    irrigated   0   1   $wheat_revised_initial
 
-deleteme_all	groundnuts	rainfed	0	1	$wheat_revised_initial
-deleteme_all	groundnuts	irrigated	0	1	$wheat_revised_initial
+deleteme_all    groundnuts  rainfed 0   1   $wheat_revised_initial
+deleteme_all    groundnuts  irrigated   0   1   $wheat_revised_initial
 
 "
 
 
 # old, with only partial coverage
-#deleteme_all	potatoes	irrigated	N_for_potatoes_IR_03may16@ricky_DSSAT_pt_develop3	growncoarse_potato_season_onset_full_24jun14_grown	$wheat_revised_initial
-#deleteme_all	potatoes	rainfed	N_for_potatoes_RF_03may16@ricky_DSSAT_pt_develop3	growncoarse_potato_season_onset_full_24jun14_grown	$wheat_revised_initial
+#deleteme_all   potatoes    irrigated   N_for_potatoes_IR_03may16@ricky_DSSAT_pt_develop3   growncoarse_potato_season_onset_full_24jun14_grown  $wheat_revised_initial
+#deleteme_all   potatoes    rainfed N_for_potatoes_RF_03may16@ricky_DSSAT_pt_develop3   growncoarse_potato_season_onset_full_24jun14_grown  $wheat_revised_initial
 
 core_crops_everywhere_three_month_window_main_control_list=\
 "
-deleteme_all	maize	rainfed	N_for_maize_RF_13mar14@DSSAT_essentials_12may11	gremlin_irrigated	$maize_initial
-deleteme_all	maize	irrigated	N_for_maize_IR_13mar14@DSSAT_essentials_12may11	gremlin_irrigated	$maize_initial
+deleteme_all    maize   rainfed N_for_maize_RF_13mar14@DSSAT_essentials_12may11 gremlin_irrigated   $maize_initial
+deleteme_all    maize   irrigated   N_for_maize_IR_13mar14@DSSAT_essentials_12may11 gremlin_irrigated   $maize_initial
 
-deleteme_all	springwheat	rainfed	N_for_wheat_RF_12aug13@DSSAT_essentials_12may11	gremlin_spring_wheat	$wheat_revised_initial
-deleteme_all	springwheat	irrigated	N_for_wheat_IR_12aug13@DSSAT_essentials_12may11	gremlin_spring_wheat	$wheat_revised_initial
+deleteme_all    springwheat rainfed N_for_wheat_RF_12aug13@DSSAT_essentials_12may11 gremlin_spring_wheat    $wheat_revised_initial
+deleteme_all    springwheat irrigated   N_for_wheat_IR_12aug13@DSSAT_essentials_12may11 gremlin_spring_wheat    $wheat_revised_initial
 
-deleteme_all	winterwheat	rainfed	N_for_wheat_RF_12aug13@DSSAT_essentials_12may11	gremlin_winter_wheat	$wheat_revised_initial
-deleteme_all	winterwheat	irrigated	N_for_wheat_IR_12aug13@DSSAT_essentials_12may11	gremlin_winter_wheat	$wheat_revised_initial
+deleteme_all    winterwheat rainfed N_for_wheat_RF_12aug13@DSSAT_essentials_12may11 gremlin_winter_wheat    $wheat_revised_initial
+deleteme_all    winterwheat irrigated   N_for_wheat_IR_12aug13@DSSAT_essentials_12may11 gremlin_winter_wheat    $wheat_revised_initial
 
-deleteme_all	potatoes	irrigated	N_for_potatoes_IR_19apr22@DSSAT_essentials_12may11	growncoarse_potato_season_onset_full_24jun14_grown	$wheat_revised_initial
-deleteme_all	potatoes	rainfed	N_for_potatoes_RF_19apr22@DSSAT_essentials_12may11	growncoarse_potato_season_onset_full_24jun14_grown	$wheat_revised_initial
+deleteme_all    potatoes    irrigated   N_for_potatoes_IR_19apr22@DSSAT_essentials_12may11  growncoarse_potato_season_onset_full_24jun14_grown  $wheat_revised_initial
+deleteme_all    potatoes    rainfed N_for_potatoes_RF_19apr22@DSSAT_essentials_12may11  growncoarse_potato_season_onset_full_24jun14_grown  $wheat_revised_initial
 
-deleteme_all	rice	rainfed	N_for_rice_RF_12aug13@DSSAT_essentials_12may11	gremlin_irrigated	$wheat_revised_initial
-deleteme_all	rice	irrigated	N_for_rice_IR_12aug13@DSSAT_essentials_12may11	gremlin_irrigated	$wheat_revised_initial
+deleteme_all    rice    rainfed N_for_rice_RF_12aug13@DSSAT_essentials_12may11  gremlin_irrigated   $wheat_revised_initial
+deleteme_all    rice    irrigated   N_for_rice_IR_12aug13@DSSAT_essentials_12may11  gremlin_irrigated   $wheat_revised_initial
 
-deleteme_all	sorghum	rainfed	N_for_sorghum_RF_12aug13@DSSAT_essentials_12may11	gremlin_irrigated	$wheat_revised_initial
-deleteme_all	sorghum	irrigated	N_for_sorghum_IR_12aug13@DSSAT_essentials_12may11	gremlin_irrigated	$wheat_revised_initial
+deleteme_all    sorghum rainfed N_for_sorghum_RF_12aug13@DSSAT_essentials_12may11   gremlin_irrigated   $wheat_revised_initial
+deleteme_all    sorghum irrigated   N_for_sorghum_IR_12aug13@DSSAT_essentials_12may11   gremlin_irrigated   $wheat_revised_initial
 
-deleteme_all	soybeans	rainfed	0	gremlin_irrigated	$wheat_revised_initial
-deleteme_all	soybeans	irrigated	0	gremlin_irrigated	$wheat_revised_initial
+deleteme_all    soybeans    rainfed 0   gremlin_irrigated   $wheat_revised_initial
+deleteme_all    soybeans    irrigated   0   gremlin_irrigated   $wheat_revised_initial
 
-deleteme_all	groundnuts	rainfed	0	gremlin_irrigated	$wheat_revised_initial
-deleteme_all	groundnuts	irrigated	0	gremlin_irrigated	$wheat_revised_initial
+deleteme_all    groundnuts  rainfed 0   gremlin_irrigated   $wheat_revised_initial
+deleteme_all    groundnuts  irrigated   0   gremlin_irrigated   $wheat_revised_initial
 
-deleteme_all	tomatoes	rainfed	100	gremlin_irrigated	$wheat_revised_initial
-deleteme_all	tomatoes	irrigated	150	gremlin_irrigated	$wheat_revised_initial
+deleteme_all    tomatoes    rainfed 100 gremlin_irrigated   $wheat_revised_initial
+deleteme_all    tomatoes    irrigated   150 gremlin_irrigated   $wheat_revised_initial
 
-deleteme_all	cabbage	rainfed	175	gremlin_irrigated	$wheat_revised_initial
-deleteme_all	cabbage	irrigated	200	gremlin_irrigated	$wheat_revised_initial
+deleteme_all    cabbage rainfed 175 gremlin_irrigated   $wheat_revised_initial
+deleteme_all    cabbage irrigated   200 gremlin_irrigated   $wheat_revised_initial
 
-deleteme_all	greenbeans	rainfed	50	gremlin_irrigated	$wheat_revised_initial
-deleteme_all	greenbeans	irrigated	50	gremlin_irrigated	$wheat_revised_initial
+deleteme_all    greenbeans  rainfed 50  gremlin_irrigated   $wheat_revised_initial
+deleteme_all    greenbeans  irrigated   50  gremlin_irrigated   $wheat_revised_initial
 
-deleteme_all	springbarley	rainfed	N_for_wheat_RF_12aug13@DSSAT_essentials_12may11	gremlin_spring_wheat	$wheat_revised_initial
-deleteme_all	springbarley	irrigated	N_for_wheat_IR_12aug13@DSSAT_essentials_12may11	gremlin_spring_wheat	$wheat_revised_initial
+deleteme_all    springbarley    rainfed N_for_wheat_RF_12aug13@DSSAT_essentials_12may11 gremlin_spring_wheat    $wheat_revised_initial
+deleteme_all    springbarley    irrigated   N_for_wheat_IR_12aug13@DSSAT_essentials_12may11 gremlin_spring_wheat    $wheat_revised_initial
 
-deleteme_all	winterbarley	rainfed	N_for_wheat_RF_12aug13@DSSAT_essentials_12may11	gremlin_winter_wheat	$wheat_revised_initial
-deleteme_all	winterbarley	irrigated	N_for_wheat_IR_12aug13@DSSAT_essentials_12may11	gremlin_winter_wheat	$wheat_revised_initial
+deleteme_all    winterbarley    rainfed N_for_wheat_RF_12aug13@DSSAT_essentials_12may11 gremlin_winter_wheat    $wheat_revised_initial
+deleteme_all    winterbarley    irrigated   N_for_wheat_IR_12aug13@DSSAT_essentials_12may11 gremlin_winter_wheat    $wheat_revised_initial
 
-deleteme_all	chickpeas	rainfed	0	gremlin_spring_wheat	$wheat_revised_initial
-deleteme_all	chickpeas	irrigated	0	gremlin_spring_wheat	$wheat_revised_initial
+deleteme_all    chickpeas   rainfed 0   gremlin_spring_wheat    $wheat_revised_initial
+deleteme_all    chickpeas   irrigated   0   gremlin_spring_wheat    $wheat_revised_initial
 
-deleteme_all	peppers	rainfed	100	gremlin_irrigated	$wheat_revised_initial
-deleteme_all	peppers	irrigated	100	gremlin_irrigated	$wheat_revised_initial
+deleteme_all    peppers rainfed 100 gremlin_irrigated   $wheat_revised_initial
+deleteme_all    peppers irrigated   100 gremlin_irrigated   $wheat_revised_initial
 
-deleteme_all	sunflowers	rainfed	100	gremlin_irrigated	$wheat_revised_initial
-deleteme_all	sunflowers	irrigated	100	gremlin_irrigated	$wheat_revised_initial
+deleteme_all    sunflowers  rainfed 100 gremlin_irrigated   $wheat_revised_initial
+deleteme_all    sunflowers  irrigated   100 gremlin_irrigated   $wheat_revised_initial
 "
 
 # sugarcane needs to be limited to a few particular timeframes, so we need to do the search thing....
 sugarcane_main_control_list=\
 "
-deleteme_all	sugarcane	rainfed	0	1	$wheat_revised_initial
-deleteme_all	sugarcane	irrigated	0	1	$wheat_revised_initial
+deleteme_all    sugarcane   rainfed 0   1   $wheat_revised_initial
+deleteme_all    sugarcane   irrigated   0   1   $wheat_revised_initial
 "
 
 # cassava: based on very little information, it appears that the irrigated map would work better than the spring_wheat map
@@ -429,47 +429,47 @@ deleteme_all	sugarcane	irrigated	0	1	$wheat_revised_initial
 
 even_more_useful_junk=\
 "
-deleteme_all	springbarley	rainfed	N_for_wheat_RF_12aug13@DSSAT_essentials_12may11	gremlin_spring_wheat	$wheat_revised_initial
-deleteme_all	springbarley	irrigated	N_for_wheat_IR_12aug13@DSSAT_essentials_12may11	gremlin_spring_wheat	$wheat_revised_initial
+deleteme_all    springbarley    rainfed N_for_wheat_RF_12aug13@DSSAT_essentials_12may11 gremlin_spring_wheat    $wheat_revised_initial
+deleteme_all    springbarley    irrigated   N_for_wheat_IR_12aug13@DSSAT_essentials_12may11 gremlin_spring_wheat    $wheat_revised_initial
 
-deleteme_all	winterbarley	rainfed	N_for_wheat_RF_12aug13@DSSAT_essentials_12may11	gremlin_winter_wheat	$wheat_revised_initial
-deleteme_all	winterbarley	irrigated	N_for_wheat_IR_12aug13@DSSAT_essentials_12may11	gremlin_winter_wheat	$wheat_revised_initial
+deleteme_all    winterbarley    rainfed N_for_wheat_RF_12aug13@DSSAT_essentials_12may11 gremlin_winter_wheat    $wheat_revised_initial
+deleteme_all    winterbarley    irrigated   N_for_wheat_IR_12aug13@DSSAT_essentials_12may11 gremlin_winter_wheat    $wheat_revised_initial
 
-deleteme_all	beans	rainfed	0	gremlin_irrigated	$wheat_revised_initial
-deleteme_all	beans	irrigated	0	gremlin_irrigated	$wheat_revised_initial
+deleteme_all    beans   rainfed 0   gremlin_irrigated   $wheat_revised_initial
+deleteme_all    beans   irrigated   0   gremlin_irrigated   $wheat_revised_initial
 
-deleteme_all	chickpeas	rainfed	0	gremlin_spring_wheat	$wheat_revised_initial
-deleteme_all	chickpeas	irrigated	0	gremlin_spring_wheat	$wheat_revised_initial
+deleteme_all    chickpeas   rainfed 0   gremlin_spring_wheat    $wheat_revised_initial
+deleteme_all    chickpeas   irrigated   0   gremlin_spring_wheat    $wheat_revised_initial
 
-deleteme_all	cassava	rainfed	10	gremlin_irrigated	$wheat_revised_initial
-deleteme_all	cassava	irrigated	10	gremlin_irrigated	$wheat_revised_initial
+deleteme_all    cassava rainfed 10  gremlin_irrigated   $wheat_revised_initial
+deleteme_all    cassava irrigated   10  gremlin_irrigated   $wheat_revised_initial
 
-deleteme_all	tomatoes	rainfed	100	1	$wheat_revised_initial
-deleteme_all	tomatoes	irrigated	150	1	$wheat_revised_initial
+deleteme_all    tomatoes    rainfed 100 1   $wheat_revised_initial
+deleteme_all    tomatoes    irrigated   150 1   $wheat_revised_initial
 
-deleteme_all	cabbage	rainfed	175	1	$wheat_revised_initial
-deleteme_all	cabbage	irrigated	200	1	$wheat_revised_initial
+deleteme_all    cabbage rainfed 175 1   $wheat_revised_initial
+deleteme_all    cabbage irrigated   200 1   $wheat_revised_initial
 
-deleteme_all	canola	rainfed	175	1	$wheat_revised_initial
-deleteme_all	canola	irrigated	200	1	$wheat_revised_initial
+deleteme_all    canola  rainfed 175 1   $wheat_revised_initial
+deleteme_all    canola  irrigated   200 1   $wheat_revised_initial
 
-deleteme_all	cotton	rainfed	200	1	$wheat_revised_initial
-deleteme_all	cotton	irrigated	200	1	$wheat_revised_initial
+deleteme_all    cotton  rainfed 200 1   $wheat_revised_initial
+deleteme_all    cotton  irrigated   200 1   $wheat_revised_initial
 
-deleteme_all	greenbeans	rainfed	50	1	$wheat_revised_initial
-deleteme_all	greenbeans	irrigated	50	1	$wheat_revised_initial
+deleteme_all    greenbeans  rainfed 50  1   $wheat_revised_initial
+deleteme_all    greenbeans  irrigated   50  1   $wheat_revised_initial
 
-deleteme_all	pearlmillet	rainfed	20	1	$wheat_revised_initial
-deleteme_all	pearlmillet	irrigated	20	1	$wheat_revised_initial
+deleteme_all    pearlmillet rainfed 20  1   $wheat_revised_initial
+deleteme_all    pearlmillet irrigated   20  1   $wheat_revised_initial
 
-deleteme_all	peppers	rainfed	100	1	$wheat_revised_initial
-deleteme_all	peppers	irrigated	100	1	$wheat_revised_initial
+deleteme_all    peppers rainfed 100 1   $wheat_revised_initial
+deleteme_all    peppers irrigated   100 1   $wheat_revised_initial
 
-deleteme_all	sugarbeets	rainfed	300	1	$wheat_revised_initial
-deleteme_all	sugarbeets	irrigated	300	1	$wheat_revised_initial
+deleteme_all    sugarbeets  rainfed 300 1   $wheat_revised_initial
+deleteme_all    sugarbeets  irrigated   300 1   $wheat_revised_initial
 
-deleteme_all	sunflowers	rainfed	180	1	$wheat_revised_initial
-deleteme_all	sunflowers	irrigated	180	1	$wheat_revised_initial
+deleteme_all    sunflowers  rainfed 180 1   $wheat_revised_initial
+deleteme_all    sunflowers  irrigated   180 1   $wheat_revised_initial
 
 
 "

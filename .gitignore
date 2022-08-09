@@ -1,6 +1,9 @@
 # exclude built singularity image
 *.sif
 grassdata/
+# turns out, we need this actual program thing... for dssat
+# basics_15jun22/sge_Mink3daily/actual_program_4.7.5.11/
+basics_15jun22/sge_Mink3daily/staging_area/*.sh
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -101,4 +104,8 @@ target/
 GRASS_program/
 
 # object file directories
-GRASS_modles/*/OBJ*/
+GRASS_modules/*/OBJ*/
+
+# MINK data 
+catastrophe_mink/
+control_mink/

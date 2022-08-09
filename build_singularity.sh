@@ -14,4 +14,5 @@ fi
 
 echo "Building singularity"
 mkdir mink_sandbox
-sudo singularity build --sandbox mink_sandbox mink.def
+# sudo singularity --sandbox mink_sandbox mink.def
+singularity build --fakeroot mink.sif mink.def

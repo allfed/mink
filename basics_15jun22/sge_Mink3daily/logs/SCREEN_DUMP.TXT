@@ -1,0 +1,20 @@
+Thu 28 Jul 21:59:09 BST 2022
+rdl = [
+
+D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE	catastrophe_mink/Outdoor_crops_sample	mzK023RF.SNX	threeSplitWithFlowering	379	maize
+D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE	control_mink/Outdoor_crops_control	mzK023RF.SNX	threeSplitWithFlowering	379	maize
+]
+chunks per case = 5
+trying 2 cases
+nice: /home/users/morganr/usr/bin/java: No such file or directory
+
+
+FAILURE of chunkification (data); skipping
+
+
+nice: /home/users/morganr/usr/bin/java: No such file or directory
+
+
+FAILURE of chunkification (data); skipping
+
+

@@ -91,7 +91,9 @@
 
 
 
-output_file=to_DSSAT/catdailyB_ ; weather_mask=first_weather_mask@ricky_DSSAT_cat_0 ; region_to_use="n=90 s=-90 w=-180 e=180 nsres=2.5 ewres=2.5" # now forcing a square resolution region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5"
+#output_file=to_DSSAT/catdailyB_ ; weather_mask=first_weather_mask@ricky_DSSAT_cat_0 ; region_to_use="n=90 s=-90 w=-180 e=180 nsres=2.5 ewres=2.5" # now forcing a square resolution region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5"
+
+output_file=to_DSSAT/D_ ; weather_mask=first_weather_mask@ricky_DSSAT_cat_0 ; region_to_use="n=90 s=-90 w=-180 e=180 nsres=2.5 ewres=2.5" # now forcing a square resolution region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5"
 
 #output_file=to_DSSAT/crazywheatA_ ; weather_mask=mask_for_isimip_ar6@ricky_junk_0 ; region_to_use="n=52N s=30S e=95W w=115W res=2.5 -a"
 
@@ -99,6 +101,7 @@ output_file=to_DSSAT/catdailyB_ ; weather_mask=first_weather_mask@ricky_DSSAT_ca
 #### we should only need the calendar_mapset now with pre-existing daily weather...
 
 # climate_mapset=deltaPIKnov_from_daily # which mapset contains all the climate data we are going to use
+#calendar_mapset=deltaPIKnov_from_daily_c # which mapset contains the target planting month rasters
 calendar_mapset=deltaPIKnov_from_daily_c # which mapset contains the target planting month rasters
 
 # climate_mapset=PIK_climate # which mapset contains all the climate data we are going to use
@@ -216,7 +219,7 @@ growing_radius=0 # 0.0 # number of pixels
 # make a simple raster to get everything...
 echo "    ++ making an ALL raster ++"
 g.region $region_to_use
-r.mapcalc deleteme_all = "100000" 2>&1 | grep -v % # some big number
+r.mapcalc deleteme_all = "100000" 2>&1 | grep -v % # some big number that creates a dummy raster that calculates crop growing everywhere if large...
 
 
 
