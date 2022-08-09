@@ -139,7 +139,7 @@ echo "this is me trying to get the java program to run(DMR)"
 #$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution 
 echo "well, did it run then?"
 echo ""
-copy_block= `cp $PWD/../../control_mink/Outdoor-crops-control_0.9375_108.125.WTH $on_node_weather_dir`
+copy_block="cp $PWD/../../control_mink/Outdoor-crops-control_0.9375_108.125.WTH $on_node_weather_dir"
 #copy_block=`$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution | uniq`
 
 #  we_need_to_delay=`echo "if($n_before_me > -2 && $n_before_me <= $number_of_initial_cases_to_stagger) {1} else {0}" | bc`
@@ -178,7 +178,7 @@ echo "#!/bin/bash
   echo \"$magicSoilPrefix\"             >> $runner_init_file
   echo \"$spinUpTimeDays\"              >> $runner_init_file
   echo \"$nPlantingWindowsPerMonth\"    >> $runner_init_file
-  echo \"$plantingWindowLengthDays"    >> $runner_init_file
+  echo \"$plantingWindowLengthDays\"    >> $runner_init_file
   echo \"$co2ppm\"                      >> $runner_init_file
   echo \"$cropToUse\"                   >> $runner_init_file
 #  echo \"$nHappyPlantRunsForPhenology\" >> $runner_init_file
@@ -246,7 +246,7 @@ echo \"------ moving/unpacking ; \`date\` ------\"
   # copy the daily weather
 echo \"\"
 echo \"about to copy\"
-echo $copy_block
+$copy_block
 echo \"\"
 echo \"finished copying\"
 echo \"\"
