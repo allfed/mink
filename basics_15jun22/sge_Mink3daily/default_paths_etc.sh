@@ -33,7 +33,7 @@ on_node_home="$PWD/../../on_node_home/"
 #  BASE=/home/users/morganr/mink/basics_15jun22/sge_Mink3daily/
 
 # BASE is now the folder where default_paths is located (DMR)
-BASE="$PWD" 
+BASE="$PWD/" 
 
 
 
@@ -44,7 +44,7 @@ BASE="$PWD"
 
 # doesn't exist (IJ)
 # update: now does exist (DMR). Added a hidden file that keeps the folder around.
-  staging_directory=${BASE}/staging_area/
+  staging_directory=${BASE}staging_area/
 #the staging area directory seems empty... (IJ)
   runner_archive_path=${staging_directory}runner_archive_${quasi_random_code}.zip
    DSSAT_archive_path=${staging_directory}DSSAT_program_${quasi_random_code}.zip
@@ -75,7 +75,7 @@ BASE="$PWD"
 
 # latest and greatest as of 12oct21 (checked correct by IJ)
 # (WARNING: actual program folder removed by DMR to save space on the repo, may need to be reinstated at some point)
-      original_DSSAT_dir=${BASE}/actual_program_4.7.5.11
+      original_DSSAT_dir=${BASE}actual_program_4.7.5.11
 
 
 
@@ -100,8 +100,8 @@ BASE="$PWD"
  chunked_output_data_dir=${BASE}chunks_to_GRASS/
                 logs_dir=${BASE}logs/
 
-             weather_dir=${BASE}/dailyweather/
-   prestaged_weather_dir=/state/partition1/prestaged_DSSAT_daily_weather/
+             weather_dir=${BASE}dailyweather/
+   prestaged_weather_dir=${BASE}../../
 
         runner_init_file=${staging_directory}runner_init_${quasi_random_code}.txt
   

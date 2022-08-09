@@ -135,14 +135,17 @@ echo $daily_weather_copier_classname
 
 echo ""
 echo "this is me trying to get the java program to run(DMR)"
-$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution 
+#echo $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution
+#$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution 
 echo "well, did it run then?"
 echo ""
-copy_block=`$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution | uniq`
+copy_block= `cp $PWD/../../control_mink/Outdoor-crops-control_0.9375_108.125.WTH $on_node_weather_dir`
+#copy_block=`$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution | uniq`
 
-  we_need_to_delay=`echo "if($n_before_me > -2 && $n_before_me <= $number_of_initial_cases_to_stagger) {1} else {0}" | bc`
-  number_of_pixels=`echo "$copy_block" | wc -l`
-
+#  we_need_to_delay=`echo "if($n_before_me > -2 && $n_before_me <= $number_of_initial_cases_to_stagger) {1} else {0}" | bc`
+we_need_to_delay=0
+#  number_of_pixels=`echo "$copy_block" | wc -l`
+number_of_pixels=1
     echo "n_before_me = $n_before_me; maxstagger = $number_of_initial_cases_to_stagger ; n_pixels = $number_of_pixels / guess files per sec $guess_for_weather_files_per_second; need_to_delay = $we_need_to_delay"
 
   if [ "$we_need_to_delay" = 1 ]; then
@@ -175,7 +178,7 @@ echo "#!/bin/bash
   echo \"$magicSoilPrefix\"             >> $runner_init_file
   echo \"$spinUpTimeDays\"              >> $runner_init_file
   echo \"$nPlantingWindowsPerMonth\"    >> $runner_init_file
-  echo \"$plantingWindowLengthDays\"    >> $runner_init_file
+  echo \"$plantingWindowLengthDays"    >> $runner_init_file
   echo \"$co2ppm\"                      >> $runner_init_file
   echo \"$cropToUse\"                   >> $runner_init_file
 #  echo \"$nHappyPlantRunsForPhenology\" >> $runner_init_file
@@ -233,7 +236,7 @@ echo \"------ moving/unpacking ; \`date\` ------\"
 
   # move the stuff out
   # the runner needs all the subdirectories
-  cp -a $original_runner_dir/*   ${on_node_runner_dir}
+  cp -a $original_runner_dir*   ${on_node_runner_dir}
   # the rest do not want the subdirectories
   cp $original_DSSAT_dir/*    ${on_node_DSSAT_dir}
   cp ${data_file_base_name}_*  ${on_node_input_data_dir}
@@ -243,7 +246,7 @@ echo \"------ moving/unpacking ; \`date\` ------\"
   # copy the daily weather
 echo \"\"
 echo \"about to copy\"
-$copy_block
+echo $copy_block
 echo \"\"
 echo \"finished copying\"
 echo \"\"
@@ -251,7 +254,7 @@ echo \"\"
 # check if things copied ok.
 #if [ \$? -ne 0 ]; then
 # i think what i really care about is if any things got copied at all..
-if [ \`ls -U $on_node_weather_dir/*${weatherDataSuffixWithDot} | wc -l\` -eq 0 ]; then
+if [ \`ls -U $on_node_weather_dir*${weatherDataSuffixWithDot} | wc -l\` -eq 0 ]; then
     echo \" !!! something bad happened on \$HOSTNAME and we could not copy nicely, clearing out $on_node_home\"
     rm -rf $on_node_home
     echo \"- done BAILING at \`date\` -\" >> $log_file
