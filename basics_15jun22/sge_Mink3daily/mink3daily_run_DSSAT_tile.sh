@@ -139,7 +139,27 @@ echo "this is me trying to get the java program to run(DMR)"
 #$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution 
 echo "well, did it run then?"
 echo ""
-copy_block="cp $PWD/../../control_mink/Outdoor-crops-control_0.9375_108.125.WTH $on_node_weather_dir"
+# copy_block="cp $PWD/../../control_mink/Outdoor-crops-control_0.9375_108.125.WTH $on_node_weather_dir"
+copy_block="
+cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-89.375.WTH ../../../on_node_home/dailyweather/Outdoor-crops-control_81.5625_-89.375.WTH
+cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-86.875.WTH ../../../on_node_home/dailyweather/Outdoor-crops-control_81.5625_-86.875.WTH
+cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-84.375.WTH ../../../on_node_home/dailyweather/Outdoor-crops-control_81.5625_-84.375.WTH
+cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-81.875.WTH ../../../on_node_home/dailyweather/Outdoor-crops-control_81.5625_-81.875.WTH
+cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-79.375.WTH ../../../on_node_home/dailyweather/Outdoor-crops-control_81.5625_-79.375.WTH
+cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-76.875.WTH ../../../on_node_home/dailyweather/Outdoor-crops-control_81.5625_-76.875.WTH
+"
+# DELETE IF YOU SEE THIS >>>>
+# copy_block="cp -r $PWD/../../control_mink/* $on_node_weather_dir"
+# copy_block="
+# cp -r $PWD/../../control_mink/* $on_node_weather_dir
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-88.75.WTH $on_node_weather_dir
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-86.25.WTH $on_node_weather_dir
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-83.75.WTH $on_node_weather_dir
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-81.25.WTH $on_node_weather_dir
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-78.75.WTH $on_node_weather_dir
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-76.25.WTH $on_node_weather_dir
+# "
+# <<<<<<
 #copy_block=`$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution | uniq`
 
 #  we_need_to_delay=`echo "if($n_before_me > -2 && $n_before_me <= $number_of_initial_cases_to_stagger) {1} else {0}" | bc`
@@ -154,6 +174,58 @@ number_of_pixels=1
     time_to_delay=0.1s
   fi
 
+  echo "optionalHarvestInterval"
+  echo $optionalHarvestInterval
+  echo "clayLoamSandStableCarbonRatesFilename"
+  echo $clayLoamSandStableCarbonRatesFilename
+  echo "optionalHarvestInterval"
+  echo $optionalHarvestInterval
+  echo "plantingDateInMonthShiftInDays"
+  echo $plantingDateInMonthShiftInDays
+
+  # (DMR) DELETE ME AFTER YOU FIGURE OUT HOW TO RUN IN WRAPPER >>>>>
+  export  latitude_resolution=1.875  # these need to match the daily weather files
+  export longitude_resolution=1.25  # these need to match the daily weather files
+  # <<<<<
+
+  # (DMR) PULLED THIS OUT OF THE WRAPPER, DELETE WHEN FIGURE OUT WRAPPER >>>>
+
+  # catA_maize_raw=\
+  # "
+  # D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE  catastrophe_mink/Outdoor_crops_sample ZZZZRF.SNX  threeSplitWithFlowering 379 maize
+  # D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE  control_mink/Outdoor-crops-control  ZZZZRF.SNX  threeSplitWithFlowering 379 maize
+  # "
+
+
+  # catA_maize_full=\
+  # "
+  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK023/g"`
+  # "
+
+  # all_the_rest="
+  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK013/g"`
+  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK014/g"`
+  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK015/g"`
+  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK016/g"`
+  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK017/g"`
+  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK018/g"`
+  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK021/g"`
+  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK024/g"`
+  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK023/g"`
+  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK025/g"`
+  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK026/g"`
+  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK027/g"`
+  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK029/g"`
+
+  # "
+  # <<<<<<<<<<<<<<<<
+
+
+
+  echo "latitude_resolution"
+  echo $latitude_resolution
+  echo "longitude_resolution"
+  echo $longitude_resolution
 echo "reached 2"
 echo $script_to_run_in_job
 # write out the job script....
@@ -240,7 +312,7 @@ echo \"------ moving/unpacking ; \`date\` ------\"
   # the rest do not want the subdirectories
   cp $original_DSSAT_dir/*    ${on_node_DSSAT_dir}
   cp ${data_file_base_name}_*  ${on_node_input_data_dir}
-  cp ${original_X_files_dir}/${X_template} ${X_dir}
+  cp ${original_X_files_dir}${X_template} ${X_dir}
   cp $runner_init_file         ${on_node_runner_init_file}
 
   # copy the daily weather

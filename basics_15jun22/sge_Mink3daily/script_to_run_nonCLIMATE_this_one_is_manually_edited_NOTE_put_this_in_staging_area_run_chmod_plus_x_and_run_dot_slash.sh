@@ -1,5 +1,5 @@
 #!/bin/bash
-  echo "Looks like the script is printing out"
+  decho "Looks like the script is printing out"
   echo "running on $HOSTNAME at `date`"
 
   echo "CASE mzJ029w00.SNX Outdoor_crops_control 379 D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE"

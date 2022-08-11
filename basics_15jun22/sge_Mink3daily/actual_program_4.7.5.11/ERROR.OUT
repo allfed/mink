@@ -1,0 +1,14 @@
+*RUN-TIME ERRORS OUTPUT FILE
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.011 -develop    AUG 09, 2022; 20:18:59
+
+*RUN   1
+
+deleteme.SNX, Trt    1
+ 
+ File not found.  Please check file name or create file.                        
+  
+File: ./deleteme.SNX   Line:     0   Error key: IPEXP 
+
+Additional information may be available in WARNING.OUT file.

@@ -39,22 +39,22 @@ if [ 0 = 1 ]; then
 #magic_code=ZAMBIADAILY_ plantingDateInMonthShiftInDays=0 chunks_per_case=20 sleeptime=0s # chunks_per_case=10
 old_zambia_starter=\
 "
-zambiavariabilityD__dart_irrigated_DELTAonFC_base_2000_p0_groundnuts__rainfed_nonCLIMATE	DDDD	grK001RF.SNX	groundnuts	369	groundnuts
+zambiavariabilityD__dart_irrigated_DELTAonFC_base_2000_p0_groundnuts__rainfed_nonCLIMATE  DDDD  grK001RF.SNX  groundnuts  369 groundnuts
 
-zambiavariabilityD__dart_irrigated_DELTAonFC_base_2000_p0_beans__rainfed_nonCLIMATE	DDDD	bnB002RF.SNX	groundnuts	369	groundnuts
-zambiavariabilityD__dart_irrigated_DELTAonFC_base_2000_p0_cassava__rainfed_nonCLIMATE	DDDD	csC004RF.SNX	potatoes	369	potatoes
+zambiavariabilityD__dart_irrigated_DELTAonFC_base_2000_p0_beans__rainfed_nonCLIMATE DDDD  bnB002RF.SNX  groundnuts  369 groundnuts
+zambiavariabilityD__dart_irrigated_DELTAonFC_base_2000_p0_cassava__rainfed_nonCLIMATE DDDD  csC004RF.SNX  potatoes  369 potatoes
 
-zambiavariabilityD__dart_irrigated_DELTAonFC_base_2000_p0_maizelow__rainfed_nonCLIMATE	DDDD	mzK017RF.SNX	potatoes	369	maize
-zambiavariabilityD__dart_irrigated_DELTAonFC_base_2000_p0_maizehigh__rainfed_nonCLIMATE	DDDD	mzK017RF.SNX	potatoes	369	maize
+zambiavariabilityD__dart_irrigated_DELTAonFC_base_2000_p0_maizelow__rainfed_nonCLIMATE  DDDD  mzK017RF.SNX  potatoes  369 maize
+zambiavariabilityD__dart_irrigated_DELTAonFC_base_2000_p0_maizehigh__rainfed_nonCLIMATE DDDD  mzK017RF.SNX  potatoes  369 maize
 
-zambiavariabilityD__11_DELTAonFC_base_2000_p0_potatoes__rainfed_nonCLIMATE	DDDD	ptJ006RF.SNX	potatoes	369	potatoes
-zambiavariabilityD__4_DELTAonFC_base_2000_p0_potatoes__rainfed_nonCLIMATE	DDDD	ptJ006RF.SNX	potatoes	369	potatoes
-zambiavariabilityD__potato_season_onset_07mar14_DELTAonFC_base_2000_p0_potatoes__rainfed_nonCLIMATE	DDDD	ptJ006RF.SNX	potatoes	369	potatoes
+zambiavariabilityD__11_DELTAonFC_base_2000_p0_potatoes__rainfed_nonCLIMATE  DDDD  ptJ006RF.SNX  potatoes  369 potatoes
+zambiavariabilityD__4_DELTAonFC_base_2000_p0_potatoes__rainfed_nonCLIMATE DDDD  ptJ006RF.SNX  potatoes  369 potatoes
+zambiavariabilityD__potato_season_onset_07mar14_DELTAonFC_base_2000_p0_potatoes__rainfed_nonCLIMATE DDDD  ptJ006RF.SNX  potatoes  369 potatoes
 
 
-zambiavariabilityD__dart_irrigated_DELTAonFC_base_2000_p0_groundnuts__rainfed_nonCLIMATE	DDDD	grK001RF.SNX	groundnuts	369	groundnuts
+zambiavariabilityD__dart_irrigated_DELTAonFC_base_2000_p0_groundnuts__rainfed_nonCLIMATE  DDDD  grK001RF.SNX  groundnuts  369 groundnuts
 
-zambiavariabilityD__dart_irrigated_DELTAonFC_base_2000_p0_millet__rainfed_nonCLIMATE	DDDD	mill__RF.SNX	potatoes	369	potatoes
+zambiavariabilityD__dart_irrigated_DELTAonFC_base_2000_p0_millet__rainfed_nonCLIMATE  DDDD  mill__RF.SNX  potatoes  369 potatoes
 
 
 "
@@ -67,20 +67,20 @@ magic_code=ZAMBIACOV_ plantingDateInMonthShiftInDays=0 chunks_per_case=5 sleepti
 
 zambia_starter_10=\
 "
-zambiavariabilityF__10_DELTAonFC_base_2000_p0_beans__rainfed_nonCLIMATE	DDDD	bnB002RF.SNX	groundnuts	369	groundnuts
+zambiavariabilityF__10_DELTAonFC_base_2000_p0_beans__rainfed_nonCLIMATE DDDD  bnB002RF.SNX  groundnuts  369 groundnuts
 
-zambiavariabilityF__10_DELTAonFC_base_2000_p0_cassava__rainfed_nonCLIMATE	DDDD	csC004RF.SNX	potatoes	369	potatoes
+zambiavariabilityF__10_DELTAonFC_base_2000_p0_cassava__rainfed_nonCLIMATE DDDD  csC004RF.SNX  potatoes  369 potatoes
 
-zambiavariabilityF__10_DELTAonFC_base_2000_p0_groundnuts__rainfed_nonCLIMATE	DDDD	grK001RF.SNX	groundnuts	369	groundnuts
+zambiavariabilityF__10_DELTAonFC_base_2000_p0_groundnuts__rainfed_nonCLIMATE  DDDD  grK001RF.SNX  groundnuts  369 groundnuts
 
-zambiavariabilityF__10_DELTAonFC_base_2000_p0_millet__rainfed_nonCLIMATE	DDDD	mill__RF.SNX	potatoes	369	potatoes
+zambiavariabilityF__10_DELTAonFC_base_2000_p0_millet__rainfed_nonCLIMATE  DDDD  mill__RF.SNX  potatoes  369 potatoes
 
-zambiavariabilityF__10_DELTAonFC_base_2000_p0_maizelow__rainfed_nonCLIMATE	DDDD	mzK017RF.SNX	potatoes	369	maize
-zambiavariabilityF__10_DELTAonFC_base_2000_p0_maizehigh__rainfed_nonCLIMATE	DDDD	mzK017RF.SNX	potatoes	369	maize
+zambiavariabilityF__10_DELTAonFC_base_2000_p0_maizelow__rainfed_nonCLIMATE  DDDD  mzK017RF.SNX  potatoes  369 maize
+zambiavariabilityF__10_DELTAonFC_base_2000_p0_maizehigh__rainfed_nonCLIMATE DDDD  mzK017RF.SNX  potatoes  369 maize
 
-zambiavariabilityF__10_DELTAonFC_base_2000_p0_groundnuts__rainfed_nonCLIMATE	DDDD	grK001RF.SNX	groundnuts	369	groundnuts
+zambiavariabilityF__10_DELTAonFC_base_2000_p0_groundnuts__rainfed_nonCLIMATE  DDDD  grK001RF.SNX  groundnuts  369 groundnuts
 
-zambiavariabilityF__10_DELTAonFC_base_2000_p0_sorghum__rainfed_nonCLIMATE	DDDD	sgK001RF.SNX	potatoes	369	potatoes
+zambiavariabilityF__10_DELTAonFC_base_2000_p0_sorghum__rainfed_nonCLIMATE DDDD  sgK001RF.SNX  potatoes  369 potatoes
 "
 
 zambia_starter=\
@@ -141,23 +141,23 @@ magic_code=WORLDAFpr_ plantingDateInMonthShiftInDays=0 chunks_per_case=80 sleept
 
 a_readable_data_list=\
 "
-worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_hundfert__rainfed_nonCLIMATE	Historical/ENSO_Historical	mzK019RF.SNX	maize	379	maize
-worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_hundfert__rainfed_nonCLIMATE	Historical/ENSO_Historical	riL011RF.SNX	rice	379	rice
-worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_hundfert__rainfed_nonCLIMATE	Historical/ENSO_Historical	riL004RF.SNX	rice	379	rice
-worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_hundfert__rainfed_nonCLIMATE	Historical/ENSO_Historical	bnB028RF.SNX	soybeans	379	soybeans
-worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_hundfert__rainfed_nonCLIMATE	Historical/ENSO_Historical	grK002RF.SNX	soybeans	379	soybeans
+worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_hundfert__rainfed_nonCLIMATE Historical/ENSO_Historical  mzK019RF.SNX  maize 379 maize
+worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_hundfert__rainfed_nonCLIMATE Historical/ENSO_Historical  riL011RF.SNX  rice  379 rice
+worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_hundfert__rainfed_nonCLIMATE Historical/ENSO_Historical  riL004RF.SNX  rice  379 rice
+worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_hundfert__rainfed_nonCLIMATE Historical/ENSO_Historical  bnB028RF.SNX  soybeans  379 soybeans
+worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_hundfert__rainfed_nonCLIMATE Historical/ENSO_Historical  grK002RF.SNX  soybeans  379 soybeans
 
 
-worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_zerofert__rainfed_nonCLIMATE	Historical/ENSO_Historical	mzK019RF.SNX	maize	379	maize
-worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_zerofert__rainfed_nonCLIMATE	Historical/ENSO_Historical	riL011RF.SNX	rice	379	rice
-worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_zerofert__rainfed_nonCLIMATE	Historical/ENSO_Historical	riL004RF.SNX	rice	379	rice
-worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_zerofert__rainfed_nonCLIMATE	Historical/ENSO_Historical	bnB028RF.SNX	soybeans	379	soybeans
-worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_zerofert__rainfed_nonCLIMATE	Historical/ENSO_Historical	grK002RF.SNX	soybeans	379	soybeans
+worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_zerofert__rainfed_nonCLIMATE Historical/ENSO_Historical  mzK019RF.SNX  maize 379 maize
+worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_zerofert__rainfed_nonCLIMATE Historical/ENSO_Historical  riL011RF.SNX  rice  379 rice
+worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_zerofert__rainfed_nonCLIMATE Historical/ENSO_Historical  riL004RF.SNX  rice  379 rice
+worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_zerofert__rainfed_nonCLIMATE Historical/ENSO_Historical  bnB028RF.SNX  soybeans  379 soybeans
+worlddrought__firebird_irrigated_deltaONpik_base_2000_p0_zerofert__rainfed_nonCLIMATE Historical/ENSO_Historical  grK002RF.SNX  soybeans  379 soybeans
 "
 
 readable_data_list=$a_readable_data_list
 #readable_data_list=`echo "$a_readable_data_list" | grep bnB | grep zero`
-#readable_data_list=`echo "$a_readable_data_list" | grep -v "zerofert__rainfed_nonCLIMATE	Historical/ENSO_Historical	bnB0"`
+#readable_data_list=`echo "$a_readable_data_list" | grep -v "zerofert__rainfed_nonCLIMATE Historical/ENSO_Historical  bnB0"`
 
 
 magic_code=MALAWIb_ plantingDateInMonthShiftInDays=0 chunks_per_case=4 sleeptime=0s # chunks_per_case=10
@@ -354,18 +354,18 @@ readable_data_list=`echo "$readable_data_list" | grep -v "379"`
 #magic_code=PHILIPPINESENSO_ plantingDateInMonthShiftInDays=0 chunks_per_case=20 sleeptime=0s # chunks_per_case=10
 phil_readable_data_list=\
 "
-phillipinesenso__1_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE	Historical/ENSO_Historical	riK001IR.SNX	middleHeavyThreeSplitWithFlowering	379	rice
-phillipinesenso__2_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE	Historical/ENSO_Historical	riK001IR.SNX	middleHeavyThreeSplitWithFlowering	379	rice
-phillipinesenso__3_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE	Historical/ENSO_Historical	riK001IR.SNX	middleHeavyThreeSplitWithFlowering	379	rice
-phillipinesenso__4_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE	Historical/ENSO_Historical	riK001IR.SNX	middleHeavyThreeSplitWithFlowering	379	rice
-phillipinesenso__5_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE	Historical/ENSO_Historical	riK001IR.SNX	middleHeavyThreeSplitWithFlowering	379	rice
-phillipinesenso__6_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE	Historical/ENSO_Historical	riK001IR.SNX	middleHeavyThreeSplitWithFlowering	379	rice
-phillipinesenso__7_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE	Historical/ENSO_Historical	riK001IR.SNX	middleHeavyThreeSplitWithFlowering	379	rice
-phillipinesenso__8_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE	Historical/ENSO_Historical	riK001IR.SNX	middleHeavyThreeSplitWithFlowering	379	rice
-phillipinesenso__9_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE	Historical/ENSO_Historical	riK001IR.SNX	middleHeavyThreeSplitWithFlowering	379	rice
-phillipinesenso__10_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE	Historical/ENSO_Historical	riK001IR.SNX	middleHeavyThreeSplitWithFlowering	379	rice
-phillipinesenso__11_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE	Historical/ENSO_Historical	riK001IR.SNX	middleHeavyThreeSplitWithFlowering	379	rice
-phillipinesenso__12_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE	Historical/ENSO_Historical	riK001IR.SNX	middleHeavyThreeSplitWithFlowering	379	rice
+phillipinesenso__1_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE  Historical/ENSO_Historical  riK001IR.SNX  middleHeavyThreeSplitWithFlowering  379 rice
+phillipinesenso__2_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE  Historical/ENSO_Historical  riK001IR.SNX  middleHeavyThreeSplitWithFlowering  379 rice
+phillipinesenso__3_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE  Historical/ENSO_Historical  riK001IR.SNX  middleHeavyThreeSplitWithFlowering  379 rice
+phillipinesenso__4_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE  Historical/ENSO_Historical  riK001IR.SNX  middleHeavyThreeSplitWithFlowering  379 rice
+phillipinesenso__5_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE  Historical/ENSO_Historical  riK001IR.SNX  middleHeavyThreeSplitWithFlowering  379 rice
+phillipinesenso__6_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE  Historical/ENSO_Historical  riK001IR.SNX  middleHeavyThreeSplitWithFlowering  379 rice
+phillipinesenso__7_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE  Historical/ENSO_Historical  riK001IR.SNX  middleHeavyThreeSplitWithFlowering  379 rice
+phillipinesenso__8_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE  Historical/ENSO_Historical  riK001IR.SNX  middleHeavyThreeSplitWithFlowering  379 rice
+phillipinesenso__9_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE  Historical/ENSO_Historical  riK001IR.SNX  middleHeavyThreeSplitWithFlowering  379 rice
+phillipinesenso__10_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE Historical/ENSO_Historical  riK001IR.SNX  middleHeavyThreeSplitWithFlowering  379 rice
+phillipinesenso__11_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE Historical/ENSO_Historical  riK001IR.SNX  middleHeavyThreeSplitWithFlowering  379 rice
+phillipinesenso__12_deltaONpikNOV_base_2000_p0_rice__irrigated_nonCLIMATE Historical/ENSO_Historical  riK001IR.SNX  middleHeavyThreeSplitWithFlowering  379 rice
 
 "
 
@@ -655,8 +655,6 @@ fi # end cutout
 magic_code=CATa_ plantingDateInMonthShiftInDays=0 chunks_per_case=5 sleeptime=0.0s # chunks_per_case=10
 readable_data_list="$catA_maize_full"
 
-
-
 for (( plantingDateInMonthShiftInDays=0 ; plantingDateInMonthShiftInDays <= 364 ; plantingDateInMonthShiftInDays++ )); do
 #for (( plantingDateInMonthShiftInDays=1 ; plantingDateInMonthShiftInDays <= 1 ; plantingDateInMonthShiftInDays++ )); do
 
@@ -691,14 +689,13 @@ export longitude_resolution=2.5  # these need to match the daily weather files
 . default_paths_etc.sh
 
 
-
 if [ $sort_by_size_flag = 1 ]; then
 
 for case_line in $readable_data_list; do
   iii=`echo "$case_line" | cut -f1`
   geog_file_size=`ls -l ${input_data_dir}${iii}_geog.txt | tr -s " " | cut -d" " -f5`
   sortable_list="$sortable_list
-$case_line	$geog_file_size"
+$case_line  $geog_file_size"
 done
 
 sorted_list=`echo "$sortable_list" | grep -v "^$" | sort -n -r -k7`
@@ -745,6 +742,7 @@ n_to_try=`echo "$data_list" | wc -l`
 
 echo "trying $n_to_try cases"
 
+echo "here"
 
 countercounter=1
 success_failure_list=""
@@ -753,7 +751,7 @@ do
 
   let "case_index = case_num - 1"
 
-# nonCLIMATE	daily (subdir/tag)	SNX	fertilizer	CO2	irrigation
+# nonCLIMATE  daily (subdir/tag)  SNX fertilizer  CO2 irrigation
 
   data_to_use=`echo "$data_list" | sed -n "${case_num}p" | cut -f1`
  daily_to_use=`echo "$data_list" | sed -n "${case_num}p" | cut -f2`

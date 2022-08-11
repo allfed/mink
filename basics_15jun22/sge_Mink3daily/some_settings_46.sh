@@ -188,7 +188,7 @@ echo "   >>> using $nameOfDSSATExecutable <<<"
 
 
 #  clayLoamSandStableCarbonRatesFilename=${BASE}/min_StableCarbonTable.txt # lower stable fractions # file containing the fraction of stable carbon in each layer by texture
-  clayLoamSandStableCarbonRatesFilename=${BASE}/StableCarbonTable.txt     # the best guess # file containing the fraction of stable carbon in each layer by texture
+  clayLoamSandStableCarbonRatesFilename=${BASE}StableCarbonTable.txt     # the best guess # file containing the fraction of stable carbon in each layer by texture
 #  clayLoamSandStableCarbonRatesFilename=${BASE}/max_StableCarbonTable.txt # higher stable fractions# file containing the fraction of stable carbon in each layer by texture
 
 
