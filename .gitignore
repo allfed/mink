@@ -1,15 +1,19 @@
 # exclude built singularity image
 *.sif
 grassdata/
+on_node_home*/
 # turns out, we need this actual program thing... for dssat
 # basics_15jun22/sge_Mink3daily/actual_program_4.7.5.11/
-basics_15jun22/sge_Mink3daily/staging_area/*.sh
-# Byte-compiled / optimized / DLL files
+# basics_15jun22/sge_Mink3daily/staging_area/*.sh
+# Byte-compiled / optimied / DLL files
 __pycache__/
 *.py[cod]
 
 # C extensions
 *.so
+
+# zip files
+*.zip
 
 # Distribution / packaging
 .Python

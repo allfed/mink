@@ -1,0 +1,26 @@
+now in /home/dmrivers/Code/mink/on_node_home25450_834699287/DSSAT
+
+
+
+running on snailshale
+shell = /bin/bash
+at Mon 15 Aug 2022 04:28:44 PM PDT, we are attempting...
+[[[/home/dmrivers/Code/mink/on_node_home25450_834699287/to_GRASS/mzJ029w00_379_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE]]]
+
+
+
+
+--B--
+command line arguments: 
+0 /home/dmrivers/Code/mink/on_node_home25450_834699287/DSSAT/X_files/runner_init_on_node_home25450_834699287.txt
+line 0: [20	0.8	0.8	0.93]
+line 1: [40	0.96	0.98	0.98]
+line 2: [60	0.98	0.98	0.98]
+line 3: [100000000	0.98	0.98	0.98]
+Beware the MAGIC ASSUMPTION!!! We assume that the geographic
+location of the pre-existing weather files are lined up on multiples of
+the provided spacings +/- 1/2 of a spacing. That is, suppose you have 1/2 degree
+resolution. Then, we would expect points to fall on 0.25, 0.75, -0.25, 5.75, etc.
+something bad happened... leaving everything in place on the node...
+- done at Mon 15 Aug 2022 04:28:44 PM PDT -
+--E--

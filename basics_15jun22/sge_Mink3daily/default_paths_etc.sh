@@ -4,14 +4,16 @@
 ### paths and filenames ###
 ###########################
 
-  quasi_random_code="${RANDOM}_`date +%N`"
+# pseudo random int from the machine combined with the time 
+# in nanoseconds for MAXIMUM CHAOS! (DMR)
+# this is run many times from different file locations! (DMR)
+  quasi_random_code="on_node_home${RANDOM}_`date +%N`"
+
+# get the root of the git regardless of where you happen to be in the git folder (DMR) 
+git_root=`git rev-parse --show-toplevel`
 
 
-
-
-
-  original_runner_dir="$PWD/../small_java_programs/"
-
+  original_runner_dir="$git_root/basics_15jun22/small_java_programs/"
 #   java_on_headnode=~rdrobert/jres/jre1.8.0_40/bin/java
    java_on_headnode=/usr/bin/java
 java_on_computenode=$java_on_headnode
@@ -27,13 +29,15 @@ java_on_computenode=$java_on_headnode
 #           on_node_home=/mink/on_node_home_folder/DSSAT_dailyreal46_${quasi_random_code}/
 
 # this should be the mink/ directory at the root of the git repo (DMR)
-on_node_home="$PWD/../../on_node_home/" 
+mkdir -p "$git_root/$quasi_random_code/weatherdaily"
+on_node_home="$git_root/$quasi_random_code/" 
+BASE="$git_root/basics_15jun22/sge_Mink3daily/" 
 
 #uncomment as needed based on user (IJ)
 #  BASE=/home/users/morganr/mink/basics_15jun22/sge_Mink3daily/
 
 # BASE is now the folder where default_paths is located (DMR)
-BASE="$PWD/" 
+BASE="$git_root/basics_15jun22/sge_Mink3daily/" 
 
 
 

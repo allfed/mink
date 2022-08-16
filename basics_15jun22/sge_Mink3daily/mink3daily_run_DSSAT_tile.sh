@@ -1,4 +1,7 @@
 #!/bin/bash
+# (DMR) DELETE ME AFTER YOU FIGURE OUT HOW TO RUN IN WRAPPER >>>>>
+export  latitude_resolution=1.875  # these need to match the daily weather files
+export longitude_resolution=1.25  # these need to match the daily weather files
 
 
 # the idea is to make it deployable on a compute node
@@ -136,31 +139,43 @@ echo $daily_weather_copier_classname
 echo ""
 echo "this is me trying to get the java program to run(DMR)"
 #echo $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution
-#$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution 
-echo "well, did it run then?"
-echo ""
-# copy_block="cp $PWD/../../control_mink/Outdoor-crops-control_0.9375_108.125.WTH $on_node_weather_dir"
-copy_block="
-cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-89.375.WTH ../../../on_node_home/dailyweather/Outdoor-crops-control_81.5625_-89.375.WTH
-cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-86.875.WTH ../../../on_node_home/dailyweather/Outdoor-crops-control_81.5625_-86.875.WTH
-cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-84.375.WTH ../../../on_node_home/dailyweather/Outdoor-crops-control_81.5625_-84.375.WTH
-cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-81.875.WTH ../../../on_node_home/dailyweather/Outdoor-crops-control_81.5625_-81.875.WTH
-cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-79.375.WTH ../../../on_node_home/dailyweather/Outdoor-crops-control_81.5625_-79.375.WTH
-cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-76.875.WTH ../../../on_node_home/dailyweather/Outdoor-crops-control_81.5625_-76.875.WTH
-"
-# DELETE IF YOU SEE THIS >>>>
-# copy_block="cp -r $PWD/../../control_mink/* $on_node_weather_dir"
+# headnode_classpath
+# daily_weather_copier_classname
+# prestaged_weather_dir
+# daily_to_use
+# on_node_weather_dir
+# data_file_base_name
+# weatherDataSuffixWithDot
+# latitude_resolution
+# longitude_resolution
+
+# echo $java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution 
+
+# echo $java_to_use -cp  headnode_classpath  daily_weather_copier_classname  {prestaged_weather_dir} daily_to_use  on_node_weather_dir  data_file_base_name  weatherDataSuffixWithDot  latitude_resolution  longitude_resolution 
 # copy_block="
-# cp -r $PWD/../../control_mink/* $on_node_weather_dir
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-88.75.WTH $on_node_weather_dir
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-86.25.WTH $on_node_weather_dir
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-83.75.WTH $on_node_weather_dir
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-81.25.WTH $on_node_weather_dir
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-78.75.WTH $on_node_weather_dir
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_81.5625_-76.25.WTH $on_node_weather_dir
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_0* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_1* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_2* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_3* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_4* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_5* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_6* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_7* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_8* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_9* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-0* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-1* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-2* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-3* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-4* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-5* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-6* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-7* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-8* ../../../on_node_home/dailyweather/
+# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-9* ../../../on_node_home/dailyweather/
 # "
-# <<<<<<
-#copy_block=`$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution | uniq`
+
+copy_block=`$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution | uniq`
 
 #  we_need_to_delay=`echo "if($n_before_me > -2 && $n_before_me <= $number_of_initial_cases_to_stagger) {1} else {0}" | bc`
 we_need_to_delay=0
@@ -183,9 +198,6 @@ number_of_pixels=1
   echo "plantingDateInMonthShiftInDays"
   echo $plantingDateInMonthShiftInDays
 
-  # (DMR) DELETE ME AFTER YOU FIGURE OUT HOW TO RUN IN WRAPPER >>>>>
-  export  latitude_resolution=1.875  # these need to match the daily weather files
-  export longitude_resolution=1.25  # these need to match the daily weather files
   # <<<<<
 
   # (DMR) PULLED THIS OUT OF THE WRAPPER, DELETE WHEN FIGURE OUT WRAPPER >>>>
