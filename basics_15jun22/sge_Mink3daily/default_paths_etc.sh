@@ -29,7 +29,7 @@ java_on_computenode=$java_on_headnode
 #           on_node_home=/mink/on_node_home_folder/DSSAT_dailyreal46_${quasi_random_code}/
 
 # this should be the mink/ directory at the root of the git repo (DMR)
-mkdir -p "$git_root/$quasi_random_code/weatherdaily"
+mkdir -p "$git_root/$quasi_random_code/dailyweather"
 on_node_home="$git_root/$quasi_random_code/" 
 BASE="$git_root/basics_15jun22/sge_Mink3daily/" 
 
