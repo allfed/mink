@@ -44,7 +44,8 @@ public class SystemCallWithTimeout extends Thread {
 		
 		commandToRun = commandToUse;
 		workingDirectory = workingDirectoryToUse;
-
+		System.out.println("workingDirectory");
+		System.out.println(workingDirectory);
 		sleepTimeMillis = sleepTimeMillisToUse;
 		testInterval = testIntervalToUse;
 

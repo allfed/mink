@@ -47,7 +47,6 @@ echo "reached 1 in run DSSAT"
   # this is likely have a full path on it, so we need to strip the path
   # in order to refer to it in its new location on the compute node
   data_file_short_name=`basename $data_file_base_name`
-
   chunk_index=${data_file_short_name##*_}
 
 ### source in the common elements...
@@ -175,12 +174,21 @@ echo "this is me trying to get the java program to run(DMR)"
 # cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-9* ../../../on_node_home/dailyweather/
 # "
 
+# echo java_to_use -cp headnode_classpath daily_weather_copier_classname {prestaged_weather_dir}daily_to_use on_node_weather_dir data_file_base_name weatherDataSuffixWithDot latitude_resolution longitude_resolution
+
+# echo $java_to_use -cp $headnode_classpath" $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution
+
 copy_block=`$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution | uniq`
+
+
+number_of_pixels=`echo "$copy_block" | wc -l`
+echo $number_of_pixels
+echo "$copy_block" > wow.txt
 
 #  we_need_to_delay=`echo "if($n_before_me > -2 && $n_before_me <= $number_of_initial_cases_to_stagger) {1} else {0}" | bc`
 we_need_to_delay=0
-#  number_of_pixels=`echo "$copy_block" | wc -l`
-number_of_pixels=1
+ number_of_pixels=`echo "$copy_block" | wc -l`
+# number_of_pixels=1
     echo "n_before_me = $n_before_me; maxstagger = $number_of_initial_cases_to_stagger ; n_pixels = $number_of_pixels / guess files per sec $guess_for_weather_files_per_second; need_to_delay = $we_need_to_delay"
 
   if [ "$we_need_to_delay" = 1 ]; then
@@ -253,6 +261,7 @@ echo "#!/bin/bash
   echo \"$gisTableBaseName\"            >> $runner_init_file
   echo \"$templateXFile\"               >> $runner_init_file
   echo \"$yieldOutputBaseName\"         >> $runner_init_file
+  echo \"$on_node_DSSAT_dir\"           >> $runner_init_file # ADDED THIS (DMR)
   echo \"$nameOfDSSATExecutable\"       >> $runner_init_file
   echo \"$baseNameOfDailyWeather\"      >> $runner_init_file
   echo \"$SWmultiplier\"                >> $runner_init_file

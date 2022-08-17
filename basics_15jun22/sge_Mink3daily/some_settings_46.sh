@@ -14,7 +14,7 @@
 #      nameOfDSSATExecutable=./dscsm_compiled_pnmz_fast.exe # the correct one to use for aflatoxins
 
 
-      nameOfDSSATExecutable=./dscsm_compiled_fast.exe # actual_program_4.7.5.11
+      nameOfDSSATExecutable=dscsm_compiled_fast.exe # actual_program_4.7.5.11
 
 
 

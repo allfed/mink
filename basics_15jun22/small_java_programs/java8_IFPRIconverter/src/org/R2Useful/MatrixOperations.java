@@ -1153,8 +1153,10 @@ public class MatrixOperations {
 		// read the fifth line
 		LineContents = InfoReader.readLine();
 		indexOfEnd = LineContents.indexOf("=") - 2;
-		String delimiterString = LineContents.substring(0, indexOfEnd);
-
+		// String delimiterString = LineContents.substring(0, indexOfEnd);
+		String delimiterString = "\t";
+		// System.out.println("delimiterString");
+		// System.out.println(delimiterString);
 		
 		// close up shop on that part...
 		InfoReader.close();
@@ -1187,26 +1189,35 @@ public class MatrixOperations {
 			setCoords[0] = rowIndex;
 			// read it in...
 			LineContents = DataReader.readLine();
+			// System.out.println("LineContents = " + LineContents);
 			// reset everything going in...
 			currentColumn = 0;
 			previousEndIndex = -1;
 			currentEndIndex = 0;
 
 			while (currentColumn < nCols) {
+				// System.out.println("row"+rowIndex + " column " + currentColumn);
 				setCoords[1] = currentColumn;
 				currentEndIndex = LineContents.indexOf(delimiterString,
 						previousEndIndex + 1);
 				if ((currentEndIndex != previousEndIndex)
 						&& (currentEndIndex != -1)) {
 					// we are in the interior of the line...
+					// System.out.println("previousEndIndex");
+					// System.out.println(previousEndIndex);
 					tempString = LineContents.substring(previousEndIndex + 1,
 							currentEndIndex);
 //					valueToStore = Double.parseDouble(LineContents.substring(previousEndIndex + 1,
 //							currentEndIndex));
 				} else {
 //					valueToStore = Double.parseDouble(LineContents.substring(previousEndIndex + 1));
+					// System.out.println("previousEndIndex");
+					// System.out.println(previousEndIndex);
 				tempString = LineContents.substring(previousEndIndex + 1);
 				}
+				
+				// System.out.println("tempString"+tempString);
+				
 				valueToStore = Double.parseDouble(tempString);
 
 //				X.setValue(rowIndex, currentColumn, valueToStore);
