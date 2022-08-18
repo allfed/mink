@@ -2207,7 +2207,8 @@ public class Mink3p2daily {
     // for (int j = 0; j<candidateSummaryContents.length; j++){
     //      //each element is accessed here using candidateSummaryContents[j]
     //      //for example, to print out each element, use
-    //      System.out.println("j + 1 => "+candidateSummaryContents[j]);
+    //      System.out.println("j "+j);
+    //      System.out.println("j  => "+candidateSummaryContents[j]);
     // }
     // System.out.println(candidateSummaryContents);
     // System.exit(0);
@@ -2227,7 +2228,15 @@ public class Mink3p2daily {
 //      }
 //      System.out.println();
         
-        
+        // added this to skip the extra fake year index and dssat summary lines (DMR)
+        // probably want to DELETE this at some point
+        // >>>>>>
+        // System.out.println("fyi + mdslitr: "+fakeYearIndex + magicDSSATSummaryLineIndexToRead);
+        if(fakeYearIndex + magicDSSATSummaryLineIndexToRead > 4) {
+            continue;
+        }
+        // <<<<<<
+
         // check to see if the line is null....
         if (candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead] == null) {
         if (hitANullLine) {
@@ -2999,40 +3008,27 @@ public class Mink3p2daily {
             // just fine manually. go figure. so first, i'm going to run it with a timer. if i get that working,
             // then i can start having it retry a few times before giving up...
 
+            // MAY WANT TO COMMENT THIS BACK IN IF USING HAPPYRUNNER (DMR)
             // happyRunnerThing = new SystemCallWithTimeout();
             // for (int rerunIndex = 0; rerunIndex < rerunAttemptsMax ; rerunIndex++) {
             // happyRunnerThing.setup(dssatExecutionCommand, pathToDSSATDirectoryAsFile, (int)Math.ceil(maxRunTime * Math.pow(bumpUpMultiplier, rerunIndex)), testIntervalToUse);
 
-            // try {
-                System.out.println("rundssat command");
-                System.out.println("./run_dssat.sh");
-                ProcessBuilder pb = new ProcessBuilder("bash", "./run_dssat.sh");
-                pb.inheritIO();
-                pb.directory(pathToDSSATDirectoryAsFile);
-                Process process = pb.start();
-                process.waitFor();
-            // } finally {
-            //     System.out.println("done!");
-            //     System.out.println("");
-            // }
+            System.out.println("rundssat command");
+            System.out.println("./run_dssat.sh");
+            ProcessBuilder pb = new ProcessBuilder("bash", "./run_dssat.sh");
+            pb.inheritIO();
+            pb.directory(pathToDSSATDirectoryAsFile);
+            Process process = pb.start();
+            process.waitFor();
 
+            // MAY WANT TO COMMENT THIS BACK IN IF USING HAPPYRUNNER (DMR)
             // happyRunnerThing.run();
-            System.out.println("");
-            System.out.println("");
-            System.out.println("even ran at all");
-            System.out.println("");
-            System.out.println("");
 
             Thread.sleep(magicPauseLengthMillis);
-            if (new File(magicDSSATSummaryToReadPath).exists()) {
-                System.out.println("");
-                System.out.println("");
-                System.out.println("does exist after all");
-                System.out.println("");
-                System.out.println("");
-            }
+
             // i am going to add an arbitrary tiny wait in here in case the filesystem is bogged down...
             
+            // MAY WANT TO COMMENT THIS BACK IN IF USING HAPPYRUNNER (DMR)
             // if (happyRunnerThing.finishedCleanly() != SystemCallWithTimeout.SYSTEM_CALL_RAN_FINE) {
             //     System.out.println("");
             //     System.out.println("");

@@ -393,27 +393,27 @@ echo \"------ running          ; \`date\` ------\"
 # no idea why the below breaks things (DMR)
 # 2>&1 >> $log_file
 
+
+
 # this used to be part of the above run (DMR)
-
-#commenting rest out for now (DMR)
-
 #    test_exit_code=\$?
 #   if [ \$test_exit_code -eq 0 ]; then
 #     # copy the results back
    
-#     cp ${yieldOutputBaseName}_STATS.txt      ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.txt
-#     cp ${yieldOutputBaseName}_STATS.info.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.info.txt
-#     cp ${yieldOutputBaseName}_STATS.cols.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.cols.txt
-#     cp ${yieldOutputBaseName}_provenance.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_provenance.txt
+    cp ${yieldOutputBaseName}_STATS.txt      ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.txt
+    cp ${yieldOutputBaseName}_STATS.info.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.info.txt
+    cp ${yieldOutputBaseName}_STATS.cols.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.cols.txt
+    cp ${yieldOutputBaseName}_provenance.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_provenance.txt
 
-#     # clean up the compute node mess
-#     echo \"all is well, so clean up on-node-home\" >> $log_file
-#     rm -rf $on_node_home
+    # clean up the compute node mess
+    echo \"all is well, so clean up on-node-home\" >> $log_file
+    rm -rf $on_node_home
 
+# well, this is inconvenient so we don't do this for now (DMR)
 #     # and also get rid of the input chunks, since they will be many
 #     # with my new attempt at thread safety
 
-#     rm ${data_file_base_name}_*
+#     # rm ${data_file_base_name}_*
 
 #     rm $script_to_run_in_job
 #     rm $runner_init_file
@@ -424,24 +424,11 @@ echo \"------ running          ; \`date\` ------\"
 # #    sleep 600
 # #    echo \"done sleeping and exiting at \`date\`\" >> $log_file
 #   fi
-#   echo \"- done at \`date\` -\" >> $log_file
-#   echo \"--E--\" >> $log_file
+  echo \"- done at \`date\` -\" >> $log_file
+  echo \"--E--\" >> $log_file
 
 
         " > $script_to_run_in_job # end of ssh command....
-
-# IF YOU SEE THIS, DELETE IT RIGHT AWAY! >>>>
-# # added this in order to see what was being printed
-# myfunc() {
-#   echo "Content sent to stdout as defined at invocation time"
-#   # echo "Content sent to original stdout" >&"$myfunc_stdout_fd";
-# }
- 
-# myfunc_out=$(myfunc)
- 
-# declare -p myfunc_out
-
-# <<<<<<<<<
 
 # do the submission to the grid system...
 
@@ -454,7 +441,7 @@ echo \"------ running          ; \`date\` ------\"
 echo "SUBMIT: R${chunk_index}_r${quasi_random_code}; #$n_before_me sleeping $time_to_delay"
 
 #eval $Q_command
-echo $Q_command
+# echo $Q_command
 echo "reached 4: this means that we were able to run the sbatch"
 #sbatch test2.sbatch
 # now do the delaying to stagger the first few...
