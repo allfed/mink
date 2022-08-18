@@ -328,7 +328,7 @@ echo \"------ moving/unpacking ; \`date\` ------\"
          mkdir -p $on_node_output_dir
 
  # Added this recompile condition each time (DMR)
-  cd /home/dmrivers/Code/mink/basics_15jun22/small_java_programs/java8_IFPRIconverter/src/
+  cd ${original_runner_dir}java8_IFPRIconverter/src/
   javac org/DSSATRunner/Mink3p2daily.java
 
   mv org/DSSATRunner/Mink3p2daily.class ../bin/org/DSSATRunner/Mink3p2daily.class
