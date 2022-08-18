@@ -32,8 +32,6 @@ if [ $# -lt 8 ]; then
 
 fi
 
-echo "reached 1 in run DSSAT"
-
   data_file_base_name=$1
          daily_to_use=$2
            X_template=`basename $3`
@@ -52,6 +50,8 @@ echo "reached 1 in run DSSAT"
 ### source in the common elements...
 
 
+# ADDED this so that we have a clean run each time and can repeat this script (DMR)
+rm -rf $on_node_home
 
 
 ########################
@@ -327,6 +327,14 @@ echo \"------ moving/unpacking ; \`date\` ------\"
          mkdir -p $X_dir
          mkdir -p $on_node_output_dir
 
+ # Added this recompile condition each time (DMR)
+  cd /home/dmrivers/Code/mink/basics_15jun22/small_java_programs/java8_IFPRIconverter/src/
+  javac org/DSSATRunner/Mink3p2daily.java
+
+  mv org/DSSATRunner/Mink3p2daily.class ../bin/org/DSSATRunner/Mink3p2daily.class
+
+  cd -
+
   # move the stuff out
   # the runner needs all the subdirectories
   cp -a $original_runner_dir*   ${on_node_runner_dir}
@@ -378,36 +386,46 @@ echo \"------ running          ; \`date\` ------\"
   echo \"--B--\" >> $log_file
 #   echo command is $java_to_use \"$memory_string\" -cp $classpath $classname $on_node_runner_init_file >> $log_file
 #   echo using full interpretive version of the runner even with coordination style DSSAT for wheat.... >> $log_file
-   $java_to_use \"$memory_string\" -cp $classpath $classname $on_node_runner_init_file 2>&1 >> $log_file
-   test_exit_code=\$?
-  if [ \$test_exit_code -eq 0 ]; then
-    # copy the results back
+
+
+   $java_to_use \"$memory_string\" -cp $classpath $classname $on_node_runner_init_file 
+
+# no idea why the below breaks things (DMR)
+# 2>&1 >> $log_file
+
+# this used to be part of the above run (DMR)
+
+#commenting rest out for now (DMR)
+
+#    test_exit_code=\$?
+#   if [ \$test_exit_code -eq 0 ]; then
+#     # copy the results back
    
-    cp ${yieldOutputBaseName}_STATS.txt      ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.txt
-    cp ${yieldOutputBaseName}_STATS.info.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.info.txt
-    cp ${yieldOutputBaseName}_STATS.cols.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.cols.txt
-    cp ${yieldOutputBaseName}_provenance.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_provenance.txt
+#     cp ${yieldOutputBaseName}_STATS.txt      ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.txt
+#     cp ${yieldOutputBaseName}_STATS.info.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.info.txt
+#     cp ${yieldOutputBaseName}_STATS.cols.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.cols.txt
+#     cp ${yieldOutputBaseName}_provenance.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_provenance.txt
 
-    # clean up the compute node mess
-    echo \"all is well, so clean up on-node-home\" >> $log_file
-    rm -rf $on_node_home
+#     # clean up the compute node mess
+#     echo \"all is well, so clean up on-node-home\" >> $log_file
+#     rm -rf $on_node_home
 
-    # and also get rid of the input chunks, since they will be many
-    # with my new attempt at thread safety
+#     # and also get rid of the input chunks, since they will be many
+#     # with my new attempt at thread safety
 
-    rm ${data_file_base_name}_*
+#     rm ${data_file_base_name}_*
 
-    rm $script_to_run_in_job
-    rm $runner_init_file
-  else
-    # give a warning...
-    echo \"something bad happened... leaving everything in place on the node...\" >> $log_file
-#    echo \"AND TRYING TO SLEEP FOR A WHILE... at \`date\`\" >> $log_file
-#    sleep 600
-#    echo \"done sleeping and exiting at \`date\`\" >> $log_file
-  fi
-  echo \"- done at \`date\` -\" >> $log_file
-  echo \"--E--\" >> $log_file
+#     rm $script_to_run_in_job
+#     rm $runner_init_file
+#   else
+#     # give a warning...
+#     echo \"something bad happened... leaving everything in place on the node...\" >> $log_file
+# #    echo \"AND TRYING TO SLEEP FOR A WHILE... at \`date\`\" >> $log_file
+# #    sleep 600
+# #    echo \"done sleeping and exiting at \`date\`\" >> $log_file
+#   fi
+#   echo \"- done at \`date\` -\" >> $log_file
+#   echo \"--E--\" >> $log_file
 
 
         " > $script_to_run_in_job # end of ssh command....
