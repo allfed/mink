@@ -26,6 +26,8 @@ mink/
 
 TOTAL: 2.6Gb required
 
+HOWEVER, there is probably a lot larger files with your weather data (for example, 13 years at about 2 degrees resolution on a daily basis adds to about 9Gb unzipped).
+
 ```
 plus 294Mb for the temporary grassdata.zip, and another 140Mb for the singularity installation.
 
