@@ -483,7 +483,11 @@ public class Mink3p2daily {
     incorporationRate      = Double.parseDouble(initFileContents[storageIndex++]);
     incorporationDepth     = Double.parseDouble(initFileContents[storageIndex++]);
     clayLoamSandStableCarbonRatesFilename = initFileContents[storageIndex++];
-
+    String initsAsString = FunTricks.readTextFileToString(initFileName);
+    System.out.println("initsAsString");
+    System.out.println(initsAsString);
+    System.out.println("clayLoamSandStableCarbonRatesFilename");
+    System.out.println(clayLoamSandStableCarbonRatesFilename);
     optionalHarvestInterval = Integer.parseInt(initFileContents[storageIndex++]);
     plantingDateInMonthShiftInDays = Integer.parseInt(initFileContents[storageIndex++]);
 
@@ -2023,6 +2027,9 @@ public class Mink3p2daily {
 
     System.out.println("magicDSSATSummaryToReadPath");
     System.out.println(magicDSSATSummaryToReadPath);
+    System.out.println("the summary file happy");
+    System.out.println(FunTricks.readTextFileToString(magicDSSATSummaryToReadPath));
+
     System.out.println("Working Directory = " + System.getProperty("user.dir"));
     try {
         candidateSummaryContents = FunTricks.readSomeLinesOfTextFileToArray(magicDSSATSummaryToReadPath, nLinesToRead);
@@ -2053,6 +2060,7 @@ public class Mink3p2daily {
     boolean somethingWasNullInYearlyPreviously = false;
     
     for (int fakeYearIndex = 0; fakeYearIndex < nYears; fakeYearIndex++) {
+
         if (candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead] == null) {
         // i am sick of seeing all manner of these error messages, so we'll write it down the first time
         if (!somethingWasNullInYearlyPreviously) {
@@ -2161,6 +2169,7 @@ public class Mink3p2daily {
         throws InterruptedException, Exception {
 
     
+
     // declarations
     int plantingDate = -1, startingDate = -2, daysSincePlantingForEvent = -3, daysSincePlantingForMaturity = -9;
     int yieldToUse = -4, emergenceToUse = -3, anthesisToUse = -3, maturityToUse = -3;
@@ -2179,14 +2188,21 @@ public class Mink3p2daily {
 
     boolean hitANullLine = false;
 
+    // DMR might need to add pause if using run_dssat?
+
     // attempt to read
+    System.out.println("magicDSSATSummaryLineIndexToRead");
+    System.out.println(magicDSSATSummaryLineIndexToRead);
+    System.out.println("the summary file");
+    System.out.println(FunTricks.readTextFileToString(magicDSSATSummaryToReadPath));
+
     try {
         candidateSummaryContents = FunTricks.readSomeLinesOfTextFileToArray(magicDSSATSummaryToReadPath,nLinesToRead);
     } catch (FileNotFoundException fnfe) {
         System.out.println(magicDSSATSummaryToReadPath); // ADDED THIS, delete if annoying (DMR)
         System.out.println("no file"); // ADDED THIS, delete if annoying (DMR)
 
-        System.exit(0); // ADDED THIS, delete if annoying (DMR)
+        // System.exit(1); // ADDED THIS, delete if annoying (DMR)
         // check for error file
         if (errorAsFileObject.exists()) {
         System.out.println("REAL: file not found...  [" + errorAsFileObject + "] exists...");
@@ -2232,14 +2248,17 @@ public class Mink3p2daily {
         // probably want to DELETE this at some point
         // >>>>>>
         // System.out.println("fyi + mdslitr: "+fakeYearIndex + magicDSSATSummaryLineIndexToRead);
+        if(fakeYearIndex + magicDSSATSummaryLineIndexToRead == 4){
+        }
         if(fakeYearIndex + magicDSSATSummaryLineIndexToRead > 4) {
-            continue;
+            // continue;
         }
         // <<<<<<
 
         // check to see if the line is null....
         if (candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead] == null) {
-        if (hitANullLine) {
+        // if (hitANullLine) { THIS USED TO BE THE CODE (DMR)
+        if (false) {
             // we have seen this before, so just continue
             continue;
         } else {
@@ -2726,7 +2745,11 @@ public class Mink3p2daily {
     String XHappyInvariantsReplaced = invariantsReplaced[0];
     String XInvariantsReplaced      = invariantsReplaced[1];
 
+    System.out.println("XInvariantsReplaced");
+    System.out.println(XInvariantsReplaced);
 
+    System.out.println("XHappyInvariantsReplaced");
+    System.out.println(XHappyInvariantsReplaced);
     // start the timer for just DSSAT proper
     thisTimer.tic();
 
@@ -2749,13 +2772,13 @@ public class Mink3p2daily {
         // Skipping these latitudes for convenience (DMR)
         // System.out.println("latitude:"+latitude);
 
-        if(latitude >2){
-            continue;
+        // if(latitude >2){
+        //     continue;
 
-        }
-        if(latitude <-2){
-            continue;
-        }
+        // }
+        // if(latitude <-2){
+        //     continue;
+        // }
 
         elseTimer.tic();
 
@@ -2810,6 +2833,14 @@ public class Mink3p2daily {
         longitude = geogMatrix.getValue(lineIndex,3); // Beware the MAGIC NUMBER!!!
 
         // brute force padding
+        System.out.println("soilType");
+        System.out.println("totalLengthForSoilType");
+        System.out.println("magicSoilPrefix");
+        System.out.println("magicSoilPrefix.length");
+        System.out.println(soilType);
+        System.out.println(totalLengthForSoilType);
+        System.out.println(magicSoilPrefix);
+        System.out.println(magicSoilPrefix.length());
         soilTypeString = magicSoilPrefix + FunTricks.padStringWithLeadingZeros(Integer.toString(soilType), totalLengthForSoilType - magicSoilPrefix.length());
 
 
@@ -2940,16 +2971,16 @@ public class Mink3p2daily {
             // now we do this inside the loop....
             XHappyStuffToWrite = XHappyInvariantsReplaced.replaceAll(soilInitializationPlaceholder, dummyInitializationBlock);
 
-            // System.out.println("");
-            // System.out.println("");
-            // System.out.println("XHappyStuffToWrite!!!");
-            // System.out.println("");
-            // System.out.println("");
-            // System.out.println("dummyInitializationBlock");
-            // System.out.println(dummyInitializationBlock);
-            // System.out.println("");
-            // System.out.println("XHappyStuffToWrite");
-            // System.out.println(XHappyStuffToWrite);
+            System.out.println("");
+            System.out.println("");
+            System.out.println("XHappyStuffToWrite!!!");
+            System.out.println("");
+            System.out.println("");
+            System.out.println("dummyInitializationBlock");
+            System.out.println(dummyInitializationBlock);
+            System.out.println("");
+            System.out.println("XHappyStuffToWrite");
+            System.out.println(XHappyStuffToWrite);
 
             // do the search and replace thing; the invariants have already been done above...
             XHappyStuffToWrite = XHappyStuffToWrite.replaceAll(soilPlaceholder               , soilTypeString);
@@ -3117,9 +3148,10 @@ public class Mink3p2daily {
             splitUpNamesHere = (String[])spacingFindings[0];
             endingIndicesForSplitUpNamesHere = (int[])spacingFindings[1];
             
-            for (int dumpIndex = 0; dumpIndex < splitUpNamesHere.length; dumpIndex++) {
-                System.out.println("[" + dumpIndex + "] sUNH=[" + splitUpNamesHere[dumpIndex] + "]");
-            }
+            // DMR commented this out because it's not super helpful
+            // for (int dumpIndex = 0; dumpIndex < splitUpNamesHere.length; dumpIndex++) {
+            //     System.out.println("[" + dumpIndex + "] sUNH=[" + splitUpNamesHere[dumpIndex] + "]");
+            // }
 
 
             extraNames = dynamicallyBuildExtraNamesAndFirstIndexToKeepForExtras(magicFirstSummaryColumnNameToKeepForExtras);
@@ -3272,12 +3304,13 @@ public class Mink3p2daily {
             irrigationScheme.initialize(Integer.parseInt(startingDayToPlantCode), 1);
             irrigationBlock = irrigationScheme.buildIrrigationBlock();
 
-
             // do the search and replace thing; the invariants have already been done above...
+
             XStuffToWrite = XInvariantsReplaced.replaceAll(soilPlaceholder , soilTypeString);
 
             XStuffToWrite = XStuffToWrite.replaceAll(randomSeedPlaceholder,randomSeedCode);
             XStuffToWrite =       XStuffToWrite.replaceAll(initializationStartPlaceholder, initializationDayCode);
+
             XStuffToWrite =       XStuffToWrite.replaceAll(plantingDateStartPlaceholder  , startingDayToPlantCode);
             XStuffToWrite =       XStuffToWrite.replaceAll(plantingDateEndPlaceholder    , endingDayToPlantCode);
             XStuffToWrite =       XStuffToWrite.replaceAll(harvestingDatePlaceholder     , harvestDayCode);
@@ -3307,22 +3340,22 @@ public class Mink3p2daily {
                 loamStableFractionAbove,
                 sandStableFractionAbove
                 );
-            initializationBlock = "! " + soilTypeString + " " +
-                fractionBetweenLowerLimitAndDrainedUpperLimit + " " +
-                initializationDayCode + " " +
-                totalInitialNitrogenKgPerHa + " " +
-                depthForNitrogen + " " +
-                rootWeight + " " +
-                surfaceResidueWeight + " " +
-                residueNitrogenPercent + " " +
-                incorporationRate + " " +
-                incorporationDepth + " " +
-                standardDepths + " " +
-                clayStableFractionAbove + " " +
-                loamStableFractionAbove + " " +
-                sandStableFractionAbove
-                + "\n\n\n" +
-                initializationBlock;
+            // initializationBlock = "! " + soilTypeString + " " +
+            //     fractionBetweenLowerLimitAndDrainedUpperLimit + " " +
+            //     initializationDayCode + " " +
+            //     totalInitialNitrogenKgPerHa + " " +
+            //     depthForNitrogen + " " +
+            //     rootWeight + " " +
+            //     surfaceResidueWeight + " " +
+            //     residueNitrogenPercent + " " +
+            //     incorporationRate + " " +
+            //     incorporationDepth + " " +
+            //     standardDepths + " " +
+            //     clayStableFractionAbove + " " +
+            //     loamStableFractionAbove + " " +
+            //     sandStableFractionAbove
+            //     + "\n\n\n" +
+            //     initializationBlock;
 
             XStuffToWrite = XStuffToWrite.replaceAll(soilInitializationPlaceholder, initializationBlock);
 
@@ -3334,6 +3367,18 @@ public class Mink3p2daily {
             FunTricks.writeStringToFile(XStuffToWrite, fullTempXFile);
             writingTimerStats.useDoubleValue(writingTimer.tocMillis());
 
+            System.out.println("");
+            System.out.println("");
+            System.out.println("");
+            System.out.println("XStuffToWrite");
+            System.out.println("");
+            System.out.println("");
+            System.out.println("");
+            System.out.println(XStuffToWrite);
+
+            System.out.println("soilTypeString");
+            System.out.println(soilTypeString);
+            // System.exit(0);
             elseTimer.tic();
             // recommend garbage collection
             System.gc();
@@ -3345,37 +3390,49 @@ public class Mink3p2daily {
 
             realTimer.tic();
 
+            System.out.println("rundssat command AGAIN! But for REAL!!!");
+            System.out.println("./run_dssat.sh");
+            pb = new ProcessBuilder("bash", "./run_dssat.sh");
+            pb.inheritIO();
+            pb.directory(pathToDSSATDirectoryAsFile);
+            process = pb.start();
+            process.waitFor();
 
-            realRunnerThing = new SystemCallWithTimeout();
+            // MAY WANT TO COMMENT THIS BACK IN IF USING REALRUNNER (DMR)
+            // happyRunnerThing.run();
 
-            for (int rerunIndex = 0; rerunIndex < rerunAttemptsMax ; rerunIndex++) {
-            realRunnerThing.setup(dssatExecutionCommand, pathToDSSATDirectoryAsFile, (int)Math.ceil(maxRunTime * Math.pow(bumpUpMultiplier, rerunIndex)), testIntervalToUse);
-            realRunnerThing.run();
-
-            // i am going to add an arbitrary tiny wait in here in case the filesystem is bogged down...
             Thread.sleep(magicPauseLengthMillis);
 
-            if (realRunnerThing.finishedCleanly() != SystemCallWithTimeout.SYSTEM_CALL_RAN_FINE) {
-                // check how many lines ended up in Summary.OUT
-                if (new File(magicDSSATSummaryToRead).exists()) {
-                System.out.println("     +++ happy timed out #" + rerunIndex + "(max = " + (rerunAttemptsMax - 1) + ") line=" + lineIndex + " plantingWindow=" + plantingWindowIndex 
-                    + " lines in Summary.OUT = " + FunTricks.nLinesInTextFile(magicDSSATSummaryToRead) + " goal = " + (nFakeYears + magicDSSATSummaryLineIndexToRead) );
-                // check one more time to see if the length goal has been met because sometimes it is by the time we get to here...
-                if (FunTricks.nLinesInTextFile(magicDSSATSummaryToRead) == (nFakeYears + magicDSSATSummaryLineIndexToRead)) {
-                    System.out.println("  apparently, the goal was met by the time we got here, moving on...");
-                    break;
-                }
+            // realRunnerThing = new SystemCallWithTimeout();
 
-                } else {
-                System.out.println("     +++ happy timed out #" + rerunIndex + "(max = " + (rerunAttemptsMax - 1) + ") line=" + lineIndex + " plantingWindow=" + plantingWindowIndex 
-                    + " lines in Summary.OUT = " + 0 + " goal = " + (nFakeYears + magicDSSATSummaryLineIndexToRead) );
-                }
+            // for (int rerunIndex = 0; rerunIndex < rerunAttemptsMax ; rerunIndex++) {
+            // realRunnerThing.setup(dssatExecutionCommand, pathToDSSATDirectoryAsFile, (int)Math.ceil(maxRunTime * Math.pow(bumpUpMultiplier, rerunIndex)), testIntervalToUse);
+            // realRunnerThing.run();
 
-            } else {
-                // it seems all is well
-                break;
-            }
-            }
+            // // i am going to add an arbitrary tiny wait in here in case the filesystem is bogged down...
+            // Thread.sleep(magicPauseLengthMillis);
+
+            // if (realRunnerThing.finishedCleanly() != SystemCallWithTimeout.SYSTEM_CALL_RAN_FINE) {
+            //     // check how many lines ended up in Summary.OUT
+            //     if (new File(magicDSSATSummaryToRead).exists()) {
+            //     System.out.println("     +++ happy timed out #" + rerunIndex + "(max = " + (rerunAttemptsMax - 1) + ") line=" + lineIndex + " plantingWindow=" + plantingWindowIndex 
+            //         + " lines in Summary.OUT = " + FunTricks.nLinesInTextFile(magicDSSATSummaryToRead) + " goal = " + (nFakeYears + magicDSSATSummaryLineIndexToRead) );
+            //     // check one more time to see if the length goal has been met because sometimes it is by the time we get to here...
+            //     if (FunTricks.nLinesInTextFile(magicDSSATSummaryToRead) == (nFakeYears + magicDSSATSummaryLineIndexToRead)) {
+            //         System.out.println("  apparently, the goal was met by the time we got here, moving on...");
+            //         break;
+            //     }
+
+            //     } else {
+            //     System.out.println("     +++ happy timed out #" + rerunIndex + "(max = " + (rerunAttemptsMax - 1) + ") line=" + lineIndex + " plantingWindow=" + plantingWindowIndex 
+            //         + " lines in Summary.OUT = " + 0 + " goal = " + (nFakeYears + magicDSSATSummaryLineIndexToRead) );
+            //     }
+
+            // } else {
+            //     // it seems all is well
+            //     break;
+            // }
+            // }
 
 
             realTimerStats.useDoubleValue(realTimer.tocMillis());

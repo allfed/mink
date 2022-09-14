@@ -772,10 +772,29 @@ do
   sleep $sleeptime
 
   else
-    echo " -- trying to reassemble #$countercounter --"
+    echo " -- trying to reassemble $countercounter --"
 #    echo "             data=[$data_to_use] ; co2_to_use = [$co2_to_use]"
-    success_failure_list="${success_failure_list}
-`./mink3daily_reassemble_outputs.sh ${daily_to_use##*/}_d${plantingDateInMonthShiftInDays/-/n}_${data_to_use%%_data}_STATS $co2_to_use $chunks_per_case $X_to_use $magic_code | tee -a $magic_reassembly_log | grep REASSEMBL`"
+    success_failure_list="${success_failure_list}"
+    echo "./mink3daily_reassemble_outputs.sh ${daily_to_use##*/}_d${plantingDateInMonthShiftInDays/-/n}_${data_to_use%%_data}_STATS $co2_to_use $chunks_per_case $X_to_use $magic_code"
+
+    echo "{daily_to_use##*/}"
+    echo ${daily_to_use##*/}
+    echo "{plantingDateInMonthShiftInDays/-/n}"
+    echo ${plantingDateInMonthShiftInDays/-/n}
+    echo "{data_to_use%%_data}"
+    echo ${data_to_use%%_data}
+    echo "co2_to_use"
+    echo $co2_to_use
+    echo "chunks_per_case"
+    echo $chunks_per_case
+    echo "X_to_use"
+    echo $X_to_use
+    echo "magic_code"
+    echo $magic_code
+
+    exit
+
+# `./mink3daily_reassemble_outputs.sh ${daily_to_use##*/}_d${plantingDateInMonthShiftInDays/-/n}_${data_to_use%%_data}_STATS $co2_to_use $chunks_per_case $X_to_use $magic_code | tee -a $magic_reassembly_log | grep REASSEMBL`"
 #`./mink3daily_reassemble_outputs.sh ${daily_to_use##*/}_${data_to_use%%_data}_STATS $co2_to_use $chunks_per_case $X_to_use $magic_code $plantingDateInMonthShiftInDays | tee -a $magic_reassembly_log | grep REASSEMBL`"
 #`./mink2daily_reassemble_outputs.sh ${data_to_use%%_data}_STATS $co2_to_use $chunks_per_case $X_to_use $magic_code | tee -a $magic_reassembly_log | grep REASSEMBL`"
     let "countercounter++"

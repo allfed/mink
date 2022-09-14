@@ -1,0 +1,61 @@
+I forget if you got singularity working on your local. If you don't have mink_sandbox, then you need to rerun these commands:
+
+in mink directory:
+
+sudo ./build_singularity.sh
+
+and then regardless, you'll need to run
+
+cd /mnt/data
+
+once in that shell.
+
+to make some maps, the best thing would be to "reassemble" the chunks into a single file. of course, you have taken this all manual at the moment and so i don't know if you can do that super easily. but, the automatic way is to use the outermost script with a single argument that is NOT "run". for example: myawesomeprompt$ ./mink3daily_wrapper.sh asdf
+ This means we just need to reassemble, which is used as follows
+
+  echo ""
+  echo "Usage: $0 data_file_base_name n_chunks X_to_use [magic_code]"
+  echo "NOT EXACTLY CORRECT... go read the source code..."
+  echo "The idea is that this will reassemble the chunks of output into a single dataset for importation"
+  echo "into GRASS."
+  echo ""
+  echo "data_file_base_name is the base name (no .txt) of the GIS table to be used."
+  echo ""
+  echo "n_chunks specifies how many chunks this case was cut up into"
+  echo ""
+  echo "X_to_use is the X-file that was/should-be used for this case"
+  echo ""
+  echo "magic_code is an optional string that will be put at the front of the final name so that different runs"
+  echo "using the same GIS data and X_files can be told apart"
+  echo ""    
+
+    echo "./mink3daily_reassemble_outputs.sh ${daily_to_use##*/}_d${plantingDateInMonthShiftInDays/-/n}_${data_to_use%%_data}_STATS $co2_to_use $chunks_per_case $X_to_use $magic_code"
+./mink3daily_run_DSSAT_tile.sh /home/dmrivers/Code/mink/basics_15jun22/sge_Mink3daily/from_GRASS/D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE control_mink/Outdoor-crops-control mzJ029w00.SNX threeSplitWithFlowering 379 maize 1 0
+
+Therefore we need to determine:daily_to_useplantingDateInMonthShiftInDaysCo2_to_usechunks_per_casex_to_usemagic_code
+
+we ran
+  mink3daily_run_DSSAT_tile.sh 
+$new_chunk_here 
+$daily_to_use 
+$X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter
+
+corresponding to
+
+./mink3daily_run_DSSAT_tile.sh /home/dmrivers/Code/mink/basics_15jun22/sge_Mink3daily/from_GRASS/D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE 
+control_mink/Outdoor-crops-control mzJ029w00.SNX 
+threeSplitWithFlowering 
+379 
+maize 
+1 
+0
+sodaily_to_use =  /home/dmrivers/Code/mink/basics_15jun22/sge_Mink3daily/from_GRASS/D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE plantingDateInMonthShiftInDays = 1
+Co2_to_use = 379
+chunks_per_case 
+x_to_use = mzJ029w00.SNX 
+I will infer based on this:mzJ029w00_379_Outdoor-crops-control_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE_STATS.txt
+{data_to_use%%_data} = noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
+As for magic_code, I think that's probably CATa_
+./mink3daily_reassemble_outputs.sh ${daily_to_use##*/}_d${plantingDateInMonthShiftInDays/-/n}_${data_to_use%%_data}_STATS $co2_to_use $chunks_per_case $X_to_use $magic_code 
+
+that should put the chunks back together, strip the chunk numbers, and put the human readable tag on the front and stuff. the big text files should end up in a directory called "to_GRASS". from there, you would copy them to the directory in with all the grass scripts called "from_DSSAT".  at that point, you can try to figure out how the attached script works. run GRASS and when you are inside it (in the appropriate directory; after moved the files, etc, etc.). you have to give is a "globbing" pattern that it can use to get the list of files to read. and then you have to give it the human readable tag for the input dataset so that it can strip off the DSSAT-level junk from the filename and figure out which geography file to use for knowing which information literally goes where. it might be tricky to convince it to work with the raw chunked outputs because they will have that chunk index hanging off the back which will confuse it when it goes looking for the geography files. 

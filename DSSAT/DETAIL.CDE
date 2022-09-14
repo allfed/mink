@@ -1,5 +1,5 @@
 *EXPERIMENTAL DETAILS CODES
-! DSSAT v4.6; 07/01/2015
+! DSSAT v4.7; 09/01/2017
 
 ! Headers used in the @ line to identify variables are listed first, codes to
 ! identify methods, chemicals, etc. are listed next in sections that relate to
@@ -54,10 +54,13 @@ FAMO     Other elements in applied fertilizer, kg ha-1                        IB
 FAMP     P in applied fertilizer, kg ha-1                                     IB
 FDATE    Fertilization date, year + day or days from planting                 IB
 FDEP     Fertilizer incorporation/application depth, cm                       IB
+FHDUR    Field history duration                                               IB
 FL       Field level                                                          IB
 FLDD     Drain depth, cm                                                      IB
 FLDS     Drain spacing, m                                                     IB
 FLDT     Drainage type, code                                                  IB
+FLHST    Field history (5 character lookup)                                   IB
+FLNAM    Field name                                                           IB
 FLOB     Obstruction to sun, degrees                                          IB
 FLSA     Slope and aspect, degrees from horizontal plus direction (W, NW, etc.IB
 FLST     Surface stones (Abundance, % + Size, S,M,L)                          IB
@@ -78,10 +81,17 @@ IAMT     Amount per automatic irrigation if fixed, mm                         IB
 IC       Initial conditions level                                             IB
 ICBL     Depth, base of layer, cm                                             IB
 ICDAT    Initial conditions measurement date, year + days                     IB
+ICNAME   Name of initial conditions level                                     IB   
 ICND     Nodule weight from previous crop, kg ha-1                            IB
 ICRE     Rhizobia effectiveness, 0 to 1 scale                                 IB
 ICRN     Rhizobia number, 0 to 1 scale                                        IB
+ICREN    N content of surface residue, %                                      IB
+ICREP    P content of surface residue, %                                      IB
+ICRES    Initial surface residue, kg ha-1                                     IB
+ICRID    Incorporation depth for surface residue, cm                          IB
+ICRIP    Incorporation amount for surface resiude, %                          IB
 ICRT     Root weight from previous crop, kg ha-1                              IB
+ICWD     Initial water table depth, cm                                        IB
 IDATE    Irrigation date, year + day or days from planting                    IB
 IDEP     Management depth for automatic application, cm                       IB
 ID_FIELD Field ID (Institute + Site + Field)                                  IB
@@ -140,12 +150,15 @@ SA       Soil analysis level                                                  IB
 SABD     Bulk density, moist, g cm-3                                          IB
 SABL     Depth, base of layer, cm                                             IB
 SADAT    Analysis date, year + days from Jan. 1                               IB
-SAHB     pH in buffer                                                         IB
-SAHW     pH in water                                                          IB
+SADM     Bulk density, moist, g cm-3                                          IB
 SAKE     Potassium, exchangeable, cmol kg-1                                   IB
+SANAM    Soil analysis level name                                             IB
 SANI     Total nitrogen, %                                                    IB
+SAPHB    pH in buffer                                                         IB
+SAPHW    pH in water                                                          IB
 SAOC     Organic carbon, %                                                    IB
 SAPX     Phosphorus, extractable, mg kg-1                                     IB
+SASC     Measured stable organic carbon, %                                    IB
 SH2O     Water, cm3 cm-3                                                      IB
 SITE(S)  Name and location of experimental site(s)                            IB
 SLDP     Soil depth, cm                                                       IB
@@ -211,10 +224,12 @@ CH055    Mancozeb [Fungicide]                                                 IB
 CH056    Tilt [Fungicide]                                                     IB
 CH057    Rhizobium (for legume crops)                                         IB
 CH100    Pix [Mepiquat Chloride; Growth Regulator]                            IB
+CH101    Ethephon [Growth Regulator]                                          IB
+CH102    Ethylene [Growth Regulator]                                          IB
 
 *Crop and Weed Species
 @CDE     DESCRIPTION                                                          SO
-AL       Alfalfa/Lucerne                                                      IB
+AL       Alfalfa                                                              IB
 AR       Aroid                                                                IB
 BA       Barley                                                               IB
 BM       Bermuda grass                                                        IB
@@ -230,6 +245,7 @@ CN       Canola                                                               IB
 CO       Cotton                                                               IB
 CP       Cowpea                                                               IB
 CS       Cassava                                                              IB
+CU       Cucumber                                                             IB
 CV       Clover                                                               IB
 FA       Fallow                                                               IB
 FB       Faba bean                                                            IB
@@ -246,19 +262,21 @@ PE       Pea                                                                  IB
 PI       Pineapple                                                            IB
 PN       Peanut                                                               IB
 PO       Perennial peanut                                                     IB
-PP       Pigeonpea                                                            IB
+PP       Pigeon pea                                                           IB
 PR       Pepper                                                               IB
 PT       Potato                                                               IB
 RI       Rice                                                                 IB
 RP       Rhizoma peanut                                                       IB
 SB       Soybean                                                              IB
 SC       Sugarcane                                                            IB
+SF       Safflower                                                            IB
 SG       Grain sorghum                                                        IB
 SI       Switch grass                                                         IB
 SQ       Sequence                                                             IB
 SS       Sesame                                                               IB
 SU       Sunflower                                                            IB
 SW       Sweetcorn                                                            IB
+TF       Teff                                                                 IB
 TM       Tomato                                                               IB
 TN       Tanier                                                               IB
 TR       Taro                                                                 IB
@@ -384,10 +402,10 @@ IR011    Constant flood depth, mm                                             IB
 SA001    Olsen                                                                IB
 SA002    Bray No. 1                                                           IB
 SA003    Bray No. 2                                                           IB
-SA004    Mehlich I (double acid, 1:5)                                         IB
+SA004    Mehlich 1 (double acid, 1:5)                                         IB
 SA005    Anion exchange resin                                                 IB
 SA006    Truog                                                                IB
-SA007    Mehlich I (double acid, 1:10)                                        IB
+SA007    Mehlich 1 (double acid, 1:10)                                        IB
 SA008    Colwell                                                              IB
 SA009    Water                                                                IB
 SA010    IFDC Pi strip                                                        IB

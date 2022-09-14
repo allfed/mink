@@ -75,7 +75,9 @@ base_input=`basename $input_file`
 
 echo -e "\n\ncodd=[$chunked_output_data_dir]; xt=[${X_template%%.*X}]\nCF = [$chunk_file] ; IF = [$input_file] ; NT = [$n_threads_total] \n\n\n"
 
-$java_to_use "$memory_string" -cp $classpath $classname ${input_file} $chunk_file $n_threads_total
+# echo $input_file
+# exit
+$java_to_use "$memory_string" -cp $classpath $classname /home/dmrivers/Code/mink/basics_15jun22/sge_Mink3daily/chunks_to_GRASS/mzJ029w00_379_Outdoor-crops-control_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE_STATS $chunk_file $n_threads_total
 
 test_exit_code=$?
 echo "exit code was [$test_exit_code]"
