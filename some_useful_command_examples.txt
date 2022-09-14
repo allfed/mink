@@ -14,4 +14,6 @@ cd basics_15jun22/sge_Mink3daily/
 
 cd ../more_GRASS_scripts/universal/
 
-./quick_display.sh mzJ029w00_379_Outdoor-crops-control_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE_real_1@ricky_DSSAT_cat_0 "" ""
+./quick_display.sh mzJ029w00_379_Outdoor-crops-control_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE_yield_mean@morgan_DSSAT_cat_0 "" ""
+
+and then the result, if all goes well, will be in "result.png" in the root directory
