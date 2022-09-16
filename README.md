@@ -2,7 +2,7 @@
 
 > A fully open-source global gridded crop model using DSSAT.
 
-The top layer (mink) has been in development for over 10 years at IFPRI/CGIAR. There are several useful scripts enabling full control over the crop model process and modular runs, as well as several useful analysis and visualization tools. At ALLFED, we've taken that setup and put it online for anyone to use much more easily than if it were sitting on IFPRI's offline cluster. This crop model was built with the intention of understand the food production system and how it could be improved for the purposes of food security. In particular, adaptation in terms of growing different crops in current or expanded cropland, which crops to use for this, and when they should be planted
+The top layer (mink) has been in development for over 10 years at IFPRI/CGIAR. There are several useful scripts enabling full control over the crop model process and modular runs, as well as several useful analysis and visualization tools. At ALLFED, we've taken that setup and put it online for anyone to use much more easily than if it were sitting on IFPRI's offline cluster. This crop model was built with the intention of understand the food production system and how it could be improved for the purposes of food security. In particular, adaptation in terms of growing different crops in current or expanded cropland, which crops to use for this, and when they should be planted.
 
 ## Quick Start
 
