@@ -45,11 +45,11 @@ echo $raster
   d.erase
   d.rast $raster 
   cp ../../../grass6out.png ../../../bg.png
-  # if [ -n "$vector" ]; then
-  #   d.vect $vector type=boundary color=black
-  # fi
-  # d.vect cntry05 type=boundary bgcolor=none
-  # cp ../../../grass6out.png ../../../vect.png
+  if [ -n "$vector" ]; then
+    d.vect $vector type=boundary color=black
+  fi
+  d.vect cntry05 type=boundary bgcolor=none
+  cp ../../../grass6out.png ../../../vect.png
 
   # first change since feb 4, 2011 (30sep15)
   raster_type=`r.info -t $raster | cut -d= -f2`
@@ -77,9 +77,16 @@ cp ../../../grass6out.png ../../../text.png
 
 convert -composite -gravity center ../../../text.png ../../../bg.png ../../../resulttmp1.png
 convert -composite -gravity center ../../../resulttmp1.png ../../../legend.png ../../../resulttmp2.png
-convert ../../../resulttmp2.png -background white -flatten ../../../result.png
+convert -composite -gravity center ../../../resulttmp2.png ../../../vect.png ../../../resulttmp3.png
+convert ../../../resulttmp3.png -background white -flatten ../../../result.png
+rm ../../../legend.png
+rm ../../../bg.png
+rm ../../../text.png
+rm ../../../vect.png
+rm ../../../grass6out.png
 rm ../../../resulttmp1.png
 rm ../../../resulttmp2.png
+rm ../../../resulttmp3.png
 
 else
   echo "${raster_only}@${mapset_only} has failed to exist"

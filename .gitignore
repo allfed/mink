@@ -3,6 +3,7 @@
 grassdata/
 
 on_node_home*/
+all_US_DSSAT/
 basics_15jun22/sge_Mink3daily/logs/
 # turns out, we need this actual program thing... for dssat
 basics_15jun22/sge_Mink3daily/staging_area/*.sh

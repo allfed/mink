@@ -14,4 +14,8 @@ cd basics_15jun22/sge_Mink3daily/
 
 cd ../more_GRASS_scripts/universal/
 
-./quick_display.sh mzJ029w00_379_Outdoor-crops-control_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE_real_1@ricky_DSSAT_cat_0 "" ""
+./quick_display.sh mzJ029w00_379_Outdoor-crops-control_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE_real_1@morgan_DSSAT_cat_0 "" ""
+
+
+# this is for reading in some MAPSPAM data acquired from https://www.mapspam.info/
+r.in.gdal input=spam2010V2r0_global_H_MAIZ_A.tif output=MAIZE_cropland

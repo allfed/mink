@@ -169,7 +169,7 @@ echo "   >>> using $nameOfDSSATExecutable <<<"
 # for sensitivity analysis: use 100 (i.e., same as number of repetitions); for ncan30/wcan30 use 5
 #      nHappyPlantRunsForPhenology=20 # soil search = 40 # bite wheat = 100 # 100 # 9 # 80 # ncan30/wcan30 is 5
       nHappyPlantRunsForPhenology=$nFakeYears # soil search = 40 # bite wheat = 100 # 100 # 9 # 80 # ncan30/wcan30 is 5
-  happyYieldThresholdToDoRealRuns=1 # 50 # 350
+  happyYieldThresholdToDoRealRuns=5 # 50 # 350
             phenologyBufferInDays=-5
   happyMaturityThresholdToDoRealRuns=`echo "$optionalHarvestInterval + 1" | bc` # 300 # 200
 

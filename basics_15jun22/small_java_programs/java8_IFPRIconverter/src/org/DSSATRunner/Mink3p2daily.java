@@ -2607,7 +2607,7 @@ public class Mink3p2daily {
     String statisticsOutLine = null;
 
     double totalInitialNitrogenKgPerHa = -5, rootWeight = -6, surfaceResidueWeight = -7,
-        latitude, longitude, latitudeToUse, longitudeToUse;
+        latitude, longitude, latitudeToUse, longitudeToUse,lon_max,lon_min,lat_max,lat_min;
     double positiveNegativeMultiplier = 0;
     double boxIndex = Double.NaN;
 
@@ -2767,18 +2767,40 @@ public class Mink3p2daily {
 
     System.out.println("-- starting through data --");
     for (int lineIndex = 0; lineIndex < nLinesInDataFile; lineIndex++) {
+
         latitude = geogMatrix.getValue(lineIndex,2); // Beware the MAGIC NUMBER!!!
+        longitude = geogMatrix.getValue(lineIndex,3); // Beware the MAGIC NUMBER!!!
+        // SAHARA DESERT
+        // lat_max = 28;
+        // lat_min = 26;
+        // lon_min = -2;
+        // lon_max = 18;
+
+        //USA
+        lat_max = 49;
+        lat_min = 26;
+        lon_min = -124;
+        lon_max = -66;
+        if(latitude >lat_max){
+            continue;
+
+        }
+        if(latitude <lat_min){
+            continue;
+
+        }
+
+        if(longitude <lon_min){
+            continue;
+        }
+
+        if(longitude >lon_max){
+            continue;
+        }
 
         // Skipping these latitudes for convenience (DMR)
-        // System.out.println("latitude:"+latitude);
-
-        // if(latitude >2){
-        //     continue;
-
-        // }
-        // if(latitude <-2){
-        //     continue;
-        // }
+        System.out.println("latitude:"+latitude);
+        System.out.println("longitude:"+longitude);
 
         elseTimer.tic();
 
@@ -2828,9 +2850,6 @@ public class Mink3p2daily {
         // plantingMonth    = nonClimateInfo[2]; // don't need this here...
         firstPlantingDay = DSSATHelperMethods.firstPlantingDateFromMonth((int)dataMatrix.getValue(lineIndex,firstPlantingDayIndex)); // nonClimateInfo[3];
         nitrogenLevel = dataMatrix.getValue(lineIndex,nitrogenLevelIndex); // nonClimateInfo[4];
-
-        latitude = geogMatrix.getValue(lineIndex,2); // Beware the MAGIC NUMBER!!!
-        longitude = geogMatrix.getValue(lineIndex,3); // Beware the MAGIC NUMBER!!!
 
         // brute force padding
         System.out.println("soilType");

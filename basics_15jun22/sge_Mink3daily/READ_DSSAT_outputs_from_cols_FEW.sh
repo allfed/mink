@@ -77,172 +77,59 @@ real_..$
 "
 #shift_in_days
 
-
-rest="
-real_maturity_mean$
-real_emergence_mean$
-
-emergence_.$
-emergence_..$
-maturity_.$
-maturity_..$
+others=\
 "
-
-rest="
-
-^yield_mean$
-"
-
-some="
-
-shift_in_days
-real_emergence_mean$
-^yield_mean$
-shift_in_days
-IRCM
-"
-
-rest="
-
-real_.$
-real_..$
-real_maturity_mean$
-real_emergence_mean$
-"
-
-real="
-real_maturity_mean$
-CWAM
-n_contributing_real
-
-^yield_mean$
 AFCONC
-
-PCTINF
-
-real_.$
-real_..$
-"
-
-
-
-
-others="
-TMAXA
-TMINA
-PRCP
-
-sw_
-tmin_
-tmax_
-prec_
-"
-
-#param_search="
-param_name_patterns_to_keep="
-best_yield
 anthesis_of_best
-maturity_of_best
-index_of_best
-
-pdate
-g2cul
-g3cul
-p1cul
-p5cul
-p2cul
-
-"
-
-others="
+best_yield
 culnum
-
-popZ
-rowS
-deep
-g2cul
-g3cul
-p1cul
-p5cul
-p2cul
-g2cul
-g3cul
-
-phint
-"
-
-aflatoxin_name_patterns_to_keep=\
-"
-^yield_mean$
-PCTINF
-AFCONC
-"
-
-others="
-^real_.$
-^real_..$
-IRCM$
-PRCM$
-
-real_maturity_mean$
-PCTINF
-AFCONC
-n_contributing_real
-
-^N
-maturity_mean$
-
-
 CWAM
-maturity_mean$
-n_contributing
-^happy_yield_mean$
-^real_.$
-^real_..$
-^happy_yield_mean$
-maturity_mean$
-^CWAH$
-^yield_mean$
-real_emergence_mean$
-real_maturity_mean$
-^real_.$
-^real_..$
-^yield_mean$
-n_bad_thing
-syn$
+deep
+emergence_mean
+g2cul
+g3cul
+gro
+gro_
 gro$
-"
-
-others="
-
-
-^yield_std$
+index_of_best
+IRCM
+IRCM$
+maturity_mean
+maturity_of_best
+n_bad_thing
+n_contributing
+n_contributing_real
 NICM
 NUCM
-
-^real_.$
-^real_..$
+p1cul
+p2cul
+p5cul
+PCTINF
+pdate
+phint
+popZ
+PRCM$
+PRCP
+prec_
 real_emergence_mean$
 real_maturity_mean$
-gro_
-IRCM
-
-emergence_mean
-maturity_mean
-gro
-^real_maturity_mean$
-IRCM
-IRCM
-real_emergence_mean$
-real_maturity_mean$
-^yield_std$
+rowS
+^CWAH$
 ^happy_
+^happy_yield_mean$
+^N
+^real_..$
+^real_.$
+^real_maturity_mean$
+sw_
+^yield_mean$
+^yield_std$
+syn$
+tmax_
+TMAXA
+tmin_
+TMINA
 "
-
-
-
-
-
 ###################################
 
 
@@ -439,8 +326,6 @@ echo $n_patterns
 
    clean_column_name=`echo "$this_column_name" | sed "s/#/n/g"`
 
-echo "keep_this"
-echo $keep_this
     if [ $keep_this = yes ]; then
       echo -n "[$clean_column_name]"
       let "n_patterns_found_so_far++"
@@ -456,8 +341,6 @@ echo $keep_this
       # grab the data
       cut -f${column_number} ${yield_dir}${base_file_name}${clean_suffix}.txt > deleteme_single_column_of_data_${quasi_random_code}.txt
       paste deleteme_latitude_longitude_${quasi_random_code}.txt deleteme_single_column_of_data_${quasi_random_code}.txt > deleteme_full_thing_for_import_${quasi_random_code}.txt
-      echo "raster name"
-      echo ${base_file_name}_${clean_column_name}
 
       r.in.xyz input=deleteme_full_thing_for_import_${quasi_random_code}.txt output=${base_file_name}_${clean_column_name} x=2 y=1 z=3 fs=tab --o --q
 
@@ -468,61 +351,28 @@ echo $keep_this
       yield_test=`echo "$clean_column_name" | grep yield`
       gro_test=`echo "$clean_column_name" | grep _gro_`
       day_test=`echo "$clean_column_name" | grep shift_in_days`
+      echo ""
+      echo "yield_test"
+      echo $yield_test
 
       echo ""
-      # put the yield and growth stage stresses together since they both use zero_to_black.sh
+      # put the yield and growth stage stresses together since they both use ./zero_to_black.sh
       if [ -n "${yield_test}" ]; then
         echo ""
-#        zero_to_black.sh ${base_file_name}_${clean_column_name} 1>/dev/null 2>&1
-echo ""
-        # zero_to_black.sh ${base_file_name}_${clean_column_name} 2>&1 | grep -v olor | grep -v set | grep -v "$yield_test"
-      elif [ -n "${gro_test}" ]; then
-        echo ""
-        # zero_to_black.sh ${base_file_name}_${clean_column_name} 1>/dev/null 2>&1
-      elif [ -n "$day_test" ]; then
-        echo ""
-        # month_day_colors.sh ${base_file_name}_${clean_column_name}
+        ./zero_to_black.sh ${base_file_name}_${clean_column_name} 2>&1 | grep -v olor | grep -v set | grep -v "$yield_test"
+      # elif [ -n "${gro_test}" ]; then
+      #   echo ""
+      #   ./zero_to_black.sh ${base_file_name}_${clean_column_name} 1>/dev/null 2>&1
+      # elif [ -n "$day_test" ]; then
+      #   echo ""
+      #   ./month_day_colors.sh ${base_file_name}_${clean_column_name}
       fi
     else
       echo -n "."
-#      g.remove rast=${base_file_name}_${column_index} --q
+     # g.remove rast=${base_file_name}_${clean_column_name} --q
     fi
 
   done # col_index; importing
-if [ 0 = 1 ]; then
-  # do some obvious color changes
-  for rrr in `g.mlist rast pat=${base_file_name}_yield_mean`; do
-    echo rrr
-    # zero_to_black.sh $rrr
-  done
-
-  for rrr in `g.mlist rast pat=${base_file_name}_gro_*watersyn`; do
-    echo ""
-    # zero_to_black.sh $rrr
-  done
-
-  for rrr in `g.mlist rast pat=${base_file_name}_gro_*nitrosyn`; do
-    echo ""
-    # zero_to_black.sh $rrr
-  done
-
-  for rrr in `g.mlist rast pat=${base_file_name}_gro_*watergro`; do
-    echo ""
-    # zero_to_black.sh $rrr
-  done
-
-  for rrr in `g.mlist rast pat=${base_file_name}_gro_*nitrogro`; do
-    echo ""
-    # zero_to_black.sh $rrr
-  done
-
-  for rrr in `g.mlist rast pat=${base_file_name}_shift_in_days`; do
-    echo ""
-    # month_day_colors.sh $rrr
-  done
-
-fi # colors cutout
-
 
 
 done # file name loop
