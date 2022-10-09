@@ -1,5 +1,7 @@
 # exclude built singularity image
 *.sif
+wth_control/
+wth_catastrophe/
 grassdata/
 Simulation_All_Crop_Scenario_State_Planting_cleaned.csv
 on_node_home*/
