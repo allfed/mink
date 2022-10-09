@@ -61,51 +61,11 @@ echo "   >>> using $nameOfDSSATExecutable <<<"
   weatherDataSuffixWithDot=.WTH
 
 
-            firstRandomSeed=1 # 10217 # 10214
-
-#       fakePlantingYear=5 # for enso reshuffled
-#             nFakeYears=46 # for enso reshuffled ones
-
-#       fakePlantingYear=51 # for Historical.csv's, data starts in 1950, day #274, so like 92 days before the new year.
-#             nFakeYears=59 # for Historical.csv's it runs from 1951 through 2009 as normally usable planting years (actual end = 2010, day #273)
-
-# trying for 2000-2009
-#       fakePlantingYear=80 # for Historical.csv's, data starts in 1950, day #274, so like 92 days before the new year.
-##             nFakeYears=30 # for Historical.csv's it runs from 1951 through 2009 as normally usable planting years (actual end = 2010, day #273)
-#             nFakeYears=10 # for Historical.csv's it runs from 1951 through 2009 as normally usable planting years (actual end = 2010, day #273)
-
-#       fakePlantingYear=95 # 95 = first good year # for seasia power data, 94-16; which means 21 years trying to full range to see what happens
-#             nFakeYears=22 # should be 22, but previously 21 # 16 # for seasia power data, 94-16; which means 21 trying to full range to see what happens
-
-# for tim thomas's csv -> wth for SA-TIED project
-# i am going to reset all of the years to always start on 2020 because i don't want to have to
-# 
-     # this will be a very magical extraction of the appropriate planting year assuming that the file names are encoded correctly and consistently
-     # first, pull out the four digit year, then take the last two characters and hope for the best
-#### use this for SATIED!!!!
-#     firstAvailableYear=`echo "$giant_prefix" | cut -d_ -f1 | cut -c3-4`
-#     let "fakePlantingYear = firstAvailableYear + 2" # the first available year is, say, 2054, so i want to plant two years later to make sure we have data
-#             nFakeYears=12 # 2 # 2 # for Historical.csv's it runs from 1951 through 2009 as normally usable planting years (actual end = 2010, day #273)
-#echo "@@@@@@@ {$giant_prefix} [$fakePlantingYear] @@@@@@@@@@@"
-#### end use for SATIED
-
-#       # for the raw isimip data, 1850-1900
-#       fakePlantingYear=51 # 50 is the first year, so to allow for spinup, we need to start in #51
-#             nFakeYears=50 #100 # 
-
-       # for the raw isimip data, 1901-2000
-#       fakePlantingYear=2 # 1 is the first year, so to allow for spinup, we need to start in #2
-#             nFakeYears=99 #100 # 
-
-#       # for the raw isimip data, 2001-2100
-#       fakePlantingYear=2 # 1 is the first year, so to allow for spinup, we need to start in #2
-#             nFakeYears=98 # 99 #100 # 
-
-
+            firstRandomSeed=1 
 
 #       # for the first catastrophe daily weather (4nov21)
        fakePlantingYear=2 # 1 is the first year, so to allow for spinup, we need to start in #2
-             nFakeYears=13 # 99 #100 # 
+             nFakeYears=9 # 99 #100 # 
 
 
 #     export fakePlantingYear=`echo "$giant_prefix" | cut -d_ -f1 | cut -c3-4`

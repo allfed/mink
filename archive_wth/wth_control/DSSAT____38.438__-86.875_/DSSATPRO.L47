@@ -1,0 +1,173 @@
+*** *  DSSAT PROFILE LINUX* ***
+DDB // ./
+DTB // ./
+DTE // ./
+DTO // ./
+DAT // ./
+DPT // ./
+DIM // ./
+DTP // ./
+DPF // ./
+DFO // ./
+DIS // ./
+DDW // ./
+DWG // ./
+DWC // ./
+DDS // ./
+DTS // ./
+DDG // ./
+DCG // ./ GENCALC2.EXE
+DGL // ./ GLUE.BAT
+DPM // ./
+DDE // ./
+TOG // ./ GBUILD.EXE
+
+MAL // ./ dscsm047 PRFRM047
+MAR // ./
+MBA // ./ dscsm047 CSCER047
+MBH // ./ dscsm047 CRGRO047
+MBM // ./ dscsm047 PRFRM047
+MBN // ./ dscsm047 CRGRO047
+MBR // ./ dscsm047 PRFRM047
+MBS // ./ dscsm047 BSCER047
+MBW // ./
+MCB // ./ dscsm047 CRGRO047
+MCH // ./ dscsm047 CRGRO047
+MCT // ./
+MCN // ./ dscsm047 CRGRO047
+MCO // ./ dscsm047 CRGRO047
+MCP // ./ dscsm047 CRGRO047
+!MCS // ./ dscsm047 CSYCA047        ! this one does some weird thing with only harvesting the first year; but if you set the date late enough, it will harvest that one, and the all the following years with half the length or something weird; anyways, trying the other one...
+MCS // ./ dscsm047 CSCAS047
+MCV // ./
+MFA // ./ dscsm047 CRGRO047
+MFB // ./ dscsm047 CRGRO047
+MGB // ./ dscsm047 CRGRO047
+MGW // ./
+MLT // ./ dscsm047 CRGRO047
+MML // ./ dscsm047 MLCER047
+MMZ // ./ dscsm047 MZCER047
+MNN // ./
+MNP // ./ dscsm047 CRGRO047
+MOA // ./
+MPE // ./
+MPI // ./ dscsm047 PIALO047
+MPN // ./ dscsm047 CRGRO047
+MPO // ./
+MPP // ./ dscsm047 CRGRO047
+MPR // ./ dscsm047 CRGRO047
+MPT // ./ dscsm047 PTSUB047
+MRI // ./ dscsm047 RICER047
+MRP // ./
+MSB // ./ dscsm047 CRGRO047
+MSC // ./ dscsm047 SCCAN047
+MSF // ./ dscsm047 CRGRO047
+MSG // ./ dscsm047 SGCER047
+MSI // ./
+MSS // ./
+MSU // ./ dscsm047 CRGRO047
+MSW // ./ dscsm047 SWCER047
+MTM // ./ dscsm047 CRGRO047
+MTN // ./ dscsm047 TNARO047
+MTR // ./ dscsm047 TRARO047
+MVB // ./ dscsm047 CRGRO047
+MVI // ./
+MWH // ./ dscsm047 CSCER047
+MOT // ./
+MU1 // ./
+MU2 // ./
+MIO // ./
+MLO // ./
+MG0 // ./ dscsm047 PRFRM047
+
+MGR // ./
+NSH // ./
+ASP // ./
+ASS // ./ dscsm047
+ASA // ./ VARAN2.EXE
+AGR // ./
+AQS // ./ dscsm047
+AQA // ./ SUSTAIN2.EXE
+ASX // ./
+APS // ./ dscsm047
+APV // ./
+APM // ./
+APA // ./ VARAN2.EXE
+APJ // ./
+APF // ./
+APP // ./
+APK // ./ DISC9801.EXE
+TOE // /WINDOWS NOTEPAD.EXE
+TOS // /
+TOM // /
+BGD // ./
+STD // ./
+CDD // ./
+WED // ./
+WGD // ./
+CLD // ./
+WMD // ./
+SLD // ./
+CRD // ./
+FID // ./
+ALD // ./
+GCD // ./
+GUD // ./
+ARD // ./
+BAD // ./
+BHD // ./
+BMD // ./
+BND // ./
+BRD // ./
+BSD // ./
+BWD // ./
+CBD // ./
+CHD // ./
+CTD // ./
+CND // ./
+COD // ./
+CPD // ./
+CSD // ./
+CVD // ./
+FAD // ./
+FBD // ./
+GBD // ./
+GWD // ./
+LTD // ./
+MLD // ./
+MZD // ./
+NND // ./
+NPD // ./
+OAD // ./
+PED // ./
+PID // ./
+PND // ./
+POD // ./
+PPD // ./
+PRD // ./
+PTD // ./
+RID // ./
+RPD // ./
+SBD // ./
+SCD // ./
+SFD // ./
+SGD // ./
+SSD // ./
+SID // ./
+SUD // ./
+SWD // ./
+TMD // ./
+TND // ./
+TRD // ./
+VBD // ./
+VID // ./
+WHD // ./
+U1D // ./
+U2D // ./
+OTD // /
+ASD // ./
+AQD // ./
+APD // ./
+PSD // ./
+ECD // ./
+TOD // /

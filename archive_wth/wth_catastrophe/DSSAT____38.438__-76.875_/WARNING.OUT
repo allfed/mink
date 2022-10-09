@@ -1,0 +1,129 @@
+*WARNING DETAIL FILE
+
+******************************************************************************
+
+*DSSAT Cropping System Model Ver. 4.7.5.011 -develop  OCT 06, 2022 16:40:15
+
+*RUN   1        : RI                        MZCER047 deleteme    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : deleteme SN ainfed template. but everything should always be c
+ DATA PATH      : ./
+ TREATMENT  1   : RI                        MZCER047
+  
+
+ SOILDYN  YEAR DOY = 2001 277
+ Soil photosynthesis factor (SLPF) = 0.92                                      
+
+ SOILNI  YEAR DOY = 2001 277
+ N content of residue was changed from value in initial conditions             
+   section of experiment file to maintain allowable C:N ratio.                 
+   - Previous crop code                 :    99                                
+   - Recommended N content for surface residue (%):   1.1                      
+   - Value read from file               : 0.600%                               
+   - Value changed to                   : 0.880%                               
+ To change allowable N content, modify SCN parameter                           
+   in RESCH047.SDA file.                                                       
+
+******************************************************************************
+
+*DSSAT Cropping System Model Ver. 4.7.5.011 -develop  OCT 06, 2022 16:40:15
+
+*RUN   3        : RI                        MZCER047 deleteme    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : deleteme SN ainfed template. but everything should always be c
+ DATA PATH      : ./
+ TREATMENT  1   : RI                        MZCER047
+  
+
+ MZ_GRO  YEAR DOY = 2004  84
+   Crop failure growth program terminated                                      
+
+******************************************************************************
+
+*DSSAT Cropping System Model Ver. 4.7.5.011 -develop  OCT 06, 2022 16:40:15
+
+*RUN   4        : RI                        MZCER047 deleteme    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : deleteme SN ainfed template. but everything should always be c
+ DATA PATH      : ./
+ TREATMENT  1   : RI                        MZCER047
+  
+
+ MZ_GRO  YEAR DOY = 2005  88
+   Crop failure growth program terminated                                      
+
+******************************************************************************
+
+*DSSAT Cropping System Model Ver. 4.7.5.011 -develop  OCT 06, 2022 16:40:15
+
+*RUN   5        : RI                        MZCER047 deleteme    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : deleteme SN ainfed template. but everything should always be c
+ DATA PATH      : ./
+ TREATMENT  1   : RI                        MZCER047
+  
+
+ MZ_GRO  YEAR DOY = 2008 274
+   Crop failure growth program terminated                                      
+
+******************************************************************************
+
+*DSSAT Cropping System Model Ver. 4.7.5.011 -develop  OCT 06, 2022 16:40:15
+
+*RUN   6        : RI                        MZCER047 deleteme    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : deleteme SN ainfed template. but everything should always be c
+ DATA PATH      : ./
+ TREATMENT  1   : RI                        MZCER047
+  
+
+ MZ_GRO  YEAR DOY = 2009 259
+   Crop failure growth program terminated                                      
+
+******************************************************************************
+
+*DSSAT Cropping System Model Ver. 4.7.5.011 -develop  OCT 06, 2022 16:40:15
+
+*RUN   7        : RI                        MZCER047 deleteme    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : deleteme SN ainfed template. but everything should always be c
+ DATA PATH      : ./
+ TREATMENT  1   : RI                        MZCER047
+  
+
+ MZ_GRO  YEAR DOY = 2009 259
+   Crop failure growth program terminated                                      
+
+******************************************************************************
+
+*DSSAT Cropping System Model Ver. 4.7.5.011 -develop  OCT 06, 2022 16:40:15
+
+*RUN   8        : RI                        MZCER047 deleteme    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : deleteme SN ainfed template. but everything should always be c
+ DATA PATH      : ./
+ TREATMENT  1   : RI                        MZCER047
+  
+
+ MZ_GRO  YEAR DOY = 2009 259
+   Crop failure growth program terminated                                      
+
+******************************************************************************
+
+*DSSAT Cropping System Model Ver. 4.7.5.011 -develop  OCT 06, 2022 16:40:15
+
+*RUN   9        : RI                        MZCER047 deleteme    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : deleteme SN ainfed template. but everything should always be c
+ DATA PATH      : ./
+ TREATMENT  1   : RI                        MZCER047
+  
+
+ IPWTH   YEAR DOY = 2010   1
+ Weather record not found for YR DOY: 2010   1                                 
+   ./RRRR.WTH                                                                  
+ Simulation will end.                                                          
+
+ ENDRUN  YEAR DOY = 2010   1
+ End of run        9                                                           
+ Simulation ended with error code  10                                          

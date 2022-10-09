@@ -8,16 +8,14 @@
 # D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE  catastrophe_mink/Outdoor-crops-sample   ZZZZRF.SNX  threeSplitWithFlowering 379 maize
 # D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE  control_mink/Outdoor-crops-control  ZZZZRF.SNX  threeSplitWithFlowering 379 maize
 catA_maize_raw=\
-"
-D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE  control_mink/Outdoor-crops-control  ZZZZRF.SNX  threeSplitWithFlowering 379 maize
-"
+`echo -e "D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE\tcontrol_mink/Outdoor_crops_control\tZZZZRF.SNX\tthreeSplitWithFlowering\t379\tmaize"`
 
 
 
 
 catA_maize_full=\
 "
-`echo "$catA_maize_raw" | sed "s/ZZZZ/mzK023/g"`
+`echo "$catA_maize_raw" | sed "s/ZZZZ/mzK019/g"`
 "
 
 all_the_rest="

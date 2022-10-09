@@ -1,7 +1,7 @@
 # exclude built singularity image
 *.sif
 grassdata/
-
+Simulation_All_Crop_Scenario_State_Planting_cleaned.csv
 on_node_home*/
 all_US_DSSAT/
 basics_15jun22/sge_Mink3daily/logs/

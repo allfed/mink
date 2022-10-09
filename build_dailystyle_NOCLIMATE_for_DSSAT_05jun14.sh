@@ -29,7 +29,7 @@
 #   where we don't and have a valid value where we do
 # 1.875
 # 1.25
-output_file=to_DSSAT/D_ ; weather_mask=first_weather_mask@morgan_DSSAT_cat_0 ; region_to_use="n=49 s=26 w=-124 e=-66 nsres=1.875 ewres=1.25" # now forcing a square resolution region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5"
+output_file=basics_15jun22/sge_Mink3daily/to_DSSAT/D_ ; weather_mask=MAIZE_cropland@morgan_DSSAT_cat_0 ; region_to_use="n=49 s=26 w=-124 e=-66 nsres=1.875 ewres=1.25" # now forcing a square resolution region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5"
 
 
 #### we should only need the calendar_mapset now with pre-existing daily weather...
@@ -129,7 +129,7 @@ old_wheat_revised_initial="initial_soil_nitrogen_mass_07may13@DSSAT_essentials_1
 wheat_revised_initial="initial_soil_nitrogen_mass_23may13@DSSAT_essentials_12may11  initial_root_mass@DSSAT_essentials_12may11  initial_surface_residue_mass@DSSAT_essentials_12may11"
 maize_initial=`echo -e "initial_soil_nitrogen_mass_13mar14@DSSAT_essentials_12may11\tinitial_root_mass@DSSAT_essentials_12may11\tinitial_surface_residue_mass@DSSAT_essentials_12may11"`
 
-main_control_list=`echo -e "deleteme_all\tmaize\teitherN250\t250\t1\t$maize_initial"`
+main_control_list=`echo -e "MAIZE_cropland\tmaize\teitherN250\t250\t1\t$maize_initial"`
 
 echo "main_control_list"
 echo $main_control_list
@@ -384,7 +384,7 @@ done # gcm
 echo ""
 echo "copying into to_DSSAT directory"
 echo ""
-cp -r from_GRASS/* to_DSSAT/
+# cp -r from_GRASS/* to_DSSAT/
 
 
 

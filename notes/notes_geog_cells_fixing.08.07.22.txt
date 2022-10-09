@@ -1,0 +1,50 @@
+
+k. so.
+
+Why is the java not going through the needed geographical pixels, and just doing all of them instead?
+
+I want it to use the geog file I think.
+
+The geog file should be only like 167 crop cells right? But then it's more like 289 cells. 
+
+Writecopyblock is copying all 2k global cells, which clearly can't be correct. It's not even respecting the region, not even thinking aboutthe MAIZE_cropland!
+
+This comes from the _geog file. How is that generated??
+
+I think it might be the r.out.new script?
+
+Alright. Changed all to_DSSAT to the basics.../sge... folder.
+
+Now the Java runs the right things!
+
+And occasionally, the things seem alright. But, sometimes they're not alright.
+
+
+So now the situation:
+
+cut -f20 chunks_to_GRASS/mzK019RF_379_Outdoor_crops_catastrophe_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE_STATS.txt | wc -l
+272
+
+cut -f12 chunks_to_GRASS/mzK019RF_379_Outdoor_crops_control_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE_STATS.txt | wc -l
+235
+
+cut -f3,4 to_DSSAT/D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE_geog.txt | wc -l
+235
+
+
+mzK019RF_379_Outdoor_crops_catastrophe_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE_STATS.txt is full of 272 rows, not 235 as expected. Not sure why. Maybe because the cells in the us that don't have corn are not included??
+
+how is this generated...?
+
+
+So it's generated in Mink3p2daily for each lat/lon. So then, the loop through latitude and longitude is too many? In the meantime the geog file looks like it's generated at 235, maybe that's actually too little?
+
+and then there's more than 300 DSSAT___ files... confusing, this must be fewer than 272?
+
+Running again. There are, in fact, 235! So 235 seems like the right number.
+
+greenhouse notes (CO2)
+https://docs.google.com/spreadsheets/d/1oAfl8lGjyVHmDIp-iq2LR_xe6I5zieVf61E7sLc-gJc/edit#gid=229690519&range=A1
+
+
+I FIXED IT!!!! The problem was that I was looking at catastrophe, not control. Redoing for catastrophe....

@@ -70,8 +70,16 @@ fi
 # and a $ in back (for end of line)
 name_patterns_to_keep=\
 "
-real_.$
-real_..$
+^real_1$
+^real_2$
+^real_3$
+^real_4$
+^real_5$
+^real_6$
+^real_7$
+^real_8$
+^real_.$
+^real_..$
 ^yield_mean$
 ^happy_yield_mean$
 "
@@ -242,12 +250,14 @@ do
 
   ##### prepare the geography
       # grab the geog data (for later use); lat then longitude
+      echo "cut -f3,4 ${inputs_directory}${geog_correct_base}_geog.txt > deleteme_latitude_longitude_${quasi_random_code}.txt"
       cut -f3,4 ${inputs_directory}${geog_correct_base}_geog.txt > deleteme_latitude_longitude_${quasi_random_code}.txt
 
       # resolution is in line 5
       # cellsize
       cellsize=`grep "^cellsize " ${inputs_directory}${geog_correct_base}_header.txt | cut -d" " -f2`
       # extract the resolution from the header file
+
 
       # find the region extent from the geography
       # it really wants a lot of columns, so i will just look at the original....
@@ -339,11 +349,11 @@ echo $n_patterns
 
     # ok, my plan is to extract just the column we care about, along with the latitude and longitude
       # grab the data
+      
       cut -f${column_number} ${yield_dir}${base_file_name}${clean_suffix}.txt > deleteme_single_column_of_data_${quasi_random_code}.txt
       paste deleteme_latitude_longitude_${quasi_random_code}.txt deleteme_single_column_of_data_${quasi_random_code}.txt > deleteme_full_thing_for_import_${quasi_random_code}.txt
-
+      # exitl
       r.in.xyz input=deleteme_full_thing_for_import_${quasi_random_code}.txt output=${base_file_name}_${clean_column_name} x=2 y=1 z=3 fs=tab --o --q
-
 
 
 
@@ -382,3 +392,4 @@ done # file name loop
 rm deleteme_latitude_longitude_${quasi_random_code}.txt deleteme_junk_${quasi_random_code}.txt deleteme_single_column_of_data_${quasi_random_code}.txt deleteme_full_thing_for_import_${quasi_random_code}.txt
 
 
+1

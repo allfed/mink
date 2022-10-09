@@ -1,0 +1,3 @@
+$BATCH()
+@FILEX                                                                                        TRTNO     RP     SQ     OP     CO
+./deleteme.SNX                                                                                    1      0      0      0      0

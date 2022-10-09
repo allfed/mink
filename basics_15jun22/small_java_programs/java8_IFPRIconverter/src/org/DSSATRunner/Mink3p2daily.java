@@ -2777,26 +2777,35 @@ public class Mink3p2daily {
         // lon_max = 18;
 
         //USA
-        lat_max = 49;
-        lat_min = 26;
-        lon_min = -124;
-        lon_max = -66;
-        if(latitude >lat_max){
-            continue;
+        // lat_max = 49;
+        // lat_min = 26;
+        // lon_min = -124;
+        // lon_max = -66;
+        
+        // if(latitude >lat_max){
+        //     continue;
 
-        }
-        if(latitude <lat_min){
-            continue;
+        // }
+        // if(latitude <lat_min){
+        //     continue;
 
-        }
+        // }
 
-        if(longitude <lon_min){
-            continue;
-        }
+        // if(longitude <lon_min){
+        //     continue;
+        // }
 
-        if(longitude >lon_max){
-            continue;
-        }
+        // if(longitude >lon_max){
+        //     continue;
+        // }
+
+        // 36.562    -119.375    california
+        // 38.438    -86.875    indiana
+        // 38.438    -96.875    kansas
+        // 38.438    -76.875    maryland
+        // 30.938    -89.375    mississippi
+        // 45.938    -96.875    north dakota
+        // 45.938    -121.875    washington
 
         // Skipping these latitudes for convenience (DMR)
         System.out.println("latitude:"+latitude);
