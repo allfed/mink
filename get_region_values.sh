@@ -49,15 +49,15 @@
 # r.in.gdal input=spam2010V2r0_global_H_WHEA_R.tif output=WHEA_rainfed_cropland
 # r.in.gdal input=spam2010V2r0_global_Y_WHEA_R.tif output=WHEA_rainfed_yield
 
-lat_lon_list=\
+state_lat_lon_list=\
 "
-36.562\t-119.375
-38.438\t-86.875
-38.438\t-96.875
-38.438\t-76.875
-30.938\t-89.375
-45.938\t-96.875
-45.938\t-121.875
+CA\t36.562\t-119.375
+IN\t38.438\t-86.875
+KS\t38.438\t-96.875
+MD\t38.438\t-76.875
+MS\t30.938\t-89.375
+ND\t45.938\t-96.875
+WA\t45.938\t-121.875
 "
 
 raster_names=\
@@ -79,13 +79,14 @@ SOYB
 "
 rm -f point_values_yield_irrigation.csv
 touch point_values_yield_irrigation.csv
-echo "crop,lat,lon,cropland,yield,irrigated_cropland,irrigated_yield,rainfed_cropland,rainfed_yield" >> point_values_yield_irrigation.csv
+echo "crop,state,lat,lon,cropland,yield,irrigated_cropland,irrigated_yield,rainfed_cropland,rainfed_yield," >> point_values_yield_irrigation.csv
 
 radius=5 # 1 would give sinle cell, 3 would give an extra neighbor, 5 gives 2 extra neighbors
 
-for lat_lon in $lat_lon_list; do
-    lat=`echo -e "$lat_lon" | cut -f1`
-    lon=`echo -e "$lat_lon" | cut -f2`
+for state_lat_lon in $state_lat_lon_list; do
+    state=`echo -e "$state_lat_lon" | cut -f1`
+    lat=`echo -e "$state_lat_lon" | cut -f2`
+    lon=`echo -e "$state_lat_lon" | cut -f3`
     latn=`echo "scale=5;($lat)+1.875*$radius/2"|bc`
     lats=`echo "scale=5;($lat)-1.875*$radius/2"|bc`
     lonn=`echo "scale=5;($lon)+1.25*$radius/2"|bc`
@@ -99,11 +100,11 @@ for lat_lon in $lat_lon_list; do
     for crop in $crops; do
         echo ""
         echo "crop: $crop"
-        printf "$crop,$lat,$lon," >> point_values_yield_irrigation.csv
+        printf "$crop,$state,$lat,$lon," >> point_values_yield_irrigation.csv
         for rname in $raster_names; do
             echo "rname: $crop$rname"
             output=`r.univar -g "$crop$rname"`
-	    echo $output
+            echo $output
             val=`echo "$output" | grep "mean=" | cut -d "=" -f2`
             if echo "$output" | grep -q -wi "max=0"; then
                 printf "0" >> point_values_yield_irrigation.csv

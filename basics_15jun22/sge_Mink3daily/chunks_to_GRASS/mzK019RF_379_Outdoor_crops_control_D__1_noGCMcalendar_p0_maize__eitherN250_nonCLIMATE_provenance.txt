@@ -1,16 +1,16 @@
---- Provenance for run starting at Fri Oct 07 19:40:06 CEST 2022
+--- Provenance for run starting at Sun Oct 09 14:53:57 CEST 2022
 
-init file:	/home/dmrivers/Code/mink/on_node_home31805_414439797/DSSAT/X_files/runner_init_on_node_home31805_414439797.txt
+init file:	/home/dmrivers/Code/mink/on_node_home10730_383412369/DSSAT/X_files/runner_init_on_node_home10730_383412369.txt
 
---- begin copy of init file [/home/dmrivers/Code/mink/on_node_home31805_414439797/DSSAT/X_files/runner_init_on_node_home31805_414439797.txt] ---
+--- begin copy of init file [/home/dmrivers/Code/mink/on_node_home10730_383412369/DSSAT/X_files/runner_init_on_node_home10730_383412369.txt] ---
 true
 
-/home/dmrivers/Code/mink/on_node_home31805_414439797/from_GRASS/D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
-/home/dmrivers/Code/mink/on_node_home31805_414439797/DSSAT/X_files/mzK019RF.SNX
-/home/dmrivers/Code/mink/on_node_home31805_414439797/to_GRASS/mzK019RF_379_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
-/home/dmrivers/Code/mink/on_node_home31805_414439797/DSSAT/
+/home/dmrivers/Code/mink/on_node_home10730_383412369/from_GRASS/D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
+/home/dmrivers/Code/mink/on_node_home10730_383412369/DSSAT/X_files/mzK019RF.SNX
+/home/dmrivers/Code/mink/on_node_home10730_383412369/to_GRASS/mzK019RF_379_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
+/home/dmrivers/Code/mink/on_node_home10730_383412369/DSSAT/
 dscsm_compiled_fast.exe
-/home/dmrivers/Code/mink/on_node_home31805_414439797/dailyweather/Outdoor_crops_control
+/home/dmrivers/Code/mink/on_node_home10730_383412369/dailyweather/Outdoor_crops_control
 .0864000000
 .WTH
 2
@@ -43,19 +43,19 @@ false
 true
 true
 true
----- end copy of init file [/home/dmrivers/Code/mink/on_node_home31805_414439797/DSSAT/X_files/runner_init_on_node_home31805_414439797.txt] ----
+---- end copy of init file [/home/dmrivers/Code/mink/on_node_home10730_383412369/DSSAT/X_files/runner_init_on_node_home10730_383412369.txt] ----
 
 
 --- some settings in human readable format ---
 allFlag:		true
 allExtraToRecordCSV:	
-gisTableBaseName:	/home/dmrivers/Code/mink/on_node_home31805_414439797/from_GRASS/D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
-templateXFile:		/home/dmrivers/Code/mink/on_node_home31805_414439797/DSSAT/X_files/mzK019RF.SNX
-yieldOutputBaseName:	/home/dmrivers/Code/mink/on_node_home31805_414439797/to_GRASS/mzK019RF_379_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
+gisTableBaseName:	/home/dmrivers/Code/mink/on_node_home10730_383412369/from_GRASS/D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
+templateXFile:		/home/dmrivers/Code/mink/on_node_home10730_383412369/DSSAT/X_files/mzK019RF.SNX
+yieldOutputBaseName:	/home/dmrivers/Code/mink/on_node_home10730_383412369/to_GRASS/mzK019RF_379_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
 
-pathToDSSATDirectory:		/home/dmrivers/Code/mink/on_node_home31805_414439797/DSSAT/
+pathToDSSATDirectory:		/home/dmrivers/Code/mink/on_node_home10730_383412369/DSSAT/
 nameOfDSSATExecutable:		dscsm_compiled_fast.exe
-baseNameOfDailyWeather:		/home/dmrivers/Code/mink/on_node_home31805_414439797/dailyweather/Outdoor_crops_control
+baseNameOfDailyWeather:		/home/dmrivers/Code/mink/on_node_home10730_383412369/dailyweather/Outdoor_crops_control
 SWmultiplier:			0.0864
 weatherDataSuffix:		.WTH
 fakePlantingYear:		2
@@ -114,7 +114,7 @@ magicErrorFile =			ERROR.OUT
 magicInitializationFile =	deleteme.v45
 tempXFileName =			./deleteme.SNX
 
---- begin copy of template X file [/home/dmrivers/Code/mink/on_node_home31805_414439797/DSSAT/X_files/mzK019RF.SNX] ---
+--- begin copy of template X file [/home/dmrivers/Code/mink/on_node_home10730_383412369/DSSAT/X_files/mzK019RF.SNX] ---
 *EXP.DETAILS: a general rainfed template. but everything should always be checked
 
 *GENERAL
@@ -192,13 +192,13 @@ ___place fertilizers here___
  1 RE            -99   -99   -99
 @N HARVEST     HFRST HLAST HPCNP HPCNR
  1 HA            -99   -99   -99   -99
----- end copy of template X file [/home/dmrivers/Code/mink/on_node_home31805_414439797/DSSAT/X_files/mzK019RF.SNX] ----
+---- end copy of template X file [/home/dmrivers/Code/mink/on_node_home10730_383412369/DSSAT/X_files/mzK019RF.SNX] ----
 
---- begin copy of temporary initialization file [/home/dmrivers/Code/mink/on_node_home31805_414439797/DSSAT/deleteme.v45] ---
+--- begin copy of temporary initialization file [/home/dmrivers/Code/mink/on_node_home10730_383412369/DSSAT/deleteme.v45] ---
 $BATCH()
 @FILEX                                                                                        TRTNO     RP     SQ     OP     CO
 ./deleteme.SNX                                                                                    1      0      0      0      0
----- end copy of temporary initialization file [/home/dmrivers/Code/mink/on_node_home31805_414439797/DSSAT/deleteme.v45] ----
+---- end copy of temporary initialization file [/home/dmrivers/Code/mink/on_node_home10730_383412369/DSSAT/deleteme.v45] ----
 
 clayLoamSandStableCarbonRates table format is tab delimited: depth / clay fraction stable / loam fraction stable / sand fraction stable
 --- begin copy of clayLoamSandStableCarbonRates table file [/home/dmrivers/Code/mink/basics_15jun22/sge_Mink3daily/StableCarbonTable.txt] ---

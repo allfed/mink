@@ -30,7 +30,7 @@ mv DSSAT____38.438__-96.875_/ wth_control/
 mv DSSAT____38.438__-76.875_/ wth_control/
 mv DSSAT____30.938__-89.375_/ wth_control/
 mv DSSAT____45.938__-96.875_/ wth_control/
-mv DSSAT____45.938_-121.875_/ wth_control/
+mv DSSAT____45.938_-119.375_/ wth_control/
 
 rm -rf DSSAT___*
 
@@ -55,7 +55,7 @@ mv DSSAT____38.438__-96.875_/ wth_catastrophe/
 mv DSSAT____38.438__-76.875_/ wth_catastrophe/
 mv DSSAT____30.938__-89.375_/ wth_catastrophe/
 mv DSSAT____45.938__-96.875_/ wth_catastrophe/
-mv DSSAT____45.938_-121.875_/ wth_catastrophe/
+mv DSSAT____45.938_-119.375_/ wth_catastrophe/
 
 rm -rf DSSAT___*
 
