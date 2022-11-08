@@ -1,4 +1,4 @@
---- provenance started at Sun Oct  9 14:50:04 CEST 2022 ---
+--- provenance started at Thu Nov  3 13:06:55 WET 2022 ---
 this dir: /mnt/data
 this script: ./build_dailystyle_NOCLIMATE_for_DSSAT_05jun14.sh
 nonclimate_list below
@@ -14,7 +14,7 @@ soil_profile_number_int@DSSAT_essentials_12may11,deleteme_planting_month,deletem
 
 
 output_file = basics_15jun22/sge_Mink3daily/to_DSSAT/D_
-region_to_use = n=49 s=26 w=-124 e=-66 nsres=1.875 ewres=1.25
+region_to_use = n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5
 weather_mask = MAIZE_cropland@morgan_DSSAT_cat_0
 calendar_mapset=deltaPIKnov_from_daily_c
 soils_raster=soil_profile_number_int@DSSAT_essentials_12may11

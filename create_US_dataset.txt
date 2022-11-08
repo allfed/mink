@@ -34,10 +34,38 @@ mv DSSAT____45.938_-119.375_/ wth_control/
 
 rm -rf DSSAT___*
 
+# run maize mzK019RF.SNX greenhouse catastrophe
+
+cd /home/dmrivers/Code/mink/basics_15jun22/sge_Mink3daily
+
+./mink3daily_run_DSSAT_tile.sh /home/dmrivers/Code/mink/basics_15jun22/sge_Mink3daily/to_DSSAT/D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE catastrophe_mink_greenhouse/Greenhouse_catastrophe mzK019RF.SNX threeSplitWithFlowering 265 maize 1 0
+
+
+cd staging_area
+
+latest_script=`ls *.sh -rt | tail -n 1`
+
+chmod +x $latest_script 
+
+./$latest_script
+
+cd /home/dmrivers/Code/mink
+
+mv DSSAT____36.562_-119.375_/ wth_catastrophe_greenhouse/
+mv DSSAT____38.438__-86.875_/ wth_catastrophe_greenhouse/
+mv DSSAT____38.438__-96.875_/ wth_catastrophe_greenhouse/
+mv DSSAT____38.438__-76.875_/ wth_catastrophe_greenhouse/
+mv DSSAT____30.938__-89.375_/ wth_catastrophe_greenhouse/
+mv DSSAT____45.938__-96.875_/ wth_catastrophe_greenhouse/
+mv DSSAT____45.938_-119.375_/ wth_catastrophe_greenhouse/
+
+rm -rf DSSAT___*
+
 # run maize mzK019RF.SNX catastrophe
 cd /home/dmrivers/Code/mink/basics_15jun22/sge_Mink3daily
 
 ./mink3daily_run_DSSAT_tile.sh /home/dmrivers/Code/mink/basics_15jun22/sge_Mink3daily/to_DSSAT/D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE catastrophe_mink/Outdoor_crops_catastrophe mzK019RF.SNX threeSplitWithFlowering 379 maize 1 0
+
 
 cd staging_area
 
@@ -78,6 +106,7 @@ cd ../more_GRASS_scripts/universal/
 
 ./quick_display.sh mzK019RF_379_Outdoor_crops_control_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE_real_7@morgan_DSSAT_cat_0 "" ""
 ./quick_display.sh mzK019RF_379_Outdoor_crops_catastrophe_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE_real_7@morgan_DSSAT_cat_0 "" ""
+./quick_display.sh mzK019RF_265_Greenhouse_catastrophe_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE_real_7@morgan_DSSAT_cat_0 "" ""
 
 
 #g.mlist type=rast | grep MAIZE

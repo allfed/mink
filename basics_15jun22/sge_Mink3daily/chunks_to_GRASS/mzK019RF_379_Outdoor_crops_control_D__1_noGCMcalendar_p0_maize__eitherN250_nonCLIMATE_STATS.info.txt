@@ -1,5 +1,5 @@
-235	 = Number of Rows
+1084	 = Number of Rows
 54	 = Number of Columns
-12690	 = Total Number of Elements
+58536	 = Total Number of Elements
 3	 = The MultiFormatMatrix format the matrix was stored in
 		 = The string used to delimit elements in the Rows

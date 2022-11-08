@@ -2770,6 +2770,9 @@ public class Mink3p2daily {
 
         latitude = geogMatrix.getValue(lineIndex,2); // Beware the MAGIC NUMBER!!!
         longitude = geogMatrix.getValue(lineIndex,3); // Beware the MAGIC NUMBER!!!
+        // print latitude and longitude
+        // System.out.println("longitude");
+        // System.out.println(longitude);
         // SAHARA DESERT
         // lat_max = 28;
         // lat_min = 26;
