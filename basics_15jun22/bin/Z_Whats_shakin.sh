@@ -7,8 +7,6 @@
 
 #grep __ `ls -t *.txt` | cut -d":" -f2 | grep -e "\[\[\[" | cut -d"/" -f8 | cut -d"]" -f1 | cat -n | less
 
-if [ -n "$1" ]; then
-  grep __ `ls -t *.txt` | cut -d":" -f2 | grep -e "\[\[\[" | cut -d"/" -f6 | cut -d"]" -f1 | cat -n | less
-else
-  grep __ `ls -t *.txt` | cut -d":" -f2 | grep -e "\[\[\[" | cut -d"/" -f8 | cut -d"]" -f1 | cat -n | less
-fi
+#  grep CASE `ls -t *.txt` | cut -f2- | cut -d" " -f2- | cat -n | less
+  grep CASE `ls -t *.txt` | cut -d":" -f2- | sed "s/CASE.//g" | cat -n | less
+#  grep CASE `ls -t *.txt` | cut -d":" -f2 | grep -e "\[\[\[" | cut -d"/" -f8 | cut -d"]" -f1 | cat -n | less

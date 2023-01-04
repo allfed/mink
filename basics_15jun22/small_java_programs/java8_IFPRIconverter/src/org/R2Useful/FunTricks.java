@@ -174,10 +174,10 @@ public class FunTricks {
 		String fileLine = fileReader.readLine();
 			while (fileLine != null) {
 			fileContents[lineIndex] = fileLine;
-			
 			lineIndex++;
 
 			fileLine = fileReader.readLine();
+		        System.out.println(fileLine);	
 		}
 		fileReader.close();
 

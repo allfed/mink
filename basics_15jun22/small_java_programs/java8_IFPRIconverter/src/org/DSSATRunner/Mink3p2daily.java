@@ -484,10 +484,10 @@ public class Mink3p2daily {
     incorporationDepth     = Double.parseDouble(initFileContents[storageIndex++]);
     clayLoamSandStableCarbonRatesFilename = initFileContents[storageIndex++];
     String initsAsString = FunTricks.readTextFileToString(initFileName);
-    System.out.println("initsAsString");
-    System.out.println(initsAsString);
-    System.out.println("clayLoamSandStableCarbonRatesFilename");
-    System.out.println(clayLoamSandStableCarbonRatesFilename);
+    //System.out.println("initsAsString");
+    //System.out.println(initsAsString);
+    //System.out.println("clayLoamSandStableCarbonRatesFilename");
+    //System.out.println(clayLoamSandStableCarbonRatesFilename);
     optionalHarvestInterval = Integer.parseInt(initFileContents[storageIndex++]);
     plantingDateInMonthShiftInDays = Integer.parseInt(initFileContents[storageIndex++]);
 
@@ -524,12 +524,12 @@ public class Mink3p2daily {
     //      dssatExecutionCommand[2] = magicInitializationFile;
 
     // this is for the "seasonal analysis
-    System.out.println("pathToDSSATDirectory");
-    System.out.println(pathToDSSATDirectory);
-    System.out.println("nameOfDSSATExecutable");
-    System.out.println(nameOfDSSATExecutable);
-    System.out.println("magicInitializationFile");
-    System.out.println(magicInitializationFile);
+    //System.out.println("pathToDSSATDirectory");
+    //System.out.println(pathToDSSATDirectory);
+    //System.out.println("nameOfDSSATExecutable");
+    //System.out.println(nameOfDSSATExecutable);
+    //System.out.println("magicInitializationFile");
+    //System.out.println(magicInitializationFile);
     dssatExecutionCommand[0] = pathToDSSATDirectory + nameOfDSSATExecutable;
     dssatExecutionCommand[1] = "n";
     dssatExecutionCommand[2] = magicInitializationFile;
@@ -2025,12 +2025,12 @@ public class Mink3p2daily {
     int nLinesToRead = nYears + magicDSSATSummaryLineIndexToRead;
     String[] candidateSummaryContents = new String[nLinesToRead];
 
-    System.out.println("magicDSSATSummaryToReadPath");
-    System.out.println(magicDSSATSummaryToReadPath);
-    System.out.println("the summary file happy");
-    System.out.println(FunTricks.readTextFileToString(magicDSSATSummaryToReadPath));
+    //System.out.println("magicDSSATSummaryToReadPath");
+    //System.out.println(magicDSSATSummaryToReadPath);
+    //System.out.println("the summary file happy");
+    //System.out.println(FunTricks.readTextFileToString(magicDSSATSummaryToReadPath));
 
-    System.out.println("Working Directory = " + System.getProperty("user.dir"));
+    //System.out.println("Working Directory = " + System.getProperty("user.dir"));
     try {
         candidateSummaryContents = FunTricks.readSomeLinesOfTextFileToArray(magicDSSATSummaryToReadPath, nLinesToRead);
     } catch (FileNotFoundException fnfe) {
@@ -2191,16 +2191,14 @@ public class Mink3p2daily {
     // DMR might need to add pause if using run_dssat?
 
     // attempt to read
-    System.out.println("magicDSSATSummaryLineIndexToRead");
-    System.out.println(magicDSSATSummaryLineIndexToRead);
-    System.out.println("the summary file");
-    System.out.println(FunTricks.readTextFileToString(magicDSSATSummaryToReadPath));
+    //System.out.println("magicDSSATSummaryLineIndexToRead");
+    //System.out.println(magicDSSATSummaryLineIndexToRead);
+    //System.out.println("the summary file");
+    //System.out.println(FunTricks.readTextFileToString(magicDSSATSummaryToReadPath));
 
     try {
         candidateSummaryContents = FunTricks.readSomeLinesOfTextFileToArray(magicDSSATSummaryToReadPath,nLinesToRead);
     } catch (FileNotFoundException fnfe) {
-        System.out.println(magicDSSATSummaryToReadPath); // ADDED THIS, delete if annoying (DMR)
-        System.out.println("no file"); // ADDED THIS, delete if annoying (DMR)
 
         // System.exit(1); // ADDED THIS, delete if annoying (DMR)
         // check for error file
@@ -2722,10 +2720,10 @@ public class Mink3p2daily {
     // Beware the MAGIC ASSUMPTION!!! the soil file is the first two characters of the soil name with a .SOL
     // System.out.println("magicSoilPrefix.substring(0, 2)")
     // System.out.println(magicSoilPrefix)
-    System.out.println("randomSeedCode");
-    System.out.println(randomSeedCode);
-    System.out.println("pathToDSSATDirectory");
-    System.out.println(pathToDSSATDirectory);
+    //System.out.println("randomSeedCode");
+    //System.out.println(randomSeedCode);
+    //System.out.println("pathToDSSATDirectory");
+    //System.out.println(pathToDSSATDirectory);
     // SoilProfile soilProfiles = new SoilProfile(magicSoilPrefix.substring(0, 2) + ".SOL"); 
 
     SoilProfile soilProfiles = new SoilProfile(pathToDSSATDirectory+"HN.SOL"); 
@@ -2864,14 +2862,14 @@ public class Mink3p2daily {
         nitrogenLevel = dataMatrix.getValue(lineIndex,nitrogenLevelIndex); // nonClimateInfo[4];
 
         // brute force padding
-        System.out.println("soilType");
-        System.out.println("totalLengthForSoilType");
-        System.out.println("magicSoilPrefix");
-        System.out.println("magicSoilPrefix.length");
-        System.out.println(soilType);
-        System.out.println(totalLengthForSoilType);
-        System.out.println(magicSoilPrefix);
-        System.out.println(magicSoilPrefix.length());
+        //System.out.println("soilType");
+        //System.out.println("totalLengthForSoilType");
+        //System.out.println("magicSoilPrefix");
+        //System.out.println("magicSoilPrefix.length");
+        //System.out.println(soilType);
+        //System.out.println(totalLengthForSoilType);
+        //System.out.println(magicSoilPrefix);
+        //System.out.println(magicSoilPrefix.length());
         soilTypeString = magicSoilPrefix + FunTricks.padStringWithLeadingZeros(Integer.toString(soilType), totalLengthForSoilType - magicSoilPrefix.length());
 
 
@@ -2930,7 +2928,7 @@ public class Mink3p2daily {
         this.happyMaturityEntirePixel.useLongValue(yieldForMissingWeatherFile);
         } else {
 
-        System.out.println("\tthe weather file at [" + originalWeatherFileLocation + "]; lineIndex=" + lineIndex + " SUCCEEDED! :] ");
+        //System.out.println("\tthe weather file at [" + originalWeatherFileLocation + "]; lineIndex=" + lineIndex + " SUCCEEDED! :] ");
 
         finalWeatherFileLocation = magicWeatherStationNameToUse+ ".WTH";
         finalWeatherFile = new File(finalWeatherFileLocation);
@@ -3002,16 +3000,16 @@ public class Mink3p2daily {
             // now we do this inside the loop....
             XHappyStuffToWrite = XHappyInvariantsReplaced.replaceAll(soilInitializationPlaceholder, dummyInitializationBlock);
 
-            System.out.println("");
-            System.out.println("");
-            System.out.println("XHappyStuffToWrite!!!");
-            System.out.println("");
-            System.out.println("");
-            System.out.println("dummyInitializationBlock");
-            System.out.println(dummyInitializationBlock);
-            System.out.println("");
-            System.out.println("XHappyStuffToWrite");
-            System.out.println(XHappyStuffToWrite);
+            //System.out.println("");
+            //System.out.println("");
+            //System.out.println("XHappyStuffToWrite!!!");
+            //System.out.println("");
+            //System.out.println("");
+            //System.out.println("dummyInitializationBlock");
+            //System.out.println(dummyInitializationBlock);
+            //System.out.println("");
+            //System.out.println("XHappyStuffToWrite");
+            //System.out.println(XHappyStuffToWrite);
 
             // do the search and replace thing; the invariants have already been done above...
             XHappyStuffToWrite = XHappyStuffToWrite.replaceAll(soilPlaceholder               , soilTypeString);
@@ -3075,8 +3073,8 @@ public class Mink3p2daily {
             // for (int rerunIndex = 0; rerunIndex < rerunAttemptsMax ; rerunIndex++) {
             // happyRunnerThing.setup(dssatExecutionCommand, pathToDSSATDirectoryAsFile, (int)Math.ceil(maxRunTime * Math.pow(bumpUpMultiplier, rerunIndex)), testIntervalToUse);
 
-            System.out.println("rundssat command");
-            System.out.println("./run_dssat.sh");
+            //System.out.println("rundssat command");
+            //System.out.println("./run_dssat.sh");
             ProcessBuilder pb = new ProcessBuilder("bash", "./run_dssat.sh");
             pb.inheritIO();
             pb.directory(pathToDSSATDirectoryAsFile);

@@ -68,6 +68,7 @@ rm -rf $on_node_home
 
     gisTableBaseName=${on_node_input_data_dir}${data_file_short_name} # this should get pulled from the argument
  baseNameOfDailyWeather=${on_node_weather_dir}`basename $daily_to_use`
+ 
 # baseNameOfDailyWeather=${on_node_weather_dir}
        templateXFile=$magic_X_file
  yieldOutputBaseName=${on_node_output_dir}${X_template%%.*X}_${co2ppm}_${data_file_short_name} # this is new...
@@ -176,14 +177,12 @@ echo "this is me trying to get the java program to run(DMR)"
 
 # echo java_to_use -cp headnode_classpath daily_weather_copier_classname {prestaged_weather_dir}daily_to_use on_node_weather_dir data_file_base_name weatherDataSuffixWithDot latitude_resolution longitude_resolution
 
-# echo $java_to_use -cp $headnode_classpath" $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution
 
 copy_block=`$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution | uniq`
 
 
 number_of_pixels=`echo "$copy_block" | wc -l`
 echo $number_of_pixels
-echo "$copy_block" > wow.txt
 
 #  we_need_to_delay=`echo "if($n_before_me > -2 && $n_before_me <= $number_of_initial_cases_to_stagger) {1} else {0}" | bc`
 we_need_to_delay=0
@@ -328,12 +327,16 @@ echo \"------ moving/unpacking ; \`date\` ------\"
          mkdir -p $on_node_output_dir
 
  # Added this recompile condition each time (DMR)
+  echo \" original pwd: \`pwd\` \"
   cd ${original_runner_dir}java8_IFPRIconverter/src/
+  echo \" cding to ${original_runner_dir}java8_IFPRIconverter/src/ \"
   javac org/DSSATRunner/Mink3p2daily.java
+  echo \" at pwd: \`pwd\` \"
 
   mv org/DSSATRunner/Mink3p2daily.class ../bin/org/DSSATRunner/Mink3p2daily.class
 
   cd -
+  echo \" back to original pwd: \`pwd\` \"
 
   # move the stuff out
   # the runner needs all the subdirectories
@@ -366,8 +369,10 @@ echo \"------ running          ; \`date\` ------\"
 
 
   # run the program
-
+  echo \"at \`pwd\`\" 
+  echo \"now moving to $on_node_DSSAT_dir\"
   cd $on_node_DSSAT_dir
+  echo \"now at \`pwd\`\" 
 
 
   echo \"now in \`pwd\`\" >> $log_file
@@ -387,7 +392,9 @@ echo \"------ running          ; \`date\` ------\"
 #   echo command is $java_to_use \"$memory_string\" -cp $classpath $classname $on_node_runner_init_file >> $log_file
 #   echo using full interpretive version of the runner even with coordination style DSSAT for wheat.... >> $log_file
 
-
+    echo \"directory for java\"
+    echo \"\`pwd\`\"
+    echo \"$java_to_use $memory_string -cp $classpath $classname $on_node_runner_init_file \"
    $java_to_use \"$memory_string\" -cp $classpath $classname $on_node_runner_init_file 
 
 # no idea why the below breaks things (DMR)
@@ -430,20 +437,10 @@ echo \"------ running          ; \`date\` ------\"
 
         " > $script_to_run_in_job # end of ssh command....
 
-# do the submission to the grid system...
+cd staging_area
 
-#Q_command="qsub -l walltime=$max_run_time_string,nodes=1:ppn=1 -S /bin/bash -N R${chunk_index}_r${quasi_random_code} -o ${log_file} -joe -wd $staging_directory $script_to_run_in_job"
-#Q_command="qsub -l walltime=$max_run_time_string,nodes=1:ppn=1 -S /bin/bash -N R${chunk_index}_r${quasi_random_code} -o ${log_file/log_/Q_} -joe $script_to_run_in_job"
+latest_script=`ls *.sh -rt | tail -n 1`
 
-# Q_command="qsub -S /bin/bash -N R${chunk_index}_r${quasi_random_code} -o ${log_file} -j y -wd $staging_directory -q $queue_name $script_to_run_in_job"
+chmod +x $latest_script 
 
-#echo "SUBMIT: $Q_command"
-echo "SUBMIT: R${chunk_index}_r${quasi_random_code}; #$n_before_me sleeping $time_to_delay"
-
-#eval $Q_command
-# echo $Q_command
-echo "reached 4: this means that we were able to run the sbatch"
-#sbatch test2.sbatch
-# now do the delaying to stagger the first few...
-sleep $time_to_delay
-
+./$latest_script

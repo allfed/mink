@@ -1,5 +1,0 @@
-2375	 = Number of Rows
-70	 = Number of Columns
-166250	 = Total Number of Elements
-3	 = The MultiFormatMatrix format the matrix was stored in
-		 = The string used to delimit elements in the Rows

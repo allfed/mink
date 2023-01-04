@@ -392,4 +392,3 @@ done # file name loop
 rm deleteme_latitude_longitude_${quasi_random_code}.txt deleteme_junk_${quasi_random_code}.txt deleteme_single_column_of_data_${quasi_random_code}.txt deleteme_full_thing_for_import_${quasi_random_code}.txt
 
 
-1

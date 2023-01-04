@@ -85,20 +85,25 @@ g.list rast
     mkdir /mnt/data
 
     # install GRASS dependencies
-    yum -y update \
-    && yum groupinstall -y "Development Tools" \
-    && yum install -y epel-release
+
+    #yum -y update
+    yum groupinstall -y "Development Tools"
+    yum install -y epel-release
+    #yum --disablerepo=epel -y update  ca-certificates
     yum install -y proj-devel gdal-devel sqlite-devel mesa-libGL-devel \
         mesa-libGLU-devel libXmu-devel libX11-devel tcl-devel tk-devel geos \
     fftw-devel libtiff-devel lesstif-devel python-devel numpy wxPython wxGTK-devel \
     gcc gcc-c++ bison flex ncurses-devel proj-epsg proj-nad xml2 subversion \
-    geos-devel blas-devel lapack-devel xorg-x11-xauth ImageMagick
-         
-    # add okay repo, install gpg key and then ffmpeg
+    geos-devel blas-devel lapack-devel xorg-x11-xauth 
+
+    ## add okay repo, install gpg key and then ffmpeg
     rpm -ivh http://repo.okay.com.mx/centos/7/x86_64/release/okay-release-1-5.el7.noarch.rpm \
     && yum install -y ffmpeg-devel
 
-    # build GRASS
+    yum -y install ImageMagick
+    sudo yum install -y java-11-openjdk-devel
+
+    ## build GRASS
     cd /build/grass_program
     ./configure \
         --with-cxx \
@@ -117,30 +122,104 @@ g.list rast
     --with-lapack 
     make -j$(nproc) && make -j$(nproc) install
 
-    # Create generic GRASS GIS binary name regardless of version number
+    ## Create generic GRASS GIS binary name regardless of version number
     ln -sf `find /usr/local/bin -name "grass??" | sort | tail -n 1` /usr/local/bin/grass
 
 
-    # build custom modules
+    ## build custom modules
     cd /build/grass_modules
-    # enter each module directory and make
+    ## enter each module directory and make
     export GRASS_PREFIX=/usr/local/grass-6.5.svn/
     for m in {r.in.new,r.intersection,r.out.new,r.pixelarea}; do
         cd $m; make; cd ../
     done
-    # cd r.in.new
-    # make
-    # cd ../r.intersection
-    # make
-    # cd ../r.out.new
-    # make
-    # cd ../r.pixelarea
-    # make
-    
-    # # clean up
-    cd 
-    rm -rf /build
-    yum clean all
+
+    ## # clean up
+    #cd 
+    #rm -rf /build
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 %runscript
     grass --version
