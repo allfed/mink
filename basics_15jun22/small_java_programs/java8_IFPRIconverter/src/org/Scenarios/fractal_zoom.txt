@@ -1,0 +1,10 @@
+mamdelbrot ideas
+    no playing: keeps things the same
+    with playing: starts zooming in at constant rate (average tempo over 30 seconds)
+    higher pitches: goes to more intricate, detailed parts of mandelbrot
+    lower pitches: goes more to black regions, or to center of the zoom
+
+1. understand how to generate fractal zooms
+2. identify lowest and highest pitch in last 15 seconds of play
+3. identify average tempo of music over last 30 seconds
+4. move programmatically inside the fractal zoom

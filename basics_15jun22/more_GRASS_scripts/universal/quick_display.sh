@@ -11,19 +11,13 @@ fi
 
 raster=$1
 #vector=$2
-legend_options="$2"
-vector=$3
+save_loc=$2
+legend_options="$3"
+vector=$4
 
 raster_only=`echo "$raster" | cut -d"@" -f1`
 mapset_only=`echo "$raster" | cut -d"@" -f2`
 mapset_test=`echo "$raster" | grep "@"`
-
-echo "raster_only"
-echo $raster_only
-echo "mapset_only"
-echo $mapset_only
-echo "mapset_test"
-echo $mapset_test
 
 g.gisenv get=MAPSET
 
@@ -78,7 +72,7 @@ cp ../../../grass6out.png ../../../text.png
 convert -composite -gravity center ../../../text.png ../../../bg.png ../../../resulttmp1.png
 convert -composite -gravity center ../../../resulttmp1.png ../../../legend.png ../../../resulttmp2.png
 convert -composite -gravity center ../../../resulttmp2.png ../../../vect.png ../../../resulttmp3.png
-convert ../../../resulttmp3.png -background white -flatten ../../../$raster.png
+convert ../../../resulttmp3.png -background white -flatten ../../../$save_loc/$raster.png
 rm ../../../legend.png
 rm ../../../bg.png
 rm ../../../text.png

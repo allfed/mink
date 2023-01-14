@@ -98,7 +98,7 @@ BASE="$git_root/basics_15jun22/sge_Mink3daily/"
 #    original_X_files_dir=${BASE}SNX_files/meta_templates/full_wheat_search/
 
 #doesn't exist on Github- except for from_GRASS and logs (IJ). Others are still there on Morgan's JASMIN account
-          input_data_dir=${BASE}from_GRASS/
+          input_data_dir=${BASE}to_DSSAT/
   chunked_input_data_dir=${BASE}chunks_from_GRASS/
          output_data_dir=${BASE}to_GRASS/
  chunked_output_data_dir=${BASE}chunks_to_GRASS/

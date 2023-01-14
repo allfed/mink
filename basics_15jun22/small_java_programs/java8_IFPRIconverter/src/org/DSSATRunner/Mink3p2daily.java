@@ -3396,18 +3396,6 @@ public class Mink3p2daily {
             FunTricks.writeStringToFile(XStuffToWrite, fullTempXFile);
             writingTimerStats.useDoubleValue(writingTimer.tocMillis());
 
-            System.out.println("");
-            System.out.println("");
-            System.out.println("");
-            System.out.println("XStuffToWrite");
-            System.out.println("");
-            System.out.println("");
-            System.out.println("");
-            System.out.println(XStuffToWrite);
-
-            System.out.println("soilTypeString");
-            System.out.println(soilTypeString);
-            // System.exit(0);
             elseTimer.tic();
             // recommend garbage collection
             System.gc();

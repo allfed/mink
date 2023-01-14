@@ -255,36 +255,36 @@ do
 
       # resolution is in line 5
       # cellsize
-      cellsize=`grep "^cellsize " ${inputs_directory}${geog_correct_base}_header.txt | cut -d" " -f2`
+      # cellsize=`grep "^cellsize " ${inputs_directory}${geog_correct_base}_header.txt | cut -d" " -f2`
       # extract the resolution from the header file
 
 
       # find the region extent from the geography
       # it really wants a lot of columns, so i will just look at the original....
-      range_string=`r.in.xyz input=${inputs_directory}${geog_correct_base}_geog.txt output=deleteme_just_looking_${quasi_random_code} x=4 y=3 z=1 fs=tab -s --q --o 2>>deleteme_junk_${quasi_random_code}.txt`
-       low_latitude=`echo "$range_string" | grep "^y:" | tr -s " " | cut -d" " -f2`
-      high_latitude=`echo "$range_string" | grep "^y:" | tr -s " " | cut -d" " -f3`
-       low_longitude=`echo "$range_string" | grep "^x:" | tr -s " " | cut -d" " -f2`
-      high_longitude=`echo "$range_string" | grep "^x:" | tr -s " " | cut -d" " -f3`
+      # range_string=`r.in.xyz input=${inputs_directory}${geog_correct_base}_geog.txt output=deleteme_just_looking_${quasi_random_code} x=4 y=3 z=1 fs=tab -s --q --o 2>>deleteme_junk_${quasi_random_code}.txt`
+      #  low_latitude=`echo "$range_string" | grep "^y:" | tr -s " " | cut -d" " -f2`
+      # high_latitude=`echo "$range_string" | grep "^y:" | tr -s " " | cut -d" " -f3`
+      #  low_longitude=`echo "$range_string" | grep "^x:" | tr -s " " | cut -d" " -f2`
+      # high_longitude=`echo "$range_string" | grep "^x:" | tr -s " " | cut -d" " -f3`
 
       # form up the region. we need to go half a pixel-width to each side
-      bc_scale=10
-      echo "high_latitude"
-      echo $high_latitude
-      echo "low_latitude"
-      echo $low_latitude
-      NNN=`echo "scale = $bc_scale ; $high_latitude + ($cellsize / 2)" | bc`
-      SSS=`echo "scale = $bc_scale ; $low_latitude  - ($cellsize / 2)" | bc`
-      EEE=`echo "scale = $bc_scale ; $high_longitude + ($cellsize / 2)" | bc`
-      WWW=`echo "scale = $bc_scale ; $low_longitude  - ($cellsize / 2)" | bc`
+      # bc_scale=10
+      # echo "high_latitude"
+      # echo $high_latitude
+      # echo "low_latitude"
+      # echo $low_latitude
+      # NNN=`echo "scale = $bc_scale ; $high_latitude + ($cellsize / 2)" | bc`
+      # SSS=`echo "scale = $bc_scale ; $low_latitude  - ($cellsize / 2)" | bc`
+      # EEE=`echo "scale = $bc_scale ; $high_longitude + ($cellsize / 2)" | bc`
+      # WWW=`echo "scale = $bc_scale ; $low_longitude  - ($cellsize / 2)" | bc`
 
       # always set the region
-      echo $NNN
-      echo $SSS
-      echo $EEE
-      echo $WWW
-      echo $cellsize
-      g.region n=$NNN s=$SSS e=$EEE w=$WWW res=$cellsize
+      # echo $NNN
+      # echo $SSS
+      # echo $EEE
+      # echo $WWW
+      # echo $cellsize
+      # g.region n=$NNN s=$SSS e=$EEE w=$WWW res=$cellsize
 
   # ok, now, let's read the cols file and match up indices with names...
 
@@ -389,6 +389,6 @@ done # file name loop
 
 
 # rm deleteme_latitude_longitude_${quasi_random_code}.txt deleteme_just_looking_${quasi_random_code} deleteme_junk_${quasi_random_code}.txt deleteme_single_column_of_data_${quasi_random_code}.txt deleteme_full_thing_for_import_${quasi_random_code}.txt
-rm deleteme_latitude_longitude_${quasi_random_code}.txt deleteme_junk_${quasi_random_code}.txt deleteme_single_column_of_data_${quasi_random_code}.txt deleteme_full_thing_for_import_${quasi_random_code}.txt
+rm deleteme_latitude_longitude_${quasi_random_code}.txt deleteme_single_column_of_data_${quasi_random_code}.txt deleteme_full_thing_for_import_${quasi_random_code}.txt
 
 

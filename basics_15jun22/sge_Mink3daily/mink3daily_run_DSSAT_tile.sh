@@ -15,7 +15,7 @@ if [ $# -lt 8 ]; then
   echo "The idea is that this will package everything up, accomplish the run, and bring the results back."
   echo "All the details are defined internally, but will hopefully be sensible."
   echo ""
-  echo "data_file_base_name is the base name (no .txt) of the GIS table to be used. At the moment, it should be in the from_GRASS/ directory."
+  echo "data_file_base_name is the base name (no .txt) of the GIS table to be used. At the moment, it should be in the to_DSSAT/ directory. #DMR: changed from_GRASS to to_DSSAT"
   echo "X_template is the name of the template-X-file to build on (i.e., the crop/variety/management). Only the filename is needed."
   echo ""
  echo ""
