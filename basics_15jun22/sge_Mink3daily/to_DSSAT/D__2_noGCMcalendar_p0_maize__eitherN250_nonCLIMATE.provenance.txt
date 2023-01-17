@@ -1,4 +1,4 @@
---- provenance started at Fri Jan 13 21:58:56 PST 2023 ---
+--- provenance started at Mon Jan 16 21:53:07 PST 2023 ---
 this dir: /mnt/data/basics_15jun22/sge_Mink3daily
 this script: ./build_dailystyle_NOCLIMATE_for_DSSAT_05jun14.sh
 nonclimate_list below

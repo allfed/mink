@@ -11,6 +11,7 @@ basics_15jun22/sge_Mink3daily/logs/
 # turns out, we need this actual program thing... for dssat
 basics_15jun22/sge_Mink3daily/staging_area/*.sh
 basics_15jun22/sge_Mink3daily/staging_area/runner_init_on_node_home*
+basics_15jun22/sge_Mink3daily/chunks_to_GRASS/
 # Byte-compiled / optimied / DLL files
 __pycache__/
 *.py[cod]

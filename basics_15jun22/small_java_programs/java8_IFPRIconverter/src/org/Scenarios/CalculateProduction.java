@@ -15,7 +15,7 @@ public class CalculateProduction {
 
     // sum the rainfed and irrigated yields and save as ascii
     sumRainfedAndIrrigated(script_folder, scenarios);
-  }
+  } // end CalculateProduction function
 
   public static void averageCrops(String script_folder, Scenarios scenarios)
       throws InterruptedException, IOException {
@@ -48,13 +48,14 @@ public class CalculateProduction {
           }
 
           // only average together crops with SNX names ending with either "RF" or "IR"
-          if (! rainfed_or_irrigated.equals(scenarios.scenario_tag_for_averaging_rf_or_ir[i].substring(
+          if (!rainfed_or_irrigated.equals(
+              scenarios.scenario_tag_for_averaging_rf_or_ir[i].substring(
                   scenarios.scenario_tag_for_averaging_rf_or_ir[i].length() - 2))) {
             continue;
           }
 
           // add a comma after the raster names
-          if (!raster_names_to_average.equals("") ){
+          if (!raster_names_to_average.equals("")) {
             raster_names_to_average = raster_names_to_average + ",";
           }
 
@@ -87,9 +88,7 @@ public class CalculateProduction {
             scenarios.scenario_tag_for_production_rf_or_ir[last_index_of_crop]);
       } // end loop over unique crops
     } // end looping over irrigation
-  }// end averageCrops
-
-
+  } // end averageCrops
 
   public static void sumRainfedAndIrrigated(String script_folder, Scenarios scenarios)
       throws InterruptedException, IOException {
@@ -108,8 +107,6 @@ public class CalculateProduction {
     ArrayList<String> completed_tags = new ArrayList<>();
 
     for (String tag : scenarios.unique_scenario_tags_for_production) {
-      System.out.println("tag");
-      System.out.println(tag);
       // loop through the unique crops
 
       String raster_names_to_sum = "";
@@ -132,7 +129,7 @@ public class CalculateProduction {
         completed_tags.add(scenarios.scenario_tag_for_production_rf_or_ir[i]);
 
         // add a comma after the raster names
-        if (!raster_names_to_sum.equals("") ){
+        if (!raster_names_to_sum.equals("")) {
           raster_names_to_sum = raster_names_to_sum + ",";
         }
 
@@ -141,7 +138,6 @@ public class CalculateProduction {
 
         last_index_of_crop = i;
       }
-
 
       BashScripts.sumRasters(
           script_folder,
@@ -154,6 +150,5 @@ public class CalculateProduction {
           scenarios.scenario_tag_for_production[last_index_of_crop], // to save here
           scenarios.results_folder[last_index_of_crop]);
     } // end sumRainfedAndIrrigated
-
-  } // class CalculateProduction
-}
+  } // function sunRainfedAndIrrigated
+}  // class CalculateProduction

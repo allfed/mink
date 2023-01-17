@@ -1,16 +1,16 @@
---- Provenance for run starting at Fri Jan 13 02:33:08 UTC 2023
+--- Provenance for run starting at Mon Jan 16 23:15:51 UTC 2023
 
-init file:	/mnt/data/on_node_home28328_546380328/DSSAT/X_files/runner_init_on_node_home28328_546380328.txt
+init file:	/mnt/data/on_node_home3221_581119793/DSSAT/X_files/runner_init_on_node_home3221_581119793.txt
 
---- begin copy of init file [/mnt/data/on_node_home28328_546380328/DSSAT/X_files/runner_init_on_node_home28328_546380328.txt] ---
+--- begin copy of init file [/mnt/data/on_node_home3221_581119793/DSSAT/X_files/runner_init_on_node_home3221_581119793.txt] ---
 true
 
-/mnt/data/on_node_home28328_546380328/from_GRASS/D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
-/mnt/data/on_node_home28328_546380328/DSSAT/X_files/mzMCCURDY84AARF.SNX
-/mnt/data/on_node_home28328_546380328/to_GRASS/mzMCCURDY84AARF_379_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
-/mnt/data/on_node_home28328_546380328/DSSAT/
+/mnt/data/on_node_home3221_581119793/from_GRASS/D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
+/mnt/data/on_node_home3221_581119793/DSSAT/X_files/mzMCCURDY84AARF.SNX
+/mnt/data/on_node_home3221_581119793/to_GRASS/mzMCCURDY84AARF_379_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
+/mnt/data/on_node_home3221_581119793/DSSAT/
 dscsm_compiled_fast.exe
-/mnt/data/on_node_home28328_546380328/dailyweather/Outdoor_crops_control
+/mnt/data/on_node_home3221_581119793/dailyweather/Outdoor_crops_control
 .0864000000
 .WTH
 2
@@ -43,19 +43,19 @@ false
 true
 true
 true
----- end copy of init file [/mnt/data/on_node_home28328_546380328/DSSAT/X_files/runner_init_on_node_home28328_546380328.txt] ----
+---- end copy of init file [/mnt/data/on_node_home3221_581119793/DSSAT/X_files/runner_init_on_node_home3221_581119793.txt] ----
 
 
 --- some settings in human readable format ---
 allFlag:		true
 allExtraToRecordCSV:	
-gisTableBaseName:	/mnt/data/on_node_home28328_546380328/from_GRASS/D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
-templateXFile:		/mnt/data/on_node_home28328_546380328/DSSAT/X_files/mzMCCURDY84AARF.SNX
-yieldOutputBaseName:	/mnt/data/on_node_home28328_546380328/to_GRASS/mzMCCURDY84AARF_379_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
+gisTableBaseName:	/mnt/data/on_node_home3221_581119793/from_GRASS/D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
+templateXFile:		/mnt/data/on_node_home3221_581119793/DSSAT/X_files/mzMCCURDY84AARF.SNX
+yieldOutputBaseName:	/mnt/data/on_node_home3221_581119793/to_GRASS/mzMCCURDY84AARF_379_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
 
-pathToDSSATDirectory:		/mnt/data/on_node_home28328_546380328/DSSAT/
+pathToDSSATDirectory:		/mnt/data/on_node_home3221_581119793/DSSAT/
 nameOfDSSATExecutable:		dscsm_compiled_fast.exe
-baseNameOfDailyWeather:		/mnt/data/on_node_home28328_546380328/dailyweather/Outdoor_crops_control
+baseNameOfDailyWeather:		/mnt/data/on_node_home3221_581119793/dailyweather/Outdoor_crops_control
 SWmultiplier:			0.0864
 weatherDataSuffix:		.WTH
 fakePlantingYear:		2
@@ -114,7 +114,7 @@ magicErrorFile =			ERROR.OUT
 magicInitializationFile =	deleteme.v45
 tempXFileName =			./deleteme.SNX
 
---- begin copy of template X file [/mnt/data/on_node_home28328_546380328/DSSAT/X_files/mzMCCURDY84AARF.SNX] ---
+--- begin copy of template X file [/mnt/data/on_node_home3221_581119793/DSSAT/X_files/mzMCCURDY84AARF.SNX] ---
 *EXP.DETAILS: a general irrigated template. but everything should always be checked
 
 *GENERAL
@@ -192,13 +192,13 @@ ___place fertilizers here___
  1 RE            -99   -99   -99
 @N HARVEST     HFRST HLAST HPCNP HPCNR
  1 HA            -99   -99   -99   -99
----- end copy of template X file [/mnt/data/on_node_home28328_546380328/DSSAT/X_files/mzMCCURDY84AARF.SNX] ----
+---- end copy of template X file [/mnt/data/on_node_home3221_581119793/DSSAT/X_files/mzMCCURDY84AARF.SNX] ----
 
---- begin copy of temporary initialization file [/mnt/data/on_node_home28328_546380328/DSSAT/deleteme.v45] ---
+--- begin copy of temporary initialization file [/mnt/data/on_node_home3221_581119793/DSSAT/deleteme.v45] ---
 $BATCH()
 @FILEX                                                                                        TRTNO     RP     SQ     OP     CO
 ./deleteme.SNX                                                                                    1      0      0      0      0
----- end copy of temporary initialization file [/mnt/data/on_node_home28328_546380328/DSSAT/deleteme.v45] ----
+---- end copy of temporary initialization file [/mnt/data/on_node_home3221_581119793/DSSAT/deleteme.v45] ----
 
 clayLoamSandStableCarbonRates table format is tab delimited: depth / clay fraction stable / loam fraction stable / sand fraction stable
 --- begin copy of clayLoamSandStableCarbonRates table file [/mnt/data/basics_15jun22/sge_Mink3daily/StableCarbonTable.txt] ---
