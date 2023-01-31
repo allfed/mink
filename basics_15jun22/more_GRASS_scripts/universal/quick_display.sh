@@ -1,9 +1,7 @@
 #!/bin/bash
 
 if [ $# -eq 0 ]; then
-  echo "Usage: $0 raster [legend_options] [vector]"
-  echo ""
-  echo "Use an empty string (\"\") for legend_options if you don't care, but still want a special vector"
+  echo "Usage: $0 raster save_loc max_value"
 
   exit
 fi
@@ -12,9 +10,7 @@ fi
 raster=$1
 #vector=$2
 save_loc=$2
-legend_options="$3"
-vector=$4
-
+max_value=$3
 raster_only=`echo "$raster" | cut -d"@" -f1`
 mapset_only=`echo "$raster" | cut -d"@" -f2`
 mapset_test=`echo "$raster" | grep "@"`
@@ -36,14 +32,33 @@ echo $raster_exists
 if [ -n "$raster_exists" ]; then
 echo $raster
 
+  #g.region raster=$raster -p
+  
+  if [ -z $max_value ]; then
+    max=`r.univar -g map=$raster | grep max | awk -F "=" '{print $2}'`
+  else  
+    max=$max_value
+  fi
+ 
+  min=`r.univar -g map=$raster | grep min | awk -F "=" '{print $2}'`
+
+  echo " min and max of all cells"
+  echo $min
+  echo $max
+
   d.erase
-  d.rast $raster 
-  cp ../../../grass6out.png ../../../bg.png
+  d.rast $raster vallist=$min-$max 
+echo "colors"
+
+#r.colors map=$raster color=bcyr
+
+echo "done colors"
+  cp ../../../grass6out.png ../../../$save_loc/bg.png
   if [ -n "$vector" ]; then
     d.vect $vector type=boundary color=black
   fi
   d.vect cntry05 type=boundary bgcolor=none
-  cp ../../../grass6out.png ../../../vect.png
+  cp ../../../grass6out.png ../../../$save_loc/vect.png
 
   # first change since feb 4, 2011 (30sep15)
   raster_type=`r.info -t $raster | cut -d= -f2`
@@ -51,36 +66,38 @@ echo $raster
     n_categories=`r.category $raster | wc -l`
 
     if [ $n_categories -lt 12 ]; then
-      eval d.legend map=$raster $legend_options at=1,50,2,5
+      eval d.legend map=$raster range=$min,$max at=1,50,2,5
+      #eval d.legend map=$raster at=1,50,2,5
     else
       # make a bigger legend
-      eval d.legend map=$raster $legend_options at=1,80,2,10
+      eval d.legend map=$raster range=$min,$max at=1,80,2,10
+      #eval d.legend map=$raster at=1,80,2,10
     fi
   else
     # not a categorical map
-      eval d.legend map=$raster $legend_options at=1,50,2,5
+      eval d.legend map=$raster range=$min,$max at=1,50,2,5
+      #eval d.legend map=$raster at=1,50,2,5
   fi
 
-cp ../../../grass6out.png ../../../legend.png
+cp ../../../grass6out.png ../../../$save_loc/legend.png
 echo \
 ".C black
 .S 2.0
 $1" \
 | d.text at=98,95 align=lr
-cp ../../../grass6out.png ../../../text.png
+cp ../../../grass6out.png ../../../$save_loc/text.png
 
-convert -composite -gravity center ../../../text.png ../../../bg.png ../../../resulttmp1.png
-convert -composite -gravity center ../../../resulttmp1.png ../../../legend.png ../../../resulttmp2.png
-convert -composite -gravity center ../../../resulttmp2.png ../../../vect.png ../../../resulttmp3.png
-convert ../../../resulttmp3.png -background white -flatten ../../../$save_loc/$raster.png
-rm ../../../legend.png
-rm ../../../bg.png
-rm ../../../text.png
-rm ../../../vect.png
-rm ../../../grass6out.png
-rm ../../../resulttmp1.png
-rm ../../../resulttmp2.png
-rm ../../../resulttmp3.png
+convert -composite -gravity center ../../../$save_loc/text.png ../../../$save_loc/bg.png ../../../$save_loc/resulttmp1.png
+convert -composite -gravity center ../../../$save_loc/resulttmp1.png ../../../$save_loc/legend.png ../../../$save_loc/resulttmp2.png
+convert -composite -gravity center ../../../$save_loc/resulttmp2.png ../../../$save_loc/vect.png ../../../$save_loc/resulttmp3.png
+convert ../../../$save_loc/resulttmp3.png -background white -flatten ../../../$save_loc/$raster.png
+rm ../../../$save_loc/legend.png
+rm ../../../$save_loc/bg.png
+rm ../../../$save_loc/text.png
+rm ../../../$save_loc/vect.png
+rm ../../../$save_loc/resulttmp1.png
+rm ../../../$save_loc/resulttmp2.png
+rm ../../../$save_loc/resulttmp3.png
 
 else
   echo "${raster_only}@${mapset_only} has failed to exist"

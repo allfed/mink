@@ -55,7 +55,7 @@ fi
 # possibilities using this optional magic_offset option. the default is 13.
 
 
-
+. default_paths_etc.sh
 
 # rename the command line arguments
             prefix=$1
@@ -78,6 +78,8 @@ name_patterns_to_keep=\
 ^real_6$
 ^real_7$
 ^real_8$
+^real_9$
+^real_10$
 ^real_.$
 ^real_..$
 ^yield_mean$
@@ -156,8 +158,9 @@ sleeptime=0.0 # this is in seconds; a decent place to start is 0.4
 # we can find the right geographic information to reconstruct the maps
 #
 # we also need to know which directory the results are in
-inputs_directory=to_DSSAT/
-       yield_dir=chunks_to_GRASS/
+inputs_directory=$output_file_dir
+# inputs_directory=to_DSSAT/
+#        yield_dir=chunks_to_GRASS/
 #       yield_dir=from_DSSAT_daily/
 
 echo "!!! pulling from directory: $yield_dir !!!"
@@ -217,74 +220,11 @@ do
   echo "bfn = [$base_file_name] ; gcb = [$geog_correct_base]"
 
 
-  # do the actual imporation
-  # this is a special, non-standard grass program so you may need to compile it and figure out where the
-  # resulting binaries are placed
-#    /PROJECTS/GRASS_program/grass-6.4.svn_src_snapshot_2011_02_12/dist.x86_64-unknown-linux-gnu/bin/r.in.new \
-#       data_input=${yield_dir}${base_file_name}${clean_suffix} \
-#       geog_input=${inputs_directory}${geog_correct_base}_geog \
-#     header_input=${inputs_directory}${geog_correct_base}_header \
-#           \
-#           output=$base_file_name
-#
-#  if [ "$?" = 1 ]; then
-#
-#    echo "++++ some major problem with importing, skipping the rest of this entry ++++"
-#    continue
-#
-#  fi
-
-  # the maps are just numbered starting at 0 for the first column. we need to rename them
-  # to something human-readable and possibly give them some reasonable color schemes.
-  # we reset the region to match up with the rasters so that one of the color definitions
-  # will work as quickly as possible
-#  g.region rast=${base_file_name}_0
-
-
-# check how many columns showed up....
-#g.mlist rast pat=${base_file_name}_* | wc
-
-
-
-
 
   ##### prepare the geography
       # grab the geog data (for later use); lat then longitude
       echo "cut -f3,4 ${inputs_directory}${geog_correct_base}_geog.txt > deleteme_latitude_longitude_${quasi_random_code}.txt"
       cut -f3,4 ${inputs_directory}${geog_correct_base}_geog.txt > deleteme_latitude_longitude_${quasi_random_code}.txt
-
-      # resolution is in line 5
-      # cellsize
-      # cellsize=`grep "^cellsize " ${inputs_directory}${geog_correct_base}_header.txt | cut -d" " -f2`
-      # extract the resolution from the header file
-
-
-      # find the region extent from the geography
-      # it really wants a lot of columns, so i will just look at the original....
-      # range_string=`r.in.xyz input=${inputs_directory}${geog_correct_base}_geog.txt output=deleteme_just_looking_${quasi_random_code} x=4 y=3 z=1 fs=tab -s --q --o 2>>deleteme_junk_${quasi_random_code}.txt`
-      #  low_latitude=`echo "$range_string" | grep "^y:" | tr -s " " | cut -d" " -f2`
-      # high_latitude=`echo "$range_string" | grep "^y:" | tr -s " " | cut -d" " -f3`
-      #  low_longitude=`echo "$range_string" | grep "^x:" | tr -s " " | cut -d" " -f2`
-      # high_longitude=`echo "$range_string" | grep "^x:" | tr -s " " | cut -d" " -f3`
-
-      # form up the region. we need to go half a pixel-width to each side
-      # bc_scale=10
-      # echo "high_latitude"
-      # echo $high_latitude
-      # echo "low_latitude"
-      # echo $low_latitude
-      # NNN=`echo "scale = $bc_scale ; $high_latitude + ($cellsize / 2)" | bc`
-      # SSS=`echo "scale = $bc_scale ; $low_latitude  - ($cellsize / 2)" | bc`
-      # EEE=`echo "scale = $bc_scale ; $high_longitude + ($cellsize / 2)" | bc`
-      # WWW=`echo "scale = $bc_scale ; $low_longitude  - ($cellsize / 2)" | bc`
-
-      # always set the region
-      # echo $NNN
-      # echo $SSS
-      # echo $EEE
-      # echo $WWW
-      # echo $cellsize
-      # g.region n=$NNN s=$SSS e=$EEE w=$WWW res=$cellsize
 
   # ok, now, let's read the cols file and match up indices with names...
 
@@ -297,11 +237,6 @@ do
   # initialize a counter
   n_patterns_found_so_far=0
 
- echo "n_patterns"
-echo $n_patterns
-
-
-
   # rename all of them
   for (( column_index=0 ; column_index < n_columns ; column_index++ )); do
 
@@ -310,14 +245,11 @@ echo $n_patterns
       echo "<found $n_patterns_found_so_far, so breaking (beware of wildcards)>"
       break
     fi
-    # echo "n_patterns_found_so_far"
-    # echo $n_patterns_found_so_far
-    # echo "column_index"
+
     let "column_number = column_index + 1"
 
     this_column_name=`echo "$column_list" | sed -n "${column_number}p"`
-    # echo "this_column_name"
-    # echo $this_column_name
+
     # check if we want it
     keep_this=no
     for name_pattern in $name_patterns_to_keep; do
@@ -332,20 +264,11 @@ echo $n_patterns
       
     done
     
-#    echo "col#$column_number ; name = [$this_column_name] ; KT = [$keep_test]"
-
    clean_column_name=`echo "$this_column_name" | sed "s/#/n/g"`
 
     if [ $keep_this = yes ]; then
       echo -n "[$clean_column_name]"
       let "n_patterns_found_so_far++"
-#      g.rename rast=${base_file_name}_${column_index},${base_file_name}_${this_column_name} --o
-       
-
-#       data_input=${yield_dir}${base_file_name}${clean_suffix} \
-#       geog_input=${inputs_directory}${geog_correct_base}_geog \
-#     header_input=${inputs_directory}${geog_correct_base}_header \
-
 
     # ok, my plan is to extract just the column we care about, along with the latitude and longitude
       # grab the data
@@ -361,21 +284,12 @@ echo $n_patterns
       yield_test=`echo "$clean_column_name" | grep yield`
       gro_test=`echo "$clean_column_name" | grep _gro_`
       day_test=`echo "$clean_column_name" | grep shift_in_days`
-      echo ""
-      echo "yield_test"
-      echo $yield_test
 
-      echo ""
+
       # put the yield and growth stage stresses together since they both use ./zero_to_black.sh
       if [ -n "${yield_test}" ]; then
         echo ""
         ./zero_to_black.sh ${base_file_name}_${clean_column_name} 2>&1 | grep -v olor | grep -v set | grep -v "$yield_test"
-      # elif [ -n "${gro_test}" ]; then
-      #   echo ""
-      #   ./zero_to_black.sh ${base_file_name}_${clean_column_name} 1>/dev/null 2>&1
-      # elif [ -n "$day_test" ]; then
-      #   echo ""
-      #   ./month_day_colors.sh ${base_file_name}_${clean_column_name}
       fi
     else
       echo -n "."
@@ -388,7 +302,6 @@ echo $n_patterns
 done # file name loop
 
 
-# rm deleteme_latitude_longitude_${quasi_random_code}.txt deleteme_just_looking_${quasi_random_code} deleteme_junk_${quasi_random_code}.txt deleteme_single_column_of_data_${quasi_random_code}.txt deleteme_full_thing_for_import_${quasi_random_code}.txt
 rm deleteme_latitude_longitude_${quasi_random_code}.txt deleteme_single_column_of_data_${quasi_random_code}.txt deleteme_full_thing_for_import_${quasi_random_code}.txt
 
 

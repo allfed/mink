@@ -1,0 +1,31 @@
+forrtl: error (76): Abort trap signal
+Image              PC                Routine            Line        Source             
+dscsm_compiled_fa  00000000009CCAE5  Unknown               Unknown  Unknown
+dscsm_compiled_fa  00000000009CA707  Unknown               Unknown  Unknown
+dscsm_compiled_fa  0000000000969984  Unknown               Unknown  Unknown
+dscsm_compiled_fa  0000000000969796  Unknown               Unknown  Unknown
+dscsm_compiled_fa  00000000009076F6  Unknown               Unknown  Unknown
+dscsm_compiled_fa  000000000090E588  Unknown               Unknown  Unknown
+libpthread.so.0    00007FBF3FC81630  Unknown               Unknown  Unknown
+libc.so.6          00007FBF3F8DA387  Unknown               Unknown  Unknown
+libc.so.6          00007FBF3F8DBA78  Unknown               Unknown  Unknown
+libc.so.6          00007FBF3F91CF67  Unknown               Unknown  Unknown
+libc.so.6          00007FBF3F9BC7A7  Unknown               Unknown  Unknown
+libc.so.6          00007FBF3F9BA922  Unknown               Unknown  Unknown
+libc.so.6          00007FBF3F9B9E2B  Unknown               Unknown  Unknown
+libc.so.6          00007FBF3F921031  Unknown               Unknown  Unknown
+libc.so.6          00007FBF3F8EEEC5  Unknown               Unknown  Unknown
+libc.so.6          00007FBF3F9B9EB8  Unknown               Unknown  Unknown
+libc.so.6          00007FBF3F9B9E0D  Unknown               Unknown  Unknown
+dscsm_compiled_fa  000000000096EF70  Unknown               Unknown  Unknown
+dscsm_compiled_fa  0000000000970899  Unknown               Unknown  Unknown
+dscsm_compiled_fa  000000000092277D  Unknown               Unknown  Unknown
+dscsm_compiled_fa  000000000095E76E  Unknown               Unknown  Unknown
+dscsm_compiled_fa  000000000040A1C1  Unknown               Unknown  Unknown
+dscsm_compiled_fa  00000000004B282F  Unknown               Unknown  Unknown
+dscsm_compiled_fa  00000000004A2EEF  Unknown               Unknown  Unknown
+dscsm_compiled_fa  000000000090033D  Unknown               Unknown  Unknown
+dscsm_compiled_fa  0000000000403C5E  Unknown               Unknown  Unknown
+libc.so.6          00007FBF3F8C6555  Unknown               Unknown  Unknown
+dscsm_compiled_fa  0000000000403B69  Unknown               Unknown  Unknown
+./run_dssat.sh: line 2: 1939166 Aborted                 ./dscsm_compiled_fast.exe n deleteme.v45

@@ -28,6 +28,6 @@ We have a raster with the averaged yields per hectare from the best planting mon
 
 Averaging all the crop cultivars produces a raster ending with "averaged_[RF or IR]".
 
-Getting production is accomplished using the SPAM 2010 imported maps, which were previously saved as rasters ending in "\_rainfed_cropland" and "\_irrigated_cropland". The "averaged_[RF or IR]" yield rasters are multiplied by the irrigated or rainfed area to get a raster for rainfed and a raster for irrigated yields. This raster ends with "\_production_[RF or IR]".
+Getting production is accomplished using the SPAM 2010 imported maps, which were previously saved as rasters ending in "\_rainfed_cropland" and "\_irrigated_cropland". The "averaged_[RF or IR]" yield rasters are multiplied by the irrigated or rainfed area to get a raster for rainfed production and a raster for irrigated production. This raster ends with "\_production_[RF or IR]".
 
-Next, rainfed and irrigated yields are summed in order to get a total yield for each cultivar. This raster ends in "\_production"
+Next, rainfed and irrigated production are summed in order to get a total yield for each cultivar. This raster ends in "\_production"

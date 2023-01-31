@@ -34,22 +34,33 @@ public class BashScripts {
       String region_to_use_e,
       String region_to_use_w,
       String nsres,
-      String ewres)
-      throws InterruptedException, IOException {
+      String ewres,
+      String[] months,
+      String crop_area_raster,
+      String crop_name,
+      String run_descriptor,
+      String nitrogen ) throws InterruptedException, IOException {
 
-    System.out.println("");
+    // create the main control list for each month
+    String main_control_list = "";
+    for (int i = 0; i < months.length; i++) {
+      main_control_list = main_control_list + crop_area_raster + "\t" + crop_name + "\t" + run_descriptor + "\t" + nitrogen + "\t" + months[i] + "\n";
+    }
+
+    //create the region to use
+    String region_to_use = "n="+region_to_use_n+" s="+region_to_use_s+" e="+region_to_use_e+" w="+region_to_use_w+" nsres="+nsres+" ewres="+ewres;
+
     ProcessBuilder pb =
         new ProcessBuilder(
             "bash",
             "./build_dailystyle_NOCLIMATE_for_DSSAT_05jun14.sh",
-            region_to_use_n,
-            region_to_use_s,
-            region_to_use_e,
-            region_to_use_w,
-            nsres,
-            ewres);
+            region_to_use,
+            main_control_list,
+            crop_area_raster
+        );
 
     callProcess(pb, script_folder);
+
   } // end initGRASS
 
   // actually run the full set of commands to calculate yields in every point on the
@@ -61,10 +72,10 @@ public class BashScripts {
       String crop_name,
       String weather_prefix,
       String weather_folder,
-      String yield_result_name)
+      String yield_result_name,
+      String fertilizer_scheme)
       throws InterruptedException, IOException {
 
-    // ProcessBuilder pb = new ProcessBuilder("bash", "./mink3daily_run_DSSAT_tile.sh");
     System.out.println("");
     ProcessBuilder pb =
         new ProcessBuilder(
@@ -73,12 +84,15 @@ public class BashScripts {
             "/mnt/data/basics_15jun22/sge_Mink3daily/to_DSSAT/" + yield_result_name,
             weather_folder + "/" + weather_prefix,
             snx_name + ".SNX",
-            "threeSplitWithFlowering",
+            fertilizer_scheme,
             co2_level,
             crop_name,
             "1",
             "0");
-
+    System.out.println("");
+    System.out.println("");
+    System.out.println("bash"+" ./mink3daily_run_DSSAT_tile.sh"+" /mnt/data/basics_15jun22/sge_Mink3daily/to_DSSAT/ " + yield_result_name+" " + weather_folder + "/" + weather_prefix+" "+snx_name + ".SNX"+" "+fertilizer_scheme+" "+co2_level+" "+crop_name+" 1"+" 0");
+    // System.exit(0);
     callProcess(pb, script_folder);
   } // end runScenario
 
@@ -115,6 +129,9 @@ public class BashScripts {
     System.out.println("");
     System.out.println("runAverageCropsCommand creates raster with name:");
     System.out.println(scenario_tag);
+    System.out.println("");
+    System.out.println("runAverageCropsCommand uses rasters with names:");
+    System.out.println(raster_names_to_average);
     System.out.println("");
     System.out.println("");
 
@@ -160,6 +177,36 @@ public class BashScripts {
   } // end calculateProduction
 
   // use averaged yields to calculate production for rainfed and irrigated
+  public static void calculateOverallYield(
+      String script_folder,
+      String scenario_tag_for_production,
+      String crop_area_raster,
+      String scenario_tag_for_overall_yields)
+      throws InterruptedException, IOException {
+
+    System.out.println("");
+    System.out.println("");
+    System.out.println("calculateOverallYields creates raster with name:");
+    System.out.println(scenario_tag_for_overall_yields);
+    System.out.println("");
+    System.out.println("");
+    
+
+    // calculate production for rainfed and irrigated
+    // scenario_tag_for_production is the raster where the product of yield and area
+    // is saved
+    ProcessBuilder pb =
+        new ProcessBuilder(
+            "bash",
+            "./divide_rasters.sh",
+            scenario_tag_for_production,
+            crop_area_raster,
+            scenario_tag_for_overall_yields);
+
+    callProcess(pb, script_folder + "../more_GRASS_scripts/universal/");
+  } // end calculateOverallYields
+
+  // use averaged yields to calculate production for rainfed and irrigated
   // sum raster is the resulting raster
   public static void sumRasters(
       String script_folder, String rasters_to_add, String sum_raster, String results_folder)
@@ -181,7 +228,7 @@ public class BashScripts {
             "../../../" + results_folder);
 
     callProcess(pb, script_folder + "../more_GRASS_scripts/universal/");
-  } // end calculateProduction
+  } // end calculateOverallYields
 
   // use averaged yields to calculate production for rainfed and irrigated
   // sum raster is the resulting raster
@@ -237,6 +284,7 @@ public class BashScripts {
   // call a generic process
   public static void callProcess(ProcessBuilder pb, String script_folder)
       throws InterruptedException, IOException {
+    pb.inheritIO();
     pb.redirectErrorStream(true);
     pb.directory(new File(script_folder));
     Process process = pb.start();

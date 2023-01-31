@@ -49,14 +49,17 @@ public class Scenarios {
   public String[] scenario_tag_for_averaging_rf_or_ir;
   public String[] scenario_tag_for_production_rf_or_ir;
   public String[] scenario_tag_for_production;
+  public String[] scenario_tag_for_overall_yield;
   public String[] scenario_tag_with_snx;
-  public String[] raster_name;
+  public String[] best_planting_raster_name;
   public String[][][] raster_names_all_years; // cultivar, month, year
   public String[][] raster_names; // cultivar, month
   public String[] crop_area_raster;
   public String[] yield_result_name;
   public String[] month_result_name;
+  public String[] nitrogen;
   public String[][] yield_result_names; // cultivar, month
+  public String[] fertilizer_scheme;
 
   // The main method is responsible for creating an instance of the Scenarios class by reading in a
   // CSV file and then running the scenarios and averaging the results.
@@ -70,7 +73,6 @@ public class Scenarios {
     System.out.println("script folder: ");
     System.out.println(args[1]);
     System.out.println("");
-
     String simulation_csv_location = args[0];
     String script_folder = args[1];
 
@@ -91,8 +93,6 @@ public class Scenarios {
   public Scenarios(String[] initFileContents) throws InterruptedException, IOException {
 
     n_scenarios = initFileContents.length - 1;
-    this.planting_months = new String[] {"1", "3", "5"}; // ,"7","9","11"};
-    this.years = new String[] {"3", "4", "5", "6", "7"}; // ,"7","9","11"};
 
     this.snx_name = new String[n_scenarios];
     this.co2_level = new String[n_scenarios];
@@ -101,6 +101,7 @@ public class Scenarios {
     this.weather_folder = new String[n_scenarios];
     this.results_folder = new String[n_scenarios];
     this.run_descriptor = new String[n_scenarios];
+    this.nitrogen = new String[n_scenarios];
     this.region_to_use_n = new String[n_scenarios];
     this.region_to_use_s = new String[n_scenarios];
     this.region_to_use_e = new String[n_scenarios];
@@ -108,14 +109,23 @@ public class Scenarios {
     this.nsres = new String[n_scenarios];
     this.ewres = new String[n_scenarios];
     this.crop_area_raster = new String[n_scenarios];
+    this.fertilizer_scheme = new String[n_scenarios];
+
+    // consider may, april, march, june
+    this.planting_months = new String[] {"1", "3", "5" ,"7", "9", "11"};
+
+    //NOTE: only year 8 and 9 are considered later on in the code
+    //      if this is a nuclear winter
+    this.years = new String[] {"1","2","3","4","5","6","7"};
 
     // composites
     this.scenario_tag = new String[n_scenarios];
     this.scenario_tag_for_averaging_rf_or_ir = new String[n_scenarios];
     this.scenario_tag_for_production_rf_or_ir = new String[n_scenarios];
     this.scenario_tag_for_production = new String[n_scenarios];
+    this.scenario_tag_for_overall_yield = new String[n_scenarios];
     this.scenario_tag_with_snx = new String[n_scenarios];
-    this.raster_name = new String[n_scenarios];
+    this.best_planting_raster_name = new String[n_scenarios]; // best planting raster name
     this.raster_names = new String[n_scenarios][planting_months.length];
     this.raster_names_all_years = new String[n_scenarios][planting_months.length][years.length];
     this.month_result_name = new String[n_scenarios];
@@ -148,15 +158,17 @@ public class Scenarios {
       this.weather_folder[i] = line_arguments[4];
       this.results_folder[i] = line_arguments[5];
       this.run_descriptor[i] = line_arguments[6];
-      this.region_to_use_n[i] = line_arguments[7];
-      this.region_to_use_s[i] = line_arguments[8];
-      this.region_to_use_e[i] = line_arguments[9];
-      this.region_to_use_w[i] = line_arguments[10];
-      this.nsres[i] = line_arguments[11];
-      this.ewres[i] = line_arguments[12];
+      this.nitrogen[i] = line_arguments[7];
+      this.region_to_use_n[i] = line_arguments[8];
+      this.region_to_use_s[i] = line_arguments[9];
+      this.region_to_use_e[i] = line_arguments[10];
+      this.region_to_use_w[i] = line_arguments[11];
+      this.nsres[i] = line_arguments[12];
+      this.ewres[i] = line_arguments[13];
 
       // SPECIFIC TO THE CROP NAME AND WATERING STRATEGY
-      this.crop_area_raster[i] = line_arguments[13];
+      this.crop_area_raster[i] = line_arguments[14];
+      this.fertilizer_scheme[i] = line_arguments[15];
 
       // some useful composite strings
 
@@ -169,12 +181,12 @@ public class Scenarios {
       // pixel in all month's rasters
       // "Best" replaces the month number
       this.yield_result_name[i] =
-          "D__BestYield_noGCMcalendar_p0_" + this.crop_name[i] + "__" + this.run_descriptor[i];
+          "BestYield_noGCMcalendar_p0_" + this.crop_name[i] + "__" + this.run_descriptor[i];
 
       // SPECIFIC TO THE CROP NAME
       // the name of the raster for: the months with the best pixel in all month's rasters
       this.month_result_name[i] =
-          "D__BestMonth_noGCMcalendar_p0_" + this.crop_name[i] + "__" + this.run_descriptor[i];
+          "BestMonth_noGCMcalendar_p0_" + this.crop_name[i] + "__" + this.run_descriptor[i];
 
       // SPECIFIC TO THE CROP NAME
       this.scenario_tag[i] =
@@ -184,6 +196,11 @@ public class Scenarios {
       // SPECIFIC TO THE CROP NAME
       // the raster name that yield times the crop area is stored for a scenario
       this.scenario_tag_for_production[i] = this.scenario_tag[i] + "_production";
+
+      // if tag_month_month_identifier is empty, then this is the best_combined months
+      // SPECIFIC TO THE CROP NAME
+      // the raster name of the average irrigated and rainfed yield weighted by crop area
+      this.scenario_tag_for_overall_yield[i] = this.scenario_tag[i] + "_overall_yield";
 
       // SPECIFIC TO THE CROP NAME AND WATERING STRATEGY
       // the raster name where the average of the rainfed or irrigated yield is stored
@@ -197,9 +214,9 @@ public class Scenarios {
       // SPECIFIC TO THE CULTIVAR AND WATERING STRATEGY
       this.scenario_tag_with_snx[i] = this.snx_name[i] + "_" + this.scenario_tag[i];
 
-      // raster_name is the name of the raster that is shown as a png image
-      this.raster_name[i] = this.scenario_tag_with_snx[i] + "_real";
-      // this.raster_name[i] = this.scenario_tag_with_snx[i] + "_real_7@morgan_DSSAT_cat_0";
+      // best_planting_raster_name is the name of the raster that is shown as a png image
+      this.best_planting_raster_name[i] = this.scenario_tag_with_snx[i] + "_real";
+      // this.best_planting_raster_name[i] = this.scenario_tag_with_snx[i] + "_real_7@morgan_DSSAT_cat_0";
 
       for (int planting_month_index = 0;
           planting_month_index < this.planting_months.length;
@@ -210,7 +227,7 @@ public class Scenarios {
 
         // SPECIFIC TO THE CROP NAME AND MONTH
         this.yield_result_names[i][planting_month_index] =
-            "D__"
+            ""
                 + month
                 + "_noGCMcalendar_p0_"
                 + this.crop_name[i]
@@ -277,13 +294,15 @@ public class Scenarios {
       assert column_titles[4].equals("weather_folder");
       assert column_titles[5].equals("results_folder");
       assert column_titles[6].equals("run_descriptor");
-      assert column_titles[7].equals("region_to_use_n");
-      assert column_titles[8].equals("region_to_use_s");
-      assert column_titles[9].equals("region_to_use_e");
-      assert column_titles[10].equals("region_to_use_w");
-      assert column_titles[11].equals("nsres");
-      assert column_titles[12].equals("ewres");
-      assert column_titles[13].equals("crop_area_raster");
+      assert column_titles[7].equals("nitrogen");
+      assert column_titles[8].equals("region_to_use_n");
+      assert column_titles[9].equals("region_to_use_s");
+      assert column_titles[10].equals("region_to_use_e");
+      assert column_titles[11].equals("region_to_use_w");
+      assert column_titles[12].equals("nsres");
+      assert column_titles[13].equals("ewres");
+      assert column_titles[14].equals("crop_area_raster");
+      assert column_titles[15].equals("fertilizer_scheme");
     } catch (AssertionError e) {
       System.out.println(
           "Error: The first line of the csv file must contain the column titles in the code block"
@@ -322,10 +341,20 @@ public class Scenarios {
           scenarios.month_result_name[i],
           scenarios.yield_result_name[i],
           scenarios.yield_result_names[i],
-          scenarios.raster_name[i],
+          scenarios.best_planting_raster_name[i],
           scenarios.raster_names[i],
           scenarios.raster_names_all_years[i],
-          scenarios.crop_area_raster[i]);
+          scenarios.crop_area_raster[i],
+          scenarios.nitrogen[i],
+          scenarios.fertilizer_scheme[i]
+        );
+      System.out.println("====================");
+      System.out.println("====================");
+      System.out.println("=====PROGRESS=======");
+      System.out.println("====================");
+      System.out.println("====================");
+      System.out.println("completed "+(i+1)+" out of "+scenarios.n_scenarios+" scenarios");
+      System.out.println("====================");
     }
   }
 
@@ -350,10 +379,12 @@ public class Scenarios {
       String month_result_name,
       String yield_result_name,
       String[] yield_result_names,
-      String raster_name,
+      String best_planting_raster_name,
       String[] raster_names,
       String[][] raster_names_all_years,
-      String crop_area_raster)
+      String crop_area_raster,
+      String nitrogen,
+      String fertilizer_scheme)
       throws InterruptedException, IOException {
 
     // run through all the required scripts for determining and saving yields
@@ -368,7 +399,12 @@ public class Scenarios {
           region_to_use_e,
           region_to_use_w,
           nsres,
-          ewres);
+          ewres,
+          planting_months,
+          crop_area_raster,
+          crop_name,
+          run_descriptor,
+          nitrogen);
     }
 
     for (int planting_month_index = 0;
@@ -380,16 +416,32 @@ public class Scenarios {
 
       String raster_name_this_month = raster_names[planting_month_index];
 
-      // BashScripts.runScenario(
-      //     script_folder,
-      //     snx_name,
-      //     co2_level,
-      //     crop_name,
-      //     weather_prefix,
-      //     weather_folder,
-      //     yield_result_name_this_month);
+      BashScripts.runScenario(
+          script_folder,
+          snx_name,
+          co2_level,
+          crop_name,
+          weather_prefix,
+          weather_folder,
+          yield_result_name_this_month,
+          fertilizer_scheme);
+
+      System.out.println("");
+      System.out.println("");
+      System.out.println("---------------");
+      System.out.println("completed "+(planting_month_index+1)+" out of "+(planting_months.length)+" planting months");
+      System.out.println("---------------");
+      System.out.println("");
+      System.out.println("");
 
       String[] raster_name_all_years_this_month = raster_names_all_years[planting_month_index];
+
+      BashScripts.processResults(script_folder, snx_name, yield_result_name_this_month);
+
+      // // create a png for the raster for each year
+      // for(int year_index = 0; year_index < years.length; year_index++) {
+      //   BashScripts.createPNG(script_folder, raster_name_all_years_this_month[year_index],results_folder);
+      // }
 
       averageYieldsAcrossYears(
           script_folder,
@@ -397,8 +449,6 @@ public class Scenarios {
           raster_name_all_years_this_month,
           raster_name_this_month,
           results_folder);
-
-      BashScripts.processResults(script_folder, snx_name, yield_result_name_this_month);
 
       BashScripts.createPNG(script_folder, raster_name_this_month, results_folder);
     }
@@ -408,7 +458,7 @@ public class Scenarios {
         script_folder,
         planting_months,
         raster_names,
-        raster_name,
+        best_planting_raster_name,
         month_result_name,
         results_folder);
   } // processScenario
@@ -427,8 +477,20 @@ public class Scenarios {
 
     String raster_names_to_average = "";
 
+    String year;
     // loop over the years to average crop yields
     for (int year_index = 0; year_index < years.length; year_index++) {
+
+      String raster_this_year = raster_name_all_years_this_month[year_index];
+
+      // if weather_folder contains "catastrophe" string, skip years other than 6 and 7 for averaging
+      // The nuclear event starts mid way through year 5. Years 2-3 from the scenario are the coldest. So the worst year would be 5+2 and 5+3 (years 7 and 8). The first two years are used for calibrating soil temperature though, so the year numbers from the DSSAT runs are actually offset by 2. Therefore, years 5 and 6 are the worst years.
+      year = years[year_index];
+      if (raster_this_year.contains("catastrophe")) {
+        if(!(year.equals("5") || year.equals("6"))) {
+          continue;
+        }
+      }
 
       // add a comma after the raster names
       if (!raster_names_to_average.equals("")) {
@@ -436,8 +498,13 @@ public class Scenarios {
       }
 
       raster_names_to_average =
-          raster_names_to_average + raster_name_all_years_this_month[year_index];
+          raster_names_to_average + raster_this_year;
     }
+
+    // in scenarios
+    System.out.println("in scenario ");
+
+
 
     // average all the cultivars for the crop to estimate the crop's overall yield
     BashScripts.runAverageCropsCommand(
@@ -450,7 +517,7 @@ public class Scenarios {
       String script_folder,
       String[] planting_months,
       String[] raster_names,
-      String raster_name,
+      String best_planting_raster_name,
       String month_result_name,
       String results_folder)
       throws InterruptedException, IOException {
@@ -465,7 +532,7 @@ public class Scenarios {
       combined_yields_results = combined_yields_results + "," + raster_names[planting_month_index];
     }
 
-    String best_yield_raster = raster_name;
+    String best_yield_raster = best_planting_raster_name;
     String best_month_raster = month_result_name;
 
     BashScripts.compositeRaster(

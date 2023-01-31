@@ -535,6 +535,8 @@ public class Mink3p2daily {
     dssatExecutionCommand[2] = magicInitializationFile;
 
     magicDSSATSummaryToReadPath      = pathToDSSATDirectory + magicDSSATSummaryToRead;
+    System.out.println("magicDSSATSummaryToReadPath");
+    System.out.println(magicDSSATSummaryToReadPath);
     summaryDSSATOutputAsFileObject   = new File(magicDSSATSummaryToReadPath);
     errorAsFileObject                = new File(pathToDSSATDirectory + magicErrorFile);
     magicInitializationFilePath      = pathToDSSATDirectory + magicInitializationFile;
@@ -2099,7 +2101,7 @@ public class Mink3p2daily {
         // but i have seen it with the "real" yields. so, let's just censor the yields here...
         // guess: bad weather data, say tmin > tmax
         if (yieldToUse < 0) {
-            System.out.println("    HAPPY: negative yield: [" + yieldToUse + "], censoring to " + magicValueToUseWithNegativeYields + "; fakeYearIndex=" + fakeYearIndex);
+            // System.out.println("    HAPPY: negative yield: [" + yieldToUse + "], censoring to " + magicValueToUseWithNegativeYields + "; fakeYearIndex=" + fakeYearIndex);
             yieldToUse = magicValueToUseWithNegativeYields;
         }
         happyYearlyYields[fakeYearIndex].useLongValue(yieldToUse);
@@ -2200,7 +2202,6 @@ public class Mink3p2daily {
         candidateSummaryContents = FunTricks.readSomeLinesOfTextFileToArray(magicDSSATSummaryToReadPath,nLinesToRead);
     } catch (FileNotFoundException fnfe) {
 
-        // System.exit(1); // ADDED THIS, delete if annoying (DMR)
         // check for error file
         if (errorAsFileObject.exists()) {
         System.out.println("REAL: file not found...  [" + errorAsFileObject + "] exists...");
@@ -2225,7 +2226,6 @@ public class Mink3p2daily {
     //      System.out.println("j  => "+candidateSummaryContents[j]);
     // }
     // System.out.println(candidateSummaryContents);
-    // System.exit(0);
 
     // parse the output file for the necessary goodies...
     hitANullLine = false;
@@ -2348,7 +2348,7 @@ public class Mink3p2daily {
             realYearlyMaturity[fakeYearIndex].useLongValue(daysSincePlantingForEvent);
             } else {
             // we still have some sort of maturity failure... so we should assess a problem
-            System.out.println("grab real: pd = " + plantingDate + " ; mat = " + maturityToUse + " ; diff = " + daysSincePlantingForEvent);
+            // System.out.println("grab real: pd = " + plantingDate + " ; mat = " + maturityToUse + " ; diff = " + daysSincePlantingForEvent);
             realBadThingsCountsEntirePixel.useLongValue(1000000000); // assess a problem...
             realYearlyMaturity[fakeYearIndex].useLongValue(magicValueToUseWithNegativeYields);
             }
@@ -2366,7 +2366,7 @@ public class Mink3p2daily {
         // problem of negative yields. so we'll just censor at zero.
         // back to deciding to mark them with a negative value so we can see them on the map
         if (yieldToUse < 0) {
-            System.out.println("    REAL: [" + yieldToUse + "], -> " + magicValueToUseWithNegativeYields + "; fakeYearIndex=" + fakeYearIndex);
+            // System.out.println("    REAL: [" + yieldToUse + "], -> " + magicValueToUseWithNegativeYields + "; fakeYearIndex=" + fakeYearIndex);
             yieldToUse = magicValueToUseWithNegativeYields;
         }
 
@@ -2809,8 +2809,8 @@ public class Mink3p2daily {
         // 45.938    -121.875    washington
 
         // Skipping these latitudes for convenience (DMR)
-        System.out.println("latitude:"+latitude);
-        System.out.println("longitude:"+longitude);
+        // System.out.println("latitude:"+latitude);
+        // System.out.println("longitude:"+longitude);
 
         elseTimer.tic();
 
@@ -3407,8 +3407,6 @@ public class Mink3p2daily {
 
             realTimer.tic();
 
-            System.out.println("rundssat command AGAIN! But for REAL!!!");
-            System.out.println("./run_dssat.sh");
             pb = new ProcessBuilder("bash", "./run_dssat.sh");
             pb.inheritIO();
             pb.directory(pathToDSSATDirectoryAsFile);

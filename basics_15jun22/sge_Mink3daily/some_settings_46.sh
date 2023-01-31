@@ -65,7 +65,7 @@ echo "   >>> using $nameOfDSSATExecutable <<<"
 
 #       # for the first catastrophe daily weather (4nov21)
        fakePlantingYear=2 # 1 is the first year, so to allow for spinup, we need to start in #2
-             nFakeYears=9 # 99 #100 # 
+             nFakeYears=10 # 99 #100 # 
 
 
 #     export fakePlantingYear=`echo "$giant_prefix" | cut -d_ -f1 | cut -c3-4`

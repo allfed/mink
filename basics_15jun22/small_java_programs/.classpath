@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="IFPRIconverter/old_src"/>
+	<classpathentry kind="src" path="IFPRIconverter/src"/>
+	<classpathentry kind="src" path="java8_IFPRIconverter/src"/>
+	<classpathentry kind="lib" path="java_libraries/netcdfAll-4.5.jar"/>
+	<classpathentry kind="lib" path="java_libraries/opencsv-5.7.1.jar"/>
+	<classpathentry kind="output" path="IFPRIconverter/bin"/>
+</classpath>

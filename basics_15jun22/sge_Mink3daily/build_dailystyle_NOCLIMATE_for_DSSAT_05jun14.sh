@@ -1,7 +1,13 @@
 #!/bin/bash
-region_to_use="n=$1 s=$2 e=$3 w=$4 nsres=$5 ewres=$6"
+. default_paths_etc.sh
+region_to_use=$1
+main_control_list=$2
+crop_area_raster=$3
+
 echo "region_to_use"
 echo $region_to_use
+echo "weather_mask"
+echo $weather_mask
 # previous generation was NEW GISbox:
 #   /home/grass/grass_scripts/gf_crop_modeling_01mar11/build_dataset_for_DSSAT_BigInits_03nov11.sh
 #   /home/grass/grass_scripts/gf_crop_modeling_01mar11/build_dataset_for_DSSAT_monthly_neighborhood_01mar11.sh
@@ -31,9 +37,13 @@ echo $region_to_use
 #   where we don't and have a valid value where we do
 # 1.875
 # 1.25
-output_file=to_DSSAT/D_ ; weather_mask=MAIZE_cropland@morgan_DSSAT_cat_0 ; #region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" #eegion_to_use="n=49 s=26 w=-124 e=-66 nsres=1.875 ewres=1.25" # now forcing a square resolution region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" # NOTE: region_to_use SHOULD BE SET BEFORE RUNNING THIS SCRIPT
-
-
+echo "output_file_dir"
+echo "${output_file_dir}"
+output_file=${output_file_dir}
+ weather_mask="${crop_area_raster}@morgan_DSSAT_cat_0" ; #region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" #eegion_to_use="n=49 s=26 w=-124 e=-66 nsres=1.875 ewres=1.25" # now forcing a square resolution region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" # NOTE: region_to_use SHOULD BE SET BEFORE RUNNING THIS SCRIPT
+# output_file=to_DSSAT/D_ ; weather_mask=MAIZE_cropland@morgan_DSSAT_cat_0 ; #region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" #eegion_to_use="n=49 s=26 w=-124 e=-66 nsres=1.875 ewres=1.25" # now forcing a square resolution region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" # NOTE: region_to_use SHOULD BE SET BEFORE RUNNING THIS SCRIPT
+echo "weather_mask"
+echo $weather_mask
 #### we should only need the calendar_mapset now with pre-existing daily weather...
 
 calendar_mapset=deltaPIKnov_from_daily_c # which mapset contains the target planting month rasters
@@ -125,31 +135,12 @@ r.mapcalc deleteme_all = "100000" 2>&1 | grep -v % # some big number that create
 #    make one giant set of daily weather for the region with a single line and then reuse those for multiple crop
 #    cases...
 
-simple_initial="initial_soil_nitrogen_mass@DSSAT_essentials_12may11 initial_root_mass@DSSAT_essentials_12may11  initial_surface_residue_mass@DSSAT_essentials_12may11"
+simple_initial=`echo -e "initial_soil_nitrogen_mass@DSSAT_essentials_12may11\tinitial_root_mass@DSSAT_essentials_12may11\tinitial_surface_residue_mass@DSSAT_essentials_12may11"`
 wheat_simple_initial="2*initial_soil_nitrogen_mass@DSSAT_essentials_12may11 initial_root_mass@DSSAT_essentials_12may11  initial_surface_residue_mass@DSSAT_essentials_12may11"
 old_wheat_revised_initial="initial_soil_nitrogen_mass_07may13@DSSAT_essentials_12may11  initial_root_mass@DSSAT_essentials_12may11  initial_surface_residue_mass@DSSAT_essentials_12may11"
 wheat_revised_initial="initial_soil_nitrogen_mass_23may13@DSSAT_essentials_12may11  initial_root_mass@DSSAT_essentials_12may11  initial_surface_residue_mass@DSSAT_essentials_12may11"
 maize_initial=`echo -e "initial_soil_nitrogen_mass_13mar14@DSSAT_essentials_12may11\tinitial_root_mass@DSSAT_essentials_12may11\tinitial_surface_residue_mass@DSSAT_essentials_12may11"`
 
-main_control_list=`
-echo -e "
-MAIZE_cropland\tmaize\teitherN250\t250\t1\t$maize_initial
-MAIZE_cropland\tmaize\teitherN250\t250\t2\t$maize_initial
-MAIZE_cropland\tmaize\teitherN250\t250\t3\t$maize_initial
-MAIZE_cropland\tmaize\teitherN250\t250\t4\t$maize_initial
-MAIZE_cropland\tmaize\teitherN250\t250\t5\t$maize_initial
-MAIZE_cropland\tmaize\teitherN250\t250\t6\t$maize_initial
-MAIZE_cropland\tmaize\teitherN250\t250\t7\t$maize_initial
-MAIZE_cropland\tmaize\teitherN250\t250\t8\t$maize_initial
-MAIZE_cropland\tmaize\teitherN250\t250\t9\t$maize_initial
-MAIZE_cropland\tmaize\teitherN250\t250\t10\t$maize_initial
-MAIZE_cropland\tmaize\teitherN250\t250\t11\t$maize_initial
-MAIZE_cropland\tmaize\teitherN250\t250\t12\t$maize_initial
-"
-`
-
-echo "main_control_list"
-echo $main_control_list
 
 # this is a list of offsets from the target month that you would like to try.
 # integers only please...
@@ -170,7 +161,7 @@ month_shifter_list=\
 
 
 echo -e "\n\n\n CHECK THE SPAM RASTERS: should be the 30may14 ones... \n\n\n"
-sleep 3
+sleep 1
 
 
 
@@ -205,32 +196,30 @@ do
                  water_source=`echo "$spam_line" | cut -f3`
                       N_level=`echo "$spam_line" | cut -f4`
               calendar_prefix=`echo "$spam_line" | cut -f5`
-                    initial_N=`echo "$spam_line" | cut -f6`
-          initial_root_weight=`echo "$spam_line" | cut -f7`
-       initial_surface_weight=`echo "$spam_line" | cut -f8`
-                    id_raster=`echo "$spam_line" | cut -f9`
-                 skip_climate=`echo "$spam_line" | cut -f10`
-  echo "spam_raster_to_use_for_mask"
-  echo $spam_raster_to_use_for_mask
-  echo "crop_name"
-  echo $crop_name
-  echo "water_source"
-  echo $water_source
-  echo "N_level"
-  echo $N_level
+                    initial_N=`echo "$simple_initial" | cut -f1`
+          initial_root_weight=`echo "$simple_initial" | cut -f2`
+       initial_surface_weight=`echo "$simple_initial" | cut -f3`
+                 #    id_raster=`echo "$spam_line" | cut -f9`
+                 # skip_climate=`echo "$spam_line" | cut -f10`
+  # echo "spam_raster_to_use_for_mask"
+  # echo $spam_raster_to_use_for_mask
+  # echo "crop_name"
+  # echo $crop_name
+  # echo "water_source"
+  # echo $water_source
+  # echo "N_level"
+  # echo $N_level
   echo "calendar_prefix"
   echo $calendar_prefix
-  echo "initial_N"
-  echo $initial_N
-  echo "initial_root_weight"
-  echo $initial_root_weight
-  echo "initial_surface_weight"
-  echo $initial_surface_weight
-  echo "id_raster"
-  echo $id_raster
-  echo "skip_climate"
-  echo $skip_climate
+  # echo "initial_N"
+  # echo $initial_N
+  # echo "initial_root_weight"
+  # echo $initial_root_weight
+  # echo "initial_surface_weight"
+  # echo $initial_surface_weight
+
   # define the appropriate mask
+  echo ""
   echo "-- creating mask for $spam_raster_to_use_for_mask `date` --"
   g.remove MASK # clear out the GRASS magic mask name
 
@@ -338,9 +327,9 @@ do
 
   # do the exporting
   # define the name of the output file
-    start_output_name=${output_file}_${planting_month_raster}_${crop_name}__${water_source}
+    start_output_name=${output_file}${planting_month_raster}_${crop_name}__${water_source}
 
-    real_output_file=${start_output_name}_nonCLIMATE
+    real_output_file=${start_output_name}
     echo "real output"
     echo $real_output_file
 
@@ -387,7 +376,6 @@ do
     echo "" >> ${real_output_file}.provenance.txt
     echo "main_control_list=" >> ${real_output_file}.provenance.txt
     echo "$main_control_list" >> ${real_output_file}.provenance.txt
-
 
 done # month_shifter
 
