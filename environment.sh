@@ -69,6 +69,9 @@ export GRASS_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
 export PYTHONPATH="$GISBASE/etc/python:$PYTHONPATH"
 export MANPATH=$MANPATH:$GISBASE/man
 
+export JAVA_HOME=$(dirname $(dirname $(which java)))
+#export JAVA_HOME="/usr/bin/java"
+
 # test a command
-g.list rast
-v.info zipcodes_wake
+#g.list rast
+#v.info zipcodes_wake

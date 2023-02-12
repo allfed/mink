@@ -124,62 +124,13 @@ script_to_run_in_job=${staging_directory}script_to_run_${chunk_index}_r${quasi_r
    fi
 
 # build the block which will copy all those silly weather files. this will be ugly...
-
-#echo $java_to_use -cp $classpath $daily_weather_copier_classname $daily_to_use $baseNameOfDailyWeather $data_file_base_name
-#magic_id_index=6
-#copy_block=`$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $magic_id_index`
-#copy_block=`$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name`
-
-# need to debug, so putting it out there as itself for the moment...
-#echo "-- before copy block --"
-#echo $java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot
-#echo "-- after copy block --"
 echo $daily_weather_copier_classname
 
-echo ""
-echo "this is me trying to get the java program to run(DMR)"
-#echo $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution
-# headnode_classpath
-# daily_weather_copier_classname
-# prestaged_weather_dir
-# daily_to_use
-# on_node_weather_dir
-# data_file_base_name
-# weatherDataSuffixWithDot
-# latitude_resolution
-# longitude_resolution
+echo java_to_use -cp headnode_classpath daily_weather_copier_classname {prestaged_weather_dir}daily_to_use on_node_weather_dir data_file_base_name weatherDataSuffixWithDot latitude_resolution longitude_resolution
 
-# echo $java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution 
-
-# echo $java_to_use -cp  headnode_classpath  daily_weather_copier_classname  {prestaged_weather_dir} daily_to_use  on_node_weather_dir  data_file_base_name  weatherDataSuffixWithDot  latitude_resolution  longitude_resolution 
-# copy_block="
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_0* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_1* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_2* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_3* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_4* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_5* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_6* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_7* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_8* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_9* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-0* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-1* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-2* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-3* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-4* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-5* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-6* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-7* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-8* ../../../on_node_home/dailyweather/
-# cp /home/dmrivers/Code/mink/control_mink/Outdoor-crops-control_-9* ../../../on_node_home/dailyweather/
-# "
-
-# echo java_to_use -cp headnode_classpath daily_weather_copier_classname {prestaged_weather_dir}daily_to_use on_node_weather_dir data_file_base_name weatherDataSuffixWithDot latitude_resolution longitude_resolution
-
+echo "$java_to_use $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution"
 
 copy_block=`$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution | uniq`
-
 
 number_of_pixels=`echo "$copy_block" | wc -l`
 echo $number_of_pixels
@@ -204,43 +155,6 @@ we_need_to_delay=0
   echo $optionalHarvestInterval
   echo "plantingDateInMonthShiftInDays"
   echo $plantingDateInMonthShiftInDays
-
-  # <<<<<
-
-  # (DMR) PULLED THIS OUT OF THE WRAPPER, DELETE WHEN FIGURE OUT WRAPPER >>>>
-
-  # catA_maize_raw=\
-  # "
-  # D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE  catastrophe_mink/Outdoor_crops_sample ZZZZRF.SNX  threeSplitWithFlowering 379 maize
-  # D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE  control_mink/Outdoor-crops-control  ZZZZRF.SNX  threeSplitWithFlowering 379 maize
-  # "
-
-
-  # catA_maize_full=\
-  # "
-  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK023/g"`
-  # "
-
-  # all_the_rest="
-  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK013/g"`
-  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK014/g"`
-  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK015/g"`
-  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK016/g"`
-  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK017/g"`
-  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK018/g"`
-  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK021/g"`
-  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK024/g"`
-  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK023/g"`
-  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK025/g"`
-  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK026/g"`
-  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK027/g"`
-  # `echo "$catA_maize_raw" | sed "s/ZZZZ/mzK029/g"`
-
-  # "
-  # <<<<<<<<<<<<<<<<
-
-
-
   echo "latitude_resolution"
   echo $latitude_resolution
   echo "longitude_resolution"

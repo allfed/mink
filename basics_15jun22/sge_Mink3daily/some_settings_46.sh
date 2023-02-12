@@ -45,12 +45,7 @@ echo "   >>> using $nameOfDSSATExecutable <<<"
 
 
 # do we want to keep some useful stuff that is usually superflous
-    keepHappyYields=false;
-#    keepRealDaysToEmergence=false;
-#    keepRealDaysToAnthesis=false;
-#    keepRealDaysToMaturity=false;
-
-#    keepHappyYields=true;
+    keepHappyYields=true;
     keepRealDaysToEmergence=true;
     keepRealDaysToAnthesis=true;
     keepRealDaysToMaturity=true;
@@ -65,7 +60,7 @@ echo "   >>> using $nameOfDSSATExecutable <<<"
 
 #       # for the first catastrophe daily weather (4nov21)
        fakePlantingYear=2 # 1 is the first year, so to allow for spinup, we need to start in #2
-             nFakeYears=10 # 99 #100 # 
+             nFakeYears=8 # 99 #100 # 
 
 
 #     export fakePlantingYear=`echo "$giant_prefix" | cut -d_ -f1 | cut -c3-4`
@@ -115,7 +110,6 @@ echo "   >>> using $nameOfDSSATExecutable <<<"
 
              spinUpTimeDays=90 # 90 # 90 # 45
    nPlantingWindowsPerMonth=1 # potato response surface = 2
-#   plantingWindowLengthDays=135  # 70
    plantingWindowLengthDays=3 # 30  # 70
 
  # this lets you move the entire planting schme around by days...
@@ -133,10 +127,7 @@ echo "   >>> using $nameOfDSSATExecutable <<<"
             phenologyBufferInDays=-5
   happyMaturityThresholdToDoRealRuns=`echo "$optionalHarvestInterval + 1" | bc` # 300 # 200
 
-# fractionBetweenLowerLimitAndDrainedUpperLimit=0.01 # 0.25 is the CAN15 value
  fractionBetweenLowerLimitAndDrainedUpperLimit=0.25 # 0.25 is the CAN15 value
-# fractionBetweenLowerLimitAndDrainedUpperLimit=0.75 # 0.25 is the CAN15 value
-# fractionBetweenLowerLimitAndDrainedUpperLimit=0.99 # 0.25 is the CAN15 value
 
 
 
@@ -147,7 +138,6 @@ echo "   >>> using $nameOfDSSATExecutable <<<"
       incorporationDepth=5     # cm depth for incorporation of the initial crop residues
 
 
-#  clayLoamSandStableCarbonRatesFilename=${BASE}/min_StableCarbonTable.txt # lower stable fractions # file containing the fraction of stable carbon in each layer by texture
   clayLoamSandStableCarbonRatesFilename=${BASE}StableCarbonTable.txt     # the best guess # file containing the fraction of stable carbon in each layer by texture
 #  clayLoamSandStableCarbonRatesFilename=${BASE}/max_StableCarbonTable.txt # higher stable fractions# file containing the fraction of stable carbon in each layer by texture
 

@@ -1,8 +1,9 @@
 #!/bin/bash
-. default_paths_etc.sh
 region_to_use=$1
 main_control_list=$2
 crop_area_raster=$3
+
+./../more_GRASS_scripts/universal/combine_spam_datasets.sh
 
 echo "region_to_use"
 echo $region_to_use
@@ -37,9 +38,7 @@ echo $weather_mask
 #   where we don't and have a valid value where we do
 # 1.875
 # 1.25
-echo "output_file_dir"
-echo "${output_file_dir}"
-output_file=${output_file_dir}
+output_file=to_DSSAT/
  weather_mask="${crop_area_raster}@morgan_DSSAT_cat_0" ; #region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" #eegion_to_use="n=49 s=26 w=-124 e=-66 nsres=1.875 ewres=1.25" # now forcing a square resolution region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" # NOTE: region_to_use SHOULD BE SET BEFORE RUNNING THIS SCRIPT
 # output_file=to_DSSAT/D_ ; weather_mask=MAIZE_cropland@morgan_DSSAT_cat_0 ; #region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" #eegion_to_use="n=49 s=26 w=-124 e=-66 nsres=1.875 ewres=1.25" # now forcing a square resolution region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" # NOTE: region_to_use SHOULD BE SET BEFORE RUNNING THIS SCRIPT
 echo "weather_mask"
@@ -82,7 +81,7 @@ noGCMcalendar
 # the resolution of the TARGET REGION (not the original masking raster)
 
 # this is ha in a SPAM pixel needed to be considered relevant
-minimum_physical_area=100 # 0.05 # value in the masking raster to be considered relevant
+minimum_physical_area=.05 # 0.05 # value in the masking raster to be considered relevant
 
 growing_radius=0 # 0.0 # number of pixels
 
@@ -385,5 +384,6 @@ done # spam_line
   g.remove MASK
 
 done # gcm
+
 
 exit

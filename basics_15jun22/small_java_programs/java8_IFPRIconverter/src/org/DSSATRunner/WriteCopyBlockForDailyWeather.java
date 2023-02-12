@@ -20,8 +20,6 @@ public class WriteCopyBlockForDailyWeather {
         ////////////////////////////////////////////
         // handle the command line arguments...
         ////////////////////////////////////////////
-        System.out.println("echo \"AMAZING!!!!!!!!!!!!\"");
-        // System.out.println(commandLineOptions);
 
         String sourcePath       =                commandLineOptions[0];
         String destinationPath  =                commandLineOptions[1];
@@ -30,23 +28,14 @@ public class WriteCopyBlockForDailyWeather {
         
         double latitudeSpacingOfWeatherFiles  = Double.parseDouble(commandLineOptions[4]);
         double longitudeSpacingOfWeatherFiles = Double.parseDouble(commandLineOptions[5]);
-        
-        // default to .WTH for backward compatibility, but allow the option of using a different suffix
-//      String suffixToUse = ".WTH";
-//      if (commandLineOptions.length == 4) {
-//          suffixToUse = commandLineOptions[3];
-//      }
 
-
-        
-        // read in the fundamental data
-        // Beware the MAGIC NUMBER!!! gonna force these onto disk. for tiny stuff, it should run fast enough
-        // that it doesn't matter. for big stuff, we'll want disk...
         int formatIndexToForce = 1;
 //      MultiFormatMatrix dataMatrix = MatrixOperations.read2DMFMfromTextForceFormat(gisDataTablePath + "_data",formatIndexToForce);
         MultiFormatMatrix geogMatrix = MatrixOperations.read2DMFMfromTextForceFormat(gisDataTablePath + "_geog",formatIndexToForce);
 
         int nLinesInDataFile = (int)geogMatrix.getDimensions()[0];
+        System.out.println("# nLinesInDataFile");
+        System.out.println("# "+nLinesInDataFile);
 //      double idNumber = -1; // this will be the pixel-specific id number...
         String fullSourceName = null;
 

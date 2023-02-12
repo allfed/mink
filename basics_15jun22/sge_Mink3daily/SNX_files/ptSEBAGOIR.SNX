@@ -59,7 +59,7 @@ ___place fertilizers here___
 @N METHODS     WTHER INCON LIGHT EVAPO INFIL PHOTO HYDRO NSWIT MESOM MESEV MESOL
  1 ME              G     M     E     R     S     C     R     1     P     S     2
 @N MANAGEMENT  PLANT IRRIG FERTI RESID HARVS
- 1 MA              R     N     D     N     D
+ 1 MA              R     A     D     N     D
 @N OUTPUTS     FNAME OVVEW SUMRY FROPT GROUT CAOUT WAOUT NIOUT MIOUT DIOUT  LONG CHOUT OPOUT
  1 OU              N     N     Y     1     N     N     N     N     N     N     N     N     N
 @  AUTOMATIC MANAGEMENT

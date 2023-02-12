@@ -1,0 +1,6 @@
+crop,moisture_content_percent_mass,source
+potatoes,79,https://harvesttotable.com/watering_and_water_content_of/
+wheat,13.5,https://www.cfd.coop/go/doc/f/CMDT_Grain_moisture_conversions_to_standard_weights.pdf
+soybean,13,https://www.cfd.coop/go/doc/f/CMDT_Grain_moisture_conversions_to_standard_weights.pdf
+maize,15.5,https://www.cfd.coop/go/doc/f/CMDT_Grain_moisture_conversions_to_standard_weights.pdf
+rapeseed,10,https://www.dekalbasgrowdeltapine.com/en-us/agronomy/canola-harvest-management.html

@@ -16,12 +16,10 @@
 # in anything else at all, you should use the other read_DSSAT45_...sh script
 
 if [ $# -lt 1 ]; then
-  echo "Usage: $0 prefix_to_import input_magic_code"
+  echo "Usage: $0 file_to_process"
   echo ""
-  echo "This will import only those DSSAT outputs that begin with the stated prefix."
-  echo "For all files in the data directory, use \"\" (empty string)"
+  echo "This will import only those DSSAT outputs with the \"file_to_process\" name."
   echo ""
-  echo "magic_code is the input file prefix for this set (used for looking for the corresponding geography files.)"
   echo ""
   exit 1
 fi
@@ -58,11 +56,12 @@ fi
 . default_paths_etc.sh
 
 # rename the command line arguments
-            prefix=$1
-  geog_correct_base=$2
+file_to_process=$1
+geog_correct_base=$2
+# output_file_dir=$3
 
-
-
+echo "file_to_process"
+echo $file_to_process
 
 
 
@@ -78,8 +77,14 @@ name_patterns_to_keep=\
 ^real_6$
 ^real_7$
 ^real_8$
-^real_9$
-^real_10$
+^happy_1$
+^happy_2$
+^happy_3$
+^happy_4$
+^happy_5$
+^happy_6$
+^happy_7$
+^happy_8$
 ^real_.$
 ^real_..$
 ^yield_mean$
@@ -158,9 +163,8 @@ sleeptime=0.0 # this is in seconds; a decent place to start is 0.4
 # we can find the right geographic information to reconstruct the maps
 #
 # we also need to know which directory the results are in
-inputs_directory=$output_file_dir
-# inputs_directory=to_DSSAT/
-#        yield_dir=chunks_to_GRASS/
+output_file_dir=to_DSSAT/
+       yield_dir=chunks_to_GRASS/
 #       yield_dir=from_DSSAT_daily/
 
 echo "!!! pulling from directory: $yield_dir !!!"
@@ -193,113 +197,106 @@ echo -e "\n\n\n\n\n"
 sleep 1
 
 # get a list of the files that we are interested in importing
-file_list=`ls ${yield_dir}${prefix}*${DSSAT_result_suffix}`
-echo $file_list
+Y_file_full=${yield_dir}${file_to_process}
 # we will now go through the list of files and import them one at a time
-for Y_file_full in $file_list
-do
 
+# do the brief pause and do a status message
+echo ""
+echo "       ... sleeping $sleeptime ..."
+sleep $sleeptime
+echo "Yff = [$Y_file_full]"
 
-  # do the brief pause and do a status message
-  echo ""
-  echo "       ... sleeping $sleeptime ..."
-  sleep $sleeptime
-  echo "Yff = [$Y_file_full]"
+# extract out the base name by getting rid of the directories and the DSSAT runner suffix
+base_file_name=`basename $Y_file_full ${DSSAT_result_suffix}`
 
-  # extract out the base name by getting rid of the directories and the DSSAT runner suffix
-  base_file_name=`basename $Y_file_full ${DSSAT_result_suffix}`
-
-  # build up the name of the geography file
+# build up the name of the geography file
 #  geog_correct_base=${base_file_name#$magic_code} # first strip off the magic code from the DSSAT runner
 #  geog_correct_base=${geog_correct_base:$magic_offset} # now do the offset thing to get rid of the other pieces
-  
-  
-  # DMR removing this and hardcoding it
-  # geog_correct_base=$input_magic_code${base_file_name#*$input_magic_code} # first strip off the magic code from the DSSAT runner
-  # another status check to help figure out when things go wrong
-  echo "bfn = [$base_file_name] ; gcb = [$geog_correct_base]"
+
+
+# DMR removing this and hardcoding it
+# geog_correct_base=$input_magic_code${base_file_name#*$input_magic_code} # first strip off the magic code from the DSSAT runner
+# another status check to help figure out when things go wrong
+echo "bfn = [$base_file_name] ; gcb = [$geog_correct_base]"
 
 
 
-  ##### prepare the geography
-      # grab the geog data (for later use); lat then longitude
-      echo "cut -f3,4 ${inputs_directory}${geog_correct_base}_geog.txt > deleteme_latitude_longitude_${quasi_random_code}.txt"
-      cut -f3,4 ${inputs_directory}${geog_correct_base}_geog.txt > deleteme_latitude_longitude_${quasi_random_code}.txt
+##### prepare the geography
+    # grab the geog data (for later use); lat then longitude
+    echo "cut -f3,4 ${output_file_dir}${geog_correct_base}_geog.txt > deleteme_latitude_longitude_${quasi_random_code}.txt"
+    cut -f3,4 ${output_file_dir}${geog_correct_base}_geog.txt > deleteme_latitude_longitude_${quasi_random_code}.txt
 
-  # ok, now, let's read the cols file and match up indices with names...
+# ok, now, let's read the cols file and match up indices with names...
 
-  column_list=`cat ${yield_dir}${base_file_name}${clean_suffix}.cols.txt | tr "\t" "\n"`
-  n_columns=`echo "$column_list" | wc -l`
+column_list=`cat ${yield_dir}${base_file_name}${clean_suffix}.cols.txt | tr "\t" "\n"`
+n_columns=`echo "$column_list" | wc -l`
 
-  # here is the dangerous magic to try to bail out once we have all the ones we want
-  n_patterns=`echo "$name_patterns_to_keep" | grep -v "^$" | wc -l`
+# here is the dangerous magic to try to bail out once we have all the ones we want
+n_patterns=`echo "$name_patterns_to_keep" | grep -v "^$" | wc -l`
 
-  # initialize a counter
-  n_patterns_found_so_far=0
+# initialize a counter
+n_patterns_found_so_far=0
 
-  # rename all of them
-  for (( column_index=0 ; column_index < n_columns ; column_index++ )); do
+# rename all of them
+for (( column_index=0 ; column_index < n_columns ; column_index++ )); do
 
-    if [ $n_patterns_found_so_far -eq $n_patterns ]; then
-      # we have found as many as we were looking for, so break out
-      echo "<found $n_patterns_found_so_far, so breaking (beware of wildcards)>"
-      break
+  if [ $n_patterns_found_so_far -eq $n_patterns ]; then
+    # we have found as many as we were looking for, so break out
+    echo "<found $n_patterns_found_so_far, so breaking (beware of wildcards)>"
+    break
+  fi
+
+  let "column_number = column_index + 1"
+
+  this_column_name=`echo "$column_list" | sed -n "${column_number}p"`
+
+  # check if we want it
+  keep_this=no
+  for name_pattern in $name_patterns_to_keep; do
+    keep_test=`echo "$this_column_name" | grep "$name_pattern"`
+    # echo "keep_test"
+    # echo $keep_test
+    if [ -n "$keep_test" ]; then
+      # we seem to have found something, so break out
+      keep_this=yes
+      break;
     fi
-
-    let "column_number = column_index + 1"
-
-    this_column_name=`echo "$column_list" | sed -n "${column_number}p"`
-
-    # check if we want it
-    keep_this=no
-    for name_pattern in $name_patterns_to_keep; do
-      keep_test=`echo "$this_column_name" | grep "$name_pattern"`
-      # echo "keep_test"
-      # echo $keep_test
-      if [ -n "$keep_test" ]; then
-        # we seem to have found something, so break out
-        keep_this=yes
-        break;
-      fi
-      
-    done
     
-   clean_column_name=`echo "$this_column_name" | sed "s/#/n/g"`
+  done
+  
+ clean_column_name=`echo "$this_column_name" | sed "s/#/n/g"`
 
-    if [ $keep_this = yes ]; then
-      echo -n "[$clean_column_name]"
-      let "n_patterns_found_so_far++"
+  if [ $keep_this = yes ]; then
+    echo -n "[$clean_column_name]"
+    let "n_patterns_found_so_far++"
 
-    # ok, my plan is to extract just the column we care about, along with the latitude and longitude
-      # grab the data
-      
-      cut -f${column_number} ${yield_dir}${base_file_name}${clean_suffix}.txt > deleteme_single_column_of_data_${quasi_random_code}.txt
-      paste deleteme_latitude_longitude_${quasi_random_code}.txt deleteme_single_column_of_data_${quasi_random_code}.txt > deleteme_full_thing_for_import_${quasi_random_code}.txt
-      # exitl
-      r.in.xyz input=deleteme_full_thing_for_import_${quasi_random_code}.txt output=${base_file_name}_${clean_column_name} x=2 y=1 z=3 fs=tab --o --q
-
-
-
-      # contemplate renaming here....
-      yield_test=`echo "$clean_column_name" | grep yield`
-      gro_test=`echo "$clean_column_name" | grep _gro_`
-      day_test=`echo "$clean_column_name" | grep shift_in_days`
+  # ok, my plan is to extract just the column we care about, along with the latitude and longitude
+    # grab the data
+    
+    cut -f${column_number} ${yield_dir}${base_file_name}${clean_suffix}.txt > deleteme_single_column_of_data_${quasi_random_code}.txt
+    paste deleteme_latitude_longitude_${quasi_random_code}.txt deleteme_single_column_of_data_${quasi_random_code}.txt > deleteme_full_thing_for_import_${quasi_random_code}.txt
+    # exitl
+    r.in.xyz input=deleteme_full_thing_for_import_${quasi_random_code}.txt output=${base_file_name}_${clean_column_name} x=2 y=1 z=3 fs=tab --o --q
 
 
-      # put the yield and growth stage stresses together since they both use ./zero_to_black.sh
-      if [ -n "${yield_test}" ]; then
-        echo ""
-        ./zero_to_black.sh ${base_file_name}_${clean_column_name} 2>&1 | grep -v olor | grep -v set | grep -v "$yield_test"
-      fi
-    else
-      echo -n "."
-     # g.remove rast=${base_file_name}_${clean_column_name} --q
+
+    # contemplate renaming here....
+    yield_test=`echo "$clean_column_name" | grep yield`
+    gro_test=`echo "$clean_column_name" | grep _gro_`
+    day_test=`echo "$clean_column_name" | grep shift_in_days`
+
+
+    # put the yield and growth stage stresses together since they both use ./zero_to_black.sh
+    if [ -n "${yield_test}" ]; then
+      echo ""
+      ./zero_to_black.sh ${base_file_name}_${clean_column_name} 2>&1 | grep -v olor | grep -v set | grep -v "$yield_test"
     fi
+  else
+    echo -n "."
+   # g.remove rast=${base_file_name}_${clean_column_name} --q
+  fi
 
-  done # col_index; importing
-
-
-done # file name loop
+done # col_index; importing
 
 
 rm deleteme_latitude_longitude_${quasi_random_code}.txt deleteme_single_column_of_data_${quasi_random_code}.txt deleteme_full_thing_for_import_${quasi_random_code}.txt

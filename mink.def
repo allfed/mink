@@ -77,9 +77,8 @@ export LD_LIBRARY_PATH="$GISBASE/lib"
 export GRASS_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
 export PYTHONPATH="$GISBASE/etc/python:$PYTHONPATH"
 export MANPATH=$MANPATH:$GISBASE/man
+export JAVA_HOME=/usr/bin/java
 
-# test a command
-g.list rast
 
 %post
     mkdir /mnt/data
@@ -102,6 +101,10 @@ g.list rast
 
     yum -y install ImageMagick
     sudo yum install -y java-11-openjdk-devel
+
+    curl -L https://services.gradle.org/distributions/gradle-5.0-bin.zip > /tmp/gradle-5.0-bin.zip
+    unzip -d /opt/gradle /tmp/gradle-5.0-bin.zip
+
 
     ## build GRASS
     cd /build/grass_program
