@@ -1,9 +1,7 @@
 #!/bin/bash
 
-# This script aims to map the wheat varieties with the geographical regions using
+# This script aims to map the maize varieties with the geographical regions using
 # mega-environment masks as the relation
-
-# It primarily performs calculations for different geographical regions, represented by SNX, and their respective environments, iterating over the combinations and adjusting the yield calculations based on the mask of non-null areas. After each iteration, the script performs an average yield calculation. Finally, it removes the temporary count raster.
 
 # Set IFS to newline for proper list handling
 IFS="

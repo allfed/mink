@@ -5,6 +5,9 @@
 
 set -e # exit if a command fails
 
+export GRASS_VERBOSE=0
+
+
 time_start=$SECONDS
 . basics_15jun22/sge_Mink3daily/default_paths_etc.sh
 . basics_15jun22/sge_Mink3daily/some_settings_46.sh

@@ -71,6 +71,10 @@ export PYTHONPATH="$GISBASE/etc/python:$PYTHONPATH"
 export MANPATH=$MANPATH:$GISBASE/man
 
 export JAVA_HOME=$(dirname $(dirname $(which java)))
+
+# grass doesn't show loading bars on the mapcalc
+export GRASS_VERBOSE=0
+
 #export JAVA_HOME="/usr/bin/java"
 
 # test a command

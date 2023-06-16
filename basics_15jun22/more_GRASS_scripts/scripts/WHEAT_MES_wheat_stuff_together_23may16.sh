@@ -6,6 +6,24 @@
 # should do the trick, so here we go....
 
 
+# This primarily performs calculations for different geographical regions, represented by SNX, and their respective environments, iterating over the combinations and adjusting the yield calculations based on the mask of non-null areas. After each iteration, the script performs an average yield calculation. Finally, it removes the temporary count raster.
+# finally, it assigns the appropriate max or mean value to the raster name: output_prefix concatednated with average_rast. This raster is used in analysis (DMR)
+
+# 1. The Max Loop vs Mean Loop
+
+# The `mean loop` calculates an average yield across different environments for the spring and winter wheat varieties separately. It uses every "snx_me_line" in the "snx_me_list" and creates a raster for each wheat variety that represents the yield in the respective environment (spring or winter). This yield value is then added to a total yield raster ("yield_rast") and the count of valid yields in "count_rast". The mean yield is then calculated by dividing the total yield raster by the count raster.
+
+# The `max loop`, however, is trying to find the maximum yield for each "snx_me_line" in the "snx_me_list" across all environments (irrespective of it being a spring or winter wheat environment). For each raster ("this_yield"), the algorithm 
+#     1 checks if the yield is higher than the current max yield ("yield_rast")
+#     2 if it is, it replaces the current max yield with this yield and stores the corresponding environment identifier in the "winning_rast". 
+# This loop is used to determine which wheat variety yields the maximum under a given set of environmental conditions.
+
+# 2. Difference between Winter Wheat and Spring Wheat in the Analysis
+
+# The script also takes into account that some countries are winter wheat dominant. In these cases, it uses the highest yielding variety (calculated in the max loop) instead of the overall average of relevant varieties for these countries.
+
+
+
 # now we also need to be able to handle different stuff for winter wheat planting months
 
 # reset the IFS to lines
@@ -56,37 +74,37 @@ winter_run_list=\
 # var / mask / spring or winter string
 original_snx_me_list=\
 "
-whC001	fortyfivemin_me1irri@mega_environments	spring
-whC002	fortyfivemin_me1irri@mega_environments	spring
+whC001  fortyfivemin_me1irri@mega_environments  spring
+whC002  fortyfivemin_me1irri@mega_environments  spring
 
-whC003	fortyfivemin_me2a@mega_environments	spring
-whC004	fortyfivemin_me2b@mega_environments	spring
+whC003  fortyfivemin_me2a@mega_environments spring
+whC004  fortyfivemin_me2b@mega_environments spring
 
-whC005	fortyfivemin_me3@mega_environments	spring
+whC005  fortyfivemin_me3@mega_environments  spring
 
-whC006	fortyfivemin_me4@mega_environments	spring
-whC006	fortyfivemin_me9@mega_environments	spring
+whC006  fortyfivemin_me4@mega_environments  spring
+whC006  fortyfivemin_me9@mega_environments  spring
 
-whC007	fortyfivemin_me4@mega_environments	spring
-whC008	fortyfivemin_me4@mega_environments	spring
+whC007  fortyfivemin_me4@mega_environments  spring
+whC008  fortyfivemin_me4@mega_environments  spring
 
-whC009	fortyfivemin_me5@mega_environments	spring
-whC010	fortyfivemin_me5@mega_environments	spring
+whC009  fortyfivemin_me5@mega_environments  spring
+whC010  fortyfivemin_me5@mega_environments  spring
 
-whC011	fortyfivemin_me6@mega_environments	spring
+whC011  fortyfivemin_me6@mega_environments  spring
 
-whC012	fortyfivemin_me7@mega_environments	spring
+whC012  fortyfivemin_me7@mega_environments  spring
 
-whC013	fortyfivemin_me8@mega_environments	spring
-whC014	fortyfivemin_me8@mega_environments	spring
+whC013  fortyfivemin_me8@mega_environments  spring
+whC014  fortyfivemin_me8@mega_environments  spring
 
-whC015	fortyfivemin_me10@mega_environments	winter
-whC016	fortyfivemin_me10@mega_environments	winter
+whC015  fortyfivemin_me10@mega_environments winter
+whC016  fortyfivemin_me10@mega_environments winter
 
-whC017	fortyfivemin_me11@mega_environments	winter
-whC018	fortyfivemin_me11@mega_environments	winter
+whC017  fortyfivemin_me11@mega_environments winter
+whC018  fortyfivemin_me11@mega_environments winter
 
-whC019	fortyfivemin_me12@mega_environments	winter
+whC019  fortyfivemin_me12@mega_environments winter
 "
 
 
@@ -107,36 +125,36 @@ output_tag=GEObslMEAN
 
 snx_me_list=\
 "
-whK002	simplegrownspamres_ME_me1irri@mega_environments	spring
-whK001	simplegrownspamres_ME_me1irri@mega_environments	spring
+whK002  simplegrownspamres_ME_me1irri@mega_environments spring
+whK001  simplegrownspamres_ME_me1irri@mega_environments spring
 
-whK002	simplegrownspamres_ME_me2a@mega_environments	spring
-whK002	simplegrownspamres_ME_me2b@mega_environments	spring
-whK002	simplegrownspamres_ME_meALLELSE@mega_environments	spring
+whK002  simplegrownspamres_ME_me2a@mega_environments  spring
+whK002  simplegrownspamres_ME_me2b@mega_environments  spring
+whK002  simplegrownspamres_ME_meALLELSE@mega_environments spring
 
-whK002	simplegrownspamres_ME_me3@mega_environments	spring
+whK002  simplegrownspamres_ME_me3@mega_environments spring
 
-whK006	simplegrownspamres_ME_me4@mega_environments	spring
+whK006  simplegrownspamres_ME_me4@mega_environments spring
 
-whK007	simplegrownspamres_ME_me4@mega_environments	spring
+whK007  simplegrownspamres_ME_me4@mega_environments spring
 
-whK009	simplegrownspamres_ME_me5@mega_environments	spring
-whK010	simplegrownspamres_ME_me5@mega_environments	spring
+whK009  simplegrownspamres_ME_me5@mega_environments spring
+whK010  simplegrownspamres_ME_me5@mega_environments spring
 
-whK011	simplegrownspamres_ME_me6_ugly_fix@mega_environments	spring
+whK011  simplegrownspamres_ME_me6_ugly_fix@mega_environments  spring
 
-whK012	simplegrownspamres_ME_me7@mega_environments	spring
+whK012  simplegrownspamres_ME_me7@mega_environments spring
 
-whK013	simplegrownspamres_ME_me8_ugly_fix@mega_environments	spring
-whK012	simplegrownspamres_ME_me8_ugly_fix@mega_environments	spring
+whK013  simplegrownspamres_ME_me8_ugly_fix@mega_environments  spring
+whK012  simplegrownspamres_ME_me8_ugly_fix@mega_environments  spring
 
-whK015	simplegrownspamres_ME_me9@mega_environments	spring
+whK015  simplegrownspamres_ME_me9@mega_environments spring
 
-whK016	simplegrownspamres_ME_me10@mega_environments	winter
+whK016  simplegrownspamres_ME_me10@mega_environments  winter
 
-whK076	simplegrownspamres_ME_me11_ugly_fix@mega_environments	winter
+whK076  simplegrownspamres_ME_me11_ugly_fix@mega_environments winter
 
-whK016	simplegrownspamres_ME_me12@mega_environments	winter
+whK016  simplegrownspamres_ME_me12@mega_environments  winter
 "
 
 # adapting for the simple model...
@@ -147,35 +165,35 @@ whK016	simplegrownspamres_ME_me12@mega_environments	winter
 # coverage (01feb16); these are the old ones
 old_snx_me_list=\
 "
-whK001	spamres_me1irri@mega_environments	spring
-whK002	spamres_me1irri@mega_environments	spring
+whK001  spamres_me1irri@mega_environments spring
+whK002  spamres_me1irri@mega_environments spring
 
-whK002	spamres_me2a@mega_environments	spring
-whK002	spamres_me2b@mega_environments	spring
+whK002  spamres_me2a@mega_environments  spring
+whK002  spamres_me2b@mega_environments  spring
 
-whK002	spamres_me3@mega_environments	spring
+whK002  spamres_me3@mega_environments spring
 
-whK006	spamres_me4@mega_environments	spring
+whK006  spamres_me4@mega_environments spring
 
-whK007	spamres_me4@mega_environments	spring
+whK007  spamres_me4@mega_environments spring
 
-whK009	spamres_me5@mega_environments	spring
-whK010	spamres_me5@mega_environments	spring
+whK009  spamres_me5@mega_environments spring
+whK010  spamres_me5@mega_environments spring
 
-whK011	spamres_me6_ugly_fix@mega_environments	spring
+whK011  spamres_me6_ugly_fix@mega_environments  spring
 
-whK012	spamres_me7@mega_environments	spring
+whK012  spamres_me7@mega_environments spring
 
-whK013	spamres_me8_ugly_fix@mega_environments	spring
-whK012	spamres_me8_ugly_fix@mega_environments	spring
+whK013  spamres_me8_ugly_fix@mega_environments  spring
+whK012  spamres_me8_ugly_fix@mega_environments  spring
 
-whK015	spamres_me9@mega_environments	spring
+whK015  spamres_me9@mega_environments spring
 
-whK016	spamres_me10@mega_environments	winter
+whK016  spamres_me10@mega_environments  winter
 
-whK076	spamres_me11_ugly_fix@mega_environments	winter
+whK076  spamres_me11_ugly_fix@mega_environments winter
 
-whK016	spamres_me12@mega_environments	winter
+whK016  spamres_me12@mega_environments  winter
 "
 
 fi
@@ -271,7 +289,7 @@ for (( line_num=1 ; line_num <= $n_cases ; line_num++ )); do
 
       r.mapcalc deleteme_this_contribution = "(1 - isnull($this_mask)) * if(isnull($this_yield),0,$this_yield)" 2>&1 | grep -v "%"
 
-#      echo "$this_snx	$this_sw	$this_mask	$this_yield"
+#      echo "$this_snx  $this_sw  $this_mask  $this_yield"
 #      quick_display.sh deleteme_this_contribution
 
 #      sleep 1.5s
@@ -458,6 +476,7 @@ make_country_mask.sh "$winter_wheat_dominant_countries" $first_average deleteme_
 # and reset the region again
 g.region rast=$first_average
 
+# finally, assign the appropriate max or mean value to the raster name: output_prefix concatednated with average_rast. This raster is used in analysis (DMR)
 for (( line_number=1 ; line_number <= n_averages ; line_number++ )); do
 
   average_rast=`echo "$clean_average_list" | sed -n "${line_number}p"`

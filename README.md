@@ -108,17 +108,8 @@ TODO: add more details and a toy dataset?
 If this file doesn't exist, the dedicated location may be stored in the `$XAUTHORITY` variable and `-B $XAUTHORITY` must be used instead ([reference](https://pawseysc.github.io/singularity-containers/42-x11-gnuplot/index.html)).
 
 ## Java implementation of run_from_csv.sh
-running the code:
 
-Take a look at the scenarios/ directory. It contains a config file specifying many DSSAT running and post-processing analysis parameters to allow for custom runs.
-
-Once the config is to your liking, run:
-```
-$./generate_scenarios_csv.sh
-$./run_from_csv.sh both
-```
-
-This script then runs through a set of scenarios found in scenarios.csv. It follows the following procedure:
+This script then runs through a set of scenarios found in `basics_15jun22/sge_Mink3daily/scenarios`. It follows the following procedure:
 
 It first calls the java Scenarios function "main()" in basics_15jun22/small_java_programs/java8_IFPRIconverter/src/org/Scenarios.java. This first imports the csv into java string arrays. It then initializes using "basics_15jun22/sge_Mink3daily/build_dailystyle_NOCLIMATE_for_DSSAT_05jun14.sh". This is responsible for loading several initial parameters for the crop model run and setting the region. Next it calculates the yield in the region specified in scenarios.csv by running the basics_15jun22/sge_Mink3daily/mink3daily_run_DSSAT_tile.sh (which is what runs DSSAT itself for each grid cell specified in the region in the scenarios.csv file). This is run over a period of several years.
 

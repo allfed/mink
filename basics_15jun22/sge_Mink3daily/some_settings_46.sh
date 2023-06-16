@@ -159,4 +159,5 @@ testIntervalToUse=100 # milliseconds
 
 
 
-
+# shuts up mapcalc
+ export GRASS_VERBOSE=0

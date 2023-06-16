@@ -10,6 +10,10 @@ public class GenerateScenarios {
 
   public static void main(String[] args)
       throws InterruptedException, FileNotFoundException, IOException {
+        System.out.println("");
+        System.out.println("running GenerateScenarios.java ");
+        System.out.println("");
+
         System.out.println("script_folder: ");
         System.out.println(args[0]);
         System.out.println("");
@@ -36,6 +40,10 @@ public class GenerateScenarios {
         
         Config config = Config.importConfigCSV(config_file);
         generateScenariosCSV(script_folder,config, simulation_csv_location,default_cultivar_mappings_location);
+        System.out.println("");
+        System.out.println("done running GenerateScenarios.java ");
+        System.out.println("");
+
     }
   
   public static void generateScenariosCSV(String script_folder,Config config, String simulation_csv_location, String default_cultivar_mappings_location) throws InterruptedException, IOException {

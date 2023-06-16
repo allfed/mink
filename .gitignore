@@ -21,6 +21,10 @@ basics_15jun22/sge_Mink3daily/to_DSSAT/
 # Java compiled objectsu
 *.class
 
+
+# Ascii files 
+*.asc
+
 # Byte-compiled / optimied / DLL files
 __pycache__/
 *.py[cod]
