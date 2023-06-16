@@ -18,7 +18,7 @@
 
 
 
-echo "   >>> using $nameOfDSSATExecutable <<<"
+# echo "   >>> using $nameOfDSSATExecutable <<<"
 
 
       nameOfWeatherExecutable=weather_generator_standalone

@@ -22,15 +22,16 @@ if [ -z "$mapset_test" ]; then
   mapset_only=`g.gisenv get=MAPSET`
 fi
 
-g.mlist rast mapset=$mapset_only pattern="$raster_only"
+g.mlist rast mapset=$mapset_only pattern="$raster_only" 
 
 raster_exists=`g.mlist rast mapset=$mapset_only pattern="$raster_only"`
-echo "raster_exists"
-echo $raster_exists
+# echo "raster_exists"
+# echo $raster_exists
 # #echo "RO = [$raster_only] MO = [$mapset_only] MT = [$mapset_test] RE = [$raster_exists]"
 
+# echo $raster
 if [ -n "$raster_exists" ]; then
-echo $raster
+# echo $raster
 
   #g.region raster=$raster -p
   
@@ -40,24 +41,33 @@ echo $raster
     max=$max_value
   fi
  
-  min=`r.univar -g map=$raster | grep min | awk -F "=" '{print $2}'`
+# NOTE: might want to go back to the old way which actually prints things out
+  min=$(r.univar -g map=$raster | grep min | awk -F "=" '{print $2}')
+  # min=`r.univar -g map=$raster | grep min | awk -F "=" '{print $2}'`
 
-  echo " min and max of all cells"
-  echo $min
-  echo $max
+  # echo " min and max of all cells"
+  # echo $min
+  # echo $max
 
-  d.erase
-  d.rast $raster vallist=$min-$max 
-echo "colors"
+  # Check if either min or max is empty
+  if [ -z "$min" ] || [ -z "$max" ]; then
+    echo "Min or max value is empty. Exiting..."
+    exit 0
+  fi
+
+  d.erase --quiet
+  d.rast $raster vallist=$min-$max --quiet #2>&1 | grep -v "PNG"
+
+# echo "colors"
 
 #r.colors map=$raster color=bcyr
 
-echo "done colors"
+# echo "done colors"
   cp ../../../grass6out.png ../../../$save_loc/bg.png
   if [ -n "$vector" ]; then
-    d.vect $vector type=boundary color=black
+    d.vect $vector type=boundary color=black --quiet
   fi
-  d.vect cntry05 type=boundary bgcolor=none
+  d.vect cntry05 type=boundary bgcolor=none --quiet #| grep -v "PNG"
   cp ../../../grass6out.png ../../../$save_loc/vect.png
 
   # first change since feb 4, 2011 (30sep15)
@@ -75,7 +85,7 @@ echo "done colors"
     fi
   else
     # not a categorical map
-      eval d.legend map=$raster range=$min,$max at=1,50,2,5
+      eval d.legend map=$raster range=$min,$max at=1,50,2,5 --quiet
       #eval d.legend map=$raster at=1,50,2,5
   fi
 
@@ -84,13 +94,13 @@ echo \
 ".C black
 .S 2.0
 $1" \
-| d.text at=98,95 align=lr
+| d.text at=98,95 align=lr --quiet
 cp ../../../grass6out.png ../../../$save_loc/text.png
 
-convert -composite -gravity center ../../../$save_loc/text.png ../../../$save_loc/bg.png ../../../$save_loc/resulttmp1.png
-convert -composite -gravity center ../../../$save_loc/resulttmp1.png ../../../$save_loc/legend.png ../../../$save_loc/resulttmp2.png
-convert -composite -gravity center ../../../$save_loc/resulttmp2.png ../../../$save_loc/vect.png ../../../$save_loc/resulttmp3.png
-convert ../../../$save_loc/resulttmp3.png -background white -flatten ../../../$save_loc/$raster.png
+convert -composite -gravity center ../../../$save_loc/text.png ../../../$save_loc/bg.png ../../../$save_loc/resulttmp1.png | grep -v "PNG"
+convert -composite -gravity center ../../../$save_loc/resulttmp1.png ../../../$save_loc/legend.png ../../../$save_loc/resulttmp2.png | grep -v "PNG"
+convert -composite -gravity center ../../../$save_loc/resulttmp2.png ../../../$save_loc/vect.png ../../../$save_loc/resulttmp3.png | grep -v "PNG"
+convert ../../../$save_loc/resulttmp3.png -background white -flatten ../../../$save_loc/$raster.png | grep -v "PNG"
 rm ../../../$save_loc/legend.png
 rm ../../../$save_loc/bg.png
 rm ../../../$save_loc/text.png

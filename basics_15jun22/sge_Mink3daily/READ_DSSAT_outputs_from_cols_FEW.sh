@@ -24,6 +24,9 @@ if [ $# -lt 1 ]; then
   exit 1
 fi
 
+echo ""
+echo "running READ_DSSAT_outputs script"
+echo ""
 
 
 
@@ -60,8 +63,8 @@ file_to_process=$1
 geog_correct_base=$2
 # output_file_dir=$3
 
-echo "file_to_process"
-echo $file_to_process
+# echo "file_to_process"
+# echo $file_to_process
 
 
 
@@ -167,7 +170,7 @@ output_file_dir=to_DSSAT/
        yield_dir=chunks_to_GRASS/
 #       yield_dir=from_DSSAT_daily/
 
-echo "!!! pulling from directory: $yield_dir !!!"
+# echo "!!! pulling from directory: $yield_dir !!!"
 
 # make a quasirandom code so we can parallelize
 quasi_random_code="${RANDOM}_`date +%N`"
@@ -191,9 +194,9 @@ clean_suffix=${DSSAT_result_suffix%%.txt} # we now strip off the .txt portion fo
 # remind ourselves that a small wait is being employed; we are also putting some
 # white space above and below so that it doesn't get lost amongst everything
 # else going to the screen. the sleep immediately following also helps in that regard.
-echo -e "\n\n\n\n\n"
-echo "using sleep time of [$sleeptime]"
-echo -e "\n\n\n\n\n"
+# echo -e "\n\n\n\n\n"
+# echo "using sleep time of [$sleeptime]"
+# echo -e "\n\n\n\n\n"
 sleep 1
 
 # get a list of the files that we are interested in importing
@@ -201,10 +204,10 @@ Y_file_full=${yield_dir}${file_to_process}
 # we will now go through the list of files and import them one at a time
 
 # do the brief pause and do a status message
-echo ""
-echo "       ... sleeping $sleeptime ..."
-sleep $sleeptime
-echo "Yff = [$Y_file_full]"
+# echo ""
+# echo "       ... sleeping $sleeptime ..."
+# sleep $sleeptime
+# echo "Yff = [$Y_file_full]"
 
 # extract out the base name by getting rid of the directories and the DSSAT runner suffix
 base_file_name=`basename $Y_file_full ${DSSAT_result_suffix}`
@@ -217,16 +220,14 @@ base_file_name=`basename $Y_file_full ${DSSAT_result_suffix}`
 # DMR removing this and hardcoding it
 # geog_correct_base=$input_magic_code${base_file_name#*$input_magic_code} # first strip off the magic code from the DSSAT runner
 # another status check to help figure out when things go wrong
-echo "bfn = [$base_file_name] ; gcb = [$geog_correct_base]"
+# echo "bfn = [$base_file_name] ; gcb = [$geog_correct_base]"
 
 
 
 ##### prepare the geography
     # grab the geog data (for later use); lat then longitude
-    echo "cut -f3,4 ${output_file_dir}${geog_correct_base}_geog.txt > deleteme_latitude_longitude_${quasi_random_code}.txt"
+    # echo "cut -f3,4 ${output_file_dir}${geog_correct_base}_geog.txt > deleteme_latitude_longitude_${quasi_random_code}.txt"
     cut -f3,4 ${output_file_dir}${geog_correct_base}_geog.txt > deleteme_latitude_longitude_${quasi_random_code}.txt
-
-# ok, now, let's read the cols file and match up indices with names...
 
 column_list=`cat ${yield_dir}${base_file_name}${clean_suffix}.cols.txt | tr "\t" "\n"`
 n_columns=`echo "$column_list" | wc -l`
@@ -267,15 +268,25 @@ for (( column_index=0 ; column_index < n_columns ; column_index++ )); do
  clean_column_name=`echo "$this_column_name" | sed "s/#/n/g"`
 
   if [ $keep_this = yes ]; then
-    echo -n "[$clean_column_name]"
+    # echo -n "[$clean_column_name]"
     let "n_patterns_found_so_far++"
 
   # ok, my plan is to extract just the column we care about, along with the latitude and longitude
     # grab the data
-    
+
+    # # in the case that there are no columns, we need to generate a null filled raster
+    if [ ! -e ${yield_dir}${base_file_name}${clean_suffix}.txt ]; then
+      echo ""
+      echo "no columns file found for [$base_file_name] setting raster to all null values"
+      echo ""
+      r.mapcalc "${base_file_name}_${clean_column_name} = null()"
+      continue
+    fi
+
+
     cut -f${column_number} ${yield_dir}${base_file_name}${clean_suffix}.txt > deleteme_single_column_of_data_${quasi_random_code}.txt
     paste deleteme_latitude_longitude_${quasi_random_code}.txt deleteme_single_column_of_data_${quasi_random_code}.txt > deleteme_full_thing_for_import_${quasi_random_code}.txt
-    # exitl
+
     r.in.xyz input=deleteme_full_thing_for_import_${quasi_random_code}.txt output=${base_file_name}_${clean_column_name} x=2 y=1 z=3 fs=tab --o --q
 
 
@@ -291,14 +302,16 @@ for (( column_index=0 ; column_index < n_columns ; column_index++ )); do
       echo ""
       ./zero_to_black.sh ${base_file_name}_${clean_column_name} 2>&1 | grep -v olor | grep -v set | grep -v "$yield_test"
     fi
-  else
-    echo -n "."
+    # echo -n "."
    # g.remove rast=${base_file_name}_${clean_column_name} --q
   fi
 
 done # col_index; importing
 
 
-rm deleteme_latitude_longitude_${quasi_random_code}.txt deleteme_single_column_of_data_${quasi_random_code}.txt deleteme_full_thing_for_import_${quasi_random_code}.txt
+rm -f deleteme_latitude_longitude_${quasi_random_code}.txt deleteme_single_column_of_data_${quasi_random_code}.txt deleteme_full_thing_for_import_${quasi_random_code}.txt
 
 
+echo ""
+echo "done running READ_DSSAT_outputs script"
+echo ""

@@ -171,7 +171,7 @@ top_check=`echo "if( $temp_max > $max ) {1} else {0}" | bc`
 
 if [ $top_check = 1 ]; then
 color_string="${color_string}
-$temp_max	`echo "$color_list" | tail -n 1`"
+$temp_max `echo "$color_list" | tail -n 1`"
 fi
 
 
@@ -179,5 +179,5 @@ fi
 
 #echo "[$color_string]"
 #echo "temp_max = $temp_max ; functional max = $max"
-echo "$color_string" | r.colors $raster color=rules
+# echo "$color_string" | r.colors $raster color=rules
 

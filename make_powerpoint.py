@@ -6,6 +6,7 @@ from datetime import date
 from pptx.util import Inches, Pt
 from pptx.enum.text import PP_ALIGN
 
+
 # Functions go here
 class MakePowerpoint:
     def __init__(self):
@@ -54,7 +55,7 @@ class MakePowerpoint:
         title = slide.shapes.title
         title.text = title_below
         textbox = slide.shapes.add_textbox(
-            left=Inches(7), top=Inches(2), width=Inches(3), height=Inches(5)
+            left=Inches(2), top=Inches(2), width=Inches(5), height=Inches(5)
         )
 
         tf = textbox.text_frame
@@ -62,7 +63,7 @@ class MakePowerpoint:
         para = tf.add_paragraph()
         para.text = description
         para.alignment = PP_ALIGN.CENTER
-        para.font.size = Pt(10)
+        para.font.size = Pt(20)
 
     def save_ppt(self, pres_name):
         self.prs.save(pres_name)

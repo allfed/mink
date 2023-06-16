@@ -1,0 +1,6 @@
+PSET=stuff_for_morgan_25apr23
+MYGISRC="$HOME/.grassrc.$GRASS_VERSION.$$"
+echo "MAPSET: $MYMAPSET" >> "$MYGISRC"
+export GISRC=$MYGISRC
+g.mlist -r
+

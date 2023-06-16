@@ -1,11 +1,12 @@
 #!/bin/bash
 
 # sum a series of rasters and save the result
-
+ echo ""
+ echo "creating combined spam data..."
+ echo ""
 # need to put the spam2010 dataset in grassdata/world/spam
-git_root=`git rev-parse --show-toplevel`
 
-cd ${git_root}/grassdata/world/spam
+cd ../../../grassdata/world/spam
 
 area_categories=(
     "A" # total irrigated+rainfed
@@ -59,9 +60,6 @@ crops=(
 )
 
 for area_category in "${area_categories[@]}"; do
-    echo "area_category"
-    echo "$area_category"
-
     if [ $area_category == "A" ]; then
         area_name=""
     elif [ $area_category == "I" ]; then
@@ -70,16 +68,12 @@ for area_category in "${area_categories[@]}"; do
         area_name="_rainfed"
     fi
     areas=""
-    echo "area_name"
-    echo "$area_name"
     for crop in "${crops[@]}"; do
-        echo "crop"
-        echo $crop
 
         # this is for reading in some MAPSPAM data acquired from https://www.mapspam.info/
         # and placed in /grassdata/world/spam
         # (imports the geotiffs)
-        r.in.gdal input=spam2010V2r0_global_H_${crop}_${area_category}.tif output=${crop}${area_name}_cropland
+        script -c "r.in.gdal input=spam2010V2r0_global_H_${crop}_${area_category}.tif output=${crop}${area_name}_cropland --quiet" > /dev/null
 
         # if the first crop, then don't add a comma
         if [ -z "$areas" ]; then
@@ -90,20 +84,19 @@ for area_category in "${area_categories[@]}"; do
 
     done
 
-
-    echo "area_category"
-    echo $area_category
-
-
-    echo "areas"
-    echo $areas
-
-    # statements
     combined_area="ALL_CROPS${area_name}_cropland"
-    r.series --overwrite input=$areas output=$combined_area method=sum
+    r.series --overwrite input=$areas output=$combined_area method=sum --quiet
 
-    # save the result as tiff
-    r.out.tiff input=$combined_area output=- > "${combined_area}.tif"
-    r.out.ascii input=$combined_area output=- > "${combined_area}.asc"
+    # save the results
+    r.out.tiff input=$combined_area output=- > "${combined_area}.tif" --quiet
+    r.out.ascii input=$combined_area output=- > "${combined_area}.asc" --quiet
 
 done
+
+for crop in "${crops[@]}"; do
+    script -c "r.in.gdal input=spam2010V2r0_global_Y_${crop}_A.tif output=${crop}_yield --quiet" > /dev/null
+done
+
+echo ""
+echo "All rasters created for all spam crops"
+echo ""

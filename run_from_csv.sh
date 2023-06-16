@@ -9,13 +9,20 @@ time_start=$SECONDS
 . basics_15jun22/sge_Mink3daily/default_paths_etc.sh
 . basics_15jun22/sge_Mink3daily/some_settings_46.sh
 cd /mnt/data/basics_15jun22/small_java_programs/java8_IFPRIconverter/src
+
+javac org/Scenarios/Config.java
+javac org/Scenarios/GenerateScenarios.java
 javac org/Scenarios/Scenarios.java
-scenarios_csv_location="/mnt/data/basics_15jun22/sge_Mink3daily/scenarios/$1"
+javac org/Scenarios/CalculateProduction.java
+javac org/DSSATRunner/WriteCopyBlockForDailyWeather.java
+
+scenarios_csv_location="/mnt/data/basics_15jun22/sge_Mink3daily/scenarios/generated_scenarios.csv"
+config_file_location="/mnt/data/scenarios/AUS/test_AUS_megaenvironments.yaml"
 script_folder=/mnt/data/basics_15jun22/sge_Mink3daily/
 run_parameters_csv_folder="/mnt/data/basics_15jun22/sge_Mink3daily/parameters/"
-whether_run_DSSAT_or_process=$2
+whether_run_DSSAT_or_process=$1
 
-java -ea org.Scenarios.Scenarios $scenarios_csv_location $script_folder $run_parameters_csv_folder $whether_run_DSSAT_or_process
+java -ea org.Scenarios.Scenarios $scenarios_csv_location $script_folder $run_parameters_csv_folder $config_file_location $whether_run_DSSAT_or_process
 time_end=$SECONDS
 echo "duration (seconds)"
 echo $(echo "scale=2 ; $time_end - $time_start " | bc -l)

@@ -3,12 +3,15 @@ region_to_use=$1
 main_control_list=$2
 crop_area_raster=$3
 
-./../more_GRASS_scripts/universal/combine_spam_datasets.sh
+echo ""
+echo "running build_dailystyle"
+echo ""
 
-echo "region_to_use"
-echo $region_to_use
-echo "weather_mask"
-echo $weather_mask
+
+# echo "region_to_use"
+# echo $region_to_use
+# echo "weather_mask"
+# echo $weather_mask
 # previous generation was NEW GISbox:
 #   /home/grass/grass_scripts/gf_crop_modeling_01mar11/build_dataset_for_DSSAT_BigInits_03nov11.sh
 #   /home/grass/grass_scripts/gf_crop_modeling_01mar11/build_dataset_for_DSSAT_monthly_neighborhood_01mar11.sh
@@ -39,10 +42,10 @@ echo $weather_mask
 # 1.875
 # 1.25
 output_file=to_DSSAT/
- weather_mask="${crop_area_raster}@morgan_DSSAT_cat_0" ; #region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" #eegion_to_use="n=49 s=26 w=-124 e=-66 nsres=1.875 ewres=1.25" # now forcing a square resolution region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" # NOTE: region_to_use SHOULD BE SET BEFORE RUNNING THIS SCRIPT
+weather_mask=$crop_area_raster ; #region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" #eegion_to_use="n=49 s=26 w=-124 e=-66 nsres=1.875 ewres=1.25" # now forcing a square resolution region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" # NOTE: region_to_use SHOULD BE SET BEFORE RUNNING THIS SCRIPT
 # output_file=to_DSSAT/D_ ; weather_mask=MAIZE_cropland@morgan_DSSAT_cat_0 ; #region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" #eegion_to_use="n=49 s=26 w=-124 e=-66 nsres=1.875 ewres=1.25" # now forcing a square resolution region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" # NOTE: region_to_use SHOULD BE SET BEFORE RUNNING THIS SCRIPT
-echo "weather_mask"
-echo $weather_mask
+# echo "weather_mask"
+# echo $weather_mask
 #### we should only need the calendar_mapset now with pre-existing daily weather...
 
 calendar_mapset=deltaPIKnov_from_daily_c # which mapset contains the target planting month rasters
@@ -87,7 +90,7 @@ growing_radius=0 # 0.0 # number of pixels
 
 
 # make a simple raster to get everything...
-echo "    ++ making an ALL raster ++"
+# echo "    ++ making an ALL raster ++"
 g.region $region_to_use
 r.mapcalc deleteme_all = "100000" 2>&1 | grep -v % # some big number that creates a dummy raster that calculates crop growing everywhere if large...
 
@@ -159,7 +162,7 @@ month_shifter_list=\
 # "
 
 
-echo -e "\n\n\n CHECK THE SPAM RASTERS: should be the 30may14 ones... \n\n\n"
+# echo -e "\n\n\n CHECK THE SPAM RASTERS: should be the 30may14 ones... \n\n\n"
 sleep 1
 
 
@@ -176,7 +179,7 @@ IFS="
 
 # make sure the output directory exists
 output_dir=${output_file%/*}  # extract the directory part out the output file
-echo "outputs being placed in = [$output_dir]" ; # display something to the screen
+# echo "outputs being placed in = [$output_dir]" ; # display something to the screen
 mkdir -p $output_dir   # create the directory, if necessary
 
 
@@ -192,7 +195,7 @@ do
   # pull out the different pieces of the line and store them separately for easy reference
   spam_raster_to_use_for_mask=`echo "$spam_line" | cut -f1`
                     crop_name=`echo "$spam_line" | cut -f2`
-                 water_source=`echo "$spam_line" | cut -f3`
+                  description=`echo "$spam_line" | cut -f3`
                       N_level=`echo "$spam_line" | cut -f4`
               calendar_prefix=`echo "$spam_line" | cut -f5`
                     initial_N=`echo "$simple_initial" | cut -f1`
@@ -204,12 +207,12 @@ do
   # echo $spam_raster_to_use_for_mask
   # echo "crop_name"
   # echo $crop_name
-  # echo "water_source"
-  # echo $water_source
+  # echo "description"
+  # echo $description
   # echo "N_level"
   # echo $N_level
-  echo "calendar_prefix"
-  echo $calendar_prefix
+  # echo "calendar_prefix"
+  # echo $calendar_prefix
   # echo "initial_N"
   # echo $initial_N
   # echo "initial_root_weight"
@@ -218,9 +221,11 @@ do
   # echo $initial_surface_weight
 
   # define the appropriate mask
-  echo ""
-  echo "-- creating mask for $spam_raster_to_use_for_mask `date` --"
-  g.remove MASK # clear out the GRASS magic mask name
+  # echo ""
+  # echo "-- creating mask for $spam_raster_to_use_for_mask `date` --"
+
+  # clear out the GRASS magic mask name
+  g.remove MASK 2>&1 | grep -v "" # silenced
 
 
   # find all the pixels that meet the criterion for being relevant
@@ -231,25 +236,31 @@ do
   # we need to figure out which is coarser, the desired region or the masking source raster
 
 
-  echo "    ++ masking ++"
+  # echo "    ++ masking ++"
+  # echo "spam_raster_to_use_for_mask"
+  # echo $spam_raster_to_use_for_mask
+  
   # first the mask raster
   g.region rast=$spam_raster_to_use_for_mask
   nsres_from_raster=`g.region -g | grep nsres | cut -d= -f2`
 
+  # echo "setting desired region"
+  # echo $region_to_use
   # second the desired region
   eval g.region $region_to_use
   nsres_from_region=`g.region -g | grep nsres | cut -d= -f2`
 
+  # echo "setting desired region"
   raster_res_is_coarser_than_region_res=`echo "if($nsres_from_raster >= $nsres_from_region) {1} else {0}" | bc`
 
   # we should already be in the target region...
   if [ $raster_res_is_coarser_than_region_res = 1 ]; then
     # do it the old way using pin pricks
-    echo "      __ masking pin-prick __"
+    # echo "      __ masking pin-prick __"
     r.mapcalc deleteme_initial_spam_ungrown = "if($spam_raster_to_use_for_mask >= $minimum_physical_area, 1, null())" 2>&1 | grep -v %
   else
     # do a statistical coarsening to make sure we catch everything
-    echo "      __ masking coarsening __"
+    # echo "      __ masking coarsening __"
     r.resamp.stats input=$spam_raster_to_use_for_mask output=deleteme_coarse_mask_ungrown method=sum --o
     r.mapcalc deleteme_initial_spam_ungrown = "if(deleteme_coarse_mask_ungrown >= $minimum_physical_area, 1, null())" 2>&1 | grep -v %
   fi
@@ -265,13 +276,55 @@ do
 
 
 
-  echo "    ++ N/inits ++"
+  # echo "    ++ N/inits ++"
 #  # define the region to use
 #  eval g.region $region_to_use
 
   # make some fake rasters for nitrogen; this allows us to use either a raster or a supplied value.
   # you could even use some sort of formula like "original_N * 1.25"
   r.mapcalc deleteme_N_to_use = "$N_level" 2>&1 | grep -v %
+
+# UNCOMMENT BELOW IF YOU WANT TO DEAL WITH NITROGEN MAPS(DMR)
+  # if [ -z "$variable" ]; then
+
+  #   # NOTE: THIS SHOULD BE UNCOMMENTED USED AS A WAY TO TEST ANOTHER NITROGEN
+  #   # MAP TO SEE IF RESULTS ARE BETTER
+
+  #   # echo "Nitrogen is not specified. Importing 2010 nitrogen application."
+  #   # r.in.gdal -o input="../../grassdata/world/PANGEA-lu/nfery2010.asc" output=nitrogen_chemical_2010_g_per_kg
+  #   # r.in.gdal -o input="../../grassdata/world/PANGEA-zhang/appliedNyy2014.asc" output=nitrogen_manure_2014_g_per_kg
+  #   # # import realistic nitrogen map for initial conditions
+
+  #   # # this converts the nitrogen into proper units (g/m^2 to kg/ha)
+  #   # # noting that m^2/ha = 10000
+  #   # # unit conversion: 1 g/m^2=1/1000 kg/m^2 = 10 kg/ha => factor of 10 applied
+  #   # r.mapcalc "deleteme_initial_N = (nitrogen_chemical_2010_g_per_kg + nitrogen_manure_2014_g_per_kg) * 10"
+
+  #   # TODO: check this works
+  #   echo "nitrogen name"
+  #   echo "N_for_${crop_name}_${water_source}"
+
+  #   r.mapcalc deleteme_initial_N = "N_for_${crop_name}_${water_source}" 2>&1 | grep -v "%"
+  #   exit 1
+
+  #   # useful commands:
+
+  #   # 1. show initial rasters initialized
+  #   # $ g.mlist -r | grep initial
+  #   # 2. show statistical average of raster
+  #   # $ g.mlist -r | grep initial
+  #   # 3. mask off cells to ones previously defined as having cropland
+  #   # $ r.mask deleteme_initial_N # add mask   
+  #   # $ r.mask -r # remove mask
+  # else
+  #   # make  fake raster for initial conditions
+  #   r.mapcalc deleteme_initial_N              = "$  " 2>&1 | grep -v "%"
+  
+  
+  #   echo "Variable is not empty."
+  # fi
+
+
 
   # make some fake rasters for initial conditions
   r.mapcalc deleteme_initial_N              = "$initial_N" 2>&1 | grep -v "%"
@@ -301,7 +354,11 @@ do
 
   # define the name for this particular offset
   planting_month_raster=${calendar_prefix}_${gcm}_p${text_month_shifter}
-
+  # echo "original_planting_month_raster"
+  # echo $original_planting_month_raster
+  # echo "month_shifter"
+  # echo $month_shifter
+  
   # compute the appropriate planting month by shifting the target month and then wrapping the months that
   # go outside of 1 to 12
   r.mapcalc deleteme_planting_month = "eval(cand_month = $original_planting_month_raster + ($month_shifter), \
@@ -326,7 +383,7 @@ do
 
   # do the exporting
   # define the name of the output file
-    start_output_name=${output_file}${planting_month_raster}_${crop_name}__${water_source}
+    start_output_name=${output_file}${planting_month_raster}_${crop_name}__${description}
 
     real_output_file=${start_output_name}
     echo "real output"
@@ -336,7 +393,7 @@ do
     echo "$nonclimate_list" | tr "," "\n" | cat -n > ${real_output_file}.cols.txt
 
     # dump a status report out to the screen
-    echo " -- exporting $planting_month_raster $crop_name $water_source `date` --"
+    # echo " -- exporting $planting_month_raster $crop_name $description `date` --"
 
   # skip the climate if requested... that is, always, now....
      # Beware the MAGIC PATH!!! this is a non-standard grass program. so you need to know the actual path
@@ -381,9 +438,12 @@ done # month_shifter
 
 done # spam_line
 
-  g.remove MASK
+  g.remove MASK 2>&1 | grep -v ""
 
 done # gcm
 
+echo ""
+echo "done running build_dailystyle"
+echo ""
 
 exit

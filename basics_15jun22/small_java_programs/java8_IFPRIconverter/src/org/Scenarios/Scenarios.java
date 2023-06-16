@@ -35,11 +35,14 @@ public class Scenarios {
   public boolean process_results;
   public boolean calculate_as_wet_weight;
   public boolean average_yields;
+  public boolean calculate_average_production_over_time;
   public boolean calculate_rf_or_ir_specific_average_yield;
   public boolean calculate_rf_or_ir_specific_production;
   public boolean calculate_rf_plus_ir_production;
   public boolean calculate_average_yield_rf_and_ir;
   public boolean make_rasters_comparing_overall_to_historical;
+  // public boolean make_plots_overall_vs_historical;
+  // public boolean generate_pptx_report;
   public boolean find_best_yields;
   public boolean create_each_year_png;
   public boolean create_average_png;
@@ -67,67 +70,308 @@ public class Scenarios {
   public String[] best_planting_raster_name;
   public String[][][] raster_names_all_years_dry; // cultivar, month, year
   public String[][][] raster_names_all_years_wet_or_dry; // cultivar, month, year
-  public String[][] raster_names; // cultivar, month
+  public String[][] raster_names_best_all_years; // cultivar, year
+  public String[][] raster_names_average_year; // cultivar, month
   public String[][] output_stats_filenames; // cultivar, month
-  public String[] crop_area_raster;
+  public String[] mask_for_this_snx;
   public String[] yield_result_name;
   public String[] month_result_name;
   public String[] nitrogen;
   public String[][] yield_result_names; // cultivar, month
   public String[] fertilizer_scheme;
+  public HashMap<String, String> crop_lower_to_caps_dictionary;
 
   // The main method is responsible for creating an instance of the Scenarios class by reading in a
   // CSV file and then running the scenarios and averaging the results.
   public static void main(String[] args)
       throws InterruptedException, FileNotFoundException, IOException {
 
-    System.out.println("Using simulation csv: ");
-    System.out.println(args[0]);
-    System.out.println("");
+    // System.out.println("Using simulation csv: ");
+    // System.out.println(args[0]);
+    // System.out.println("");
 
-    System.out.println("script folder: ");
-    System.out.println(args[1]);
-    System.out.println("");
+    // System.out.println("script folder: ");
+    // System.out.println(args[1]);
+    // System.out.println("");
 
     String simulation_csv_location = args[0];
     String script_folder = args[1];
     String run_parameters_csv_folder = args[2];
-    String DSSAT_process_or_both = args[3];
+    String config_file = args[3];
+    String DSSAT_process_or_both = args[4];
 
     String moisture_csv_location = run_parameters_csv_folder + "moisture_contents.csv";
+
+    /* TODO: cultivar mapping
+
+    We need to set it up so that default_cultivar_mappings is used if 
+    cultivar_mappings is not specified in the simulation csv for potatoes, wheat, maize.
+
+    In the case Canola, we already have everything setup for the mapping (canola only has one cultivar).
+
+    In the case of Soybean, Soybean used will be the best of all cultivars. We already have the scenario setup for this.
+
+    If cultivar_mappings is specified in the simulation csv, then it should be used instead of default_cultivar_mappings.
+
+    If is not specified, then we want to implement a special java function which runs EITHER a new simulation for each megaenvironment, or runs a single simulation where each location already has its cultivar determined.
+    This may involve downscaling the raster to the resolution of the weather files in order to pick the most appropriate cultivar for each location. (NEED TO CHECK THIS)
+
+      The mapping from the file will beconverted to a HashMap<String, String>. where the first String is one of (maize, wheat, potato), and the second string is the raster (but actually, maybe a single cultivar has multiple rasters? Assume they're somehow combined for now (NEED TO CHECK THIS)).
+
+        This entirely depends on whether it's possible to have the java mink3dailyrunner run a single simulation with different cultivars.
+        Mink3Daily has:
+
+        public static final String tempXFileName                    = "./deleteme.SNX";
+        FunTricks.writeStringToFile(XHappyStuffToWrite, fullTempXFile);
+
+        so then does StuffToWrite differ between grid cells? Where do we get this data?
+
+        we have:
+
+        ProcessBuilder pb =
+            new ProcessBuilder(
+                "bash",
+                "./mink3daily_run_DSSAT_tile.sh",
+                "/mnt/data/basics_15jun22/sge_Mink3daily/to_DSSAT/" + yield_result_name,
+                weather_folder + "/" + weather_prefix,
+                snx_name + ".SNX",
+                fertilizer_scheme,
+                co2_level,
+                crop_name,
+                "1",
+                "0");
+
+        and then basically what happens is a single run uses the X_file
+
+        mink3daily_run_DSSAT_tile.sh
+
+        to copy over just one SNX
+
+        cp \${original_X_files_dir}\${X_template} \$X_dir
+
+        which becomes
+
+        cp /mnt/data/basics_15jun22/sge_Mink3daily/SNX_files/whNEWTONRF.SNX /mnt/data/on_node_home9159_927265190/DSSAT/X_files/
+
+
+        the actual running of the tiles occurs at 
+
+        org.DSSATRunner.MinkRunner3p2daily
+        
+        with this injected code:
+
+        \$java_to_use "\$memory_string" -cp \$classpath \$classname \$on_node_runner_init_file 
+
+        $on_node_runner_init_file only has one SNX.
+
+        the key place this occurs is in the Mink3p2daily runner:
+
+
+        System.out.println("-- starting through data --");
+        for (int lineIndex = 0; lineIndex < nLinesInDataFile; lineIndex++) {
+
+            latitude = geogMatrix.getValue(lineIndex,2); // Beware the MAGIC NUMBER!!!
+            longitude = geogMatrix.getValue(lineIndex,3); // Beware the MAGIC NUMB
+
+            ...
+
+          
+            //System.out.println("rundssat command");
+            //System.out.println("./run_dssat.sh");
+            ProcessBuilder pb = new ProcessBuilder("bash", "./run_dssat.sh");
+            pb.inheritIO();
+            pb.directory(pathToDSSATDirectoryAsFile);
+            Process process = pb.start();
+            process.waitFor();
+
+        okay, so clearly only one SNX is run for a given on_node_home.
+
+        The question arises:
+          Do we run multiple cultivars in a single region and average the result, if we have a ratio between the likely amount of each cultivar? Are the maps even mutually exclusive at all? At such a low resolution, it may be naive to simply run one cultivar for a cell if we have reason to believe multiple cultivars are grown there.
+
+          And what is currently being done?
+
+          in MAIZE_maize_mask_MEs_28Aug13.sh:
+
+            # now we need to do the division
+            r.mapcalc $yield_rast = "$yield_rast / $count_rast" 2>&1 | grep -v "%"
+          so it looks like we're averaging over the number of counts
+          
+
+
+      The HashMap will be used if the cultivar has not been set in the scenarios.
+
+      IN THE CASE THAT EACH CULTIVAR IS A SEPARATE MAPPING TO RUN, once we have the cultivar map, we need to sum the result. Otherwise it should be set up properly. (ANSWER: YES< EACH ONE IS, AND HE DID THIS DIFFERENTLY, HE RAN IT AFTER THE FACT FOR EACH RUN FOR SOME REASON! SO I NEED TO MULTIPLY THE MASK BEFOREHAND)
+
+    REMAINING QUESTIONS: Spring and Winter for wheat seem to have different processing somehow? I think I can just alter scenarios to account for this? It might already be taken care of. (I think this just comes down to different locations for winter and spring)
+
+    ALSO we need to run the whole world! So this requires setting a different lat/lon max/min. HOWEVER, we should try just running a small region first like the US to see if the results are reasonable.
+
+
+    OKAY!
+
+    so I will for example, run through each cultivar, and have a list of (1,0) grass megaenvironment masks which need to be unioned together to get the regions that cultivar needs to be calculated (a (1,0) grass mask). Then, I get a smaller_crop_area_mask (also a (1,0) grass mask), where the smaller_crop_area_mask is the intersection of the crop_area mask and the unioned_megaenvironment mask.
+
+    this union of megaenvironments, and subsequent intersection with the crop_area needs to be done before the initGRASS method is called
+
+    method is completed.
+
+
+
+    ###
+
+
+    So, today (june 5) I got compile time things fixed with java but not runtime. Theoretically, if the resolution isn't an issue, it should find all the areas the crop exists, and then only run those (using megaenvironments). A given crop is already specified with spam, and then this map from the crop is overlaid with relavent megaenvironments for acultivar. I generate this megaenvironment_union by unioniing all the megaenvironments for a given cultivar. Then I intersect, to get the new smaller mask just for tha cultivar. It initializes with this in grass, and I should get a pretty picture, but there's a runtime error.
+
+    next I need to fix the error, make sure nothing fishy is happening when we go from spam resolutioin to the larger crop resolution from the weather files (may need to use a resample command for example) by looking at the png, and then make sure to sum all the relevant yields in a given region, where the yield of each SNX file counts equally towards the total. So this probably means taking all the SNX and averaging.
+
+    I also still need to check if SNX are being specified in the run, and if not, automatically find the relevant SNX for a crop with DSSAT.
+
+    ###
+
+    Today (june 6) I finished the creation of the scenarios from a basic yaml file.
+    Probably should next add to the csvmonths and years and real or happy for each row, to make it complete. Things should now be set up to run this Scenarios.java, but I need to remember to replace area_raster with mask_for_this_snx, and make sure to set mask_for_this_snx equal to the area. 
+
+    I need to figure out a way to ensure there's not too much region setting in the initgrassbuild... potentially I should just split up the initgrassbuild file into separate parts if there's lots of computationally heavy things that don't need to happen there.
+
+    but the minimal thing to do next is just ensure the actual raster is being set properly and check that only nonnull raster elements above the minimum area reuirements are being run. 
+    
+    I need to make sure the scenario configs are logged somewhere automatically as well, when the scenario is actually run (the part that is time consuming and I can't just redo).
+
+
+    At that point, I should be good to go with running first australia, then the whole world. 
+
+    ### june 7
+     everythingexcept the logging and the last point are basically done now
+    3 errors
+    Singularity mink_sandbox:~/Code/mink> ./run_from_csv.sh dssat
+       >>> using dscsm_compiled_fast.exe <<<
+    org/Scenarios/Scenarios.java:815: error: incompatible types: String cannot be converted to String[]
+              scenarios.month_result_name[i],
+from
+Singularity mink_sandbox:~/Code/mink> ./run_from_csv.sh dssat
+
+    need to also check the final yield calcs arent using the weather_raster
+    and that it all adds together properly between dssats... could be a problem if some are null, or all are null?
+
+    also need to still check winterwheat is going properly (and potatoes, but thats less worrisome)
+
+    ###
+    there was a very hard to find bug (missing line in the build killing the nitrogen initialization raster, meaning run_dssat was failing)
+
+    fixed it, now things are looking better
+
+    ###
+    Jun 13
+    seeinsubl "singularity exec --writable --bind $PWD:/mnt/data mink_sandbox ./generate_scenarios_csv.sh"
+    [{"success":true}]
+    [{"success":true}]
+    [{"success":true}]
+     $    ~/Code/mink   main  seeinsubl "singularity exec --writable --bind $PWD:/mnt/data mink_sandbox ./run_from_csv.sh both"
+
+    Got my code working but there's a little issue: the REFACTORED for build_daily seems to have a parse errro
+
+    ignoring the refactored, we have a small error iwth gneerating png's
+
+    379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_wheat__Jun13AUSmasktest_wet_averaged_RF@morgan_DSSAT_cat_0 has failed to exist
+
+    I believe has to do with my conditions set in the  /home/dmrivers/Code/mink/scenarios/AUS/test_AUS_megaenvironments.yaml
+
+    but otherwise wverything is working. Checked also: the averaging does not count null values. so masks should be good, avering all the non-null values. 
+
+    once this is fixed, try to test if looks like old AUS results, then run the whole world!
+
+    ### jun 14
+
+    I fixed the parse error and pngs
+    I reduced the printout statements greatly. it was unmanageable before, and now it's a lot but not completely crazy.
+    some issues with --quiet though especially in r.mapcalc... not sure best way to quiet r.mapcalc.
+    It looks like wheat is operating well so far as well, with similiar-to-correct-values as far as I can tell!
+
+    Everything so far is working.
+
+    Fixed the analyze_single_crop.py to plot out the results for a given mask.
+
+    Succeeded in testing for all the planting months!
+    
+    ### 
+    jun 15
+    
+    success in getting skipped dssat run rasters (in the case of 0 pixels) processed (just used the columns array, with some logic to just set a null)
+
+    there was some issue in actually creating the rasters in these cases for some reason
+
+    OK. So I ran the full MaIZE in AUS. Took 90 seconds to run and 160 second to process! So the process is slow because all the empty files I guess.
+
+    Maize doesn't grow at all in aus (but does in one place in the phillipines/indonesia??. That seems highly suspicious. Maybe my min hectare thing is too stringent? 
+    where it does grow the yield is fine.
+    But actually also it's not even showing zero yield. which is fine, but good to keep in mind.
+
+    So, next I'll figure out how he deals with winterwheat, and try to run the wheats to see if I get something reasonable. After that, I suppose I'll try the whole world, probably starting with canola. 
+
+    So this is good, no bugs left as far as I can tell (but a lack of a feature (winter wheat), and some suspicious results)  
+
+    */
+
     // String run_parameters_csv_location = run_parameters_csv_folder + "parameters.csv"
 
-    System.out.println("import scenarios");
+    // System.out.println("import scenarios");
     String[] initFileContents = importScenariosCSV(simulation_csv_location);
+    // System.out.println("import scenarios");
+      int n_scenarios = initFileContents.length - 1;
+      System.out.println("n_scenarios");
+      System.out.println(n_scenarios);
 
-    System.out.println("new scenario");
-    Scenarios scenarios = new Scenarios(initFileContents);
+    // System.out.println("new scenario");
+    Scenarios scenarios = new Scenarios(initFileContents,config_file);
 
     HashMap<String, Float> coefficients_to_get_wetweight_from_dryweight = createWetWeightConversionMap(moisture_csv_location);
 
-    scenarios.calculate_as_wet_weight = true;
+    scenarios.crop_lower_to_caps_dictionary = new HashMap<String, String>();
+    scenarios.crop_lower_to_caps_dictionary.put("maize", "MAIZ");
+    scenarios.crop_lower_to_caps_dictionary.put("soybean", "SOYB");
+    scenarios.crop_lower_to_caps_dictionary.put("rapeseed", "RAPE");
+    scenarios.crop_lower_to_caps_dictionary.put("wheat", "WHEA");
+    scenarios.crop_lower_to_caps_dictionary.put("potato", "POTA");
 
+
+    if(DSSAT_process_or_both.equals("DSSAT")){
     // run a full set of scenarios, without processing anything
-    if(DSSAT_process_or_both.equals("DSSAT") || DSSAT_process_or_both.equals("both")){
       scenarios.run_crop_model = true;
       scenarios.process_results = false;
+
+      // Overwrite inputs from the config file (as we haven't processed yet, we can't do these things)
       scenarios.average_yields = false;
       scenarios.find_best_yields = false;
-      processScenarios(script_folder, scenarios,coefficients_to_get_wetweight_from_dryweight);
-    }
-    if(DSSAT_process_or_both.equals("process") || DSSAT_process_or_both.equals("both")){
-      scenarios.run_crop_model = false;
-      scenarios.process_results = false;
-      scenarios.calculate_as_wet_weight = true;
-      scenarios.average_yields = false;
+      scenarios.calculate_average_production_over_time = false;
       scenarios.find_best_yields = false;
       scenarios.calculate_rf_or_ir_specific_average_yield = false;
       scenarios.calculate_rf_or_ir_specific_production = false;
-      scenarios.calculate_rf_plus_ir_production = true;
-      scenarios.calculate_average_yield_rf_and_ir = true;
-      scenarios.make_rasters_comparing_overall_to_historical = true;
+      scenarios.calculate_rf_plus_ir_production = false;
+      scenarios.calculate_average_yield_rf_and_ir = false;
+      scenarios.make_rasters_comparing_overall_to_historical = false;
+      scenarios.create_each_year_png = false;
+      scenarios.create_average_png = false;
+      scenarios.create_overall_png = false;
 
       processScenarios(script_folder, scenarios,coefficients_to_get_wetweight_from_dryweight);
+    } else if(DSSAT_process_or_both.equals("process") ){
+      // process result of runs, using config file settings for what to calculate
+      scenarios.run_crop_model = false;
+      scenarios.process_results = true;
+
+      processScenarios(script_folder, scenarios,coefficients_to_get_wetweight_from_dryweight);
+
+    } else if (DSSAT_process_or_both.equals("both")) {
+
+      scenarios.run_crop_model = true;
+      scenarios.process_results = true;
+
+      processScenarios(script_folder, scenarios,coefficients_to_get_wetweight_from_dryweight);
+
+    } else {
+      System.out.println("ERROR:DSSAT_process_or_both must be one of 'DSSAT', 'process', or 'both'");
+      System.exit(1);
 
     }
 
@@ -136,13 +380,39 @@ public class Scenarios {
     // calculate aggregate production for crops
     // this involves calculating overall production, then calculating average yields
     CalculateProduction calculator = new CalculateProduction(script_folder, scenarios);
+
+    // PlotCreator plotter = new PlotCreator();
+    // plotter.plot();
+    // generateReport();
   }
 
+  // // make_plots_overall_vs_historical
+  // public static void makeOverallVsHistoricalScatterplots() {
+  //   AsciiImporter ascii = new AsciiImporter();
+  //   PlotCreator plotter = new PlotCreator();
+
+  // }
+
+  // // // generate_pptx_report
+
+  // // // generate a report with the results of the scenarios
+  // // public static void generatePptxReport() {
+
+  // }
+
+
   /// initialize the scenario variables
-  public Scenarios(String[] initFileContents) throws InterruptedException, IOException {
+  public Scenarios(String[] initFileContents,String config_file) throws InterruptedException, IOException {
 
-    n_scenarios = initFileContents.length - 1;
+    // System.out.println("config_file");
+    // System.out.println(config_file);
 
+    // System.out.println("n_scenarios");
+    // System.out.println(n_scenarios);
+    Config config = Config.importConfigCSV(config_file);
+
+    int n_scenarios = initFileContents.length - 1;
+    this.n_scenarios = n_scenarios;
     this.snx_name = new String[n_scenarios];
     this.co2_level = new String[n_scenarios];
     this.crop_name = new String[n_scenarios];
@@ -157,51 +427,86 @@ public class Scenarios {
     this.region_to_use_w = new String[n_scenarios];
     this.nsres = new String[n_scenarios];
     this.ewres = new String[n_scenarios];
-    this.crop_area_raster = new String[n_scenarios];
+    this.mask_for_this_snx = new String[n_scenarios];
     this.fertilizer_scheme = new String[n_scenarios];
-    this.run_crop_model = new Boolean(true);
-    this.process_results = new Boolean(true);
-    this.calculate_as_wet_weight = new Boolean(true);
-    this.average_yields = new Boolean(true);
-    this.find_best_yields = new Boolean(true);
-    this.calculate_rf_or_ir_specific_average_yield = new Boolean(true);
-    this.calculate_rf_or_ir_specific_production = new Boolean(true);
-    this.calculate_rf_plus_ir_production = new Boolean(true);
-    this.calculate_average_yield_rf_and_ir = new Boolean(true);
-    this.make_rasters_comparing_overall_to_historical = new Boolean(true);
-    this.create_each_year_png = new Boolean(true);
-    this.create_average_png = new Boolean(true);
-    this.create_overall_png = new Boolean(true);
 
-    // consider may, april, march, june
-    this.planting_months = new String[] {"1", "3", "5", "7", "9", "11"};
-    // this.planting_months = new String[] {"1"};
+    this.run_crop_model = new Boolean(
+      config.model_configuration.run_crop_model
+    );
+    this.process_results = new Boolean(
+      config.model_configuration.process_results
+    );
 
-    // NOTE: only year 8 and 9 (5 and 6 here, as there's a 3 year offset) are
-    // considered later on in the code if this is a nuclear winter.
-    this.years = new String[] {"1", "2", "3", "4", "5", "6", "7"};
+    this.calculate_as_wet_weight = new Boolean(
+      config.model_configuration.calculate_as_wet_weight
+    );
+    this.average_yields = new Boolean(
+      config.model_configuration.average_yields
+    );
+    this.calculate_average_production_over_time = new Boolean(
+      config.model_configuration.calculate_average_production_over_time
+    );
+    this.find_best_yields = new Boolean(
+      config.model_configuration.find_best_yields
+    );
+    this.calculate_rf_or_ir_specific_average_yield = new Boolean(
+      config.model_configuration.calculate_rf_or_ir_specific_average_yield
+    );
+    this.calculate_rf_or_ir_specific_production = new Boolean(
+      config.model_configuration.calculate_rf_or_ir_specific_production
+    );
+    this.calculate_rf_plus_ir_production = new Boolean(
+      config.model_configuration.calculate_rf_plus_ir_production
+    );
+    this.calculate_average_yield_rf_and_ir = new Boolean(
+      config.model_configuration.calculate_average_yield_rf_and_ir
+    );
+    this.make_rasters_comparing_overall_to_historical = new Boolean(
+      config.model_configuration.make_rasters_comparing_overall_to_historical
+    );
+    this.create_each_year_png = new Boolean(
+      config.model_configuration.create_each_year_png
+    );
+    this.create_average_png = new Boolean(
+      config.model_configuration.create_average_png
+    );
+    this.create_overall_png = new Boolean(
+      config.model_configuration.create_overall_png
+    );
 
-    String real_or_happy = "real";
+    String real_or_happy = config.model_configuration.real_or_happy;
 
-    // NOTE: happy means unstressed by water or nitrogen
-    //       real means full stress is estimated
-    this.run_crop_model = true;
-    this.process_results = false;
-    this.calculate_as_wet_weight = true;
-    this.average_yields = false;
-    this.find_best_yields = false;
-    this.calculate_rf_or_ir_specific_average_yield = false;
-    this.calculate_rf_or_ir_specific_production = false;
-    this.calculate_rf_plus_ir_production = false;
-    this.calculate_average_yield_rf_and_ir = false;
-    this.make_rasters_comparing_overall_to_historical = false;
-    this.create_each_year_png = false;
-    this.create_average_png = false;
-    this.create_overall_png = true;
+
+  //   // consider may, april, march, june
+  //   // this.planting_months = new String[] {"1", "3", "5", "7", "9", "11"};
+    // this.planting_months = config.physical_parameters.planting_months;
+    this.planting_months = config.physical_parameters.planting_months.toArray(new String[0]);
+    this.years = config.physical_parameters.years.toArray(new String[0]);
+  //   // NOTE: only year 8 and 9 (5 and 6 here, as there's a 3 year offset) are
+  //   // considered later on in the code if this is a nuclear winter.
+    // this.years = config.physical_parameters.years;
+
+
+  //   // NOTE: happy means unstressed by water or nitrogen
+  //   //       real means full stress is estimated
+  //   // this.run_crop_model = true;
+  //   // this.process_results = false;
+  //   // this.calculate_as_wet_weight = true;
+  //   // this.average_yields = false;
+  //   // this.calculate_average_production_over_time = true;
+  //   // this.find_best_yields = false;
+  //   // this.calculate_rf_or_ir_specific_average_yield = false;
+  //   // this.calculate_rf_or_ir_specific_production = false;
+  //   // this.calculate_rf_plus_ir_production = false;
+  //   // this.calculate_average_yield_rf_and_ir = false;
+  //   // this.make_rasters_comparing_overall_to_historical = false;
+  //   // this.create_each_year_png = false;
+  //   // this.create_average_png = false;
+  //   // this.create_overall_png = false;
 
     // set to "wet" if calculating yields wet weight, "dry" if calculating dry weight
     String wet_or_dry;
-    if (this.calculate_as_wet_weight) {
+    if (config.model_configuration.calculate_as_wet_weight) {
       wet_or_dry = "wet";
     } else {
       wet_or_dry = "dry";
@@ -217,7 +522,8 @@ public class Scenarios {
     this.scenario_tag_for_overall_yield = new String[n_scenarios];
     this.scenario_tag_with_snx = new String[n_scenarios];
     this.best_planting_raster_name = new String[n_scenarios]; // best planting raster name
-    this.raster_names = new String[n_scenarios][planting_months.length];
+    this.raster_names_best_all_years = new String[n_scenarios][years.length];
+    this.raster_names_average_year = new String[n_scenarios][planting_months.length];
     this.raster_names_all_years_dry = new String[n_scenarios][planting_months.length][years.length];
     this.raster_names_all_years_wet_or_dry = new String[n_scenarios][planting_months.length][years.length];
     this.output_stats_filenames = new String[n_scenarios][planting_months.length];
@@ -260,7 +566,7 @@ public class Scenarios {
       this.ewres[i] = line_arguments[13];
 
       // SPECIFIC TO THE CROP NAME AND WATERING STRATEGY
-      this.crop_area_raster[i] = line_arguments[14];
+      this.mask_for_this_snx[i] = line_arguments[14];
       this.fertilizer_scheme[i] = line_arguments[15];
 
       // some useful composite strings
@@ -286,6 +592,8 @@ public class Scenarios {
       // the name of the raster for: the months with the best pixel in all month's rasters
       this.month_result_name[i] =
           "BestMonth_noGCMcalendar_p0_" + this.crop_name[i] + "__" + this.run_descriptor[i]+"_"+wet_or_dry;
+
+
 
       // SPECIFIC TO THE CROP NAME
       this.scenario_tag[i] =
@@ -330,10 +638,7 @@ public class Scenarios {
             month + "_noGCMcalendar_p0_" + this.crop_name[i] + "__" + this.run_descriptor[i];
 
         // SPECIFIC TO THE CULTIVAR AND WATERING STRATEGY AND MONTH
-        // this.raster_names[i][planting_month_index] = this.snx_name[i] + "_" + this.co2_level[i] +
-        // "_" + this.weather_prefix[i] +"_"+
-        // this.yield_result_name[i]+"_real_7@morgan_DSSAT_cat_0";
-        this.raster_names[i][planting_month_index] =
+        this.raster_names_average_year[i][planting_month_index] =
             this.snx_name[i]
                 + "_"
                 + this.co2_level[i]
@@ -394,6 +699,24 @@ public class Scenarios {
                   + this.years[year_index];
         }
       }
+      for (int year_index = 0; year_index < this.years.length; year_index++) {
+        // SPECIFIC TO THE CULTIVAR AND WATERING STRATEGY AND MONTH
+        this.raster_names_best_all_years[i][year_index] =
+            this.snx_name[i]
+                + "_"
+                + this.co2_level[i]
+                + "_"
+                + this.weather_prefix[i]
+                + "_"
+                + this.yield_result_name[i]
+                + "_"
+                + wet_or_dry
+                + "_"
+                + real_or_happy
+                + "_"
+                + this.years[year_index];
+
+      }      
     }
 
     // set the unique crop names to the uniqueCrops variable
@@ -432,12 +755,13 @@ public class Scenarios {
       assert column_titles[11].equals("region_to_use_w");
       assert column_titles[12].equals("nsres");
       assert column_titles[13].equals("ewres");
-      assert column_titles[14].equals("crop_area_raster");
+      assert column_titles[14].equals("mask_for_this_snx");
       assert column_titles[15].equals("fertilizer_scheme");
     } catch (AssertionError e) {
       System.out.println(
           "Error: The first line of the csv file must contain the column titles in the code block"
-              + " (specified above this error message)");
+              + " (specified above this error message)"
+              + " (scenarios csv)");
       System.exit(0); // logging or any action
     }
     System.out.println("");
@@ -461,7 +785,9 @@ public class Scenarios {
     } catch (AssertionError e) {
       System.out.println(
           "Error: The first line of the csv file must contain the column titles in the code block"
-              + " (specified above this error message)");
+              + " (specified above this error message)"
+              + " (moisture)");
+
       System.exit(0); // logging or any action
     }
     System.out.println("");
@@ -511,10 +837,6 @@ public class Scenarios {
 
       float coefficient = 1 / ( 1 - moisture_percent / 100 );
 
-      System.out.println("crop");
-      System.out.println(crop);
-      System.out.println("coefficient");
-      System.out.println(coefficient);
 
       coefficients_to_get_wetweight_from_dryweight.put(crop, coefficient );
     }
@@ -524,9 +846,11 @@ public class Scenarios {
 
   public static void processScenarios(String script_folder, Scenarios scenarios, HashMap<String,Float> coefficients_to_get_wetweight_from_dryweight)
       throws InterruptedException, IOException {
-
+    // System.out.println(scenarios.month_result_name[1][0]);
     String crop_name = "";
     // loop through and run each scenario
+    // System.out.println("scenarios.n_scenarios");
+    // System.out.println(scenarios.n_scenarios);
     for (int i = 0; i < scenarios.n_scenarios; i++) {
       //if the scenario crop name is new, initialize
       // if(!crop_name.equals(scenarios.crop_name[i])) {
@@ -547,14 +871,13 @@ public class Scenarios {
       //     scenarios.nsres[i],
       //     scenarios.ewres[i],
       //     scenarios.planting_months,
-      //     scenarios.crop_area_raster[i],
       //     crop_name,
       //     scenarios.run_descriptor[i],
       //     scenarios.nitrogen[i]);
       // }
 
       crop_name = scenarios.crop_name[i];
-
+      System.out.println(scenarios.month_result_name[i]);
       processScenario(
           script_folder,
           i,
@@ -564,6 +887,7 @@ public class Scenarios {
           scenarios.process_results,
           scenarios.calculate_as_wet_weight,
           scenarios.average_yields,
+          scenarios.calculate_average_production_over_time,
           scenarios.find_best_yields,
           scenarios.calculate_rf_or_ir_specific_average_yield,
           scenarios.calculate_rf_or_ir_specific_production,
@@ -587,11 +911,12 @@ public class Scenarios {
           scenarios.month_result_name[i],
           scenarios.yield_result_names[i],
           scenarios.best_planting_raster_name[i],
-          scenarios.raster_names[i],
+          scenarios.raster_names_average_year[i],
+          scenarios.raster_names_best_all_years[i],
           scenarios.raster_names_all_years_dry[i],
           scenarios.raster_names_all_years_wet_or_dry[i],
           scenarios.output_stats_filenames[i],
-          scenarios.crop_area_raster[i],
+          scenarios.mask_for_this_snx[i],
           scenarios.nitrogen[i],
           scenarios.fertilizer_scheme[i]);
       System.out.println("====================");
@@ -610,6 +935,7 @@ public class Scenarios {
       boolean process_results,
       boolean calculate_as_wet_weight,
       boolean average_yields,
+      boolean calculate_average_production_over_time,
       boolean find_best_yields,
       boolean calculate_rf_or_ir_specific_average_yield,
       boolean calculate_rf_or_ir_specific_production,
@@ -633,35 +959,39 @@ public class Scenarios {
       String month_result_name,
       String[] yield_result_names,
       String best_planting_raster_name,
-      String[] raster_names,
+      String[] raster_names_average_year,
+      String[] raster_names_best_all_years,
       String[][] raster_names_all_years_dry,
       String[][] raster_names_all_years_wet_or_dry,
       String[] output_stats_filenames,
-      String crop_area_raster,
+      String mask_for_this_snx,
       String nitrogen,
       String fertilizer_scheme)
       throws InterruptedException, IOException {
 
+    // scenario_index
     // run through all the required scripts for determining and saving yields
-
     if (scenario_index == 0) {
-      // we only need to initialize the GRASS GIS region to use in the first round (all
-      // other regions in the CSV rows from "scenarios.csv" should be identical)
-      // NOTE: in order to get the crop initialized in to_DSSAT
-      BashScripts.initGRASS(
-          script_folder,
-          region_to_use_n,
-          region_to_use_s,
-          region_to_use_e,
-          region_to_use_w,
-          nsres,
-          ewres,
-          planting_months,
-          crop_area_raster,
-          crop_name,
-          run_descriptor,
-          nitrogen);
+      BashScripts.initSPAM(script_folder);
     }
+
+    // BashScripts.createPNG(script_folder,
+    //   mask_for_this_snx,results_folder);
+    // System.out.println("should have png");
+
+    BashScripts.initGRASS(
+        script_folder,
+        region_to_use_n,
+        region_to_use_s,
+        region_to_use_e,
+        region_to_use_w,
+        nsres,
+        ewres,
+        planting_months,
+        mask_for_this_snx,
+        crop_name,
+        run_descriptor,
+        nitrogen);
     
     for (int planting_month_index = 0;
         planting_month_index < planting_months.length;
@@ -670,7 +1000,7 @@ public class Scenarios {
 
       String yield_result_name_this_month = yield_result_names[planting_month_index];
 
-      String raster_name_this_month = raster_names[planting_month_index];
+      String raster_name_this_month = raster_names_average_year[planting_month_index];
 
       if (run_crop_model) {
 
@@ -729,6 +1059,7 @@ public class Scenarios {
         }
       }
 
+
       // if we are averaging yields, average the yields across the years being simulated
       if(average_yields) {
         averageYieldsAcrossYears(script_folder,
@@ -738,29 +1069,70 @@ public class Scenarios {
             results_folder);
       }
 
-      // BashScripts.createPNG(script_folder, raster_name_this_month, results_folder);
     }
 
 
     // if we choose to find the best yields, find best yields for each scenario
+    if(calculate_average_production_over_time) {
+      calculateBestYieldAllYears(
+          script_folder,
+          years,
+          planting_months,
+          raster_names_all_years_wet_or_dry,
+          raster_names_best_all_years,
+          results_folder);
+    }
     if(find_best_yields) {
+      // System.out.println("Find best yields?");
       findBestYields(
           script_folder,
           planting_months,
-          raster_names,
+          raster_names_average_year,
           best_planting_raster_name,
           month_result_name,
           results_folder);
     }
   } // processScenario
 
+  public static void calculateBestYieldAllYears(
+    String script_folder, // the output rasters
+    String[] years,
+    String[] planting_months,
+    String[][] raster_names_all_years_wet_or_dry, // the input rasters
+    String[] raster_names_best_all_years, // the output rasters
+    String results_folder // the output rasters
+  )throws InterruptedException, IOException{
+    // calculate the average of the raster yield over time for a given scenario
+    for(int year_index = 0; year_index < years.length; year_index++) {
+      String[] raster_names_all_months_this_year = new String[planting_months.length];
+
+      String raster_name_best_this_year = raster_names_best_all_years[year_index];
+
+      for (int planting_month_index = 0;
+          planting_month_index < planting_months.length;
+          planting_month_index++) {
+        raster_names_all_months_this_year[planting_month_index] = raster_names_all_years_wet_or_dry[planting_month_index][year_index];
+      }
+      // System.out.println("raster_name_best_this_year");
+      // System.out.println(raster_name_best_this_year);
+      findBestYields(
+          script_folder,
+          planting_months,
+          raster_names_all_months_this_year, // input rasters
+          raster_name_best_this_year, // the output raster
+          "planting_month_raster_result_unused",
+          results_folder);
+    }
+  }
+
+
   public static void convertToWetWeightIfNeeded(
       boolean calculate_as_wet_weight,
       HashMap<String,Float> coefficients_to_get_wetweight_from_dryweight,
       String script_folder,
       String crop_name,
-      String raster_name_all_years_this_month_dry,
-      String raster_name_all_years_this_month_wet_or_dry)
+      String raster_name_all_years_this_month_dry,// the input raster
+      String raster_name_all_years_this_month_wet_or_dry) // the output raster
       throws InterruptedException, IOException {
     // convert to wet weight by either setting raster_name_all_years_this_month_wet_or_dry to raster_name_all_years_this_month_dry (if we want the dryweight specified by setting calculate_as_wet_weight to false). If calculate_as_wet_weight is true, we import the moisture content csv, then determine the wet weight and scale the raster by the appropriate value to estimate the wet weight for the current crop. DSSAT defaults to calculating the dryweight.
 
@@ -768,14 +1140,12 @@ public class Scenarios {
     // otherwise, set the coefficient to 1
     String coefficient;
     if(calculate_as_wet_weight){ 
-      System.out.println("coefficients_to_get_wetweight_from_dryweight.get(crop_name)");
-      System.out.println(coefficients_to_get_wetweight_from_dryweight.get(crop_name));
+      // System.out.println("coefficients_to_get_wetweight_from_dryweight.get(crop_name)");
+      // System.out.println(coefficients_to_get_wetweight_from_dryweight.get(crop_name));
       coefficient = String.valueOf(coefficients_to_get_wetweight_from_dryweight.get(crop_name));
     } else {
       coefficient = "1.0";
     }
-      System.out.println("coefficient");
-      System.out.println(coefficient);
 
     BashScripts.multiplyRasterByCoefficient(script_folder,
       raster_name_all_years_this_month_dry,
@@ -787,13 +1157,13 @@ public class Scenarios {
   public static void averageYieldsAcrossYears(
       String script_folder,
       String[] years,
-      String[] raster_name_all_years_this_month_dry,
-      String raster_name_this_month,
+      String[] raster_name_all_years_this_month_wet_or_dry, // the input rasters
+      String raster_name_this_month,// the output raster
       String results_folder)
       throws InterruptedException, IOException {
 
     // average the yields across the years being simulated ("5" => 2005,"6" => 2006, etc)  from
-    // raster_name_all_years_this_month_dry
+    // raster_name_all_years_this_month_wet_or_dry
     // and save to raster_name_this_month
 
     String raster_names_to_average = "";
@@ -802,7 +1172,7 @@ public class Scenarios {
     // loop over the years to average crop yields
     for (int year_index = 0; year_index < years.length; year_index++) {
 
-      String raster_this_year = raster_name_all_years_this_month_dry[year_index];
+      String raster_this_year = raster_name_all_years_this_month_wet_or_dry[year_index];
 
       // if weather_folder contains "catastrophe" string, skip years other than 6 and 7 for
       // averaging
@@ -810,7 +1180,7 @@ public class Scenarios {
       // coldest. So the worst year would be 5+2 and 5+3 (years 7 and 8). The first two years are
       // used for calibrating soil temperature though, so the year numbers from the DSSAT runs are
       // actually offset by 2. Therefore, years 5 and 6 are the worst years.
-      System.out.println("Averaging years!");
+      // System.out.println("Averaging years!");
       year = years[year_index];
       if (raster_this_year.contains("catastrophe")) {
         if (!(year.equals("5") || year.equals("6"))) {
@@ -836,25 +1206,27 @@ public class Scenarios {
   public static void findBestYields(
       String script_folder,
       String[] planting_months,
-      String[] raster_names,
-      String best_planting_raster_name,
-      String month_result_name,
+      String[] raster_names_to_combine, // the input rasters
+      String best_planting_raster_name, // the output yield raster
+      String month_result_name, // the output best planting month raster
       String results_folder)
       throws InterruptedException, IOException {
-    String rasters_to_get_composite = "";
+    // combines rasters by choosing the best of each pixel in a list of rasters and 
+    //creating the "best_planting_raster_name" raster as an output
 
-    String combined_yields_results = raster_names[0];
+    // raster name at first planting month
+    String combined_yields_results = raster_names_to_combine[0];
 
     for (int planting_month_index = 1;
         planting_month_index < planting_months.length;
         planting_month_index++) {
       // create a suitable list of rasters to compare
-      combined_yields_results = combined_yields_results + "," + raster_names[planting_month_index];
+      combined_yields_results = combined_yields_results + "," + raster_names_to_combine[planting_month_index];
     }
 
     String best_yield_raster = best_planting_raster_name;
     String best_month_raster = month_result_name;
-
+    // System.out.println("running composite raster");
     BashScripts.compositeRaster(
         script_folder,
         combined_yields_results,

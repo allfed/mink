@@ -429,7 +429,7 @@ public class Mink3p2daily {
     public void readInitFile() throws IOException, Exception {
 
     String[] initFileContents = FunTricks.readTextFileToArray(initFileName);
-    System.out.println("readInitFile: " + initFileName);
+    // System.out.println("readInitFile: " + initFileName);
 
     int storageIndex = 0;
     allFlag                  = Boolean.parseBoolean(initFileContents[storageIndex++]);
@@ -535,8 +535,8 @@ public class Mink3p2daily {
     dssatExecutionCommand[2] = magicInitializationFile;
 
     magicDSSATSummaryToReadPath      = pathToDSSATDirectory + magicDSSATSummaryToRead;
-    System.out.println("magicDSSATSummaryToReadPath");
-    System.out.println(magicDSSATSummaryToReadPath);
+    // System.out.println("magicDSSATSummaryToReadPath");
+    // System.out.println(magicDSSATSummaryToReadPath);
     summaryDSSATOutputAsFileObject   = new File(magicDSSATSummaryToReadPath);
     errorAsFileObject                = new File(pathToDSSATDirectory + magicErrorFile);
     magicInitializationFilePath      = pathToDSSATDirectory + magicInitializationFile;
@@ -772,7 +772,7 @@ public class Mink3p2daily {
 
     String[] splitLine = null;
     for (int layerIndex = 0; layerIndex < nLayers; layerIndex++) {
-        System.out.println("line " + layerIndex + ": [" + carbonTable[layerIndex] + "]");
+        // System.out.println("line " + layerIndex + ": [" + carbonTable[layerIndex] + "]");
         splitLine = carbonTable[layerIndex].split("\t");
         standardDepths[         layerIndex] = Double.parseDouble(splitLine[0]);
         clayStableFractionAbove[layerIndex] = Double.parseDouble(splitLine[1]);
@@ -2027,10 +2027,10 @@ public class Mink3p2daily {
     int nLinesToRead = nYears + magicDSSATSummaryLineIndexToRead;
     String[] candidateSummaryContents = new String[nLinesToRead];
 
-    //System.out.println("magicDSSATSummaryToReadPath");
-    //System.out.println(magicDSSATSummaryToReadPath);
-    //System.out.println("the summary file happy");
-    //System.out.println(FunTricks.readTextFileToString(magicDSSATSummaryToReadPath));
+    // System.out.println("magicDSSATSummaryToReadPath");
+    // System.out.println(magicDSSATSummaryToReadPath);
+    // System.out.println("the summary file happy");
+    // System.out.println(FunTricks.readTextFileToString(magicDSSATSummaryToReadPath));
 
     //System.out.println("Working Directory = " + System.getProperty("user.dir"));
     try {
@@ -2513,11 +2513,11 @@ public class Mink3p2daily {
         return;
     }
 
-    System.out.println("Beware the MAGIC ASSUMPTION!!! We assume that the geographic\n" +
-        "location of the pre-existing weather files are lined up on multiples of\n" +
-        "the provided spacings +/- 1/2 of a spacing. That is, suppose you have 1/2 degree\n" +
-        "resolution. Then, we would expect points to fall on 0.25, 0.75, -0.25, 5.75, etc."
-        );
+    // System.out.println("Beware the MAGIC ASSUMPTION!!! We assume that the geographic\n" +
+    //     "location of the pre-existing weather files are lined up on multiples of\n" +
+    //     "the provided spacings +/- 1/2 of a spacing. That is, suppose you have 1/2 degree\n" +
+    //     "resolution. Then, we would expect points to fall on 0.25, 0.75, -0.25, 5.75, etc."
+    //     );
 
     // set up a timer for the fun of it...
     TimerUtility thisTimer = new TimerUtility();
@@ -2743,11 +2743,11 @@ public class Mink3p2daily {
     String XHappyInvariantsReplaced = invariantsReplaced[0];
     String XInvariantsReplaced      = invariantsReplaced[1];
 
-    System.out.println("XInvariantsReplaced");
-    System.out.println(XInvariantsReplaced);
+    // System.out.println("XInvariantsReplaced");
+    // System.out.println(XInvariantsReplaced);
 
-    System.out.println("XHappyInvariantsReplaced");
-    System.out.println(XHappyInvariantsReplaced);
+    // System.out.println("XHappyInvariantsReplaced");
+    // System.out.println(XHappyInvariantsReplaced);
     // start the timer for just DSSAT proper
     thisTimer.tic();
 
@@ -2763,7 +2763,12 @@ public class Mink3p2daily {
     SystemCallWithTimeout realRunnerThing = new SystemCallWithTimeout();
 
 
-    System.out.println("-- starting through data --");
+    System.out.println();
+    System.out.println("-- starting through data in Mink3p2daily.java --");
+    System.out.println();
+    System.out.println("nLinesInDataFile (number of cells)");
+    System.out.println(nLinesInDataFile);
+    System.out.println();
     for (int lineIndex = 0; lineIndex < nLinesInDataFile; lineIndex++) {
 
         latitude = geogMatrix.getValue(lineIndex,2); // Beware the MAGIC NUMBER!!!
@@ -3073,10 +3078,9 @@ public class Mink3p2daily {
             // for (int rerunIndex = 0; rerunIndex < rerunAttemptsMax ; rerunIndex++) {
             // happyRunnerThing.setup(dssatExecutionCommand, pathToDSSATDirectoryAsFile, (int)Math.ceil(maxRunTime * Math.pow(bumpUpMultiplier, rerunIndex)), testIntervalToUse);
 
-            //System.out.println("rundssat command");
-            //System.out.println("./run_dssat.sh");
+            // System.out.println("./run_dssat.sh");
             ProcessBuilder pb = new ProcessBuilder("bash", "./run_dssat.sh");
-            pb.inheritIO();
+            // pb.inheritIO();
             pb.directory(pathToDSSATDirectoryAsFile);
             Process process = pb.start();
             process.waitFor();
@@ -3408,7 +3412,7 @@ public class Mink3p2daily {
             realTimer.tic();
 
             pb = new ProcessBuilder("bash", "./run_dssat.sh");
-            pb.inheritIO();
+            // pb.inheritIO();
             pb.directory(pathToDSSATDirectoryAsFile);
             process = pb.start();
             process.waitFor();
@@ -3794,6 +3798,12 @@ public class Mink3p2daily {
 
 
     FunTricks.writeStringToFile(columnList,yieldOutputBaseName  + "_STATS.cols.txt");
+    if (nLinesInDataFile == 0) {
+        System.out.println("All we did was make some empty STATS columns");
+        System.out.println("");
+        // We have no pixels in the raster we're processing. We should skip the rest of this and return from the function. Any missing rasters as a result should be ignored.
+        return;
+    }
 
     long nRows = nLinesInDataFile;
 

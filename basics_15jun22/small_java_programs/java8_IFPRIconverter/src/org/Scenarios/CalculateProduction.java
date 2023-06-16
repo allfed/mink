@@ -17,7 +17,7 @@ public class CalculateProduction {
     List<List<String>> cultivar_groups_rasters =
         getCultivarGroups(scenarios, scenarios.best_planting_raster_name);
     List<List<String>> cultivar_groups_croplands =
-        getCultivarGroups(scenarios, scenarios.crop_area_raster);
+        getCultivarGroups(scenarios, scenarios.mask_for_this_snx);
     List<List<String>> scenario_tags_for_averaging =
         getCultivarGroups(scenarios, scenarios.scenario_tag_for_averaging_rf_or_ir);
     List<List<String>> scenario_tags_for_production =
@@ -38,8 +38,9 @@ public class CalculateProduction {
 
 
       // get the crop area and assert they're all the same
+      // NOTE: different cultivars now can have different croplands
       List<String> croplands = cultivar_groups_croplands.get(i);
-      assert verifyAllEqualUsingALoop(croplands);
+      // assert verifyAllEqualUsingALoop(croplands);
       String cropland = croplands.get(0);
 
       // get the results folders and assert they're all the same
@@ -170,24 +171,15 @@ public class CalculateProduction {
       String scenario_tag_for_averaging_rf_or_ir,
       String scenario_tag_for_production_rf_or_ir,
       String results_folder,
-      String crop_area_raster)
+      String mask_for_this_snx)
       throws InterruptedException, IOException {
 
     // average all the cultivars for the crop to estimate the crop's overall yield
     // this is specific to whether IR or RF
     // UNLESS this is soybean.. in which case get the best cultivar's (maturity group's) yield
     if(calculate_rf_or_ir_specific_average_yield){
-      System.out.println("crop");
-      System.out.println("crop");
-      System.out.println("crop");
-      System.out.println("crop");
-      System.out.println("crop");
-      System.out.println("crop");
-      System.out.println("crop");
-      System.out.println("crop");
-      System.out.println("crop");
-      System.out.println("crop");
-      System.out.println(crop);
+      // System.out.println("crop");
+      // System.out.println(crop);
       if(crop.equals("soybean")){
         BashScripts.compositeRaster(
             script_folder,
@@ -220,7 +212,7 @@ public class CalculateProduction {
       BashScripts.calculateProduction(
           script_folder,
           scenario_tag_for_averaging_rf_or_ir,
-          crop_area_raster,
+          mask_for_this_snx,
           scenario_tag_for_production_rf_or_ir);
     }
   }
@@ -277,7 +269,7 @@ public class CalculateProduction {
         raster_names_to_sum =
             raster_names_to_sum + scenarios.scenario_tag_for_production_rf_or_ir[i];
 
-        crop_area_to_sum = crop_area_to_sum + scenarios.crop_area_raster[i];
+        crop_area_to_sum = crop_area_to_sum + scenarios.mask_for_this_snx[i];
 
         last_index_of_crop = i;
       }
@@ -313,7 +305,10 @@ public class CalculateProduction {
 
       // process the overall yield rasters to .asc files
       if (scenarios.make_rasters_comparing_overall_to_historical) {
-        String crop_caps = StringUtils.substring(scenarios.crop_area_raster[last_index_of_crop], 0, 4);
+        String crop_caps = scenarios.crop_lower_to_caps_dictionary.get(scenarios.crop_name[last_index_of_crop]);
+
+        // System.out.println("crop_caps");
+        // System.out.println(crop_caps);
 
         BashScripts.CreateHistoricalVsModelYieldsASCIIs(
           script_folder,

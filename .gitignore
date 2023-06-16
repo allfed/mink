@@ -1,0 +1,137 @@
+# exclude built singularity image
+*.sif
+reports/
+wth_historical/
+wth_control/
+wth_catastrophe/
+wth_catastrophe_greenhouse/
+grassdata/
+grass6out.png
+Simulation_All_Crop_Scenario_State_Planting_cleaned.csv
+on_node_home*/
+all_US_DSSAT/
+basics_15jun22/sge_Mink3daily/logs/
+# turns out, we need this actual program thing... for dssat
+basics_15jun22/sge_Mink3daily/staging_area/*.sh
+basics_15jun22/sge_Mink3daily/staging_area/*.txt
+basics_15jun22/sge_Mink3daily/staging_area/runner_init_on_node_home*
+basics_15jun22/sge_Mink3daily/chunks_to_GRASS/
+basics_15jun22/sge_Mink3daily/to_DSSAT/
+
+# Java compiled objectsu
+*.class
+
+# Byte-compiled / optimied / DLL files
+__pycache__/
+*.py[cod]
+
+# C extensions
+*.so
+
+# zip files
+*.zip
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+#any numpy saved object
+*.npy
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# DotEnv configuration
+.env
+
+# Database
+*.db
+*.rdb
+
+# Pycharm
+.idea
+
+# VS Code
+.vscode/
+
+# Spyder
+.spyproject/
+
+# Jupyter NB Checkpoints
+.ipynb_checkpoints/
+
+
+
+# Mac OS-specific storage files
+.DS_Store
+
+# vim
+*.swp
+*.swo
+
+# Mypy cache
+.mypy_cache/
+
+# Singularity builds
+*sandbox*
+*.sif
+
+# GRASS source code
+GRASS_program/
+
+# object file directories
+GRASS_modules/*/OBJ*/
+
+# MINK data 
+catastrophe_mink/
+control_mink/
+control_mink_greenhouse/
+catastrophe_mink_greenhouse/
+DSSAT_control/
+DSSAT_greenhouse/
+DSSAT48/
+

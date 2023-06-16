@@ -3,6 +3,9 @@
 export  latitude_resolution=1.875  # these need to match the daily weather files
 export longitude_resolution=1.25  # these need to match the daily weather files
 
+echo ""
+echo "running mink3daily_run_DSSAT_tile.sh"
+echo ""
 
 # the idea is to make it deployable on a compute node
 
@@ -124,22 +127,25 @@ script_to_run_in_job=${staging_directory}script_to_run_${chunk_index}_r${quasi_r
    fi
 
 # build the block which will copy all those silly weather files. this will be ugly...
-echo $daily_weather_copier_classname
+# echo $daily_weather_copier_classname
 
-echo java_to_use -cp headnode_classpath daily_weather_copier_classname {prestaged_weather_dir}daily_to_use on_node_weather_dir data_file_base_name weatherDataSuffixWithDot latitude_resolution longitude_resolution
+# echo java_to_use -cp headnode_classpath daily_weather_copier_classname {prestaged_weather_dir}daily_to_use on_node_weather_dir data_file_base_name weatherDataSuffixWithDot latitude_resolution longitude_resolution
 
-echo "$java_to_use $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution"
+# echo "$java_to_use $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution"
 
 copy_block=`$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution | uniq`
-
+# echo "copy_block"
+# echo $copy_block
 number_of_pixels=`echo "$copy_block" | wc -l`
-echo $number_of_pixels
+# echo $number_of_pixels
 
 #  we_need_to_delay=`echo "if($n_before_me > -2 && $n_before_me <= $number_of_initial_cases_to_stagger) {1} else {0}" | bc`
 we_need_to_delay=0
- number_of_pixels=`echo "$copy_block" | wc -l`
-# number_of_pixels=1
-    echo "n_before_me = $n_before_me; maxstagger = $number_of_initial_cases_to_stagger ; n_pixels = $number_of_pixels / guess files per sec $guess_for_weather_files_per_second; need_to_delay = $we_need_to_delay"
+
+# In the regular expression '^cp', the ^ symbol means "start of the line", and cp is the exact character sequence you are looking for. Therefore, grep '^cp' matches any line that starts with "cp". The wc -l command then counts the number of these lines.
+number_of_pixels=`echo "$copy_block" | grep '^cp' | wc -l`
+
+    # echo "n_before_me = $n_before_me; maxstagger = $number_of_initial_cases_to_stagger ; n_pixels = $number_of_pixels / guess files per sec $guess_for_weather_files_per_second; need_to_delay = $we_need_to_delay"
 
   if [ "$we_need_to_delay" = 1 ]; then
     time_to_delay=`echo "scale=1 ; $number_of_pixels / $guess_for_weather_files_per_second" | bc`s
@@ -147,26 +153,21 @@ we_need_to_delay=0
     time_to_delay=0.1s
   fi
 
-  echo "optionalHarvestInterval"
-  echo $optionalHarvestInterval
-  echo "clayLoamSandStableCarbonRatesFilename"
-  echo $clayLoamSandStableCarbonRatesFilename
-  echo "optionalHarvestInterval"
-  echo $optionalHarvestInterval
-  echo "plantingDateInMonthShiftInDays"
-  echo $plantingDateInMonthShiftInDays
-  echo "latitude_resolution"
-  echo $latitude_resolution
-  echo "longitude_resolution"
-  echo $longitude_resolution
-echo "reached 2"
-echo $script_to_run_in_job
+  # echo "optionalHarvestInterval"
+  # echo $optionalHarvestInterval
+  # echo "clayLoamSandStableCarbonRatesFilename"
+  # echo $clayLoamSandStableCarbonRatesFilename
+  # echo "optionalHarvestInterval"
+  # echo $optionalHarvestInterval
+  # echo "plantingDateInMonthShiftInDays"
+  # echo $plantingDateInMonthShiftInDays
+  # echo "latitude_resolution"
+  # echo $latitude_resolution
+  # echo "longitude_resolution"
+  # echo $longitude_resolution
+# echo $script_to_run_in_job
 # write out the job script....
 echo "#!/bin/bash
-  echo \"Looks like the script is printing out\"
-  echo \"running on \$HOSTNAME at \`date\`\"
-
-  echo \"CASE $X_template ${daily_to_use##*/} $co2_level ${data_file_base_name##*/CZX*_*XZC_}\"
 
   # write out the runner init file
   echo \"$allFlag\"                      > $runner_init_file
@@ -218,7 +219,6 @@ echo "#!/bin/bash
   echo \"$keepRealDaysToMaturity\"      >> $runner_init_file
   
   
-echo \"reached 3\"
 ###################
 ### do the work ###
 ###################
@@ -241,16 +241,14 @@ echo \"------ moving/unpacking ; \`date\` ------\"
          mkdir -p $on_node_output_dir
 
  # Added this recompile condition each time (DMR)
-  echo \" original pwd: \`pwd\` \"
   cd ${original_runner_dir}java8_IFPRIconverter/src/
-  echo \" cding to ${original_runner_dir}java8_IFPRIconverter/src/ \"
   javac org/DSSATRunner/Mink3p2daily.java
-  echo \" at pwd: \`pwd\` \"
+  javac org/DSSATRunner/WriteCopyBlockForDailyWeather.java
 
   mv org/DSSATRunner/Mink3p2daily.class ../bin/org/DSSATRunner/Mink3p2daily.class
+  mv org/DSSATRunner/WriteCopyBlockForDailyWeather.class ../bin/org/DSSATRunner/WriteCopyBlockForDailyWeather.class
 
   cd -
-  echo \" back to original pwd: \`pwd\` \"
 
   # move the stuff out
   # the runner needs all the subdirectories
@@ -262,31 +260,22 @@ echo \"------ moving/unpacking ; \`date\` ------\"
   cp $runner_init_file         ${on_node_runner_init_file}
 
   # copy the daily weather
-echo \"\"
-echo \"about to copy\"
 $copy_block
-echo \"\"
-echo \"finished copying\"
-echo \"\"
+echo \"number_of_pixels\"
+echo \"$number_of_pixels\"
 
-# check if things copied ok.
-#if [ \$? -ne 0 ]; then
 # i think what i really care about is if any things got copied at all..
-if [ \`ls -U $on_node_weather_dir*${weatherDataSuffixWithDot} | wc -l\` -eq 0 ]; then
+# however, if there are actually no valid cells, we don't want to error out
+if [ $number_of_pixels -ne 0 ] && [ \`ls -U $on_node_weather_dir*${weatherDataSuffixWithDot} | wc -l\` -eq 0 ]; then
     echo \" !!! something bad happened on \$HOSTNAME and we could not copy nicely, clearing out $on_node_home\"
     rm -rf $on_node_home
     echo \"- done BAILING at \`date\` -\" >> $log_file
     exit
 fi
 
-echo \"------ running          ; \`date\` ------\"
-
 
   # run the program
-  echo \"at \`pwd\`\" 
-  echo \"now moving to $on_node_DSSAT_dir\"
   cd $on_node_DSSAT_dir
-  echo \"now at \`pwd\`\" 
 
 
   echo \"now in \`pwd\`\" >> $log_file
@@ -303,12 +292,7 @@ echo \"------ running          ; \`date\` ------\"
   echo \"\" >> $log_file
   echo \"\" >> $log_file
   echo \"--B--\" >> $log_file
-#   echo command is $java_to_use \"$memory_string\" -cp $classpath $classname $on_node_runner_init_file >> $log_file
-#   echo using full interpretive version of the runner even with coordination style DSSAT for wheat.... >> $log_file
 
-    echo \"directory for java\"
-    echo \"\`pwd\`\"
-    echo \"$java_to_use $memory_string -cp $classpath $classname $on_node_runner_init_file \"
    $java_to_use \"$memory_string\" -cp $classpath $classname $on_node_runner_init_file 
 
 # no idea why the below breaks things (DMR)
@@ -320,11 +304,13 @@ echo \"------ running          ; \`date\` ------\"
 #    test_exit_code=\$?
 #   if [ \$test_exit_code -eq 0 ]; then
 #     # copy the results back
-   
+
+  cp ${yieldOutputBaseName}_STATS.cols.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.cols.txt
+   if [ $number_of_pixels -ne 0 ]; then
     cp ${yieldOutputBaseName}_STATS.txt      ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.txt
     cp ${yieldOutputBaseName}_STATS.info.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.info.txt
-    cp ${yieldOutputBaseName}_STATS.cols.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.cols.txt
     cp ${yieldOutputBaseName}_provenance.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_provenance.txt
+    fi
 
     # clean up the compute node mess
     echo \"all is well, so clean up on-node-home\" >> $log_file
@@ -351,6 +337,15 @@ echo \"------ running          ; \`date\` ------\"
 
         " > $script_to_run_in_job # end of ssh command....
 
+echo ""
+echo "done running mink3daily_run_DSSAT_tile.sh"
+echo ""
+
+
+echo ""
+echo "running the script generated from mink3daily_run_DSSAT_tile"
+echo ""
+
 cd staging_area
 
 latest_script=`ls *.sh -rt | tail -n 1`
@@ -358,3 +353,7 @@ latest_script=`ls *.sh -rt | tail -n 1`
 chmod +x $latest_script 
 
 ./$latest_script
+
+echo ""
+echo "done running the generated script"
+echo ""

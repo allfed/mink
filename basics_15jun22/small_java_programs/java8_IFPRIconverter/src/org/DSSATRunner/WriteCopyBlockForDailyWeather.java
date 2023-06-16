@@ -34,8 +34,6 @@ public class WriteCopyBlockForDailyWeather {
         MultiFormatMatrix geogMatrix = MatrixOperations.read2DMFMfromTextForceFormat(gisDataTablePath + "_geog",formatIndexToForce);
 
         int nLinesInDataFile = (int)geogMatrix.getDimensions()[0];
-        System.out.println("# nLinesInDataFile");
-        System.out.println("# "+nLinesInDataFile);
 //      double idNumber = -1; // this will be the pixel-specific id number...
         String fullSourceName = null;
 

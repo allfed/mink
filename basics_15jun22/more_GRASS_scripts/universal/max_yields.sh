@@ -13,7 +13,11 @@ r.series --overwrite input=$1 output=$3 method=max_raster
 
 
 # if you want to save the result as ascii, you could uncomment the lines below
-# cd $3
-# r.out.ascii input=$2 output=- > $2.asc
+# echo "cd to $4"
+# echo "saving max yields"
+cd $4
+# echo "rastername to save"
+# echo $3
+r.out.ascii input=$2 output=- > $2.asc
 # r.out.ascii input=$3 output=- > $3.asc
 

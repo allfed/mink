@@ -1,0 +1,14 @@
+# run directory
+~/Code/mink/
+
+# rasters for masks
+~/Code/mink/grassdata/world/stuff_for_morgan_25apr23
+
+# scenarios
+~/Code/mink/basics_15jun22/sge_Mink3daily/scenarios/world
+
+# GRASS scripts
+~/Code/mink/basics_15jun22/more_GRASS_scripts/scripts
+
+# Java scenarios code
+~/Code/mink/basics_15jun22/small_java_programs/java8_IFPRIconverter/src/org/Scenario

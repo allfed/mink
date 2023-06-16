@@ -32,7 +32,8 @@
    
    export GRASS_VERSION="6.5.svn"
    MYGISDBASE=/mnt/data/grassdata
-   MYMAPSET=DSSAT_essentials_12may11
+   #MYMAPSET=stuff_for_morgan_25apr23
+   MYMAPSET=morgan_DSSAT_cat_0
    MYLOC=world
 #set the global grassrc file to individual file name
 MYGISRC="$HOME/.grassrc.$GRASS_VERSION.$$"
@@ -60,7 +61,7 @@ export TGISDB_DRIVER=sqlite
 export TGISDB_DATABASE=$MYGISDBASE/$MYLOC/PERMANENT/tgis/sqlite.db
 
 # for fun, we can even set the shell prompt to contain a hint on GRASS GIS env being active
-export PS1="[\u@\h \W G-$GRASS_VERSION]$ "
+#export PS1="[\u@\h \W G-$GRASS_VERSION]$ "
 
 # system vars
 export PATH="$GISBASE/bin:$GISBASE/scripts:$PATH"

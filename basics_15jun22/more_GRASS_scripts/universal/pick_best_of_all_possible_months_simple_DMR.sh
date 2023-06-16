@@ -75,10 +75,10 @@ for line in $line_list; do
     # update the base yield if we meet the criteria
     r.mapcalc $best_yield = " \
                   if($this_months_yield > $best_yield, $this_months_yield, $best_yield) \
-                            " 2>&1 | grep -v "%"
+                            " --quiet #2>&1 | grep -v "%"
   
     # update the best month
-    r.mapcalc $best_month = "if($best_yield == ${this_months_yield}, $month, $best_month)" 2>&1 | grep -v "%"
+    r.mapcalc $best_month = "if($best_yield == ${this_months_yield}, $month, $best_month)" --quiet #@2>&1 | grep -v "%"
 
   done # month
 
