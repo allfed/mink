@@ -1,0 +1,212 @@
+notes on my progress on mapping cultivars with defaults and all the resulting errors that occurred
+
+other improvements relevant to june 16 commit
+
+
+
+    We need to set it up so that default_cultivar_mappings is used if 
+    cultivar_mappings is not specified in the simulation csv for potatoes, wheat, maize.
+
+    In the case Canola, we already have everything setup for the mapping (canola only has one cultivar).
+
+    In the case of Soybean, Soybean used will be the best of all cultivars. We already have the scenario setup for this.
+
+    If cultivar_mappings is specified in the simulation csv, then it should be used instead of default_cultivar_mappings.
+
+    If is not specified, then we want to implement a special java function which runs EITHER a new simulation for each megaenvironment, or runs a single simulation where each location already has its cultivar determined.
+    This may involve downscaling the raster to the resolution of the weather files in order to pick the most appropriate cultivar for each location. (NEED TO CHECK THIS)
+
+      The mapping from the file will beconverted to a HashMap<String, String>. where the first String is one of (maize, wheat, potato), and the second string is the raster (but actually, maybe a single cultivar has multiple rasters? Assume they're somehow combined for now (NEED TO CHECK THIS)).
+
+        This entirely depends on whether it's possible to have the java mink3dailyrunner run a single simulation with different cultivars.
+        Mink3Daily has:
+
+        public static final String tempXFileName                    = "./deleteme.SNX";
+        FunTricks.writeStringToFile(XHappyStuffToWrite, fullTempXFile);
+
+        so then does StuffToWrite differ between grid cells? Where do we get this data?
+
+        we have:
+
+        ProcessBuilder pb =
+            new ProcessBuilder(
+                "bash",
+                "./mink3daily_run_DSSAT_tile.sh",
+                "/mnt/data/basics_15jun22/sge_Mink3daily/to_DSSAT/" + yield_result_name,
+                weather_folder + "/" + weather_prefix,
+                snx_name + ".SNX",
+                fertilizer_scheme,
+                co2_level,
+                crop_name,
+                "1",
+                "0");
+
+        and then basically what happens is a single run uses the X_file
+
+        mink3daily_run_DSSAT_tile.sh
+
+        to copy over just one SNX
+
+        cp \${original_X_files_dir}\${X_template} \$X_dir
+
+        which becomes
+
+        cp /mnt/data/basics_15jun22/sge_Mink3daily/SNX_files/whNEWTONRF.SNX /mnt/data/on_node_home9159_927265190/DSSAT/X_files/
+
+
+        the actual running of the tiles occurs at 
+
+        org.DSSATRunner.MinkRunner3p2daily
+        
+        with this injected code:
+
+        \$java_to_use "\$memory_string" -cp \$classpath \$classname \$on_node_runner_init_file 
+
+        $on_node_runner_init_file only has one SNX.
+
+        the key place this occurs is in the Mink3p2daily runner:
+
+
+        System.out.println("-- starting through data --");
+        for (int lineIndex = 0; lineIndex < nLinesInDataFile; lineIndex++) {
+
+            latitude = geogMatrix.getValue(lineIndex,2); // Beware the MAGIC NUMBER!!!
+            longitude = geogMatrix.getValue(lineIndex,3); // Beware the MAGIC NUMB
+
+            ...
+
+          
+            //System.out.println("rundssat command");
+            //System.out.println("./run_dssat.sh");
+            ProcessBuilder pb = new ProcessBuilder("bash", "./run_dssat.sh");
+            pb.inheritIO();
+            pb.directory(pathToDSSATDirectoryAsFile);
+            Process process = pb.start();
+            process.waitFor();
+
+        okay, so clearly only one SNX is run for a given on_node_home.
+
+        The question arises:
+          Do we run multiple cultivars in a single region and average the result, if we have a ratio between the likely amount of each cultivar? Are the maps even mutually exclusive at all? At such a low resolution, it may be naive to simply run one cultivar for a cell if we have reason to believe multiple cultivars are grown there.
+
+          And what is currently being done?
+
+          in MAIZE_maize_mask_MEs_28Aug13.sh:
+
+            # now we need to do the division
+            r.mapcalc $yield_rast = "$yield_rast / $count_rast" 2>&1 | grep -v "%"
+          so it looks like we're averaging over the number of counts
+          
+
+
+      The HashMap will be used if the cultivar has not been set in the scenarios.
+
+      IN THE CASE THAT EACH CULTIVAR IS A SEPARATE MAPPING TO RUN, once we have the cultivar map, we need to sum the result. Otherwise it should be set up properly. (ANSWER: YES< EACH ONE IS, AND HE DID THIS DIFFERENTLY, HE RAN IT AFTER THE FACT FOR EACH RUN FOR SOME REASON! SO I NEED TO MULTIPLY THE MASK BEFOREHAND)
+
+    REMAINING QUESTIONS: Spring and Winter for wheat seem to have different processing somehow? I think I can just alter scenarios to account for this? It might already be taken care of. (I think this just comes down to different locations for winter and spring)
+
+    ALSO we need to run the whole world! So this requires setting a different lat/lon max/min. HOWEVER, we should try just running a small region first like the US to see if the results are reasonable.
+
+
+    OKAY!
+
+    so I will for example, run through each cultivar, and have a list of (1,0) grass megaenvironment masks which need to be unioned together to get the regions that cultivar needs to be calculated (a (1,0) grass mask). Then, I get a smaller_crop_area_mask (also a (1,0) grass mask), where the smaller_crop_area_mask is the intersection of the crop_area mask and the unioned_megaenvironment mask.
+
+    this union of megaenvironments, and subsequent intersection with the crop_area needs to be done before the initGRASS method is called
+
+    method is completed.
+
+
+
+    ###
+
+
+    So, today (june 5) I got compile time things fixed with java but not runtime. Theoretically, if the resolution isn't an issue, it should find all the areas the crop exists, and then only run those (using megaenvironments). A given crop is already specified with spam, and then this map from the crop is overlaid with relavent megaenvironments for acultivar. I generate this megaenvironment_union by unioniing all the megaenvironments for a given cultivar. Then I intersect, to get the new smaller mask just for tha cultivar. It initializes with this in grass, and I should get a pretty picture, but there's a runtime error.
+
+    next I need to fix the error, make sure nothing fishy is happening when we go from spam resolutioin to the larger crop resolution from the weather files (may need to use a resample command for example) by looking at the png, and then make sure to sum all the relevant yields in a given region, where the yield of each SNX file counts equally towards the total. So this probably means taking all the SNX and averaging.
+
+    I also still need to check if SNX are being specified in the run, and if not, automatically find the relevant SNX for a crop with DSSAT.
+
+    ###
+
+    Today (june 6) I finished the creation of the scenarios from a basic yaml file.
+    Probably should next add to the csvmonths and years and real or happy for each row, to make it complete. Things should now be set up to run this Scenarios.java, but I need to remember to replace area_raster with mask_for_this_snx, and make sure to set mask_for_this_snx equal to the area. 
+
+    I need to figure out a way to ensure there's not too much region setting in the initgrassbuild... potentially I should just split up the initgrassbuild file into separate parts if there's lots of computationally heavy things that don't need to happen there.
+
+    but the minimal thing to do next is just ensure the actual raster is being set properly and check that only nonnull raster elements above the minimum area reuirements are being run. 
+    
+    I need to make sure the scenario configs are logged somewhere automatically as well, when the scenario is actually run (the part that is time consuming and I can't just redo).
+
+
+    At that point, I should be good to go with running first australia, then the whole world. 
+
+    ### june 7
+     everythingexcept the logging and the last point are basically done now
+    3 errors
+    Singularity mink_sandbox:~/Code/mink> ./run_from_csv.sh dssat
+       >>> using dscsm_compiled_fast.exe <<<
+    org/Scenarios/Scenarios.java:815: error: incompatible types: String cannot be converted to String[]
+              scenarios.month_result_name[i],
+from
+Singularity mink_sandbox:~/Code/mink> ./run_from_csv.sh dssat
+
+    need to also check the final yield calcs arent using the weather_raster
+    and that it all adds together properly between dssats... could be a problem if some are null, or all are null?
+
+    also need to still check winterwheat is going properly (and potatoes, but thats less worrisome)
+
+    ###
+    there was a very hard to find bug (missing line in the build killing the nitrogen initialization raster, meaning run_dssat was failing)
+
+    fixed it, now things are looking better
+
+    ###
+    Jun 13
+    seeinsubl "singularity exec --writable --bind $PWD:/mnt/data mink_sandbox ./generate_scenarios_csv.sh"
+    [{"success":true}]
+    [{"success":true}]
+    [{"success":true}]
+     $    ~/Code/mink   main  seeinsubl "singularity exec --writable --bind $PWD:/mnt/data mink_sandbox ./run_from_csv.sh both"
+
+    Got my code working but there's a little issue: the REFACTORED for build_daily seems to have a parse errro
+
+    ignoring the refactored, we have a small error iwth gneerating png's
+
+    379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_wheat__Jun13AUSmasktest_wet_averaged_RF@morgan_DSSAT_cat_0 has failed to exist
+
+    I believe has to do with my conditions set in the  /home/dmrivers/Code/mink/scenarios/AUS/test_AUS_megaenvironments.yaml
+
+    but otherwise wverything is working. Checked also: the averaging does not count null values. so masks should be good, avering all the non-null values. 
+
+    once this is fixed, try to test if looks like old AUS results, then run the whole world!
+
+    ### jun 14
+
+    I fixed the parse error and pngs
+    I reduced the printout statements greatly. it was unmanageable before, and now it's a lot but not completely crazy.
+    some issues with --quiet though especially in r.mapcalc... not sure best way to quiet r.mapcalc.
+    It looks like wheat is operating well so far as well, with similiar-to-correct-values as far as I can tell!
+
+    Everything so far is working.
+
+    Fixed the analyze_single_crop.py to plot out the results for a given mask.
+
+    Succeeded in testing for all the planting months!
+    
+    ### 
+    jun 15
+    
+    success in getting skipped dssat run rasters (in the case of 0 pixels) processed (just used the columns array, with some logic to just set a null)
+
+    there was some issue in actually creating the rasters in these cases for some reason
+
+    OK. So I ran the full MaIZE in AUS. Took 90 seconds to run and 160 second to process! So the process is slow because all the empty files I guess.
+
+    Maize doesn't grow at all in aus (but does in one place in the phillipines/indonesia??. That seems highly suspicious. Maybe my min hectare thing is too stringent? 
+    where it does grow the yield is fine.
+    But actually also it's not even showing zero yield. which is fine, but good to keep in mind.
+
+    So, next I'll figure out how he deals with winterwheat, and try to run the wheats to see if I get something reasonable. After that, I suppose I'll try the whole world, probably starting with canola. 
+
+    So this is good, no bugs left as far as I can tell (but a lack of a feature (winter wheat), and some suspicious results)  
