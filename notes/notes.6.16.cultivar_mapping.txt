@@ -210,3 +210,22 @@ Singularity mink_sandbox:~/Code/mink> ./run_from_csv.sh dssat
     So, next I'll figure out how he deals with winterwheat, and try to run the wheats to see if I get something reasonable. After that, I suppose I'll try the whole world, probably starting with canola. 
 
     So this is good, no bugs left as far as I can tell (but a lack of a feature (winter wheat), and some suspicious results)  
+
+
+### jun 16
+
+I fixed an issue with unioning megaenvironemnts
+
+but still, If I run the cultivar like this:
+mzK026RF,379,maize,Outdoor_crops_control,control_mink,wth_control,Jun15AUSmasktest,250,-8.4375,-44.0625,158.125,104.375,1.875,1.25,mask_for_mzK026RF,threeSplitWithFlowering
+mzK026IR,379,maize,Outdoor_crops_control,control_mink,wth_control,Jun15AUSmasktest,250,-8.4375,-44.0625,158.125,104.375,1.875,1.25,mask_for_mzK026IR,threeSplitWithFlowering
+mzK024RF,379,maize,Outdoor_crops_control,control_mink,wth_control,Jun15AUSmasktest,250,-8.4375,-44.0625,158.125,104.375,1.875,1.25,mask_for_mzK024RF,threeSplitWithFlowering
+mzK024IR,379,maize,Outdoor_crops_control,control_mink,wth_control,Jun15AUSmasktest,250,-8.4375,-44.0625,158.125,104.375,1.875,1.25,mask_for_mzK024IR,threeSplitWithFlowering
+
+or this
+
+mzK026RF,379,maize,Outdoor_crops_control,control_mink,wth_control,Jun15AUSmasktest,250,-8.4375,-44.0625,158.125,104.375,1.875,1.25,mask_for_mzK026RF,threeSplitWithFlowering
+mzK026IR,379,maize,Outdoor_crops_control,control_mink,wth_control,Jun15AUSmasktest,250,-8.4375,-44.0625,158.125,104.375,1.875,1.25,mask_for_mzK026IR,threeSplitWithFlowering
+
+it gives me lots of nice outputs. 
+but when I have the whole list of  maize cultivars, the output gets lower! That should never happen. I was thinking it was the nulls in the data, but now I think it's probably something to do with not entirely null data messing up the data pipeline in the averaging or dividing somewhere.
