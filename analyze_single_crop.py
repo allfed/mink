@@ -16,7 +16,7 @@ model_results_dictionary[cat_or_cntrl_options[0]] = {}
 if len(cat_or_cntrl_options) == 2:
     model_results_dictionary[cat_or_cntrl_options[1]] = {}
 # descriptions = ["Feb8AUS150tg", "Feb13RealNitAUS150tg"]
-descriptions = ["Jun13AUSmasktest"]
+descriptions = ["Jun15AUSmasktest"]
 the_title = "Crop Yields Australia"
 
 
@@ -37,8 +37,8 @@ DSSAT_to_SNX_crop_dictionary = {
 }
 
 dssat_crops_to_consider = [
-    "wheat",
-    # "maize",
+    # "wheat",
+    "maize",
     # "rapeseed",
     # "soybean"
     # "potatoes",

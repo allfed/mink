@@ -26,6 +26,7 @@ import org.R2Useful.*;
 public class Scenarios {
 
   public int n_scenarios;
+  public String all_or_crop_specific;
   public String[] crop_name;
 
   private String pathToCSV = null;
@@ -79,6 +80,7 @@ public class Scenarios {
   public String[] nitrogen;
   public String[][] yield_result_names; // cultivar, month
   public String[] fertilizer_scheme;
+  public String[] rf_or_ir;
   public HashMap<String, String> crop_lower_to_caps_dictionary;
 
   // The main method is responsible for creating an instance of the Scenarios class by reading in a
@@ -260,7 +262,10 @@ public class Scenarios {
       config.model_configuration.create_overall_png
     );
 
-    String real_or_happy = config.model_configuration.real_or_happy;
+    this.all_or_crop_specific = config.physical_parameters.all_or_crop_specific;
+
+
+    String real_or_happy = config.physical_parameters.real_or_happy;
 
 
   //   // consider may, april, march, june
@@ -302,6 +307,7 @@ public class Scenarios {
 
     // composites
     this.scenario_tag = new String[n_scenarios];
+    this.rf_or_ir = new String[n_scenarios];
     this.scenario_tag_for_averaging_rf_or_ir = new String[n_scenarios];
     this.scenario_tag_for_production_rf_or_ir = new String[n_scenarios];
     this.scenario_tag_for_production = new String[n_scenarios];
@@ -360,7 +366,7 @@ public class Scenarios {
       // last 2 characters of snx name is rf_or_ir (indicates whether rainfed or irrigated)
       String rf_or_ir = snx_name[i].substring(snx_name[i].length() - 2);
       assert rf_or_ir.equals("RF") || rf_or_ir.equals("IR");
-
+      this.rf_or_ir[i] = rf_or_ir;
 
       // CAN'T BE CHANGED:
       // (PREDETERMINED BY DSSAT AND READ_DSSAT_outputs_from_cols_FEW SCRIPT)

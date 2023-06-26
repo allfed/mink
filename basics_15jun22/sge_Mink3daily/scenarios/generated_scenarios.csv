@@ -1,4 +1,8 @@
 snx_name,co2_level,crop_name,weather_prefix,weather_folder,results_folder,run_descriptor,nitrogen,region_to_use_n,region_to_use_s,region_to_use_e,region_to_use_w,nsres,ewres,mask_for_this_snx,fertilizer_scheme
+mzK013RF,379,maize,Outdoor_crops_control,control_mink,wth_control,Jun15AUSmasktest,250,-8.4375,-44.0625,158.125,104.375,1.875,1.25,mask_for_mzK013RF,threeSplitWithFlowering
+mzK013IR,379,maize,Outdoor_crops_control,control_mink,wth_control,Jun15AUSmasktest,250,-8.4375,-44.0625,158.125,104.375,1.875,1.25,mask_for_mzK013IR,threeSplitWithFlowering
+mzK014RF,379,maize,Outdoor_crops_control,control_mink,wth_control,Jun15AUSmasktest,250,-8.4375,-44.0625,158.125,104.375,1.875,1.25,mask_for_mzK014RF,threeSplitWithFlowering
+mzK014IR,379,maize,Outdoor_crops_control,control_mink,wth_control,Jun15AUSmasktest,250,-8.4375,-44.0625,158.125,104.375,1.875,1.25,mask_for_mzK014IR,threeSplitWithFlowering
 mzK026RF,379,maize,Outdoor_crops_control,control_mink,wth_control,Jun15AUSmasktest,250,-8.4375,-44.0625,158.125,104.375,1.875,1.25,mask_for_mzK026RF,threeSplitWithFlowering
 mzK026IR,379,maize,Outdoor_crops_control,control_mink,wth_control,Jun15AUSmasktest,250,-8.4375,-44.0625,158.125,104.375,1.875,1.25,mask_for_mzK026IR,threeSplitWithFlowering
 mzK024RF,379,maize,Outdoor_crops_control,control_mink,wth_control,Jun15AUSmasktest,250,-8.4375,-44.0625,158.125,104.375,1.875,1.25,mask_for_mzK024RF,threeSplitWithFlowering

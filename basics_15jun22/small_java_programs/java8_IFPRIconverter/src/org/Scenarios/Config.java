@@ -23,7 +23,7 @@ public class Config {
     }
 
     public class ModelConfiguration {
-        public String real_or_happy;
+        public String run_descriptor;
         public boolean run_crop_model;
         public boolean process_results;
         public boolean calculate_as_wet_weight;
@@ -42,7 +42,7 @@ public class Config {
         @Override
         public String toString() {
             return "ModelConfiguration{" +
-                    "real_or_happy='" + real_or_happy + '\'' +
+                    "run_descriptor='" + run_descriptor + '\'' +
                     ", run_crop_model=" + run_crop_model +
                     ", process_results=" + process_results +
                     ", calculate_as_wet_weight=" + calculate_as_wet_weight +
@@ -70,7 +70,8 @@ public class Config {
         public double ewres;
         public int co2_level;
         public int nitrogen;
-        public String run_descriptor;
+        public String real_or_happy;
+        public String all_or_crop_specific;
         public List<String> irrigation_to_try;
         public String weather_prefix;
         public String weather_folder;
@@ -89,7 +90,8 @@ public class Config {
                     ", ewres=" + ewres +
                     ", co2_level=" + co2_level +
                     ", nitrogen=" + nitrogen +
-                    ", run_descriptor='" + run_descriptor + '\'' +
+                    ", real_or_happy='" + real_or_happy + '\'' +
+                    ", all_or_crop_specific='" + all_or_crop_specific + '\'' +
                     ", irrigation_to_try=" + irrigation_to_try +
                     ", weather_prefix='" + weather_prefix + '\'' +
                     ", weather_folder='" + weather_folder + '\'' +
@@ -143,7 +145,7 @@ public class Config {
                 } else if (line.startsWith("nitrogen: ")) {
                     config.physical_parameters.nitrogen = Integer.parseInt(line.split(": ")[1]);
                 } else if (line.startsWith("run_descriptor: ")) {
-                    config.physical_parameters.run_descriptor = line.split(": ")[1].trim();
+                    config.model_configuration.run_descriptor = line.split(": ")[1].trim();
                 } else if (line.startsWith("irrigation_to_try: ")) {
                     String[] array = line.split(": ")[1].replace("[","").replace("]","").split(", ");
                     config.physical_parameters.irrigation_to_try = Arrays.asList(array);
@@ -171,7 +173,9 @@ public class Config {
                     String[] array = line.split(": ")[1].replace("[","").replace("]","").split(", ");
                     config.physical_parameters.years = Arrays.asList(array);
                 } else if (line.startsWith("real_or_happy: ")) {
-                    config.model_configuration.real_or_happy = line.split(": ")[1].trim();
+                    config.physical_parameters.real_or_happy = line.split(": ")[1].trim();
+                } else if (line.startsWith("all_or_crop_specific: ")) {
+                    config.physical_parameters.all_or_crop_specific = line.split(": ")[1].trim();
                 } else if (line.startsWith("run_crop_model: ")) {
                     config.model_configuration.run_crop_model = Boolean.parseBoolean(line.split(": ")[1]);
                 } else if (line.startsWith("process_results: ")) {

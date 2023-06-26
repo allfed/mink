@@ -84,6 +84,16 @@ public class GenerateScenarios {
     // all the snx_names 
     String[] default_snx_names_prefix = getUniqueSNXnames(default_cultivar_mappings_location);
 
+    String prefix = "";
+    if (config.physical_parameters.all_or_crop_specific.equals("all")) {
+       prefix = "ALL_CROPS";
+    } else if (config.physical_parameters.all_or_crop_specific.equals("specific")) {
+       prefix = crop.name;
+    } else {
+      System.out.println("Error: make sure all_or_crop_specific is all or specific");
+      System.exit(1);
+    }
+
     for (String snx_name_prefix : default_snx_names_prefix) {
 
       String short_code = snx_name_prefix.substring(0,2);
@@ -97,8 +107,9 @@ public class GenerateScenarios {
         String megaEnvMasks = cultivar_mask_map.get(snx_name_prefix);
         String mask_for_this_snx = "mask_for_"+snx_name_prefix+irrigation;
               
+
         // determine crop area raster based on irrigation type
-        String crop_area_raster = "ALL_CROPS_" + (irrigation.equals("RF") ? "rainfed_cropland" : "irrigated_cropland");
+        String crop_area_raster = prefix + "_" + (irrigation.equals("RF") ? "rainfed_cropland" : "irrigated_cropland");
               
         // loop over the default_snx_names and get the intersection 
         BashScripts.setIntersectionWithMegaenvironmentMasks(script_folder,crop_area_raster,megaEnvMasks,mask_for_this_snx);
@@ -111,7 +122,7 @@ public class GenerateScenarios {
             config.physical_parameters.weather_prefix,
             config.physical_parameters.weather_folder,
             config.physical_parameters.results_folder,
-            config.physical_parameters.run_descriptor,
+            config.model_configuration.run_descriptor,
             String.valueOf(config.physical_parameters.nitrogen),
             String.valueOf(config.physical_parameters.region_to_use_n),
             String.valueOf(config.physical_parameters.region_to_use_s),
@@ -131,14 +142,24 @@ public class GenerateScenarios {
       // Code to write to CSV with specific snx names
       // This would be similar to your existing code for handling snx names
       // Only difference being you need to pass csvWriter as parameter and not create new
+
+      String prefix = "";
+
+      if (config.physical_parameters.all_or_crop_specific.equals("all")) {
+         prefix = "ALL_CROPS";
+      } else if (config.physical_parameters.all_or_crop_specific.equals("specific")) {
+         prefix = crop.name;
+      } else {
+        System.out.println("Error: make sure all_or_crop_specific is all or specific");
+        System.exit(1);
+      }
       for (String snx_name_prefix : crop.snx_names) {
           // iterate over all irrigation types
           for (String irrigation : config.physical_parameters.irrigation_to_try) {
               // create a unique scenario name
               String snx_name = snx_name_prefix + irrigation;
-                    
               // determine crop area raster based on irrigation type
-              String crop_area_raster = "ALL_CROPS_" + (irrigation.equals("RF") ? "rainfed_cropland" : "irrigated_cropland");
+              String crop_area_raster = prefix + "_" + (irrigation.equals("RF") ? "rainfed_cropland" : "irrigated_cropland");
                     
               // write a new line to the CSV file
               csvWriter.append(String.join(",",
@@ -148,7 +169,7 @@ public class GenerateScenarios {
                   config.physical_parameters.weather_prefix,
                   config.physical_parameters.weather_folder,
                   config.physical_parameters.results_folder,
-                  config.physical_parameters.run_descriptor,
+                  config.model_configuration.run_descriptor,
                   String.valueOf(config.physical_parameters.nitrogen),
                   String.valueOf(config.physical_parameters.region_to_use_n),
                   String.valueOf(config.physical_parameters.region_to_use_s),

@@ -1,8 +1,5 @@
 model_configuration:
 
-  # add in nitrogen and water stress for 'real', ignore them for 'happy'
-  real_or_happy: real
-
   # These are currently not used! In the case we don't want command line interface to specify (and we change the way Scenarios.java is called), then DSSAT passed in is the same as (run_crop_model variable true), process is the same ass (process_results true) or both is the same as (both true).
   run_crop_model: false
   process_results: false
@@ -56,6 +53,13 @@ physical_parameters:
   ewres: 1.25
   co2_level: 379
   nitrogen: 250
+
+  # add in nitrogen and water stress for 'real', ignore them for 'happy'
+  real_or_happy: real
+
+  # plant only in crop areas specific to that crop, or plant everywhere there are currently crops? 'specific' for crop areas specific to that crop that are currently planted, 'all' for planting in all currently planted crop areas
+  all_or_crop_specific: all
+
   run_descriptor: Jun15AUSmasktest
   irrigation_to_try: [RF, IR]
   weather_prefix: Outdoor_crops_control
@@ -65,6 +69,7 @@ physical_parameters:
   planting_months: [1] 
   # TODO: test with catastrophe only years 5 and 6
   years: [1, 2, 3, 4, 5, 6, 7]
+
     
 crops:
 - name: maize

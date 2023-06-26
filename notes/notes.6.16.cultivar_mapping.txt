@@ -229,3 +229,202 @@ mzK026IR,379,maize,Outdoor_crops_control,control_mink,wth_control,Jun15AUSmaskte
 
 it gives me lots of nice outputs. 
 but when I have the whole list of  maize cultivars, the output gets lower! That should never happen. I was thinking it was the nulls in the data, but now I think it's probably something to do with not entirely null data messing up the data pipeline in the averaging or dividing somewhere.
+
+
+jun24
+
+okay, the issue is between the wet_averaged_rf and wet_averaged_ir being good, but then the overall is actually bad! so it's combining things causing problems 
+
+the algorithm to get overall from averaged:
+
+Averaging all the crop cultivars produces a raster ending with "averaged_[RF or IR]".
+
+Getting production is accomplished using the SPAM 2010 imported maps, which were previously saved as rasters ending in "_rainfed_cropland" and "_irrigated_cropland". The "averaged_[RF or IR][wet or dry]" yield rasters are multiplied by the irrigated or rainfed area to get a raster for rainfed production and a raster for irrigated production. This raster ends with "_production[RF or IR]".
+
+Next, rainfed and irrigated production are summed in order to get a total yield for each cultivar. This raster ends in "_production"
+
+
+if(scenarios.calculate_average_yield_rf_and_ir) {
+
+  // sum rainfed and irrigated area rasters to the appropriate cropland
+  BashScripts.sumRasters(
+      script_folder,
+      crop_area_to_sum,
+      scenarios.crop_name[last_index_of_crop] + "_cropland", // to save here
+      scenarios.results_folder[last_index_of_crop]);
+
+  // use production and crop area to calculate average yield rf and ir
+  // (just divide them as average yield is total production / total area)
+  BashScripts.calculateOverallYield(
+      script_folder,
+      scenarios.scenario_tag_for_production[last_index_of_crop],
+      scenarios.crop_name[last_index_of_crop] + "_cropland",
+      scenarios.scenario_tag_for_overall_yield[last_index_of_crop]);
+
+}
+
+Finally, the production is averaged and the result os saved as "_overall"
+
+1 scenario_tag_for_production
+2 crop_area_raster
+3 scenario_tag_for_overall_yields
+r.mapcalc "$3 = $1 / $2"
+
+this creates overall yield
+
+
+ALRIGHT
+figured out it happens between averaging and "production" rasters.
+
+jun25:
+what's confusing me:
+I have two issues:
+    first, I am getting only the first cropland (mask_for_this_snx) for each cultivar group and using it for averaging and production
+    However! The cultivars actually have different values for their cropland. so a cultivar group for ir will just take the first cropland, which is a bad thing.
+
+    second, i have an issue with the production png not even being created for ir, which doesn't make sense because it's being printed right before createpng. maybe because it's all nans or something?
+
+    Addressing the first issue means that I actually, when averaging yields, and calculating overall yields, need to take into account the fact that there are different areas of different cultivars. 
+
+        Take the example of rainfed area. 
+
+        So, the area used to be the same for all cultivars -- i was trying to plant the cultivar in all the available places that crop could be grown (related to rainfed area). Then i was taking the average, without regard to crop area for all of them. then i found the production by multiplying yield by area, specifically rf or ir area by the average rf or ir yield .
+
+        then i added the resulting productions together, and finally i calculate the overall yield by taking that added together production, and dividing by the crop area determined by summing the irrigated and rainfed crop areas together
+
+            In Code:
+
+            so i got the first cropland, equivalent to all other croplands for this crop and irrigation level (rf or ir)
+
+            List<String> croplands = cultivar_groups_croplands.get(i);
+            // assert verifyAllEqualUsingALoop(croplands);
+            String cropland = croplands.get(0);
+
+            then i got all the raster names in the cultivar group as a comma separated string
+
+            List<String> rasters = cultivar_groups_rasters.get(i);
+            String raster_names_to_average = getCombinedString(rasters);
+
+            tthen, in averageAndCalculateProduction,
+
+            BashScripts.runAverageCropsCommand(
+                script_folder,
+                raster_names_to_average,
+                scenario_tag_for_averaging_rf_or_ir,
+                results_folder);
+
+            so, the rasters in that cultivar (all yields) were averaged together.
+            so far so good, as we don't use the crop area
+
+            but then, we have 
+
+            BashScripts.calculateProduction(
+                script_folder,
+                scenario_tag_for_averaging_rf_or_ir,
+                mask_for_this_snx,
+                scenario_tag_for_production_rf_or_ir);
+
+            which is taking the averaged scenario_tag_for_averaging_rf_or_ir, and multiplying this average yield by the crop area, but in this case it's just the crop area for the first cultivar of ir or rf.
+
+            so this would be the production for ir and rf. then of course to get overall, we have scenario_tag_for_production_rf_or_ir, two for each crop, and sum them together
+
+            this happens with thhe code below:
+
+            note: 
+            this.yield_result_name[i] =
+                "BestYield_noGCMcalendar_p0_" + this.crop_name[i] + "__" + this.run_descriptor[i];
+
+            this.scenario_tag[i] =
+                this.co2_level[i] + "_" + this.weather_prefix[i] + "_" + this.yield_result_name[i]+"_"+wet_or_dry;
+
+            this.scenario_tag_for_production[i] = this.scenario_tag[i] + "_production";
+
+            so scenario_tag_for_production is specific to the crop, but theres only one for rainfed and irrigated
+            but for indices i which have a given scenario_tag_for_production, there can be two unique scenario_tag_for_production_rf_or_ir, one rf one ir
+
+            // Initialize an empty map to remember completed rf_or_ir tags
+            ArrayList<String> completed_tags = new ArrayList<>();
+
+            for (String tag : scenarios.unique_scenario_tags_for_production) {
+              // loop through the unique crops
+
+                String raster_names_to_sum = "";
+                String crop_area_to_sum = "";
+
+                int last_index_of_crop = 0;
+
+                // loop through all scenarios
+                for (int i = 0; i < scenarios.n_scenarios; i++) {
+
+                  // only consider the scenarios which are running the current crop for averaging
+                  // we only need to use the results from a given scenario tag once
+                  if (!tag.equals(scenarios.scenario_tag_for_production[i])) {
+                    continue;
+                  }
+
+                  // If the map does not already contain an entry for this scenario type, continue
+                  // this allows us to find the data for a scenario tag
+                  if (completed_tags.contains(scenarios.scenario_tag_for_production_rf_or_ir[i])) {
+                    continue;
+                  }
+                  completed_tags.add(scenarios.scenario_tag_for_production_rf_or_ir[i]);
+
+                  raster_names_to_sum =
+                      raster_names_to_sum + scenarios.scenario_tag_for_production_rf_or_ir[i];
+
+                  crop_area_to_sum = crop_area_to_sum + scenarios.mask_for_this_snx[i];
+
+                  last_index_of_crop = i;
+                }
+
+            // sum rainfed and irrigated yield rasters to the appropriate scenario_tag_for_production
+              BashScripts.sumRasters(
+                  script_folder,
+                  raster_names_to_sum,
+                  scenarios.scenario_tag_for_production[last_index_of_crop], // to save here
+                  scenarios.results_folder[last_index_of_crop]);
+
+                if(scenarios.calculate_average_yield_rf_and_ir) {
+
+                  // sum rainfed and irrigated area rasters to the appropriate cropland
+                  BashScripts.sumRasters(
+                      script_folder,
+                      crop_area_to_sum,
+                      scenarios.crop_name[last_index_of_crop] + "_cropland", // to save here
+                      scenarios.results_folder[last_index_of_crop]);
+
+                  // use production and crop area to calculate average yield rf and ir
+                  // (just divide them as average yield is total production / total area)
+                  BashScripts.calculateOverallYield(
+                      script_folder,
+                      scenarios.scenario_tag_for_production[last_index_of_crop],
+                      scenarios.crop_name[last_index_of_crop] + "_cropland",
+                      scenarios.scenario_tag_for_overall_yield[last_index_of_crop]);
+
+                }
+
+
+
+        but now, i am only planting the cultivars in the region where it has been determined the megaenvironment is suitable for them, rather than all area for that crop.
+
+        in the rainfed case, rather than   assuming the area is the same for all cultivars and try to plant the cultivar in all the available places that crop could be grown (related to rainfed area), I plant just in the megaenvironments, and all the cultivar areas added together would represent the total crop area where the crop could be grown. 
+
+        So essentially the difference is that each cultivar now has its own crop area, differing even when we're talking about two of the same species that are under rainfed, say. 
+
+        HOW TO FIX THIS:
+
+        To take the average, it would be exactly the same, as this does not call in the crop area at all, and because the average command ignores null values unless all values are null. in a given region, if there are multiple cultivars, the relevant cultivar yields are averaged together
+
+        now, to take the production, we could consider multiplying each yield value by the crop are of the relevant snx. Recall that some SNX do in fact use the same crop areas as other snx (overlapping megaenvironments). As a result, the average yield would be over-estimated because both crops would be assumed to have the same area.
+        furthermore this naive solution would over-estimate the crop yields when considering a mask_for_snx which is not broken down into different crop area rasters.
+        I guess then we should check if the rasters are the same name, and any groupings of crop areas for a given irrigation level (rf_or_rf) and for  the group in question, we assume that we just multiply the average of that grouping by the crop area raster in question, and add this to the production.
+
+        in the case that two mask_for_snx overlap but are not the same, then the production would be overestimated though.
+
+        Is it actually true that mask_for_snx overlap though? I think they don't! the megaenvironments are mutually exclusive i think. if they don't overlap, then the above method works.
+
+        well, it seems like they very well may...
+
+        so another strategy is to take any individual crop areas and count the amount each cell is being represented by a map. in the case all rainfed are the same, then the count would be the number of cultivars. The yields should be added rather than averaged in this case. Then we divide by the count, giving us an equal weight to all cultivars which may grow in each cell in all cases, and ultimately simply multiplying by the crop area raster to get production.
+
+        luckily, the actual crop_area rasters are all just multiplying the known irrigated crop area. so, they all have the same amount of area.

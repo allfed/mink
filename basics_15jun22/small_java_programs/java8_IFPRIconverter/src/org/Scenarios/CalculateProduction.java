@@ -26,6 +26,8 @@ public class CalculateProduction {
         getCultivarGroups(scenarios, scenarios.results_folder);
     List<List<String>> crop_groups =
         getCultivarGroups(scenarios, scenarios.crop_name);
+    List<List<String>> irrigation_groups =
+        getCultivarGroups(scenarios, scenarios.rf_or_ir);
 
 
     for (int i = 0; i < cultivar_groups_rasters.size(); i++) {
@@ -37,16 +39,16 @@ public class CalculateProduction {
       }
 
 
-      // get the crop area and assert they're all the same
-      // NOTE: different cultivars now can have different croplands
-      List<String> croplands = cultivar_groups_croplands.get(i);
-      // assert verifyAllEqualUsingALoop(croplands);
-      String cropland = croplands.get(0);
+      // get the irrigation name and assert they're all the same
+      List<String> irrigation_group = irrigation_groups.get(i);
+      assert verifyAllEqualUsingALoop(irrigation_group);
+      String irrigation = irrigation_group.get(0);
 
       // get the results folders and assert they're all the same
       List<String> crops = crop_groups.get(i);
       assert verifyAllEqualUsingALoop(crops);
       String crop = crops.get(0);
+      System.out.println(crop);
 
       // get the average yield tag and assert they're all the same
       List<String> averaging_tags = scenario_tags_for_averaging.get(i);
@@ -64,19 +66,20 @@ public class CalculateProduction {
       String results_folder = results_folders.get(0);
 
       // combine the rasters in the group into a single comma separated string
-      String combined_string = getCombinedString(rasters);
+      String raster_names_to_average = getCombinedString(rasters);
 
       averageAndCalculateProduction(
           crop,
+          irrigation,
+          scenarios.all_or_crop_specific,
           scenarios.create_average_png,
           scenarios.calculate_rf_or_ir_specific_average_yield,
           scenarios.calculate_rf_or_ir_specific_production,
           script_folder,
-          combined_string,
+          raster_names_to_average,
           averaging_tag,
           production_tag,
-          results_folder,
-          cropland);
+          results_folder);
     }
     // average the yield results for the current crop and irrigation grouping
 
@@ -104,8 +107,6 @@ public class CalculateProduction {
     List<String> crops = new ArrayList<String>();
     crops.addAll(scenarios.uniqueCrops);
 
-    // String[] crops = Arrays.asList(scenarios.uniqueCrops.toArray(new
-    // String[scenarios.uniqueCrops.size()]));
 
     // Initialize the list of lists
     for (String rainfed_or_irrigated : rainfed_and_irrigated) {
@@ -163,6 +164,8 @@ public class CalculateProduction {
 
   public static void averageAndCalculateProduction(
       String crop,
+      String irrigation,
+      String all_or_crop_specific,
       boolean create_average_png,
       boolean calculate_rf_or_ir_specific_average_yield,
       boolean calculate_rf_or_ir_specific_production,
@@ -170,8 +173,7 @@ public class CalculateProduction {
       String raster_names_to_average,
       String scenario_tag_for_averaging_rf_or_ir,
       String scenario_tag_for_production_rf_or_ir,
-      String results_folder,
-      String mask_for_this_snx)
+      String results_folder)
       throws InterruptedException, IOException {
 
     // average all the cultivars for the crop to estimate the crop's overall yield
@@ -196,6 +198,11 @@ public class CalculateProduction {
       }
     }
 
+    System.out.println("scenario_tag_for_averaging_rf_or_ir");
+    System.out.println(scenario_tag_for_averaging_rf_or_ir);
+    System.out.println("scenario_tag_for_production_rf_or_ir");
+    System.out.println(scenario_tag_for_production_rf_or_ir);
+
     // create a png of the averaged yield raster if the average_png is true
     if (create_average_png) {
       BashScripts.createPNG(
@@ -207,13 +214,31 @@ public class CalculateProduction {
     // use averaged yields to calculate production for either rainfed or irrigated yield.
     // area raster refers to rainfed or irrigated area of a crop, but is not specific to a
     // cultivar (or variety)
+
+    String prefix = "";
     if(calculate_rf_or_ir_specific_production){
+      if (all_or_crop_specific.equals("all")) {
+         prefix = "ALL_CROPS";
+      } else if (all_or_crop_specific.equals("specific")) {
+         prefix = crop;
+      } else {
+        System.out.println("Error: make sure all_or_crop_specific is all or specific");
+        System.exit(1);
+      }
+      String crop_area_raster = prefix + "_" + (irrigation.equals("RF") ? "rainfed_cropland" : "irrigated_cropland");
+
 
       BashScripts.calculateProduction(
           script_folder,
           scenario_tag_for_averaging_rf_or_ir,
-          mask_for_this_snx,
+          crop_area_raster,
           scenario_tag_for_production_rf_or_ir);
+
+      // create a png of the production for this crop
+      BashScripts.createPNG(
+          script_folder,
+          scenario_tag_for_production_rf_or_ir,
+          results_folder);
     }
   }
 
@@ -229,6 +254,8 @@ public class CalculateProduction {
     // run a series of crops of the same species in order to act in aggregate on them
     // we are aggregating over rainfed and irrigated production (if rainfed and irrigated exist for
     // the same crop)
+
+    // so in summary, we're generating the raster names to sum and the crop names to sum,  then actually summing both
 
     // Initialize an empty map to remember completed rf_or_ir tags
     ArrayList<String> completed_tags = new ArrayList<>();
@@ -275,12 +302,22 @@ public class CalculateProduction {
       }
 
       if(scenarios.calculate_rf_plus_ir_production){
-      // sum rainfed and irrigated yield rasters to the appropriate scenario_tag_for_production
+        // sum rainfed and irrigated yield rasters to the appropriate scenario_tag_for_production
+        // note that the last_index_of_crop is the last index where the tag matched and we had a new IR or RF specific production.
+        // but scenario_tag_for_production is not specific to ir or rf
         BashScripts.sumRasters(
             script_folder,
             raster_names_to_sum,
             scenarios.scenario_tag_for_production[last_index_of_crop], // to save here
             scenarios.results_folder[last_index_of_crop]);
+
+
+        // DELETE ME
+        BashScripts.createPNG(
+            script_folder,
+            scenarios.scenario_tag_for_production[last_index_of_crop],
+            scenarios.results_folder[last_index_of_crop]);
+
       }
 
       if(scenarios.calculate_average_yield_rf_and_ir) {
