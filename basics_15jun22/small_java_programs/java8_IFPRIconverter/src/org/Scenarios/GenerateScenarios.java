@@ -1,4 +1,6 @@
+// can be considered the preprocessing rasters and scenario definitions, needed before actually running through all the scenarios with dssat (hopefully eventually will have everything debugged and then can put initspam here and ensure all works the same...)
 // take a list of specifications about a scenario, and generate a csv specifying the actual csv which contains information necessary for each individual run of the grid of locations for a given cultivar and level of irrigation
+// also imports necessary rasters for the current regions needed for processing
 // specifications are listed in a config .yaml file
 package org.Scenarios;
 
@@ -39,6 +41,13 @@ public class GenerateScenarios {
 
         
         Config config = Config.importConfigCSV(config_file);
+        // scenario_index
+        // run through all the required scripts for determining and saving yields
+        BashScripts.makeCountryMask(script_folder,
+          config.model_configuration.winter_wheat_countries_csv,
+          "ALL_CROPS_cropland",
+          "winter_wheat_countries_mask");
+
         generateScenariosCSV(script_folder,config, simulation_csv_location,default_cultivar_mappings_location);
         System.out.println("");
         System.out.println("done running GenerateScenarios.java ");

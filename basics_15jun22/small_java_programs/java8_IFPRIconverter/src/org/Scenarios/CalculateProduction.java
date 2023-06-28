@@ -48,7 +48,6 @@ public class CalculateProduction {
       List<String> crops = crop_groups.get(i);
       assert verifyAllEqualUsingALoop(crops);
       String crop = crops.get(0);
-      System.out.println(crop);
 
       // get the average yield tag and assert they're all the same
       List<String> averaging_tags = scenario_tags_for_averaging.get(i);
@@ -183,13 +182,27 @@ public class CalculateProduction {
       // System.out.println("crop");
       // System.out.println(crop);
       if(crop.equals("soybean")){
+        // gets the max of  all available yields in each cell (all regions)
         BashScripts.compositeRaster(
             script_folder,
             raster_names_to_average,
             scenario_tag_for_averaging_rf_or_ir,
             "deleteme_best_maturity_group_soybean",
             results_folder);
+      } else if(crop.equals("wheat")){
+        // gets the max of  all available yields in each cell for regions in the winter_wheat_dominant map, and otherwise just gets the average
+
+        // the idea here is that for the winter wheat dominant countries, we need winter wheat
+        // to dominate. so we are arbitrarily enforcing a list of western european countries to
+        // use the highest yielding variety rather than the overall average of relevant varieties.
+        BashScripts.getBestOrAverageBasedOnCountryMasks(
+            script_folder,
+            raster_names_to_average,
+            "winter_wheat_countries_mask",
+            scenario_tag_for_averaging_rf_or_ir,
+            results_folder);
       } else {
+        // gets the average of all available yields in each cell
         BashScripts.runAverageCropsCommand(
             script_folder,
             raster_names_to_average,
@@ -197,11 +210,6 @@ public class CalculateProduction {
             results_folder);
       }
     }
-
-    System.out.println("scenario_tag_for_averaging_rf_or_ir");
-    System.out.println(scenario_tag_for_averaging_rf_or_ir);
-    System.out.println("scenario_tag_for_production_rf_or_ir");
-    System.out.println(scenario_tag_for_production_rf_or_ir);
 
     // create a png of the averaged yield raster if the average_png is true
     if (create_average_png) {
@@ -216,6 +224,10 @@ public class CalculateProduction {
     // cultivar (or variety)
 
     String prefix = "";
+
+    // this assert is very important! The production -> overall estimate requires ALL_crops at the moment! Otherwise, need to pass in the appropriate cropland for going from production -> overall raster in the relevant section of the code in this class
+    assert all_or_crop_specific.equals("all");
+
     if(calculate_rf_or_ir_specific_production){
       if (all_or_crop_specific.equals("all")) {
          prefix = "ALL_CROPS";
@@ -235,10 +247,10 @@ public class CalculateProduction {
           scenario_tag_for_production_rf_or_ir);
 
       // create a png of the production for this crop
-      BashScripts.createPNG(
-          script_folder,
-          scenario_tag_for_production_rf_or_ir,
-          results_folder);
+      // BashScripts.createPNG(
+      //     script_folder,
+      //     scenario_tag_for_production_rf_or_ir,
+      //     results_folder);
     }
   }
 
@@ -267,7 +279,7 @@ public class CalculateProduction {
       String crop_area_to_sum = "";
 
       int last_index_of_crop = 0;
-
+      int number_of_loops = 0;
       for (int i = 0; i < scenarios.n_scenarios; i++) {
 
         // only consider the scenarios which are running the current crop for averaging
@@ -282,7 +294,7 @@ public class CalculateProduction {
           continue;
         }
         completed_tags.add(scenarios.scenario_tag_for_production_rf_or_ir[i]);
-
+        number_of_loops++;
         // add a comma after the raster names
         if (!raster_names_to_sum.equals("")) {
           raster_names_to_sum = raster_names_to_sum + ",";
@@ -296,10 +308,31 @@ public class CalculateProduction {
         raster_names_to_sum =
             raster_names_to_sum + scenarios.scenario_tag_for_production_rf_or_ir[i];
 
-        crop_area_to_sum = crop_area_to_sum + scenarios.mask_for_this_snx[i];
+
+        String prefix = "";
+
+        // this assert is very important! The production -> overall estimate requires ALL_crops at the moment! Otherwise, need to pass in the appropriate cropland for going from production -> overall raster in the relevant section of the code in this class
+        assert scenarios.all_or_crop_specific.equals("all");
+
+        if (scenarios.all_or_crop_specific.equals("all")) {
+           prefix = "ALL_CROPS";
+        } else if (scenarios.all_or_crop_specific.equals("specific")) {
+           prefix = scenarios.crop_name[i];
+        } else {
+          System.out.println("Error: make sure all_or_crop_specific is all or specific");
+          System.exit(1);
+        }
+          String crop_area_raster = prefix + "_" + (scenarios.rf_or_ir[i].equals("RF") ? "rainfed_cropland" : "irrigated_cropland");
+
+        crop_area_to_sum = crop_area_to_sum + crop_area_raster;
 
         last_index_of_crop = i;
       }
+
+      // the above is just a (unfortunately messy) way to add irrigated and rainfed for a given crop
+
+      assert number_of_loops == 2;
+
 
       if(scenarios.calculate_rf_plus_ir_production){
         // sum rainfed and irrigated yield rasters to the appropriate scenario_tag_for_production
@@ -322,10 +355,14 @@ public class CalculateProduction {
 
       if(scenarios.calculate_average_yield_rf_and_ir) {
 
+
         // sum rainfed and irrigated area rasters to the appropriate cropland
         BashScripts.sumRasters(
             script_folder,
             crop_area_to_sum,
+            // "ALL_CROPS_cropland", // see comment, ideally this isn't hardcoded
+            // BELOW should be crop_area_raster... but need to figure that out in the code (assert comment a few hundred lines above...)
+            // instead I've hardcoded it and added an assert to make sure someone doesn't try to use broken functionality
             scenarios.crop_name[last_index_of_crop] + "_cropland", // to save here
             scenarios.results_folder[last_index_of_crop]);
 
@@ -334,7 +371,10 @@ public class CalculateProduction {
         BashScripts.calculateOverallYield(
             script_folder,
             scenarios.scenario_tag_for_production[last_index_of_crop],
-            scenarios.crop_name[last_index_of_crop] + "_cropland",
+            // "ALL_CROPS_cropland", // see comment, ideally this isn't hardcoded
+            // BELOW should be crop_area_raster... but need to figure that out in the code (assert comment a few hundred lines above...)
+            // instead I've hardcoded it and added an assert to make sure someone doesn't try to use broken functionality
+            scenarios.crop_name[last_index_of_crop] + "_cropland", // to save here
             scenarios.scenario_tag_for_overall_yield[last_index_of_crop]);
 
       }

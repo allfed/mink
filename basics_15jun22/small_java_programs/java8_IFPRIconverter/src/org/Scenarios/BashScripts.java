@@ -40,6 +40,22 @@ public class BashScripts {
     callProcess(pb, script_folder + "../more_GRASS_scripts/universal/");
   } // end initSPAM
 
+  // initialize spam for the appropriate region (croplands and historical yields)
+  public static void makeCountryMask(
+      String script_folder, String countries_csv, String crop_area_raster, String winter_wheat_mask_raster_name)
+      throws InterruptedException, IOException {
+    // create the main control list for each month
+    ProcessBuilder pb =
+        new ProcessBuilder(
+            "bash",
+            "./make_country_mask.sh",
+            countries_csv,
+            crop_area_raster,
+            winter_wheat_mask_raster_name);
+
+    callProcess(pb, script_folder + "../more_GRASS_scripts/universal/");
+  } // end initSPAM
+
   // initialize GRASS to the proper region and other initialization tasks
   public static void initGRASS(
       String script_folder,
@@ -201,6 +217,38 @@ public class BashScripts {
             "./average_rasters.sh",
             raster_names_to_average,
             scenario_tag,
+            "../../../" + results_folder);
+
+    callProcess(pb, script_folder + "../more_GRASS_scripts/universal/");
+  } // end runAverageCropsCommand
+
+  // average the crop yield with a script
+  public static void getBestOrAverageBasedOnCountryMasks(
+      String script_folder,
+      String raster_names_to_average,
+      String mask_name_for_max,
+      String raster_result_name,
+      String results_folder)
+      throws InterruptedException, IOException {
+    // System.out.println("");
+
+    // System.out.println("");
+    // System.out.println("");
+    // System.out.println("getBestOrAverageBasedOnCountryMasks creates raster with name:");
+    // System.out.println(scenario_tag);
+    // System.out.println("");
+    // System.out.println("getBestOrAverageBasedOnCountryMasks uses rasters with names:");
+    // System.out.println(raster_names_to_average);
+    // System.out.println("");
+    // System.out.println("");
+
+    ProcessBuilder pb =
+        new ProcessBuilder(
+            "bash",
+            "./average_raster_or_find_max_using_mask.sh",
+            raster_names_to_average,
+            mask_name_for_max,
+            raster_result_name,
             "../../../" + results_folder);
 
     callProcess(pb, script_folder + "../more_GRASS_scripts/universal/");

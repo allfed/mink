@@ -38,6 +38,7 @@ public class Config {
         public boolean create_each_year_png;
         public boolean create_average_png;
         public boolean create_overall_png;
+        public String winter_wheat_countries_csv;
 
         @Override
         public String toString() {
@@ -57,6 +58,7 @@ public class Config {
                     ", create_each_year_png=" + create_each_year_png +
                     ", create_average_png=" + create_average_png +
                     ", create_overall_png=" + create_overall_png +
+                    ", winter_wheat_countries_csv=" + winter_wheat_countries_csv +
                     '}';
         }
     }
@@ -146,6 +148,8 @@ public class Config {
                     config.physical_parameters.nitrogen = Integer.parseInt(line.split(": ")[1]);
                 } else if (line.startsWith("run_descriptor: ")) {
                     config.model_configuration.run_descriptor = line.split(": ")[1].trim();
+                } else if (line.startsWith("winter_wheat_countries_csv: ")) {
+                    config.model_configuration.winter_wheat_countries_csv = line.split(": ")[1].trim();
                 } else if (line.startsWith("irrigation_to_try: ")) {
                     String[] array = line.split(": ")[1].replace("[","").replace("]","").split(", ");
                     config.physical_parameters.irrigation_to_try = Arrays.asList(array);

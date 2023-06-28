@@ -428,3 +428,16 @@ I have two issues:
         so another strategy is to take any individual crop areas and count the amount each cell is being represented by a map. in the case all rainfed are the same, then the count would be the number of cultivars. The yields should be added rather than averaged in this case. Then we divide by the count, giving us an equal weight to all cultivars which may grow in each cell in all cases, and ultimately simply multiplying by the crop area raster to get production.
 
         luckily, the actual crop_area rasters are all just multiplying the known irrigated crop area. so, they all have the same amount of area.
+
+jun28
+
+getting wierd error for a few of the cultivars (specifically scenario 2, corresponding to mzK017IR (i think))
+
+the wierd part is maybe i had this error  from fixes before but didnt catch it, as i wasnt running all the pixels until now.
+
+running READ_DSSAT_outputs script i get the error
+
+Not enough data columns. Incorrect delimiter or column number? Found the following character(s) in row 1:
+[2741.5]
+
+otherwise, things seem alright. I just put in winter wheat mask map. it should be able to run the winter wheat situation appropriately now

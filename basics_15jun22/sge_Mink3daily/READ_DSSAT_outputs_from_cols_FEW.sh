@@ -276,9 +276,11 @@ for (( column_index=0 ; column_index < n_columns ; column_index++ )); do
 
     # # in the case that there are no columns, we need to generate a null filled raster
     if [ ! -e ${yield_dir}${base_file_name}${clean_suffix}.txt ]; then
-      echo ""
-      echo "no columns file found for [$base_file_name] setting raster to all null values"
-      echo ""
+
+      # Removed the comment below -- null rasters are not an error (perhaps there are no cultivars in that region, for example). But can uncomment below if you wish to see whenever have null rasters. (DMR)
+      # echo ""
+      # echo "no columns file found for [$base_file_name] setting raster to all null values"
+      # echo ""
       r.mapcalc "${base_file_name}_${clean_column_name} = null()"
       continue
     fi

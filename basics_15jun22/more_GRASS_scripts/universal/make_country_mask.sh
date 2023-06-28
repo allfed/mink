@@ -23,6 +23,27 @@ IFS="
 "
 
 
+###
+### ADDED BY DMR
+###
+
+
+# I expect we will want to fix these hardcoded hacks in the future. needless to say this may cause errors if different database names exist. This should be imported from existing available rasters!
+
+debug="debug"
+
+
+db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
+db.connect -p
+v.db.connect driver=dbf database='/mnt/data/grassdata/world/DSSAT_essentials_12may11/dbf/' map=cntry05 table=cntry05 -o
+
+g.region rast=$align_raster
+
+###
+### END ADDED BY DMR
+###
+
+
 ### now doing some special one-off's for countries...
 
 magic_large_number=1000000
@@ -41,7 +62,6 @@ if [ "$country_names_csv" = "World" ]; then
 
 else
   whole_world_flag=0
-
 
 #****************************#
 ### pull out the desired country/ies
@@ -84,6 +104,11 @@ do
     new_piece="($country_name_column = '$country_name')"
   fi
 
+  echo "new_piece"
+  echo "$new_piece"
+  echo "country_vector"
+  echo "$country_vector"
+
   cat=`v.db.select $country_vector where="$new_piece" col=cat -c`
 
   cat_list="$cat_list,$cat"
@@ -93,7 +118,6 @@ do
   fi
 done
 fi # end if whole world
-
 
 cat_list=${cat_list:1}
 
@@ -124,7 +148,7 @@ fi
 
 g.region vect=deleteme_vectors_we_want     # pull the extent from the extracted vectors
 
-align_region_to_raster.sh $align_raster
+./align_region_to_raster.sh $align_raster
 g.region align=$align_raster -a
 
 v.to.rast input=deleteme_vectors_we_want output=$output_raster use=val value=1 --o --q
@@ -133,7 +157,8 @@ v.to.rast input=deleteme_vectors_we_want output=$output_raster use=val value=1 -
 # to try to avoid registration problems, we're gonna have to suck it down and start
 # with the same region every time, and then zoom down...
 
-#g.region rast=$align_raster
+# go back to the original region (ADDED BY DMR)
+g.region rast=$align_raster
 
 #v.to.rast input=deleteme_vectors_we_want output=deleteme_large_mask use=val value=1 --o --q
 

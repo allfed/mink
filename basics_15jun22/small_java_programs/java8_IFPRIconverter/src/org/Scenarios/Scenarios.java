@@ -199,6 +199,7 @@ public class Scenarios {
     // System.out.println(n_scenarios);
     Config config = Config.importConfigCSV(config_file);
 
+
     int n_scenarios = initFileContents.length - 1;
     this.n_scenarios = n_scenarios;
     this.snx_name = new String[n_scenarios];
@@ -586,6 +587,7 @@ public class Scenarios {
     System.out.println("");
 
     HashMap<String, Float> coefficients_to_get_wetweight_from_dryweight = new HashMap<String, Float>();
+
     // loop through the scenario input csv file and create string arrays with the
     // appropriate value for each scenario index
     for (int i = 0; i < initFileContents.length - 1; i++) {
@@ -643,6 +645,8 @@ public class Scenarios {
     // loop through and run each scenario
     // System.out.println("scenarios.n_scenarios");
     // System.out.println(scenarios.n_scenarios);
+
+
     for (int i = 0; i < scenarios.n_scenarios; i++) {
       //if the scenario crop name is new, initialize
       // if(!crop_name.equals(scenarios.crop_name[i])) {
@@ -761,12 +765,9 @@ public class Scenarios {
       String fertilizer_scheme)
       throws InterruptedException, IOException {
 
-    // scenario_index
-    // run through all the required scripts for determining and saving yields
     if (scenario_index == 0) {
       BashScripts.initSPAM(script_folder);
     }
-
     // BashScripts.createPNG(script_folder,
     //   mask_for_this_snx,results_folder);
     // System.out.println("should have png");
