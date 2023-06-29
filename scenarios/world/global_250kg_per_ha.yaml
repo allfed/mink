@@ -49,10 +49,10 @@ model_configuration:
   winter_wheat_countries_csv: Luxembourg,Belgium,Denmark,France,Germany,Ireland,Netherlands,United Kingdom
 
 physical_parameters:
-  region_to_use_n: -8.4375
-  region_to_use_s: -44.0625
-  region_to_use_e: 158.125
-  region_to_use_w: 104.375
+  region_to_use_n: 65
+  region_to_use_s: -65
+  region_to_use_e: 170
+  region_to_use_w: -170
   nsres: 1.875
   ewres: 1.25
   co2_level: 379
@@ -64,7 +64,7 @@ physical_parameters:
   # plant only in crop areas specific to that crop, or plant everywhere there are currently crops? 'specific' for crop areas specific to that crop that are currently planted, 'all' for planting in all currently planted crop areas
   all_or_crop_specific: all
 
-  run_descriptor: Jun15AUSmasktest
+  run_descriptor: Jun28_global_N250
   irrigation_to_try: [RF, IR]
   weather_prefix: Outdoor_crops_control
   weather_folder: control_mink

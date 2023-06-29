@@ -43,10 +43,10 @@ public class GenerateScenarios {
         Config config = Config.importConfigCSV(config_file);
         // scenario_index
         // run through all the required scripts for determining and saving yields
-        BashScripts.makeCountryMask(script_folder,
-          config.model_configuration.winter_wheat_countries_csv,
-          "ALL_CROPS_cropland",
-          "winter_wheat_countries_mask");
+        // BashScripts.makeCountryMask(script_folder,
+        //   config.model_configuration.winter_wheat_countries_csv,
+        //   "ALL_CROPS_cropland",
+        //   "winter_wheat_countries_mask");
 
         generateScenariosCSV(script_folder,config, simulation_csv_location,default_cultivar_mappings_location);
         System.out.println("");
