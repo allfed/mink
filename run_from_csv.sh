@@ -20,7 +20,7 @@ javac org/Scenarios/CalculateProduction.java
 javac org/DSSATRunner/WriteCopyBlockForDailyWeather.java
 
 scenarios_csv_location="/mnt/data/basics_15jun22/sge_Mink3daily/scenarios/generated_scenarios.csv"
-config_file_location="/mnt/data/scenarios/AUS/test_AUS_megaenvironments.yaml"
+config_file_location="/mnt/data/scenarios/world/global_250kg_per_ha.yaml"
 script_folder=/mnt/data/basics_15jun22/sge_Mink3daily/
 run_parameters_csv_folder="/mnt/data/basics_15jun22/sge_Mink3daily/parameters/"
 whether_run_DSSAT_or_process=$1

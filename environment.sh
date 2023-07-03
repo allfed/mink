@@ -32,7 +32,7 @@
    
    export GRASS_VERSION="6.5.svn"
    MYGISDBASE=/mnt/data/grassdata
-   #MYMAPSET=stuff_for_morgan_25apr23
+   # MYMAPSET=stuff_for_morgan_25apr23
    MYMAPSET=morgan_DSSAT_cat_0
    MYLOC=world
 #set the global grassrc file to individual file name

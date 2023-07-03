@@ -765,13 +765,6 @@ public class Scenarios {
       String fertilizer_scheme)
       throws InterruptedException, IOException {
 
-    if (scenario_index == 0) {
-      BashScripts.initSPAM(script_folder);
-    }
-    // BashScripts.createPNG(script_folder,
-    //   mask_for_this_snx,results_folder);
-    // System.out.println("should have png");
-
     BashScripts.initGRASS(
         script_folder,
         region_to_use_n,
@@ -797,7 +790,11 @@ public class Scenarios {
 
       if (run_crop_model) {
 
-
+        System.out.println("");
+        System.out.println("====RUN DETAILS===");
+        System.out.println("run: "+run_descriptor +"\ncrop name: "+ crop_name+"\nplanting month: "+planting_months[planting_month_index]+"\nsnx_name: "+snx_name);
+        System.out.println("==================");
+        System.out.println("");
         BashScripts.runScenario(
             script_folder,
             snx_name,

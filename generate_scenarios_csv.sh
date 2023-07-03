@@ -12,7 +12,7 @@ cd /mnt/data/basics_15jun22/small_java_programs/java8_IFPRIconverter/src
 javac org/Scenarios/Config.java
 javac org/Scenarios/GenerateScenarios.java
 scenarios_csv_location="/mnt/data/basics_15jun22/sge_Mink3daily/scenarios/generated_scenarios.csv"
-config_file_location="/mnt/data/scenarios/AUS/test_AUS_megaenvironments.yaml"
+config_file_location="/mnt/data/scenarios/world/global_250kg_per_ha.yaml"
 run_parameters_csv_folder="/mnt/data/basics_15jun22/sge_Mink3daily/parameters/"
 script_folder=/mnt/data/basics_15jun22/sge_Mink3daily/
 

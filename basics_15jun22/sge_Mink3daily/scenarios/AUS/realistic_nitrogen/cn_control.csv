@@ -1,3 +1,0 @@
-snx_name,co2_level,crop_name,weather_prefix,weather_folder,results_folder,run_descriptor,nitrogen,region_to_use_n,region_to_use_s,region_to_use_e,region_to_use_w,nsres,ewres,crop_area_raster,fertilizer_scheme
-cnINVIGOR5440RF,379,rapeseed,Outdoor_crops_control,control_mink,wth_control,Feb13RealNitAUS150tg,43,-44.0625,-8.4375,158.125,104.375,1.875,1.25,ALL_CROPS_rainfed_cropland,wheat
-cnINVIGOR5440IR,379,rapeseed,Outdoor_crops_control,control_mink,wth_control,Feb13RealNitAUS150tg,43,-44.0625,-8.4375,158.125,104.375,1.875,1.25,ALL_CROPS_irrigated_cropland,wheat

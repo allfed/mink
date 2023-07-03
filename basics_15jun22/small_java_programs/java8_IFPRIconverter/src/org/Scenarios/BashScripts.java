@@ -56,6 +56,19 @@ public class BashScripts {
     callProcess(pb, script_folder + "../more_GRASS_scripts/universal/");
   } // end initSPAM
 
+  public static void makeMegaEnvironmentMasks(
+    String script_folder
+  ) throws InterruptedException, IOException {
+    // import from .pack files all the megaenvironments as rasters
+    ProcessBuilder pb =
+        new ProcessBuilder(
+            "bash",
+            "./unpack_all_me_rasters.sh");
+
+    callProcess(pb, script_folder + "../more_GRASS_scripts/universal/");
+
+  } // end makeMegaEnvironmentMasks
+
   // initialize GRASS to the proper region and other initialization tasks
   public static void initGRASS(
       String script_folder,

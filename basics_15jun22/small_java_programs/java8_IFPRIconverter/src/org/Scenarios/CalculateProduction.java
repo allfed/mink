@@ -396,6 +396,15 @@ public class CalculateProduction {
 
       // create a png of the overall yield if create_overall_png is true
       if (scenarios.create_overall_png) {
+        System.out.println("overall png results:");
+        System.out.println("last_index_of_crop");
+        System.out.println(last_index_of_crop);
+        System.out.println("script_folder");
+        System.out.println(script_folder);
+        System.out.println("scenarios.scenario_tag_for_overall_yield[last_index_of_crop]");
+        System.out.println(scenarios.scenario_tag_for_overall_yield[last_index_of_crop]);
+        System.out.println("scenarios.results_folder[last_index_of_crop]");
+        System.out.println(scenarios.results_folder[last_index_of_crop]);
         BashScripts.createPNG(
           script_folder,
           scenarios.scenario_tag_for_overall_yield[last_index_of_crop], // to save here

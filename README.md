@@ -79,6 +79,9 @@ You should now be in a shell. To test out whether everything worked, run the fol
 cd /mnt/data
 ./build_dailystyle_NOCLIMATE_for_DSSAT_05jun14.sh
 ```
+
+<b>NOTE: SOMETIMES SEG FAULTS OCCUR WHEN RESTARTING THE PROCESS AFTER A SIGINT (cntrl+c during the DSSAT runs). IF THIS HAPPENS, RESTART YOUR COMPUTER AND IT SHOULD RESOLVE THE ISSUE.</b>
+
 You should see the following:
 ```bash
     ++ making an ALL raster ++
