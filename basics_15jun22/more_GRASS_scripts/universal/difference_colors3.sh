@@ -3,7 +3,7 @@
 # this is to do some sensible colors for difference or error maps centered on zero
 
 if [ $# -eq 0 ]; then
-  echo "Usage: $0 raster_to_color [classic|classic_wide|cream] [min,max,std]"
+  echo "Usage: $0 raster_to_color [classic|classic_white|classic_wide|bad_good|cream] [min,max,std]"
   echo ""
   echo "default is classic. classic_wide will make the central black"
   echo "area wider (more values fall into \"we don't care\")."
@@ -60,6 +60,24 @@ $std green
 $two_std cyan
 $extreme blue"
 
+bad_good_color_string=\
+"-$extreme red
+-$two_std red
+-$std green
+0 green
+$std green
+$two_std red
+$extreme red"
+
+white_color_string=\
+"-$extreme cyan
+-$two_std cyan
+-$std blue
+0 white
+$std orange
+$two_std magenta
+$extreme magenta"
+
 wide_color_string=\
 "-$extreme yellow
 -$two_std red
@@ -96,6 +114,10 @@ if [ -z "$color_scheme" -o "$color_scheme" = "classic" ]; then
   echo "$classic_color_string" | r.colors $raster color=rules
 elif [ "$color_scheme" = "classic_wide" ]; then
   echo "$wide_color_string"    | r.colors $raster color=rules
+elif [ "$color_scheme" = "classic_white" ]; then
+  echo "$white_color_string"    | r.colors $raster color=rules
+elif [ "$color_scheme" = "bad_good" ]; then
+  echo "$bad_good_color_string"    | r.colors $raster color=rules
 elif [ "$color_scheme" = "cream" ]; then
 #  echo "$cream_color_string"
   echo "$cream_color_string"   | r.colors $raster color=rules

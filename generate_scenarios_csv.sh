@@ -5,6 +5,12 @@
 
 set -e # exit if a command fails
 
+if [ $# -eq 0 ]; then
+  echo "Usage: $0 [scenario_config_file_location]"
+  exit
+fi
+
+
 time_start=$SECONDS
 . basics_15jun22/sge_Mink3daily/default_paths_etc.sh
 . basics_15jun22/sge_Mink3daily/some_settings_46.sh
@@ -12,7 +18,7 @@ cd /mnt/data/basics_15jun22/small_java_programs/java8_IFPRIconverter/src
 javac org/Scenarios/Config.java
 javac org/Scenarios/GenerateScenarios.java
 scenarios_csv_location="/mnt/data/basics_15jun22/sge_Mink3daily/scenarios/generated_scenarios.csv"
-config_file_location="/mnt/data/scenarios/world/global_250kg_per_ha.yaml"
+config_file_location="/mnt/data/$1"
 run_parameters_csv_folder="/mnt/data/basics_15jun22/sge_Mink3daily/parameters/"
 script_folder=/mnt/data/basics_15jun22/sge_Mink3daily/
 

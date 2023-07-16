@@ -6,11 +6,21 @@ public class Config {
     public ModelConfiguration model_configuration;
     public PhysicalParameters physical_parameters;
     public List<Crop> crops;
+    public HashMap<String, String> crop_lower_to_caps_dictionary;
 
     public Config() {
         this.model_configuration = new ModelConfiguration();
         this.physical_parameters = new PhysicalParameters();
         this.crops = new ArrayList<>();
+
+        this.crop_lower_to_caps_dictionary = new HashMap<String, String>();
+        this.crop_lower_to_caps_dictionary.put("maize", "MAIZ");
+        this.crop_lower_to_caps_dictionary.put("soybean", "SOYB");
+        this.crop_lower_to_caps_dictionary.put("rapeseed", "RAPE");
+        this.crop_lower_to_caps_dictionary.put("wheat", "WHEA");
+        this.crop_lower_to_caps_dictionary.put("potato", "POTA");
+
+
     }
 
     @Override
@@ -71,7 +81,7 @@ public class Config {
         public double nsres;
         public double ewres;
         public int co2_level;
-        public int nitrogen;
+        public int nitrogen = -1;
         public String real_or_happy;
         public String all_or_crop_specific;
         public List<String> irrigation_to_try;
@@ -80,6 +90,7 @@ public class Config {
         public String results_folder;
         public List<String> planting_months;
         public List<String> years;
+        public String minimum_physical_area;
 
         @Override
         public String toString() {
@@ -91,7 +102,7 @@ public class Config {
                     ", nsres=" + nsres +
                     ", ewres=" + ewres +
                     ", co2_level=" + co2_level +
-                    ", nitrogen=" + nitrogen +
+                    ", nitrogen=" + (nitrogen == -1 ? "default" : nitrogen) +
                     ", real_or_happy='" + real_or_happy + '\'' +
                     ", all_or_crop_specific='" + all_or_crop_specific + '\'' +
                     ", irrigation_to_try=" + irrigation_to_try +
@@ -100,6 +111,7 @@ public class Config {
                     ", results_folder='" + results_folder + '\'' +
                     ", planting_months=" + planting_months +
                     ", years=" + years +
+                    ", minimum_physical_area=" + minimum_physical_area +
                     '}';
         }
     }
@@ -148,6 +160,8 @@ public class Config {
                     config.physical_parameters.nitrogen = Integer.parseInt(line.split(": ")[1]);
                 } else if (line.startsWith("run_descriptor: ")) {
                     config.model_configuration.run_descriptor = line.split(": ")[1].trim();
+                } else if (line.startsWith("minimum_physical_area: ")) {
+                    config.physical_parameters.minimum_physical_area = line.split(": ")[1].trim();
                 } else if (line.startsWith("winter_wheat_countries_csv: ")) {
                     config.model_configuration.winter_wheat_countries_csv = line.split(": ")[1].trim();
                 } else if (line.startsWith("irrigation_to_try: ")) {

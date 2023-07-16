@@ -35,7 +35,9 @@ public class BashScripts {
     ProcessBuilder pb =
         new ProcessBuilder(
             "bash",
-            "./combine_spam_datasets.sh");
+            "./combine_spam_datasets.sh",
+            script_folder
+        );
 
     callProcess(pb, script_folder + "../more_GRASS_scripts/universal/");
   } // end initSPAM
@@ -54,7 +56,42 @@ public class BashScripts {
             winter_wheat_mask_raster_name);
 
     callProcess(pb, script_folder + "../more_GRASS_scripts/universal/");
-  } // end initSPAM
+  } // end makeCountryMask
+
+  // initialize spam for the appropriate region (croplands and historical yields)
+  public static void setGRASSRegion(
+      String script_folder, Config config)
+      throws InterruptedException, IOException {
+    // create the main control list for each month
+    // create the region to use
+    String region_to_use_n = String.valueOf(config.physical_parameters.region_to_use_n);
+    String region_to_use_s = String.valueOf(config.physical_parameters.region_to_use_s);
+    String region_to_use_e = String.valueOf(config.physical_parameters.region_to_use_e);
+    String region_to_use_w = String.valueOf(config.physical_parameters.region_to_use_w);
+    String nsres = String.valueOf(config.physical_parameters.nsres);
+    String ewres = String.valueOf(config.physical_parameters.ewres);
+    String region_to_use =
+        "n="
+            + region_to_use_n
+            + " s="
+            + region_to_use_s
+            + " e="
+            + region_to_use_e
+            + " w="
+            + region_to_use_w
+            + " nsres="
+            + nsres
+            + " ewres="
+            + ewres;
+
+    ProcessBuilder pb =
+        new ProcessBuilder(
+            "bash",
+            "./setGRASSRegion.sh",
+            region_to_use);
+
+    callProcess(pb, script_folder + "../more_GRASS_scripts/universal/");
+  } // end makeCountryMask
 
   public static void makeMegaEnvironmentMasks(
     String script_folder
@@ -69,6 +106,20 @@ public class BashScripts {
 
   } // end makeMegaEnvironmentMasks
 
+  public static void makeNitrogenRasters(
+    String script_folder
+  ) throws InterruptedException, IOException {
+    // import from .pack files all the megaenvironments as rasters
+    ProcessBuilder pb =
+        new ProcessBuilder(
+            "bash",
+            "./unpack_all_nitrogen_rasters.sh",
+            script_folder);
+
+    callProcess(pb, script_folder + "../more_GRASS_scripts/universal/");
+
+  } // end makeNitrogenRasters
+
   // initialize GRASS to the proper region and other initialization tasks
   public static void initGRASS(
       String script_folder,
@@ -82,6 +133,7 @@ public class BashScripts {
       String crop_area_raster,
       String crop_name,
       String run_descriptor,
+      String minimum_physical_area,
       String nitrogen)
       throws InterruptedException, IOException {
 
@@ -117,13 +169,15 @@ public class BashScripts {
             + " ewres="
             + ewres;
 
+
     ProcessBuilder pb =
         new ProcessBuilder(
             "bash",
             "./build_dailystyle_NOCLIMATE_for_DSSAT_05jun14.sh",
             region_to_use,
             main_control_list,
-            crop_area_raster);
+            crop_area_raster,
+            minimum_physical_area);
 
     callProcess(pb, script_folder);
   } // end initGRASS
@@ -482,15 +536,19 @@ public class BashScripts {
 
   // UTILITIES
 
-  // creates a raster (which is a 2d grid) and saves it as a png image
-  public static void createPNG(String script_folder, String raster_name, String results_folder)
-      throws InterruptedException, IOException {
+  public static void createPNG(String script_folder, String[] raster_list, String results_folder)
+        throws InterruptedException, IOException {
 
-    ProcessBuilder pb =
-        new ProcessBuilder("bash", "./quick_display.sh", raster_name, results_folder);
+      List<String> commands = new ArrayList<>();
+      commands.add("bash");
+      commands.add("./render_all_rasters_same_scale.sh");
+      commands.addAll(Arrays.asList(raster_list));
+      commands.add(results_folder);
+    
+      ProcessBuilder pb = new ProcessBuilder(commands);
 
-    callProcess(pb, script_folder + "../more_GRASS_scripts/universal/");
-  } // end createPNG
+      callProcess(pb, script_folder + "../more_GRASS_scripts/universal/");
+  }
 
   // call a generic process
   public static void callProcess(ProcessBuilder pb, String script_folder)

@@ -1,27 +1,16 @@
 #!/bin/bash
+
 if [ $# -eq 0 ]; then
   echo "Usage: $0 raster save_loc max_value"
+
   exit
 fi
 
+
 raster=$1
+#vector=$2
 save_loc=$2
 max_value=$3
-min_value=$4
-extra_description="${@:5}"
-
-if [ -z "$save_loc" ] || [ "$save_loc" = "" ]; then
-    save_loc="/mnt/data"
-else
-    save_loc="/mnt/data/${save_loc}"
-fi
-
-# Create a unique temporary directory for this script instance
-tmp_dir="../../../image_dump_${$}"
-mkdir -p $tmp_dir
-
-export GRASS_PNGFILE=${tmp_dir}/${raster}.png
-
 raster_only=`echo "$raster" | cut -d"@" -f1`
 mapset_only=`echo "$raster" | cut -d"@" -f2`
 mapset_test=`echo "$raster" | grep "@"`
@@ -53,13 +42,12 @@ if [ -n "$raster_exists" ]; then
   fi
  
 # NOTE: might want to go back to the old way which actually prints things out
-  if [ -z $min_value ]; then
-    min=$(r.univar -g map=$raster | grep min | awk -F "=" '{print $2}')
-  else
-    min=$min_value
-  fi
+  min=$(r.univar -g map=$raster | grep min | awk -F "=" '{print $2}')
   # min=`r.univar -g map=$raster | grep min | awk -F "=" '{print $2}'`
 
+  # echo " min and max of all cells"
+  # echo $min
+  # echo $max
 
   # Check if either min or max is empty
   if [ -z "$min" ] || [ -z "$max" ]; then
@@ -68,23 +56,19 @@ if [ -n "$raster_exists" ]; then
   fi
 
   d.erase --quiet
-  echo "min-max"
-  echo $min-$max
-  d.rast $raster vallist=$min-$max #2>&1 | grep -v "PNG"
+  d.rast $raster vallist=$min-$max --quiet #2>&1 | grep -v "PNG"
 
 # echo "colors"
 
 #r.colors map=$raster color=bcyr
 
 # echo "done colors"
-  # When using cp, use $tmp_dir instead of ../../../
-  cp $GRASS_PNGFILE $tmp_dir/bg.png
-
+  cp ../../../grass6out.png ../../../$save_loc/bg.png
   if [ -n "$vector" ]; then
     d.vect $vector type=boundary color=black --quiet
   fi
   d.vect cntry05 type=boundary bgcolor=none --quiet #| grep -v "PNG"
-  cp $GRASS_PNGFILE $tmp_dir/vect.png
+  cp ../../../grass6out.png ../../../$save_loc/vect.png
 
   # first change since feb 4, 2011 (30sep15)
   raster_type=`r.info -t $raster | cut -d= -f2`
@@ -105,36 +89,25 @@ if [ -n "$raster_exists" ]; then
       #eval d.legend map=$raster at=1,50,2,5
   fi
 
-cp $GRASS_PNGFILE $tmp_dir/legend.png
-if [ -z "$extra_description" ]; then
+cp ../../../grass6out.png ../../../$save_loc/legend.png
 echo \
 ".C black
 .S 2.0
-$raster" \
+$1" \
 | d.text at=98,95 align=lr --quiet
-cp $GRASS_PNGFILE $tmp_dir/text.png
-else
-echo \
-".C black
-.S 2.0
-$raster : $extra_description" \
-| d.text at=98,95 align=lr --quiet
-cp $GRASS_PNGFILE $tmp_dir/text.png
-fi
+cp ../../../grass6out.png ../../../$save_loc/text.png
 
-convert -composite -gravity center $tmp_dir/text.png $tmp_dir/bg.png $tmp_dir/resulttmp1.png | grep -v "PNG"
-convert -composite -gravity center $tmp_dir/resulttmp1.png $tmp_dir/legend.png $tmp_dir/resulttmp2.png | grep -v "PNG"
-convert -composite -gravity center $tmp_dir/resulttmp2.png $tmp_dir/vect.png $tmp_dir/resulttmp3.png | grep -v "PNG"
-echo ""
-echo save_loc
-echo $save_loc/$raster.png
-echo ""
-
-convert $tmp_dir/resulttmp3.png -background white -flatten $save_loc/$raster.png | grep -v "PNG"
-
-if [ -d $tmp_dir ]; then
-  rm -rf $tmp_dir
-fi
+convert -composite -gravity center ../../../$save_loc/text.png ../../../$save_loc/bg.png ../../../$save_loc/resulttmp1.png | grep -v "PNG"
+convert -composite -gravity center ../../../$save_loc/resulttmp1.png ../../../$save_loc/legend.png ../../../$save_loc/resulttmp2.png | grep -v "PNG"
+convert -composite -gravity center ../../../$save_loc/resulttmp2.png ../../../$save_loc/vect.png ../../../$save_loc/resulttmp3.png | grep -v "PNG"
+convert ../../../$save_loc/resulttmp3.png -background white -flatten ../../../$save_loc/$raster.png | grep -v "PNG"
+rm ../../../$save_loc/legend.png
+rm ../../../$save_loc/bg.png
+rm ../../../$save_loc/text.png
+rm ../../../$save_loc/vect.png
+rm ../../../$save_loc/resulttmp1.png
+rm ../../../$save_loc/resulttmp2.png
+rm ../../../$save_loc/resulttmp3.png
 
 else
   echo "${raster_only}@${mapset_only} has failed to exist"

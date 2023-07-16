@@ -1,0 +1,85 @@
+model_configuration:
+
+  # These are currently not used! In the case we don't want command line interface to specify (and we change the way Scenarios.java is called), then DSSAT passed in is the same as (run_crop_model variable true), process is the same ass (process_results true) or both is the same as (both true).
+  run_crop_model: false
+  process_results: false
+
+
+  # THE FOLLOWING MODEL CONFIGURATION VARIABLES ARE ONLY APPLICABLE
+  # TO THE PROCESS_RESULTS SCENARIOS
+
+  # dry calculate yields as dry weight or wet weight? SPAM is typically wet weight
+  calculate_as_wet_weight: true
+
+  # Average the yields across the years being simulated
+  average_yields: true
+
+  # Averages over the years if true. (Does not affect other operations if false).
+  calculate_average_production_over_time: true
+
+  find_best_yields: true
+
+  #specific to the rainfed or irrigated, calculate average yields (must be true for any of below to be true!)
+  calculate_rf_or_ir_specific_average_yield: true
+  
+  #specific to the rainfed or irrigated, calculate production (doesn't affect other function operation)
+  calculate_rf_or_ir_specific_production: true
+  
+  #calculate total production (doesn't affect other operation)
+  calculate_rf_plus_ir_production: true
+  
+  #calculate average rainfed and irrigated yield 
+  calculate_average_yield_rf_and_ir: true
+  
+  make_rasters_comparing_overall_to_historical: true
+
+  # PNG Generation options (ONLY APPLIES TO PROCESS SCENARIO CONDITION)
+
+  # create a png for each year in the region (lots of png's!)
+  create_each_year_png: true
+
+  #  Make sure "average_yields" is true if cerate_average_png is true.
+  create_average_png: true
+
+  # Make sure "make_rasters_comparing_overall_to_historical" is true if create_overall_png is true.
+  create_overall_png: true
+
+  # countries where we enforce max yields rather than average for wheat specifically
+  # this allows us to allow winter wheat to be dominant in those countries
+  winter_wheat_countries_csv: Luxembourg,Belgium,Denmark,France,Germany,Ireland,Netherlands,United Kingdom
+
+physical_parameters:
+  region_to_use_n: 65
+  region_to_use_s: -65
+  region_to_use_e: 170
+  region_to_use_w: -170
+  nsres: 1.875
+  ewres: 1.25
+  co2_level: 379
+
+  # add in nitrogen and water stress for 'real', ignore them for 'happy'
+  real_or_happy: real
+
+  # minimum area cell to consider for crop
+  minimum_physical_area: 0.05
+
+  # plant only in crop areas specific to that crop, or plant everywhere there are currently crops? 'specific' for crop areas specific to that crop that are currently planted, 'all' for planting in all currently planted crop areas
+  all_or_crop_specific: specific
+
+  run_descriptor: Jul13
+  irrigation_to_try: [RF, IR]
+  weather_prefix: Outdoor_crops_control
+  weather_folder: control_mink
+  results_folder: wth_control
+  #typically below is [1, 3, 5, 7, 9, 11]
+  planting_months: [1, 2, 3, 4, 5, 6]
+  years: [1, 2, 3, 4, 5, 6, 7]
+
+    
+crops:
+- name: maize
+  fertilizer_scheme: threeSplitWithFlowering
+# snx_names: [whNEWTON]
+# - name: wheat
+  # snx_names: [whNEWTON]
+  # fertilizer_scheme: winterwheat

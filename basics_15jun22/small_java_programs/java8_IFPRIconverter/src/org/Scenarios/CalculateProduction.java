@@ -10,6 +10,9 @@ public class CalculateProduction {
   public CalculateProduction(String script_folder, Scenarios scenarios)
       throws InterruptedException, FileNotFoundException, IOException {
 
+    BashScripts.setGRASSRegion(script_folder,scenarios.config);
+
+    HashMap<String, String> crop_lower_to_caps_dictionary = scenarios.config.crop_lower_to_caps_dictionary;
     // average yield results for each crop and irrigation grouping (regardless of cultivar)
 
     // group together the rasters of the cultivars to average
@@ -67,6 +70,7 @@ public class CalculateProduction {
       // combine the rasters in the group into a single comma separated string
       String raster_names_to_average = getCombinedString(rasters);
 
+      // average the yield results for the current crop and irrigation grouping
       averageAndCalculateProduction(
           crop,
           irrigation,
@@ -78,13 +82,49 @@ public class CalculateProduction {
           raster_names_to_average,
           averaging_tag,
           production_tag,
+          crop_lower_to_caps_dictionary,
           results_folder);
     }
-    // average the yield results for the current crop and irrigation grouping
+
 
     // sum the rainfed and irrigated yields and save as ascii
     sumRainfedAndIrrigated(script_folder, scenarios);
+
+    if (scenarios.create_average_png) {
+      createAveragePNG(script_folder, scenarios,cultivar_groups_rasters,scenario_tags_for_averaging);
+    }
+
+
   } // end CalculateProduction function
+
+
+  public static void createAveragePNG(String script_folder,Scenarios scenarios, List<List<String>>cultivar_groups_rasters,List<List<String>> scenario_tags_for_averaging) 
+    throws InterruptedException, IOException {
+
+      String historical_yield_raster = scenarios.config.crop_lower_to_caps_dictionary.get(scenarios.crop_name[0]) + "_yield";
+      List<String> rasters_to_render = new ArrayList<>();
+      rasters_to_render.add(historical_yield_raster);
+
+      for (int i = 0; i < cultivar_groups_rasters.size(); i++) {
+        List<String> rasters = cultivar_groups_rasters.get(i);
+
+        // skip if no rasters in the cultivar group
+        if (rasters.size() == 0) {
+          continue;
+        }
+
+        List<String> averaging_tags = scenario_tags_for_averaging.get(i);
+
+        String averaging_tag = averaging_tags.get(0);
+        rasters_to_render.add(averaging_tag);
+      }
+
+      BashScripts.createPNG(
+        script_folder,
+        rasters_to_render.toArray(new String[0]), // convert to array here
+        scenarios.results_folder);  
+  } // end createAveragePNG function
+
 
   // https://www.baeldung.com/java-list-all-equal
   public boolean verifyAllEqualUsingALoop(List<String> list) {
@@ -172,6 +212,7 @@ public class CalculateProduction {
       String raster_names_to_average,
       String scenario_tag_for_averaging_rf_or_ir,
       String scenario_tag_for_production_rf_or_ir,
+      HashMap<String,String> crop_lower_to_caps_dictionary,
       String results_folder)
       throws InterruptedException, IOException {
 
@@ -211,28 +252,17 @@ public class CalculateProduction {
       }
     }
 
-    // create a png of the averaged yield raster if the average_png is true
-    if (create_average_png) {
-      BashScripts.createPNG(
-          script_folder,
-          scenario_tag_for_averaging_rf_or_ir,
-          results_folder);
-    }
-
     // use averaged yields to calculate production for either rainfed or irrigated yield.
     // area raster refers to rainfed or irrigated area of a crop, but is not specific to a
     // cultivar (or variety)
 
     String prefix = "";
 
-    // this assert is very important! The production -> overall estimate requires ALL_crops at the moment! Otherwise, need to pass in the appropriate cropland for going from production -> overall raster in the relevant section of the code in this class
-    assert all_or_crop_specific.equals("all");
-
     if(calculate_rf_or_ir_specific_production){
       if (all_or_crop_specific.equals("all")) {
          prefix = "ALL_CROPS";
       } else if (all_or_crop_specific.equals("specific")) {
-         prefix = crop;
+        prefix = crop_lower_to_caps_dictionary.get(crop);
       } else {
         System.out.println("Error: make sure all_or_crop_specific is all or specific");
         System.exit(1);
@@ -246,12 +276,8 @@ public class CalculateProduction {
           crop_area_raster,
           scenario_tag_for_production_rf_or_ir);
 
-      // create a png of the production for this crop
-      // BashScripts.createPNG(
-      //     script_folder,
-      //     scenario_tag_for_production_rf_or_ir,
-      //     results_folder);
     }
+
   }
 
   public static void sumRainfedAndIrrigated(String script_folder, Scenarios scenarios)
@@ -311,13 +337,10 @@ public class CalculateProduction {
 
         String prefix = "";
 
-        // this assert is very important! The production -> overall estimate requires ALL_crops at the moment! Otherwise, need to pass in the appropriate cropland for going from production -> overall raster in the relevant section of the code in this class
-        assert scenarios.all_or_crop_specific.equals("all");
-
         if (scenarios.all_or_crop_specific.equals("all")) {
            prefix = "ALL_CROPS";
         } else if (scenarios.all_or_crop_specific.equals("specific")) {
-           prefix = scenarios.crop_name[i];
+          prefix = scenarios.config.crop_lower_to_caps_dictionary.get(scenarios.crop_name[i]);
         } else {
           System.out.println("Error: make sure all_or_crop_specific is all or specific");
           System.exit(1);
@@ -345,13 +368,6 @@ public class CalculateProduction {
             scenarios.results_folder[last_index_of_crop]);
 
 
-        // DELETE ME
-        BashScripts.createPNG(
-            script_folder,
-            scenarios.scenario_tag_for_production[last_index_of_crop],
-            scenarios.results_folder[last_index_of_crop]);
-
-      }
 
       if(scenarios.calculate_average_yield_rf_and_ir) {
 
@@ -382,7 +398,7 @@ public class CalculateProduction {
 
       // process the overall yield rasters to .asc files
       if (scenarios.make_rasters_comparing_overall_to_historical) {
-        String crop_caps = scenarios.crop_lower_to_caps_dictionary.get(scenarios.crop_name[last_index_of_crop]);
+        String crop_caps = scenarios.config.crop_lower_to_caps_dictionary.get(scenarios.crop_name[last_index_of_crop]);
 
         // System.out.println("crop_caps");
         // System.out.println(crop_caps);
@@ -396,21 +412,34 @@ public class CalculateProduction {
 
       // create a png of the overall yield if create_overall_png is true
       if (scenarios.create_overall_png) {
-        System.out.println("overall png results:");
-        System.out.println("last_index_of_crop");
-        System.out.println(last_index_of_crop);
-        System.out.println("script_folder");
-        System.out.println(script_folder);
-        System.out.println("scenarios.scenario_tag_for_overall_yield[last_index_of_crop]");
-        System.out.println(scenarios.scenario_tag_for_overall_yield[last_index_of_crop]);
-        System.out.println("scenarios.results_folder[last_index_of_crop]");
-        System.out.println(scenarios.results_folder[last_index_of_crop]);
+        String historical_yield_raster = scenarios.config.crop_lower_to_caps_dictionary.get(scenarios.crop_name[last_index_of_crop]) + "_yield";
+        String overall_yield_raster = scenarios.scenario_tag_for_overall_yield[last_index_of_crop];
+        String[] rasters_to_render = {historical_yield_raster, overall_yield_raster};
         BashScripts.createPNG(
           script_folder,
-          scenarios.scenario_tag_for_overall_yield[last_index_of_crop], // to save here
+          rasters_to_render,
           scenarios.results_folder[last_index_of_crop]);  
       }
 
     } // end loop over scenarios
   } // function sumRainfedAndIrrigated
+
+  public static void createAveragePNG(String[] planting_months, String[] years, String script_folder, String results_folder, String[][] raster_names_all_years_wet_or_dry) throws InterruptedException, IOException {
+
+    // This function creates png's at the very end, where all png are shown on the same scale and colormap for easy comparison
+
+    List<String> rasterList = new ArrayList<>();
+    for (int planting_month_index = 0;
+        planting_month_index < planting_months.length;
+        planting_month_index++) {
+
+      String[] raster_name_all_years_this_month_wet_or_dry = raster_names_all_years_wet_or_dry[planting_month_index];
+
+      for(int year_index = 0; year_index < years.length; year_index++) {
+        rasterList.add(raster_name_all_years_this_month_wet_or_dry[year_index]);
+      }
+    }
+    BashScripts.createPNG(script_folder,
+      rasterlist,results_folder);
+  }
 } // class CalculateProduction

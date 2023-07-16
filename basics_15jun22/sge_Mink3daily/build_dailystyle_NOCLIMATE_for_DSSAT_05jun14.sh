@@ -2,6 +2,7 @@
 region_to_use=$1
 main_control_list=$2
 crop_area_raster=$3
+minimum_physical_area=$4
 
 echo ""
 echo "running build_dailystyle"
@@ -84,7 +85,7 @@ noGCMcalendar
 # the resolution of the TARGET REGION (not the original masking raster)
 
 # this is ha in a SPAM pixel needed to be considered relevant
-minimum_physical_area=.05 # 0.05 # value in the masking raster to be considered relevant
+# minimum_physical_area=.05 # 0.05 # value in the masking raster to be considered relevant
 
 growing_radius=0 # 0.0 # number of pixels
 
@@ -92,6 +93,12 @@ growing_radius=0 # 0.0 # number of pixels
 # make a simple raster to get everything...
 # echo "    ++ making an ALL raster ++"
 g.region $region_to_use
+
+echo ""
+echo "Region: "
+g.region -g
+echo ""
+
 r.mapcalc deleteme_all = "100000" 2>&1 | grep -v % # some big number that creates a dummy raster that calculates crop growing everywhere if large...
 
 
@@ -224,106 +231,12 @@ do
   # echo ""
   # echo "-- creating mask for $spam_raster_to_use_for_mask `date` --"
 
-  # clear out the GRASS magic mask name
-  g.remove MASK 2>&1 | grep -v "" # silenced
+  r.mapcalc "deleteme_raster_representing_region=1" 
 
+  # import the masking bash script
+  ./mask_unwanted_pixels.sh $spam_raster_to_use_for_mask deleteme_raster_representing_region $minimum_physical_area $growing_radius
 
-  # find all the pixels that meet the criterion for being relevant
-  # old way, just looking at pin-prick style
-  #  g.region rast=$spam_raster_to_use_for_mask # set the region to match up with the desired raster
-  # r.mapcalc deleteme_initial_spam_ungrown = "if($spam_raster_to_use_for_mask >= $minimum_physical_area, 1, null())"
-
-  # we need to figure out which is coarser, the desired region or the masking source raster
-
-
-  # echo "    ++ masking ++"
-  # echo "spam_raster_to_use_for_mask"
-  # echo $spam_raster_to_use_for_mask
-  
-  # first the mask raster
-  g.region rast=$spam_raster_to_use_for_mask
-  nsres_from_raster=`g.region -g | grep nsres | cut -d= -f2`
-
-  # echo "setting desired region"
-  # echo $region_to_use
-  # second the desired region
-  eval g.region $region_to_use
-  nsres_from_region=`g.region -g | grep nsres | cut -d= -f2`
-
-  # echo "setting desired region"
-  raster_res_is_coarser_than_region_res=`echo "if($nsres_from_raster >= $nsres_from_region) {1} else {0}" | bc`
-
-  # we should already be in the target region...
-  if [ $raster_res_is_coarser_than_region_res = 1 ]; then
-    # do it the old way using pin pricks
-    # echo "      __ masking pin-prick __"
-    r.mapcalc deleteme_initial_spam_ungrown = "if($spam_raster_to_use_for_mask >= $minimum_physical_area, 1, null())" 2>&1 | grep -v %
-  else
-    # do a statistical coarsening to make sure we catch everything
-    # echo "      __ masking coarsening __"
-    r.resamp.stats input=$spam_raster_to_use_for_mask output=deleteme_coarse_mask_ungrown method=sum --o
-    r.mapcalc deleteme_initial_spam_ungrown = "if(deleteme_coarse_mask_ungrown >= $minimum_physical_area, 1, null())" 2>&1 | grep -v %
-  fi
-  
-
-
-
-  # also, choose the pixels around those deemed relevant; note that this stays in the original region
-  #   so desired pixels on the edges will not have a buffer to the outside (this is usually not a big deal)
-  r.grow input=deleteme_initial_spam_ungrown output=deleteme_crop_mask radius=$growing_radius --o
-  # finally, make the final mask a clean 1's and nulls version of the previous step
-  r.mapcalc MASK = "if(isnull(deleteme_crop_mask),null(),1)" 2>&1 | grep -v %
-
-
-
-  # echo "    ++ N/inits ++"
-#  # define the region to use
-#  eval g.region $region_to_use
-
-  # make some fake rasters for nitrogen; this allows us to use either a raster or a supplied value.
-  # you could even use some sort of formula like "original_N * 1.25"
   r.mapcalc deleteme_N_to_use = "$N_level" 2>&1 | grep -v %
-
-# UNCOMMENT BELOW IF YOU WANT TO DEAL WITH NITROGEN MAPS(DMR)
-  # if [ -z "$variable" ]; then
-
-  #   # NOTE: THIS SHOULD BE UNCOMMENTED USED AS A WAY TO TEST ANOTHER NITROGEN
-  #   # MAP TO SEE IF RESULTS ARE BETTER
-
-  #   # echo "Nitrogen is not specified. Importing 2010 nitrogen application."
-  #   # r.in.gdal -o input="../../grassdata/world/PANGEA-lu/nfery2010.asc" output=nitrogen_chemical_2010_g_per_kg
-  #   # r.in.gdal -o input="../../grassdata/world/PANGEA-zhang/appliedNyy2014.asc" output=nitrogen_manure_2014_g_per_kg
-  #   # # import realistic nitrogen map for initial conditions
-
-  #   # # this converts the nitrogen into proper units (g/m^2 to kg/ha)
-  #   # # noting that m^2/ha = 10000
-  #   # # unit conversion: 1 g/m^2=1/1000 kg/m^2 = 10 kg/ha => factor of 10 applied
-  #   # r.mapcalc "deleteme_initial_N = (nitrogen_chemical_2010_g_per_kg + nitrogen_manure_2014_g_per_kg) * 10"
-
-  #   # TODO: check this works
-  #   echo "nitrogen name"
-  #   echo "N_for_${crop_name}_${water_source}"
-
-  #   r.mapcalc deleteme_initial_N = "N_for_${crop_name}_${water_source}" 2>&1 | grep -v "%"
-  #   exit 1
-
-  #   # useful commands:
-
-  #   # 1. show initial rasters initialized
-  #   # $ g.mlist -r | grep initial
-  #   # 2. show statistical average of raster
-  #   # $ g.mlist -r | grep initial
-  #   # 3. mask off cells to ones previously defined as having cropland
-  #   # $ r.mask deleteme_initial_N # add mask   
-  #   # $ r.mask -r # remove mask
-  # else
-  #   # make  fake raster for initial conditions
-  #   r.mapcalc deleteme_initial_N              = "$  " 2>&1 | grep -v "%"
-  
-  
-  #   echo "Variable is not empty."
-  # fi
-
 
 
   # make some fake rasters for initial conditions
@@ -361,7 +274,7 @@ do
   
   # compute the appropriate planting month by shifting the target month and then wrapping the months that
   # go outside of 1 to 12
-  r.mapcalc deleteme_planting_month = "eval(cand_month = $original_planting_month_raster + ($month_shifter), \
+  r.mapcalc "${original_planting_month_raster}_${month_shifter}" = "eval(cand_month = $original_planting_month_raster + ($month_shifter), \
                                             too_low_fixed  = if( cand_month    <=  0, 12 + cand_month,    cand_month    ), \
                                             too_high_fixed = if( too_low_fixed >= 13, too_low_fixed - 12, too_low_fixed ), \
                                             too_high_fixed \
@@ -379,7 +292,7 @@ do
 
 
   # make the new, smaller lists...
-    nonclimate_list="$soils_raster,deleteme_planting_month,deleteme_N_to_use,deleteme_initial_N,deleteme_initial_root_weight,deleteme_initial_surface_weight,$weather_mask"
+    nonclimate_list="$soils_raster,${original_planting_month_raster}_${month_shifter},$N_level,$initial_N,$initial_root_weight,$initial_surface_weight,$weather_mask"
 
   # do the exporting
   # define the name of the output file

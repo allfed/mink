@@ -6,6 +6,7 @@ wth_control/
 wth_catastrophe/
 wth_catastrophe_greenhouse/
 grassdata/
+image_dump_*
 grass6out.png
 Simulation_All_Crop_Scenario_State_Planting_cleaned.csv
 on_node_home*/
@@ -17,10 +18,13 @@ basics_15jun22/sge_Mink3daily/staging_area/*.txt
 basics_15jun22/sge_Mink3daily/staging_area/runner_init_on_node_home*
 basics_15jun22/sge_Mink3daily/chunks_to_GRASS/
 basics_15jun22/sge_Mink3daily/to_DSSAT/
-
+deleteme*
 # Java compiled objectsu
 *.class
 
+# image files
+*.png
+*.tif
 
 # Ascii files 
 *.asc

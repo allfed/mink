@@ -8,6 +8,7 @@ import java.io.*;
 import java.util.*;
 import org.R2Useful.*;
 
+
 public class GenerateScenarios {
 
   public static void main(String[] args)
@@ -38,13 +39,15 @@ public class GenerateScenarios {
         String simulation_csv_location = args[2];
         String run_parameters_csv_folder = args[3];
         String default_cultivar_mappings_location = run_parameters_csv_folder + "default_cultivar_mappings.csv";
-
         
         Config config = Config.importConfigCSV(config_file);
 
+        BashScripts.setGRASSRegion(script_folder,config);
+
 
         // Make all the rasters needed for crop models
-
+        System.out.println("script_folder");
+        System.out.println(script_folder);
         // make by-crop crop area rasters and present-day yield rasters
         BashScripts.initSPAM(script_folder);
 
@@ -56,6 +59,9 @@ public class GenerateScenarios {
 
         // make masks for megaenvironments (regions where certain megaenvironments are)
         BashScripts.makeMegaEnvironmentMasks(script_folder);
+
+        // make rasters for nitrogen
+        BashScripts.makeNitrogenRasters(script_folder);
 
         generateScenariosCSV(script_folder,config, simulation_csv_location,default_cultivar_mappings_location);
         System.out.println("");
@@ -83,6 +89,11 @@ public class GenerateScenarios {
       // iterate over all crops
       for (Config.Crop crop : config.crops) {
           if (crop.snx_names.isEmpty()) {
+              System.out.println("");
+              System.out.println("");
+              System.out.println("WARNING: SNX Name Not Specified for "+crop.name+".");
+              System.out.println("         Using megaenvironments to calculate yield");
+              System.out.println("");
               String crop_code = crop_name_to_short_code_dictionary.get(crop.name);
               write_csv_default_snx(csvWriter, config, crop, crop_code, default_cultivar_mappings_location,script_folder);
           } else {
@@ -106,7 +117,7 @@ public class GenerateScenarios {
     if (config.physical_parameters.all_or_crop_specific.equals("all")) {
        prefix = "ALL_CROPS";
     } else if (config.physical_parameters.all_or_crop_specific.equals("specific")) {
-       prefix = crop.name;
+       prefix = config.crop_lower_to_caps_dictionary.get(crop.name);
     } else {
       System.out.println("Error: make sure all_or_crop_specific is all or specific");
       System.exit(1);
@@ -125,6 +136,7 @@ public class GenerateScenarios {
         String megaEnvMasks = cultivar_mask_map.get(snx_name_prefix);
         String mask_for_this_snx = "mask_for_"+snx_name_prefix+irrigation;
               
+        String nitrogen_raster_or_constant = getNitrogenRasterOrConstant(config.physical_parameters.nitrogen,crop.name, irrigation);
 
         // determine crop area raster based on irrigation type
         String crop_area_raster = prefix + "_" + (irrigation.equals("RF") ? "rainfed_cropland" : "irrigated_cropland");
@@ -141,7 +153,7 @@ public class GenerateScenarios {
             config.physical_parameters.weather_folder,
             config.physical_parameters.results_folder,
             config.model_configuration.run_descriptor,
-            String.valueOf(config.physical_parameters.nitrogen),
+            nitrogen_raster_or_constant,
             String.valueOf(config.physical_parameters.region_to_use_n),
             String.valueOf(config.physical_parameters.region_to_use_s),
             String.valueOf(config.physical_parameters.region_to_use_e),
@@ -166,14 +178,20 @@ public class GenerateScenarios {
       if (config.physical_parameters.all_or_crop_specific.equals("all")) {
          prefix = "ALL_CROPS";
       } else if (config.physical_parameters.all_or_crop_specific.equals("specific")) {
-         prefix = crop.name;
+        prefix = config.crop_lower_to_caps_dictionary.get(crop.name);
       } else {
         System.out.println("Error: make sure all_or_crop_specific is all or specific");
         System.exit(1);
       }
+
+      if (config.physical_parameters.nitrogen == -1) {
+        System.out.println("Using default nitrogen raster");
+      }
       for (String snx_name_prefix : crop.snx_names) {
           // iterate over all irrigation types
           for (String irrigation : config.physical_parameters.irrigation_to_try) {
+              String nitrogen_raster_or_constant = getNitrogenRasterOrConstant(config.physical_parameters.nitrogen,crop.name, irrigation);
+
               // create a unique scenario name
               String snx_name = snx_name_prefix + irrigation;
               // determine crop area raster based on irrigation type
@@ -188,7 +206,7 @@ public class GenerateScenarios {
                   config.physical_parameters.weather_folder,
                   config.physical_parameters.results_folder,
                   config.model_configuration.run_descriptor,
-                  String.valueOf(config.physical_parameters.nitrogen),
+                  nitrogen_raster_or_constant,
                   String.valueOf(config.physical_parameters.region_to_use_n),
                   String.valueOf(config.physical_parameters.region_to_use_s),
                   String.valueOf(config.physical_parameters.region_to_use_e),
@@ -201,6 +219,20 @@ public class GenerateScenarios {
               csvWriter.append("\n");
           }
       }
+  }
+
+  public static String getNitrogenRasterOrConstant(int nitrogen_from_user,String crop_name,String irrigation) throws IOException {
+    String nitrogen_raster_string = "";
+    if (nitrogen_from_user == -1) {
+      // use default nitrogen raster
+      nitrogen_raster_string = "N_for_"+crop_name+"_"+(irrigation.equals("RF") ? "rainfed" : "irrigated") + "_grown";
+      // System.out.println("Using default nitrogen raster: "+nitrogen_raster_string);
+
+    } else {
+      // use constant nitrogen
+      nitrogen_raster_string = String.valueOf(nitrogen_from_user);
+    }
+    return nitrogen_raster_string;
   }
 
 //   public Scenarios(String[] initFileContents) throws InterruptedException, IOException {

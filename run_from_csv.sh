@@ -5,6 +5,11 @@
 
 set -e # exit if a command fails
 
+if [ $# -eq 0 ]; then
+  echo "Usage: $0 [scenario_config_file_location] [DSSAT,process,both]"
+  exit
+fi
+
 export GRASS_VERBOSE=0
 
 
@@ -20,10 +25,10 @@ javac org/Scenarios/CalculateProduction.java
 javac org/DSSATRunner/WriteCopyBlockForDailyWeather.java
 
 scenarios_csv_location="/mnt/data/basics_15jun22/sge_Mink3daily/scenarios/generated_scenarios.csv"
-config_file_location="/mnt/data/scenarios/world/global_250kg_per_ha.yaml"
+config_file_location="/mnt/data/$1"
 script_folder=/mnt/data/basics_15jun22/sge_Mink3daily/
 run_parameters_csv_folder="/mnt/data/basics_15jun22/sge_Mink3daily/parameters/"
-whether_run_DSSAT_or_process=$1
+whether_run_DSSAT_or_process=$2
 
 java -ea org.Scenarios.Scenarios $scenarios_csv_location $script_folder $run_parameters_csv_folder $config_file_location $whether_run_DSSAT_or_process
 time_end=$SECONDS

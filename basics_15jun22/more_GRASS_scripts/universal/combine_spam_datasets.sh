@@ -1,12 +1,19 @@
 #!/bin/bash
+if [ $# -eq 0 ]; then
+  echo "Usage: $0 script_folder"
+
+  exit
+fi
 
 # sum a series of rasters and save the result
  echo ""
  echo "creating combined spam data..."
  echo ""
 # need to put the spam2010 dataset in grassdata/world/spam
-
-cd ../../../grassdata/world/spam
+echo "PWD"
+echo "$PWD"
+script_folder=$1
+cd "$script_folder../../grassdata/world/spam"
 
 area_categories=(
     "A" # total irrigated+rainfed
@@ -94,7 +101,9 @@ for area_category in "${area_categories[@]}"; do
 done
 
 for crop in "${crops[@]}"; do
-    script -c "r.in.gdal input=spam2010V2r0_global_Y_${crop}_A.tif output=${crop}_yield --quiet" > /dev/null
+    r.in.gdal input=spam2010V2r0_global_Y_${crop}_A.tif output=${crop}_yield --quiet &> /dev/null
+    r.out.ascii input=${crop}_yield output=- > "${crop}_yield.asc" --quiet
+    mv "${crop}_yield.asc" "$script_folder../../../wth_historical"
 done
 
 echo ""
