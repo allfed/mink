@@ -78,8 +78,5 @@ physical_parameters:
     
 crops:
 - name: soybean
-  fertilizer_scheme: threeSplitWithFlowering
-# snx_names: [whNEWTON]
-# - name: wheat
-  # snx_names: [whNEWTON]
-  # fertilizer_scheme: winterwheat
+  fertilizer_scheme: soybeans
+  snx_names: [sbMGROUP1, sbMGROUP3, sbMGROUP5, sbMGROUP7, sbMGROUP9, sbMGROUP11, sbMGROUP13, sbMGROUP15]

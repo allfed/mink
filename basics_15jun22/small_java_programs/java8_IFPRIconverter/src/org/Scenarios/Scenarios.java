@@ -862,24 +862,24 @@ public class Scenarios {
 
 
   } // processScenario
-
   public static void createEachYearPNG(String[] planting_months, String[] years, String script_folder, String results_folder, String[][] raster_names_all_years_wet_or_dry) throws InterruptedException, IOException {
 
-    // This function creates png's at the very end, where all png are shown on the same scale and colormap for easy comparison
+      // This function creates png's at the very end, where all png are shown on the same scale and colormap for easy comparison
 
-    List<String> rasterList = new ArrayList<>();
-    for (int planting_month_index = 0;
-        planting_month_index < planting_months.length;
-        planting_month_index++) {
+      List<String> rasterList = new ArrayList<>();
+      for (int planting_month_index = 0;
+          planting_month_index < planting_months.length;
+          planting_month_index++) {
 
-      String[] raster_name_all_years_this_month_wet_or_dry = raster_names_all_years_wet_or_dry[planting_month_index];
+        String[] raster_name_all_years_this_month_wet_or_dry = raster_names_all_years_wet_or_dry[planting_month_index];
 
-      for(int year_index = 0; year_index < years.length; year_index++) {
-        rasterList.add(raster_name_all_years_this_month_wet_or_dry[year_index]);
+        for(int year_index = 0; year_index < years.length; year_index++) {
+          rasterList.add(raster_name_all_years_this_month_wet_or_dry[year_index]);
+        }
       }
-    }
-    BashScripts.createPNG(script_folder,
-      rasterlist,results_folder);
+      // Convert the list to an array and pass it to the method
+      String[] rasterArray = rasterList.toArray(new String[0]);
+      BashScripts.createPNG(script_folder, rasterArray, results_folder);
   }
 
   public static void calculateBestYieldAllYears(

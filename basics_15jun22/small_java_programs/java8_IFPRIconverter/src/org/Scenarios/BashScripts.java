@@ -542,43 +542,52 @@ public class BashScripts {
       List<String> commands = new ArrayList<>();
       commands.add("bash");
       commands.add("./render_all_rasters_same_scale.sh");
-      commands.addAll(Arrays.asList(raster_list));
       commands.add(results_folder);
+      commands.addAll(Arrays.asList(raster_list));
     
       ProcessBuilder pb = new ProcessBuilder(commands);
 
       callProcess(pb, script_folder + "../more_GRASS_scripts/universal/");
   }
-
-  // call a generic process
+    
   public static void callProcess(ProcessBuilder pb, String script_folder)
         throws InterruptedException, IOException {
       pb.inheritIO();
       pb.redirectErrorStream(true);
       pb.directory(new File(script_folder));
-      Process process = pb.start();
-
+      Process process = pb.start(); // Added semicolon here
+      // Create a new thread to handle the error stream
+      new Thread(() -> {
+          try (BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+              String str = null;
+              while ((str = stdError.readLine()) != null) {
+                  System.err.println(str);  // print to standard error
+              }
+          } catch (IOException e) {
+              e.printStackTrace();
+          }
+      }).start(); // Added semicolon here
       BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
       String str = null;
       while ((str = stdInput.readLine()) != null) {
-        // displaying the output on the console
-        System.out.println(str);
+          // displaying the output on the console
+          System.out.println(str);
       }
 
       process.waitFor();
       if (process.exitValue() == 1) {
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        StackTraceElement caller = stackTrace[2];  // stackTrace[0] is getStackTrace, stackTrace[1] is callProcess, stackTrace[2] is the calling method
-        StackTraceElement callerOfCaller = stackTrace[3];  // stackTrace[3] is the method that called the calling method
-        List<String> commands = pb.command();
-        
-        System.out.println("Error occurred in bash script: " + commands.get(1));
-        System.out.println("Error occurred in bash command initiated from: " + caller.getFileName() + ": line " + caller.getLineNumber());
-        System.out.println("The calling method was invoked from: " + callerOfCaller.getFileName() + ": line " + callerOfCaller.getLineNumber());
-        System.out.println("ERROR: process exited with value 1 (Error)");
-        System.exit(1);
+          StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+          StackTraceElement caller = stackTrace[2];  
+          StackTraceElement callerOfCaller = stackTrace[3];  
+          List<String> commands = pb.command(); // Added semicolon here
+          System.out.println("Error occurred in bash script: " + commands.get(1));
+          System.out.println("Error occurred in bash command initiated from: " + caller.getFileName() + ": line " + caller.getLineNumber()); // Fixed concatenation here
+          System.out.println("The calling method was invoked from: " + callerOfCaller.getFileName() + ": line " + callerOfCaller.getLineNumber()); // Fixed concatenation here
+          System.out.println("ERROR: process exited with value 1 (Error)");
+          System.exit(1);
       }
-      ;
+
       assert process.exitValue() != 1;
   } // end callProcess
-} // end BashScripts class
+
+  } // end BashScripts class

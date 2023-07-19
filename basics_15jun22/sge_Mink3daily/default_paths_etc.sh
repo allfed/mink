@@ -14,6 +14,7 @@
 git_root=`git rev-parse --show-toplevel`
 
   original_runner_dir="$git_root/basics_15jun22/small_java_programs/"
+  java_dir="$git_root/basics_15jun22/small_java_programs/java8_IFPRIconverter/"
 #   java_on_headnode=~rdrobert/jres/jre1.8.0_40/bin/java
    java_on_headnode=/usr/bin/java
 java_on_computenode=$java_on_headnode

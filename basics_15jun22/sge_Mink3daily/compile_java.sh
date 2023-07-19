@@ -28,5 +28,9 @@ for dir in $(find ${BASE_SRC_DIR} -type d); do
     done
 done
 
+echo "Cleaning up any remaining .class files in ${BASE_SRC_DIR}..."
+find ${BASE_SRC_DIR} -type f -name "*.class" -exec rm -f {} \;
+echo "Cleanup complete."
+
 cd "${BASE}"
 

@@ -85,7 +85,6 @@ public class GenerateScenarios {
       crop_name_to_short_code_dictionary.put("wheat", "wh");
       crop_name_to_short_code_dictionary.put("potato", "pt");
 
-
       // iterate over all crops
       for (Config.Crop crop : config.crops) {
           if (crop.snx_names.isEmpty()) {

@@ -11,7 +11,7 @@ public class CalculateProduction {
       throws InterruptedException, FileNotFoundException, IOException {
 
     BashScripts.setGRASSRegion(script_folder,scenarios.config);
-
+    // System.out.println("Calculating production for " + scenarios.crop_name[0]);
     HashMap<String, String> crop_lower_to_caps_dictionary = scenarios.config.crop_lower_to_caps_dictionary;
     // average yield results for each crop and irrigation grouping (regardless of cultivar)
 
@@ -122,7 +122,7 @@ public class CalculateProduction {
       BashScripts.createPNG(
         script_folder,
         rasters_to_render.toArray(new String[0]), // convert to array here
-        scenarios.results_folder);  
+        scenarios.results_folder[0]);  
   } // end createAveragePNG function
 
 
@@ -366,7 +366,7 @@ public class CalculateProduction {
             raster_names_to_sum,
             scenarios.scenario_tag_for_production[last_index_of_crop], // to save here
             scenarios.results_folder[last_index_of_crop]);
-
+      }
 
 
       if(scenarios.calculate_average_yield_rf_and_ir) {
@@ -423,23 +423,4 @@ public class CalculateProduction {
 
     } // end loop over scenarios
   } // function sumRainfedAndIrrigated
-
-  public static void createAveragePNG(String[] planting_months, String[] years, String script_folder, String results_folder, String[][] raster_names_all_years_wet_or_dry) throws InterruptedException, IOException {
-
-    // This function creates png's at the very end, where all png are shown on the same scale and colormap for easy comparison
-
-    List<String> rasterList = new ArrayList<>();
-    for (int planting_month_index = 0;
-        planting_month_index < planting_months.length;
-        planting_month_index++) {
-
-      String[] raster_name_all_years_this_month_wet_or_dry = raster_names_all_years_wet_or_dry[planting_month_index];
-
-      for(int year_index = 0; year_index < years.length; year_index++) {
-        rasterList.add(raster_name_all_years_this_month_wet_or_dry[year_index]);
-      }
-    }
-    BashScripts.createPNG(script_folder,
-      rasterlist,results_folder);
-  }
 } // class CalculateProduction

@@ -58,6 +58,9 @@ physical_parameters:
   co2_level: 379
   nitrogen: 250
 
+  # minimum area cell to consider for crop
+  minimum_physical_area: 0.05
+
   # add in nitrogen and water stress for 'real', ignore them for 'happy'
   real_or_happy: real
 

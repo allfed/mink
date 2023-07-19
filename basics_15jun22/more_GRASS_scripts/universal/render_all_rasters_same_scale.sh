@@ -9,6 +9,12 @@ overall_max_int=-99999999999999
 # Initialize overall_min_int to a very large number
 overall_min_int=99999999999999
 
+# Store the first argument in a variable
+first_arg=$1
+
+# Shift the argument list by one, so that $1 is now the second argument from the original list, $2 is the third, etc.
+shift
+
 # loop over all input rasters
 for raster in "$@"; do
   # get the max and min float values for the current raster
@@ -39,14 +45,10 @@ for raster in "$@"; do
   halfmax=`echo $overall_max_int / 2 | bc`
   
   # construct the color rule string
-  classic_color_string=\
-  "$overall_min_int blue
-  $halfmax green
-  $overall_max_int red"
-  
+  classic_color_string="$overall_min_int blue\n$halfmax green\n$overall_max_int red"
   # apply the color rule to the raster
-  echo "$classic_color_string" | r.colors $raster rules=-
+  printf "$classic_color_string" | r.colors $raster rules=-
   
   # call the quick_display script to display the raster
-  ./quick_display.sh $raster . $overall_max_int $overall_min_int
+  ./quick_display.sh $raster $first_arg $overall_max_int $overall_min_int
 done
