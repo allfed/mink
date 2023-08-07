@@ -4,20 +4,25 @@ if [ $# -eq 0 ]; then
   exit
 fi
 
+. ../default_paths_etc.sh
+
 raster=$1
 save_loc=$2
 max_value=$3
 min_value=$4
 extra_description="${@:5}"
 
-if [ -z "$save_loc" ] || [ "$save_loc" = "" ]; then
-    save_loc="/mnt/data"
+
+if [[ $save_loc == /* ]]; then
+  location="${save_loc}"
+elif [[ -z $save_loc ]]; then
+  location="$git_root"
 else
-    save_loc="/mnt/data/${save_loc}"
+  location="$git_root/${save_loc}"
 fi
 
 # Create a unique temporary directory for this script instance
-tmp_dir="../../../image_dump_${$}"
+tmp_dir="$git_root/image_dump_${$}"
 mkdir -p $tmp_dir
 
 export GRASS_PNGFILE=${tmp_dir}/${raster}.png
@@ -70,13 +75,16 @@ if [ -n "$raster_exists" ]; then
   d.erase --quiet
   echo "min-max"
   echo $min-$max
+
+  # echo "colors"
+
+  r.colors map=$raster color=rainbow
+
+  # echo "done colors"
+
+
   d.rast $raster vallist=$min-$max #2>&1 | grep -v "PNG"
 
-# echo "colors"
-
-#r.colors map=$raster color=bcyr
-
-# echo "done colors"
   # When using cp, use $tmp_dir instead of ../../../
   cp $GRASS_PNGFILE $tmp_dir/bg.png
 
@@ -126,16 +134,19 @@ convert -composite -gravity center $tmp_dir/text.png $tmp_dir/bg.png $tmp_dir/re
 convert -composite -gravity center $tmp_dir/resulttmp1.png $tmp_dir/legend.png $tmp_dir/resulttmp2.png | grep -v "PNG"
 convert -composite -gravity center $tmp_dir/resulttmp2.png $tmp_dir/vect.png $tmp_dir/resulttmp3.png | grep -v "PNG"
 echo ""
-echo save_loc
-echo $save_loc/$raster.png
+echo location saving raster: 
+echo $location/$raster.png
 echo ""
 
-convert $tmp_dir/resulttmp3.png -background white -flatten $save_loc/$raster.png | grep -v "PNG"
+convert $tmp_dir/resulttmp3.png -background white -flatten $location/$raster.png | grep -v "PNG"
 
 if [ -d $tmp_dir ]; then
   rm -rf $tmp_dir
 fi
 
 else
+  echo ""
   echo "${raster_only}@${mapset_only} has failed to exist"
+  echo "cannot generate raster"
+  echo ""
 fi

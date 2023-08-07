@@ -1,19 +1,11 @@
 #!/bin/bash
-if [ $# -eq 0 ]; then
-  echo "Usage: $0 script_folder"
-
-  exit
-fi
 
 # sum a series of rasters and save the result
- echo ""
- echo "creating combined spam data..."
- echo ""
+. ../default_paths_etc.sh # imports historical_results_directory and spam_data_folder
+
 # need to put the spam2010 dataset in grassdata/world/spam
-echo "PWD"
-echo "$PWD"
-script_folder=$1
-cd "$script_folder../../grassdata/world/spam"
+
+cd $spam_data_folder
 
 area_categories=(
     "A" # total irrigated+rainfed
@@ -67,6 +59,9 @@ crops=(
 )
 
 for area_category in "${area_categories[@]}"; do
+    echo "area_category"
+    echo "$area_category"
+
     if [ $area_category == "A" ]; then
         area_name=""
     elif [ $area_category == "I" ]; then
@@ -75,12 +70,19 @@ for area_category in "${area_categories[@]}"; do
         area_name="_rainfed"
     fi
     areas=""
+    echo "area_name"
+    echo "$area_name"
     for crop in "${crops[@]}"; do
+        # echo "crop"
+        # echo $crop
 
         # this is for reading in some MAPSPAM data acquired from https://www.mapspam.info/
         # and placed in /grassdata/world/spam
         # (imports the geotiffs)
-        script -c "r.in.gdal input=spam2010V2r0_global_H_${crop}_${area_category}.tif output=${crop}${area_name}_cropland --quiet" > /dev/null
+        r.in.gdal input=spam2010V2r0_global_H_${crop}_${area_category}.tif output=${crop}${area_name}_cropland 2>&1 | grep -v "0..5..10" | grep -v "Reading raster map"
+
+
+        r.out.ascii input=${crop}${area_name}_cropland output=- > "${crop}${area_name}_cropland.asc"
 
         # if the first crop, then don't add a comma
         if [ -z "$areas" ]; then
@@ -91,21 +93,14 @@ for area_category in "${area_categories[@]}"; do
 
     done
 
+
+    # statements
     combined_area="ALL_CROPS${area_name}_cropland"
-    r.series --overwrite input=$areas output=$combined_area method=sum --quiet
+    r.series --overwrite input=$areas output=$combined_area method=sum 2>&1 | grep -v "0..5..10" | grep -v "Reading raster map"
 
-    # save the results
-    r.out.tiff input=$combined_area output=- > "${combined_area}.tif" --quiet
-    r.out.ascii input=$combined_area output=- > "${combined_area}.asc" --quiet
+
+    # save the result as tiff
+    r.out.tiff input=$combined_area output=- > "${combined_area}.tif"
+    r.out.ascii input=$combined_area output=- > "${combined_area}.asc"
 
 done
-
-for crop in "${crops[@]}"; do
-    r.in.gdal input=spam2010V2r0_global_Y_${crop}_A.tif output=${crop}_yield --quiet &> /dev/null
-    r.out.ascii input=${crop}_yield output=- > "${crop}_yield.asc" --quiet
-    mv "${crop}_yield.asc" "$script_folder../../../wth_historical"
-done
-
-echo ""
-echo "All rasters created for all spam crops"
-echo ""

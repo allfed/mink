@@ -1,0 +1,73 @@
+
+Description:
+ Creates/modifies the color table associated with a raster map layer.
+
+Keywords:
+ raster, color table
+
+Usage:
+ r.colors [-rwlngaeiq] [map=name] [color=style] [raster=name]
+   [rules=name] [--verbose] [--quiet]
+
+Flags:
+  -r   Remove existing color table
+  -w   Only write new color table if one doesn't already exist
+  -l   List available rules then exit
+  -n   Invert colors
+  -g   Logarithmic scaling
+  -a   Logarithmic-absolute scaling
+  -e   Histogram equalization
+  -i   Enter rules interactively
+  -q   Run quietly
+ --v   Verbose module output
+ --q   Quiet module output
+
+Parameters:
+     map   Name of input raster map
+   color   Type of color table
+           options: aspect,aspectcolr,bcyr,bgyr,byg,byr,celsius,corine,
+                    curvature,differences,elevation,etopo2,evi,gdd,grey,
+                    grey.eq,grey.log,grey1.0,grey255,gyr,haxby,ndvi,
+                    population,population_dens,precipitation,
+                    precipitation_monthly,rainbow,ramp,random,rstcurv,rules,
+                    ryb,ryg,sepia,slope,srtm,terrain,wave
+            aspect: aspect oriented grey colors
+            aspectcolr: aspect oriented rainbow colors
+            bcyr: blue through cyan through yellow to red
+            bgyr: blue through green through yellow to red
+            byg: blue through yellow to green
+            byr: blue through yellow to red
+            celsius: blue to red for degree Celsius temperature
+            corine: EU Corine land cover colors
+            curvature: for terrain curvatures (from v.surf.rst and r.slope.aspect)
+            differences: differences oriented colors
+            elevation: maps relative ranges of raster values to elevation color ramp
+            etopo2: colors for ETOPO2 worldwide bathymetry/topography
+            evi: enhanced vegetative index colors
+            gdd: accumulated growing degree days
+            grey: grey scale
+            grey.eq: histogram-equalized grey scale
+            grey.log: histogram logarithmic transformed grey scale
+            grey1.0: grey scale for raster values between 0.0-1.0
+            grey255: grey scale for raster values between 0-255
+            gyr: green through yellow to red
+            haxby: relative colors for bathymetry or topography
+            ndvi: Normalized Difference Vegetation Index colors
+            population: color table covering human population classification breaks
+            population_dens: color table covering human population density classification breaks
+            precipitation: precipitation color table (0..2000mm)
+            precipitation_monthly: precipitation color table (0..1000mm)
+            rainbow: rainbow color table
+            ramp: color ramp
+            random: random color table
+            rstcurv: terrain curvature (from r.resamp.rst)
+            rules: create new color table based on user-specified rules read from stdin
+            ryb: red through yellow to blue
+            ryg: red through yellow to green
+            sepia: yellowish-brown through to white
+            slope: r.slope.aspect-type slope colors for raster values 0-90
+            srtm: color palette for Shuttle Radar Topography Mission elevation
+            terrain: global elevation color table covering -11000 to +8850m
+            wave: color wave
+  raster   Raster map from which to copy color table
+   rules   Path to rules file ("-" to read rules from stdin)

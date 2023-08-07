@@ -30,7 +30,7 @@ IFS="
 
 # I expect we will want to fix these hardcoded hacks in the future. needless to say this may cause errors if different database names exist. This should be imported from existing available rasters!
 
-debug="debug"
+# debug="debug"
 
 
 db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
@@ -103,11 +103,6 @@ do
   else
     new_piece="($country_name_column = '$country_name')"
   fi
-
-  echo "new_piece"
-  echo "$new_piece"
-  echo "country_vector"
-  echo "$country_vector"
 
   cat=`v.db.select $country_vector where="$new_piece" col=cat -c`
 

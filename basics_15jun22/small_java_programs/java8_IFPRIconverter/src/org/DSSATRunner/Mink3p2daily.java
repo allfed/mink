@@ -472,7 +472,6 @@ public class Mink3p2daily {
         initFileContents[storageIndex++]);
 
     irrigationSchemeToUse       = initFileContents[storageIndex++];
-
     fractionBetweenLowerLimitAndDrainedUpperLimit = Double.parseDouble(
         initFileContents[storageIndex++]);
     //      nitrogenPPMforBothNH4NO2 = Double.parseDouble(

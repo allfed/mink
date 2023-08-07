@@ -1,13 +1,13 @@
 #!/bin/bash
 
-cd ../../../grassdata/world/megaenvironments_packed/
+. ../default_paths_etc.sh # imports megaenvironments_directory
 
-echo $PWD
+cd "$megaenvironments_directory"
+
 
 echo ""
 echo "unpacking megaenvironments..."
 echo ""
-
 for pack in *.pack; do
     raster_name="${pack%.*}"  # remove the .pack extension
 
@@ -15,6 +15,7 @@ for pack in *.pack; do
         g.remove -f "$raster_name"  # use with caution!
     fi
 
+    # create the raster
     r.unpack input="$pack" output="$raster_name"
 done
 

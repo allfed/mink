@@ -4,6 +4,16 @@
 ### paths and filenames ###
 ###########################
 
+# useful printouts!
+error() {
+  echo "$@" 1>&2
+}
+
+fail() {
+  error "$@"
+  exit 1
+}
+
 # pseudo random int from the machine combined with the time 
 # in nanoseconds for MAXIMUM CHAOS! (DMR)
 # this is run many times from different file locations! (DMR)
@@ -40,6 +50,19 @@ on_node_home="$git_root/$quasi_random_code/"
 BASE="$git_root/basics_15jun22/sge_Mink3daily/" 
 # BASE="/mnt/data/basics_15jun22/sge_Mink3daily/" 
 
+# NEEDED FOR PRERUN_SCRIPTS FOLDER
+
+grass_world_directory="$git_root/grassdata/world/" 
+spam_data_folder="$git_root/grassdata/world/spam/" 
+megaenvironments_directory="$git_root/grassdata/world/megaenvironments_packed/" 
+nitrogen_directory="$git_root/grassdata/world/nitrogen_maps/" 
+
+historical_results_directory="$git_root/wth_historical/" 
+control_results_directory="$git_root/wth_control/" 
+catastrophe_results_directory="$git_root/wth_catastrophe/" 
+
+prerun_scripts="${BASE}prerun_scripts/" 
+export_scripts="${BASE}export_scripts/" 
 
 
 #####################################

@@ -1,5 +1,13 @@
 #!/bin/bash
 
+#
+# Quick summary of what this does: runs r.in.xyz to create GRASS rasters using 
+# [file_description]STATS.txt in the chunks_to_GRASS folder
+# Rasters are exported in the format as specified in the relevant chunks_to_grass .cols.txt file.
+# 
+
+## longer decription
+
 # this is to read in a set of predictions based on what was exported
 # using build_dataset_for_DSSAT_monthly_neighborhood_01mar11.sh
 #
@@ -15,8 +23,9 @@
 # the ACTUAL yields, you could use this script for wheat. if you are interested
 # in anything else at all, you should use the other read_DSSAT45_...sh script
 
+
 if [ $# -lt 1 ]; then
-  echo "Usage: $0 file_to_process"
+  echo "Usage: $0 file_to_process geog_correct_base"
   echo ""
   echo "This will import only those DSSAT outputs with the \"file_to_process\" name."
   echo ""
@@ -25,8 +34,9 @@ if [ $# -lt 1 ]; then
 fi
 
 echo ""
-echo "running READ_DSSAT_outputs script"
-echo ""
+echo "running READ_DSSAT_outputs script with:"
+echo "  file_to_process = $1"
+echo "  geog_correct_base = $2"
 
 
 
@@ -62,10 +72,6 @@ echo ""
 file_to_process=$1
 geog_correct_base=$2
 # output_file_dir=$3
-
-# echo "file_to_process"
-# echo $file_to_process
-
 
 
 # if you want to match something exactly, put a ^ in front (for start of line)
@@ -223,7 +229,6 @@ base_file_name=`basename $Y_file_full ${DSSAT_result_suffix}`
 # echo "bfn = [$base_file_name] ; gcb = [$geog_correct_base]"
 
 
-
 ##### prepare the geography
     # grab the geog data (for later use); lat then longitude
     # echo "cut -f3,4 ${output_file_dir}${geog_correct_base}_geog.txt > deleteme_latitude_longitude_${quasi_random_code}.txt"
@@ -234,13 +239,11 @@ n_columns=`echo "$column_list" | wc -l`
 
 # here is the dangerous magic to try to bail out once we have all the ones we want
 n_patterns=`echo "$name_patterns_to_keep" | grep -v "^$" | wc -l`
-
 # initialize a counter
 n_patterns_found_so_far=0
 
 # rename all of them
 for (( column_index=0 ; column_index < n_columns ; column_index++ )); do
-
   if [ $n_patterns_found_so_far -eq $n_patterns ]; then
     # we have found as many as we were looking for, so break out
     echo "<found $n_patterns_found_so_far, so breaking (beware of wildcards)>"
@@ -254,9 +257,8 @@ for (( column_index=0 ; column_index < n_columns ; column_index++ )); do
   # check if we want it
   keep_this=no
   for name_pattern in $name_patterns_to_keep; do
-    keep_test=`echo "$this_column_name" | grep "$name_pattern"`
-    # echo "keep_test"
-    # echo $keep_test
+
+    keep_test=`echo "$this_column_name" | grep "$name_pattern" || test $? = 1 `
     if [ -n "$keep_test" ]; then
       # we seem to have found something, so break out
       keep_this=yes
@@ -264,16 +266,13 @@ for (( column_index=0 ; column_index < n_columns ; column_index++ )); do
     fi
     
   done
-  
- clean_column_name=`echo "$this_column_name" | sed "s/#/n/g"`
-
+ clean_column_name=`echo "$this_column_name" | sed "s/#/n/g"  || test $? = 1 `
   if [ $keep_this = yes ]; then
     # echo -n "[$clean_column_name]"
-    let "n_patterns_found_so_far++"
+    n_patterns_found_so_far=$((n_patterns_found_so_far+1))
 
   # ok, my plan is to extract just the column we care about, along with the latitude and longitude
     # grab the data
-
     # # in the case that there are no columns, we need to generate a null filled raster
     if [ ! -e ${yield_dir}${base_file_name}${clean_suffix}.txt ]; then
 
@@ -285,26 +284,34 @@ for (( column_index=0 ; column_index < n_columns ; column_index++ )); do
       continue
     fi
 
-
     cut -f${column_number} ${yield_dir}${base_file_name}${clean_suffix}.txt > deleteme_single_column_of_data_${quasi_random_code}.txt
     paste deleteme_latitude_longitude_${quasi_random_code}.txt deleteme_single_column_of_data_${quasi_random_code}.txt > deleteme_full_thing_for_import_${quasi_random_code}.txt
-
     r.in.xyz input=deleteme_full_thing_for_import_${quasi_random_code}.txt output=${base_file_name}_${clean_column_name} x=2 y=1 z=3 fs=tab --o --q
+    if [ $? -eq 1 ]; then
+        echo ""
+        echo "ERROR: An error occurred while importing DSSAT results r.in.xyz. This means DSSAT did not successfully generate results for this planting month, cultivar, and scenario description, in one or more pixels (most likely, all of them)."
+        echo "    You will need to either change the range of planting months processed, adjust cultivars associated with the DSSAT run, or re-run DSSAT to generate the necessary files."
+        echo "    The issue is most likely having to do with specifically, $file_to_process"
+        echo "    To duplicate this error, you would have to run the following script from ${PWD}: "
+        echo "    $ $0 $file_to_process $geog_correct_base"
+        echo ""
+        exit 1
+    fi
+    
+    # exit
 
 
 
     # contemplate renaming here....
-    yield_test=`echo "$clean_column_name" | grep yield`
-    gro_test=`echo "$clean_column_name" | grep _gro_`
-    day_test=`echo "$clean_column_name" | grep shift_in_days`
+    yield_test=`echo "$clean_column_name" | grep yield || test $? = 1`
+    gro_test=`echo "$clean_column_name" | grep _gro_ || test $? = 1`
+    day_test=`echo "$clean_column_name" | grep shift_in_days || test $? = 1`
 
 
     # put the yield and growth stage stresses together since they both use ./zero_to_black.sh
     if [ -n "${yield_test}" ]; then
-      echo ""
-      ./zero_to_black.sh ${base_file_name}_${clean_column_name} 2>&1 | grep -v olor | grep -v set | grep -v "$yield_test"
+      ./export_scripts/zero_to_black.sh ${base_file_name}_${clean_column_name} 
     fi
-    # echo -n "."
    # g.remove rast=${base_file_name}_${clean_column_name} --q
   fi
 

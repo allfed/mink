@@ -13,13 +13,18 @@ fi
 raster=$1
 max_value_to_use=$2
 min_value_to_use=$3
+# echo "max_value_to_use"
+# echo "min_value_to_use"
+# echo $max_value_to_use
+# echo $min_value_to_use
+
 
 # check to see if the desired raster even exists
 raster_test=`g.mlist rast pat=$raster`
 
 if [ -z "$raster_test" ]; then
   echo "$0: raster <$raster> not found"
-  exit
+  exit 1
 fi
 
 magic_overshoot_fraction=0.001
@@ -33,6 +38,11 @@ if [ -z "$max_value_to_use" ]; then
     temp_max=`echo "scale=15; $temp_max" | bc`
     temp_min=`echo "$temp_min" | sed "s/e/*10^/g"`
     temp_min=`echo "scale=15; $temp_min" | bc`
+
+  if [ -z "$temp_max" ]; then
+    # echo "temp_max value is empty. Exiting..."
+    exit 0
+  fi
 
   max=`echo "$temp_max * (1 + $magic_overshoot_fraction)" | bc`
   min=`echo "$temp_min * (1 + $magic_overshoot_fraction)" | bc`
@@ -53,6 +63,12 @@ else
     temp_min=$min_value_to_use
     min=$min_value_to_use
   fi
+fi
+
+# Check if max is empty
+if [ -z "$max" ]; then
+  # echo "Max value is empty. Exiting..."
+  exit 0
 fi
 
 # clean up any e's that would screw up the bc
@@ -84,7 +100,7 @@ small_num=0.0001
 if [ -z "$min_value_to_use" ]; then
   use_zero_as_black=1
 else
-      test_for_min_is_zero=`echo "if($min_value_to_use <= 0) {1} else {0}" | bc`
+  test_for_min_is_zero=`echo "if($min_value_to_use == 0) {1} else {0}" | bc`
   if [ $test_for_min_is_zero = 1 ]; then
     # the specified minimum is zero, so we want to use black
     use_zero_as_black=1
@@ -167,6 +183,11 @@ fi # else of if min_value_to_use is empty
 # if so, we want to add another like with the temp max at the tippy top
 # with the same color so it doesn't get washed out...
 
+if [ -z "$temp_max" ]; then
+    # echo "temp_max is not set or empty. Exiting..."
+    exit 0
+fi
+
 top_check=`echo "if( $temp_max > $max ) {1} else {0}" | bc`
 
 if [ $top_check = 1 ]; then
@@ -177,7 +198,6 @@ fi
 
 
 
-#echo "[$color_string]"
 #echo "temp_max = $temp_max ; functional max = $max"
-# echo "$color_string" | r.colors $raster color=rules
+echo "$color_string" | r.colors --q $raster color=rules 2>&1 | grep -v "Your color rules do not cover the whole range of data!" | grep -v " but data "
 

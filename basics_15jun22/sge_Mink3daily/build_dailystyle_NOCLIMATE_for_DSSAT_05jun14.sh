@@ -4,49 +4,31 @@ main_control_list=$2
 crop_area_raster=$3
 minimum_physical_area=$4
 
+set -e 
+
+#
+# This script is responsible for generating the following files in the output file (to_DSSAT) using r.out.new:
+# [month]_[more details]_[run_name]header.txt
+# [month]_[more details]_[run_name].cols.txt
+# [month]_[more details]_[run_name]_geog.txt
+# [month]_[more details]_[run_name]_geog.info.txt
+# [month]_[more details]_[run_name]_data.txt
+# [month]_[more details]_[run_name]_data.info.txt
+# [month]_[more details]_[run_name].provenance.txt
+#
+# these txt files are data tables in txt format, easy for java to read and use for given latitudes and longitudes
+#
+# this is needed for the java programs to be able to know which regions have which properties for runtime
+# these details are then imported into DSSAT
+# 
+# it gets these details by importing them from GRASS GIS maps, and the details passed in from the 
+
 echo ""
 echo "running build_dailystyle"
 echo ""
 
-
-# echo "region_to_use"
-# echo $region_to_use
-# echo "weather_mask"
-# echo $weather_mask
-# previous generation was NEW GISbox:
-#   /home/grass/grass_scripts/gf_crop_modeling_01mar11/build_dataset_for_DSSAT_BigInits_03nov11.sh
-#   /home/grass/grass_scripts/gf_crop_modeling_01mar11/build_dataset_for_DSSAT_monthly_neighborhood_01mar11.sh
-# previous generation was old GISbox:
-#   /home/grass/grass_scripts/crop_modeling/ricky_DSSAT/improved_calendars_15dec09
-#   export_MONTHLY_neighborhood_29mar10.sh
-
-
-# the purpose of this is to create a single table for me
-# to use for the crop modeling
-# BUT: now we have added some more things to do the soil initial conditions a little more better-er
-# BUT: furthermore, i am going to use this to build a pre-generated daily weather thing to test with
-#            the to-be-developed daily weather Mink2 AND i'm going to change the way that masking gets
-#            done to be a little more robust
-# BUT: now this should work nicely with data we get from someone else...
-
-
-# the output_file is the name to be used when writing out the dataset. 
-# the name should have the form directory/prefix_ (ending in an underscore)
-# this allows you to give a unique name to all the myriad little
-# details that cannot be easily incorporated into the filename directly
-#
-# typically, this name will be paired primarily with a geographic region
-# and resolution
-#
-# the weather_mask provides a way of telling where we actually have weather data for and not. it should be missing values
-#   where we don't and have a valid value where we do
-# 1.875
-# 1.25
 output_file=to_DSSAT/
-weather_mask=$crop_area_raster ; #region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" #eegion_to_use="n=49 s=26 w=-124 e=-66 nsres=1.875 ewres=1.25" # now forcing a square resolution region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" # NOTE: region_to_use SHOULD BE SET BEFORE RUNNING THIS SCRIPT
-# output_file=to_DSSAT/D_ ; weather_mask=MAIZE_cropland@morgan_DSSAT_cat_0 ; #region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" #eegion_to_use="n=49 s=26 w=-124 e=-66 nsres=1.875 ewres=1.25" # now forcing a square resolution region_to_use="n=90 s=-90 w=-180 e=180 nsres=1.875 ewres=2.5" # NOTE: region_to_use SHOULD BE SET BEFORE RUNNING THIS SCRIPT
-# echo "weather_mask"
-# echo $weather_mask
+weather_mask=$crop_area_raster
 #### we should only need the calendar_mapset now with pre-existing daily weather...
 
 calendar_mapset=deltaPIKnov_from_daily_c # which mapset contains the target planting month rasters
@@ -99,9 +81,6 @@ echo "Region: "
 g.region -g
 echo ""
 
-r.mapcalc deleteme_all = "100000" 2>&1 | grep -v % # some big number that creates a dummy raster that calculates crop growing everywhere if large...
-
-
 # this is the main control where we list the crop cases we wish to model
 # the columns are tab delimited...
 #
@@ -144,12 +123,6 @@ r.mapcalc deleteme_all = "100000" 2>&1 | grep -v % # some big number that create
 #    make one giant set of daily weather for the region with a single line and then reuse those for multiple crop
 #    cases...
 
-simple_initial=`echo -e "initial_soil_nitrogen_mass@DSSAT_essentials_12may11\tinitial_root_mass@DSSAT_essentials_12may11\tinitial_surface_residue_mass@DSSAT_essentials_12may11"`
-wheat_simple_initial="2*initial_soil_nitrogen_mass@DSSAT_essentials_12may11 initial_root_mass@DSSAT_essentials_12may11  initial_surface_residue_mass@DSSAT_essentials_12may11"
-old_wheat_revised_initial="initial_soil_nitrogen_mass_07may13@DSSAT_essentials_12may11  initial_root_mass@DSSAT_essentials_12may11  initial_surface_residue_mass@DSSAT_essentials_12may11"
-wheat_revised_initial="initial_soil_nitrogen_mass_23may13@DSSAT_essentials_12may11  initial_root_mass@DSSAT_essentials_12may11  initial_surface_residue_mass@DSSAT_essentials_12may11"
-maize_initial=`echo -e "initial_soil_nitrogen_mass_13mar14@DSSAT_essentials_12may11\tinitial_root_mass@DSSAT_essentials_12may11\tinitial_surface_residue_mass@DSSAT_essentials_12may11"`
-
 
 # this is a list of offsets from the target month that you would like to try.
 # integers only please...
@@ -160,16 +133,7 @@ month_shifter_list=\
 "
 0
 "
-# EXAMPLE
-# month_shifter_list=\
-# "
-# 0
-# 1
-# -1
-# "
 
-
-# echo -e "\n\n\n CHECK THE SPAM RASTERS: should be the 30may14 ones... \n\n\n"
 sleep 1
 
 
@@ -189,8 +153,8 @@ output_dir=${output_file%/*}  # extract the directory part out the output file
 # echo "outputs being placed in = [$output_dir]" ; # display something to the screen
 mkdir -p $output_dir   # create the directory, if necessary
 
-
-
+other_initial=`echo -e "initial_soil_nitrogen_mass@DSSAT_essentials_12may11\tinitial_root_mass@DSSAT_essentials_12may11\tinitial_surface_residue_mass@DSSAT_essentials_12may11"`
+wheat_revised_initial=`echo -e "initial_soil_nitrogen_mass_23may13@DSSAT_essentials_12may11\tinitial_root_mass@DSSAT_essentials_12may11\tinitial_surface_residue_mass@DSSAT_essentials_12may11"`
 
 # pick one of the gcm cases from the list
 for gcm in $gcm_list; do
@@ -205,11 +169,20 @@ do
                   description=`echo "$spam_line" | cut -f3`
                       N_level=`echo "$spam_line" | cut -f4`
               calendar_prefix=`echo "$spam_line" | cut -f5`
+
+  if [ "$crop_name" = "wheat" ]; then
+    simple_initial="$wheat_revised_initial"
+  else
+    simple_initial="$other_initial"
+  fi
+
+
                     initial_N=`echo "$simple_initial" | cut -f1`
           initial_root_weight=`echo "$simple_initial" | cut -f2`
        initial_surface_weight=`echo "$simple_initial" | cut -f3`
                  #    id_raster=`echo "$spam_line" | cut -f9`
                  # skip_climate=`echo "$spam_line" | cut -f10`
+
   # echo "spam_raster_to_use_for_mask"
   # echo $spam_raster_to_use_for_mask
   # echo "crop_name"
@@ -228,22 +201,17 @@ do
   # echo $initial_surface_weight
 
   # define the appropriate mask
-  # echo ""
-  # echo "-- creating mask for $spam_raster_to_use_for_mask `date` --"
-
   r.mapcalc "deleteme_raster_representing_region=1" 
 
-  # import the masking bash script
-  ./mask_unwanted_pixels.sh $spam_raster_to_use_for_mask deleteme_raster_representing_region $minimum_physical_area $growing_radius
+  # run the masking bash script to only generate data for regions where this crop variety grows
+  ./prerun_scripts/mask_unwanted_pixels.sh $spam_raster_to_use_for_mask deleteme_raster_representing_region $minimum_physical_area $growing_radius
 
-  r.mapcalc deleteme_N_to_use = "$N_level" 2>&1 | grep -v %
-
+  r.mapcalc deleteme_N_to_use = "$N_level" 2>&1 
 
   # make some fake rasters for initial conditions
-  r.mapcalc deleteme_initial_N              = "$initial_N" 2>&1 | grep -v "%"
-  r.mapcalc deleteme_initial_root_weight    = "$initial_root_weight" 2>&1 | grep -v "%"
-  r.mapcalc deleteme_initial_surface_weight = "$initial_surface_weight" 2>&1 | grep -v "%"
-
+  r.mapcalc deleteme_initial_N              = "$initial_N" 2>&1 #| grep -v "%"
+  r.mapcalc deleteme_initial_root_weight    = "$initial_root_weight" 2>&1 #| grep -v "%"
+  r.mapcalc deleteme_initial_surface_weight = "$initial_surface_weight" 2>&1 #| grep -v "%"
 
 # here is where we go through the shifts against the target planting month
 for month_shifter in $month_shifter_list
@@ -290,32 +258,27 @@ do
   # then, we need to split up the pure climate stuff into one table and the
   # non-climate stuff into another. but they need to match up.
 
-
   # make the new, smaller lists...
-    nonclimate_list="$soils_raster,${original_planting_month_raster}_${month_shifter},$N_level,$initial_N,$initial_root_weight,$initial_surface_weight,$weather_mask"
+    nonclimate_list="$soils_raster,${original_planting_month_raster}_${month_shifter},deleteme_N_to_use,$initial_N,$initial_root_weight,$initial_surface_weight,$weather_mask"
 
   # do the exporting
   # define the name of the output file
     start_output_name=${output_file}${planting_month_raster}_${crop_name}__${description}
 
     real_output_file=${start_output_name}
-    echo "real output"
-    echo $real_output_file
 
     # make a header file with all the names of the maps in order so we can figure out what they are later
     echo "$nonclimate_list" | tr "," "\n" | cat -n > ${real_output_file}.cols.txt
 
-    # dump a status report out to the screen
-    # echo " -- exporting $planting_month_raster $crop_name $description `date` --"
+    # exporting $planting_month_raster $crop_name $description 
 
-  # skip the climate if requested... that is, always, now....
      # Beware the MAGIC PATH!!! this is a non-standard grass program. so you need to know the actual path
      # this is what actually makes the giant text tables
+     # test part is just saying we don't mind if this throws errors (always seems to even if correct operation)
      /usr/local/grass-6.5.svn/bin/r.out.new \
        input=${nonclimate_list} \
        output=${real_output_file} \
-       -l
-
+       -l || test $? = 1 
 
   # try some provenance from here...
   # the idea here is to record all the important settings so that you can reproduce this dataset
@@ -351,12 +314,8 @@ done # month_shifter
 
 done # spam_line
 
-  g.remove MASK 2>&1 | grep -v ""
-
 done # gcm
 
 echo ""
 echo "done running build_dailystyle"
 echo ""
-
-exit

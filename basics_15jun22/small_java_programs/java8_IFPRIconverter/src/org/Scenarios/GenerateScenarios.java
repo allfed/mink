@@ -17,7 +17,7 @@ public class GenerateScenarios {
         System.out.println("running GenerateScenarios.java ");
         System.out.println("");
 
-        System.out.println("script_folder: ");
+        System.out.println("run_script_folder: ");
         System.out.println(args[0]);
         System.out.println("");
 
@@ -34,7 +34,7 @@ public class GenerateScenarios {
         System.out.println("");
 
 
-        String script_folder = args[0];
+        String run_script_folder = args[0];
         String config_file = args[1];
         String simulation_csv_location = args[2];
         String run_parameters_csv_folder = args[3];
@@ -42,48 +42,56 @@ public class GenerateScenarios {
         
         Config config = Config.importConfigCSV(config_file);
 
-        BashScripts.setGRASSRegion(script_folder,config);
+        BashScripts.setGRASSRegion(run_script_folder,config);
 
+        HashMap<String, String> crop_name_to_short_code_dictionary = getCropCodeMap();
 
         // Make all the rasters needed for crop models
-        System.out.println("script_folder");
-        System.out.println(script_folder);
-        // make by-crop crop area rasters and present-day yield rasters
-        BashScripts.initSPAM(script_folder);
+        System.out.println("run_script_folder");
+        System.out.println(run_script_folder);
+        for (Config.Crop crop : config.crops) {
+          // make by-crop crop area rasters and present-day yield rasters
+            String crop_code_caps = config.crop_lower_to_caps_dictionary.get(crop.name);
+            BashScripts.initSPAM(run_script_folder,crop_code_caps);
+        } 
 
         // make masks for winter wheat dominant countries
-        BashScripts.makeCountryMask(script_folder,
+        BashScripts.makeCountryMask(run_script_folder,
           config.model_configuration.winter_wheat_countries_csv,
           "ALL_CROPS_cropland",
           "winter_wheat_countries_mask");
 
         // make masks for megaenvironments (regions where certain megaenvironments are)
-        BashScripts.makeMegaEnvironmentMasks(script_folder);
+        BashScripts.makeMegaEnvironmentMasks(run_script_folder);
 
         // make rasters for nitrogen
-        BashScripts.makeNitrogenRasters(script_folder);
+        BashScripts.makeNitrogenRasters(run_script_folder);
 
-        generateScenariosCSV(script_folder,config, simulation_csv_location,default_cultivar_mappings_location);
+        generateScenariosCSV(run_script_folder,config, simulation_csv_location,default_cultivar_mappings_location,crop_name_to_short_code_dictionary);
         System.out.println("");
         System.out.println("done running GenerateScenarios.java ");
         System.out.println("");
 
     }
   
-  public static void generateScenariosCSV(String script_folder,Config config, String simulation_csv_location, String default_cultivar_mappings_location) throws InterruptedException, IOException {
+  public static HashMap<String, String> getCropCodeMap() {
+
+    HashMap<String, String> crop_name_to_short_code_dictionary = new HashMap<String, String>();
+    crop_name_to_short_code_dictionary.put("maize", "mz");
+    crop_name_to_short_code_dictionary.put("soybean", "sb");
+    crop_name_to_short_code_dictionary.put("rapeseed", "cn");
+    crop_name_to_short_code_dictionary.put("wheat", "wh");
+    crop_name_to_short_code_dictionary.put("potato", "pt");
+    return crop_name_to_short_code_dictionary;
+  }
+
+  public static void generateScenariosCSV(String run_script_folder,Config config, String simulation_csv_location, String default_cultivar_mappings_location,HashMap<String, String> crop_name_to_short_code_dictionary) throws InterruptedException, IOException {
       // create FileWriter instance with file at simulation_csv_location
       FileWriter csvWriter = new FileWriter(simulation_csv_location);
         
       // write header to the CSV file
       csvWriter.append("snx_name,co2_level,crop_name,weather_prefix,weather_folder,results_folder,run_descriptor,nitrogen,region_to_use_n,region_to_use_s,region_to_use_e,region_to_use_w,nsres,ewres,mask_for_this_snx,fertilizer_scheme\n");
         
-
-      HashMap<String, String> crop_name_to_short_code_dictionary = new HashMap<String, String>();
-      crop_name_to_short_code_dictionary.put("maize", "mz");
-      crop_name_to_short_code_dictionary.put("soybean", "sb");
-      crop_name_to_short_code_dictionary.put("rapeseed", "cn");
-      crop_name_to_short_code_dictionary.put("wheat", "wh");
-      crop_name_to_short_code_dictionary.put("potato", "pt");
 
       // iterate over all crops
       for (Config.Crop crop : config.crops) {
@@ -94,7 +102,7 @@ public class GenerateScenarios {
               System.out.println("         Using megaenvironments to calculate yield");
               System.out.println("");
               String crop_code = crop_name_to_short_code_dictionary.get(crop.name);
-              write_csv_default_snx(csvWriter, config, crop, crop_code, default_cultivar_mappings_location,script_folder);
+              write_csv_default_snx(csvWriter, config, crop, crop_code, default_cultivar_mappings_location,run_script_folder);
           } else {
               write_csv_snx_names_specified(csvWriter, config, crop);
           }
@@ -105,7 +113,7 @@ public class GenerateScenarios {
       csvWriter.close();
   }
 
-  public static void write_csv_default_snx(FileWriter csvWriter, Config config, Config.Crop crop, String crop_code, String default_cultivar_mappings_location,String script_folder) throws InterruptedException, IOException {
+  public static void write_csv_default_snx(FileWriter csvWriter, Config config, Config.Crop crop, String crop_code, String default_cultivar_mappings_location,String run_script_folder) throws InterruptedException, IOException {
     // Here import the default snx names and get intersection with another dataset
     HashMap<String, String> cultivar_mask_map = createCultivarMaskMap(default_cultivar_mappings_location);
 
@@ -135,13 +143,13 @@ public class GenerateScenarios {
         String megaEnvMasks = cultivar_mask_map.get(snx_name_prefix);
         String mask_for_this_snx = "mask_for_"+snx_name_prefix+irrigation;
               
-        String nitrogen_raster_or_constant = getNitrogenRasterOrConstant(config.physical_parameters.nitrogen,crop.name, irrigation);
+        String nitrogen_raster_or_constant = getNitrogenRasterOrConstant(config,crop.name, irrigation);
 
         // determine crop area raster based on irrigation type
         String crop_area_raster = prefix + "_" + (irrigation.equals("RF") ? "rainfed_cropland" : "irrigated_cropland");
               
         // loop over the default_snx_names and get the intersection 
-        BashScripts.setIntersectionWithMegaenvironmentMasks(script_folder,crop_area_raster,megaEnvMasks,mask_for_this_snx);
+        BashScripts.setIntersectionWithMegaenvironmentMasks(run_script_folder,crop_area_raster,megaEnvMasks,mask_for_this_snx);
         String snx_name = snx_name_prefix + irrigation;
         // write a new line to the CSV file
         csvWriter.append(String.join(",",
@@ -189,7 +197,7 @@ public class GenerateScenarios {
       for (String snx_name_prefix : crop.snx_names) {
           // iterate over all irrigation types
           for (String irrigation : config.physical_parameters.irrigation_to_try) {
-              String nitrogen_raster_or_constant = getNitrogenRasterOrConstant(config.physical_parameters.nitrogen,crop.name, irrigation);
+              String nitrogen_raster_or_constant = getNitrogenRasterOrConstant(config,crop.name,irrigation);
 
               // create a unique scenario name
               String snx_name = snx_name_prefix + irrigation;
@@ -220,16 +228,23 @@ public class GenerateScenarios {
       }
   }
 
-  public static String getNitrogenRasterOrConstant(int nitrogen_from_user,String crop_name,String irrigation) throws IOException {
+  public static String getNitrogenRasterOrConstant(Config config,String crop_name,String irrigation) throws IOException {
+    Integer nitrogen_from_user = config.physical_parameters.nitrogen;
     String nitrogen_raster_string = "";
     if (nitrogen_from_user == -1) {
-      // use default nitrogen raster
-      nitrogen_raster_string = "N_for_"+crop_name+"_"+(irrigation.equals("RF") ? "rainfed" : "irrigated") + "_grown";
-      // System.out.println("Using default nitrogen raster: "+nitrogen_raster_string);
+      Config.Crop crop = Config.Crop.getCropByName(config.crops, crop_name);
+      // use nitrogen rasters specified in parameters
+      if (irrigation.equals("RF")) {
+        nitrogen_raster_string = crop.nitrogen_rainfed;
+
+      } else {
+        nitrogen_raster_string = crop.nitrogen_irrigated;
+      }
 
     } else {
       // use constant nitrogen
       nitrogen_raster_string = String.valueOf(nitrogen_from_user);
+
     }
     return nitrogen_raster_string;
   }
@@ -242,13 +257,13 @@ public class GenerateScenarios {
 //       // To do so, we loop through the snx names for the current crop type
 //       // 
 //       // First we check if the megaenvironment map is 
-//       setPlantedAreasToThisCultivar(script_folder,crop_area_raster,snx_name,cultivar_mask_map,mask_for_this_snx);
+//       setPlantedAreasToThisCultivar(run_script_folder,crop_area_raster,snx_name,cultivar_mask_map,mask_for_this_snx);
 //     }
 
 // HashMap<String, String> cultivar_mask_map = createCultivarMaskMap(default_cultivar_mappings_location);
 
 // public static void setPlantedAreasToThisCultivar(
-//   String script_folder, // the output raster,mask_for_this_snxs
+//   String run_script_folder, // the output raster,mask_for_this_snxs
 //   String crop_area_raster,
 //   String snx_name,
 //   HashMap<String,String> cultivar_mask_map,
@@ -258,7 +273,7 @@ public class GenerateScenarios {
 
 //   String megaEnvMasks = cultivar_mask_map.get(snx_name);
 
-//   BashScripts.getIntersectionWithMegaenvironmentMasks(script_folder,crop_area_raster,megaEnvMasks,mask_for_this_snx);
+//   BashScripts.getIntersectionWithMegaenvironmentMasks(run_script_folder,crop_area_raster,megaEnvMasks,mask_for_this_snx);
 // }
 
 
@@ -266,7 +281,7 @@ public class GenerateScenarios {
 
   // mask_for_this_snx = "mask_for_"+snx_name;
 
-  // BashScripts.getIntersectionWithMegaenvironmentMasks(script_folder,crop_area_raster,megaEnvMasks,mask_for_this_snx);
+  // BashScripts.getIntersectionWithMegaenvironmentMasks(run_script_folder,crop_area_raster,megaEnvMasks,mask_for_this_snx);
 
 public static HashMap<String, String> createCultivarMaskMap(String csv_location)
     throws InterruptedException, IOException {

@@ -22,10 +22,3 @@ r.series --overwrite input=$1 output="deleteme_max" method=maximum
 
 r.mapcalc $3 = "if(isnull($2),deleteme_avg,deleteme_max)"
 
-
-cd $4
-
-# echo ""
-# echo "running the save..."
-# if you want to save the result as ascii, you could uncomment this line below
-r.out.ascii input=$3 output=- --quiet > $3.asc

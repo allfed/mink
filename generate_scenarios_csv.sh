@@ -20,9 +20,9 @@ javac org/Scenarios/GenerateScenarios.java
 scenarios_csv_location="/mnt/data/basics_15jun22/sge_Mink3daily/scenarios/generated_scenarios.csv"
 config_file_location="/mnt/data/$1"
 run_parameters_csv_folder="/mnt/data/basics_15jun22/sge_Mink3daily/parameters/"
-script_folder=/mnt/data/basics_15jun22/sge_Mink3daily/
+run_script_folder=/mnt/data/basics_15jun22/sge_Mink3daily/
 
-java -ea org.Scenarios.GenerateScenarios $script_folder $config_file_location $scenarios_csv_location $run_parameters_csv_folder
+java -ea org.Scenarios.GenerateScenarios $run_script_folder $config_file_location $scenarios_csv_location $run_parameters_csv_folder
 time_end=$SECONDS
 echo "duration (seconds)"
 echo $(echo "scale=2 ; $time_end - $time_start " | bc -l)

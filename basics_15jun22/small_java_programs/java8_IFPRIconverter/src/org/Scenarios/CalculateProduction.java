@@ -403,7 +403,7 @@ public class CalculateProduction {
         // System.out.println("crop_caps");
         // System.out.println(crop_caps);
 
-        BashScripts.CreateHistoricalVsModelYieldsASCIIs(
+        BashScripts.exportToCountries(
           script_folder,
           crop_caps,
           scenarios.scenario_tag_for_overall_yield[last_index_of_crop], 

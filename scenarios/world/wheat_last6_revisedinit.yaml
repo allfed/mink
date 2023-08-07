@@ -49,38 +49,35 @@ model_configuration:
   winter_wheat_countries_csv: Luxembourg,Belgium,Denmark,France,Germany,Ireland,Netherlands,United Kingdom
 
 physical_parameters:
-  region_to_use_n: 59
-  region_to_use_s: 50
-  region_to_use_e: 2
-  region_to_use_w: -12
+  region_to_use_n: 65
+  region_to_use_s: -65
+  region_to_use_e: 170
+  region_to_use_w: -170
   nsres: 1.875
   ewres: 1.25
   co2_level: 379
-  nitrogen: 250
+
+  # minimum area cropland in a pixel to consider, in hectares. Any smaller pixel is ignored.
+  minimum_physical_area: 0.05
 
   # add in nitrogen and water stress for 'real', ignore them for 'happy'
   real_or_happy: real
 
-  minimum_physical_area: 0.05
-
   # plant only in crop areas specific to that crop, or plant everywhere there are currently crops? 'specific' for crop areas specific to that crop that are currently planted, 'all' for planting in all currently planted crop areas
   all_or_crop_specific: specific
 
-  run_descriptor: Jul19UK
+  run_descriptor: Aug03_revisedinit
   irrigation_to_try: [RF, IR]
   weather_prefix: Outdoor_crops_control
   weather_folder: control_mink
   results_folder: wth_control
   #typically below is [1, 3, 5, 7, 9, 11]
-  planting_months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] 
-  # TODO: test with catastrophe only years 5 and 6
+  planting_months: [7, 8, 9, 10, 11, 12]
   years: [1, 2, 3, 4, 5, 6, 7]
 
     
 crops:
 - name: wheat
   fertilizer_scheme: winterwheat
-  snx_names: [whK076]
-# - name: wheat
-  # snx_names: [whNEWTON]
-  # fertilizer_scheme: winterwheat
+  nitrogen_irrigated: N_for_wheat_irrigated_grown
+  nitrogen_rainfed: N_for_wheat_rainfed_grown

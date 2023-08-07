@@ -1,4 +1,12 @@
 #!/bin/bash
+. ../default_paths_etc.sh # import git_root
+
+if [ $# -lt 2 ]; then
+  echo "Usage: raster1 raster2 ..."
+  exit 1
+fi
+
+
 raster1=$1
 raster2=$2
 
@@ -37,5 +45,5 @@ $overall_max_int red"
 echo "$classic_color_string" | r.colors $raster1 rules=-
 echo "$classic_color_string" | r.colors $raster2 rules=-
 
-./quick_display.sh $raster1 . $overall_max_int $overall_min_int
-./quick_display.sh $raster2 . $overall_max_int $overall_min_int
+./quick_display.sh $raster1 $git_root $overall_max_int $overall_min_int
+./quick_display.sh $raster2 $git_root $overall_max_int $overall_min_int

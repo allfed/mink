@@ -1,0 +1,1 @@
+This folder is used for scripts that are used to in the mink pipeline required for exporting appropriate files in the proper locations and creating the scripts necessary to run the DSSAT gridded model

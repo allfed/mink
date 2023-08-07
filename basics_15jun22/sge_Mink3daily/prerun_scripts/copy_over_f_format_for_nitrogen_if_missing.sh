@@ -1,6 +1,6 @@
 # Summary: check if nitrogen rasters are properly set up to run. Sometimes there are issues with unpacking them. Copy over if missing
 
-# This script accepts two arguments: the root directory of a git repository (git_root) and a level identifier (N_level). It then checks for the existence of a specific file (f_format) within a certain directory structure under the given git repository. The directory structure includes directories corresponding to mapsets in a GRASS GIS database.
+# This script accepts the nitrogen level identifier (N_level). It then checks for the existence of a specific file (f_format) within a certain directory structure under the given git repository. The directory structure includes directories corresponding to mapsets in a GRASS GIS database.
 
 # If either of the arguments is not provided, the script outputs an error message and exits with a status code of 1.
 
@@ -11,13 +11,14 @@
 # exit if there's an error
 set -e
 
-git_root=$1
-N_level=$2
+N_level=$1
 
-if [ $# -ne 2 ]; then
-    echo "Usage: $0 git_root N_level"
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 N_level"
     exit 1
 fi
+
+. ../default_paths_etc.sh # imports grass_world_directory
 
 # Execute the g.mapsets -p command, replace spaces with newlines, and read each line as a separate mapset
 mapsets=$(g.mapsets -p | tr ' ' '\n')
@@ -30,8 +31,7 @@ do
     fi
     
     # Construct the file path
-    f_format_file="$git_root/grassdata/world/$mapset/cell_misc/$N_level/f_format"
-    
+    f_format_file="${grass_world_directory}${mapset}/cell_misc/$N_level/f_format"
     # Check if the f_format_file exists, and don't overwrite if it does
     if [ -f "$f_format_file" ]; then
         continue
