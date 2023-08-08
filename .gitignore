@@ -20,6 +20,7 @@ basics_15jun22/sge_Mink3daily/staging_area/runner_init_on_node_home*
 basics_15jun22/sge_Mink3daily/chunks_to_GRASS/
 basics_15jun22/sge_Mink3daily/to_DSSAT/
 deleteme*
+archive/
 # Java compiled objectsu
 *.class
 
