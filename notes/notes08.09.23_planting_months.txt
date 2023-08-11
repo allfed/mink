@@ -1,0 +1,224 @@
+planting month todos i need to tackle:
+
+- add Java code to find the most common planting month for a crop at an irrigation level
+- send Mike and Dave planting month maps for irrigated and non-irrigated data
+- calculate the statistical relationship between planting months predicted from the model and compared to historical records, to check most common planting months dates are being assigned properly
+
+
+
+findBestYields(
+    script_folder,
+    planting_months,
+    raster_names_all_months_this_year, // input rasters
+    raster_name_best_this_year, // the output raster
+    "planting_month_raster_result_unused",
+    results_folder);
+
+inside:
+
+// we first loop through the years of the simulation and create a raster (stored in the raster_name_best_this_year variable) with the raster with the best yield for a given year
+public static void calculateBestYieldAllYears(
+  String script_folder, // the output rasters
+  String[] years,
+  String[] planting_months,
+  String[][] raster_names_all_years_wet_or_dry, // the input rasters
+  String[] raster_names_best_all_years, // the output rasters
+  String results_folder // the output rasters
+)throws InterruptedException, IOException{
+  // calculate the average of the raster yield over time for a given scenario
+  for(int year_index = 0; year_index < years.length; year_index++) {
+    String[] raster_names_all_months_this_year = new String[planting_months.length];
+
+    String raster_name_best_this_year = raster_names_best_all_years[year_index];
+
+    for (int planting_month_index = 0;
+        planting_month_index < planting_months.length;
+        planting_month_index++) {
+      raster_names_all_months_this_year[planting_month_index] = raster_names_all_years_wet_or_dry[planting_month_index][year_index];
+    }
+    // System.out.println("raster_name_best_this_year");
+    // System.out.println(raster_name_best_this_year);
+    findBestYields(
+        script_folder,
+        planting_months,
+        raster_names_all_months_this_year, // input rasters
+        raster_name_best_this_year, // the output raster
+        "planting_month_raster_result_unused",
+        results_folder);
+  }
+}
+
+// Inside process scenario, we get the maximum yield raster in two stages.
+
+// This step is optional and does not play a part in overall yield calculations. First, if calculate_each_year_best_month, we loop through the yield for all years, and find the best month for each grid cell, saving this to raster_names_best_all_years. This occurs for each year, not just the average of years, producing many more rasters than the next usage of findBestYields.
+
+// second (if find_best_yields), raster_names_average_year has been calculated as the average of all years at a given planting month. When we findBestYields,
+
+public static void processScenario():
+// if we choose to find the best yields, find best yields for each scenario
+if(calculate_each_year_best_month) {
+  calculateBestYieldAllYears(
+      script_folder,
+      years,
+      planting_months,
+      raster_names_all_years_wet_or_dry,
+      raster_names_best_all_years,
+      results_folder);
+}
+
+if(find_best_yields) {
+  findBestYields(
+      script_folder,
+      planting_months,
+      raster_names_average_year,
+      best_planting_raster_name,
+      month_result_name,
+      results_folder);
+}
+
+so
+
+
+so when is the above called, compared to the other one?
+
+Here's findbestyields:
+
+// (assigns the best scenario cell of all planting_months to the rasters with "Best" in
+// it)
+// Determine the best yield and best planting month for each grid cell, given a raster for each planting month raster_names_to_combine, and assign this to a single "BestYield" and a single "BestMonth" raster. BestMonth stores the index of the month with the best yield, while BestYield stores a raster of the actual yield per hectare when planting in the BestMonth.)
+public static void findBestYields(
+    String script_folder,
+    String[] planting_months,
+    String[] raster_names_to_combine, // the input rasters
+    String best_planting_raster_name, // the output yield raster
+    String month_result_name, // the output best planting month raster
+    String results_folder)
+    throws InterruptedException, IOException {
+  // combines rasters by choosing the best of each pixel in a list of rasters and 
+  //creating the "best_planting_raster_name" raster as an output
+
+  // raster name at first planting month
+  String combined_yields_results = raster_names_to_combine[0];
+
+  for (int planting_month_index = 1;
+      planting_month_index < planting_months.length;
+      planting_month_index++) {
+    // create a suitable list of rasters to compare
+    combined_yields_results = combined_yields_results + "," + raster_names_to_combine[planting_month_index];
+  }
+
+  String best_yield_raster = best_planting_raster_name;
+  String best_month_raster = month_result_name;
+  // System.out.println("running composite raster");
+  BashScripts.compositeRaster(
+      script_folder,
+      combined_yields_results,
+      best_yield_raster,
+      best_month_raster,
+      results_folder);
+
+  // BashScripts.createPNG(script_folder, best_month_raster, results_folder);
+
+} // findBestYields
+
+This is compositeraster:
+
+// use averaged yields to calculate production for rainfed and irrigated
+// sum raster is the resulting raster
+public static void compositeRaster(
+    String run_script_folder,
+    String combined_yield_results,
+    String best_yield_raster,
+    String best_month_raster,
+    String results_folder)
+    throws InterruptedException, IOException {
+
+  // System.out.println("");
+  // System.out.println("combined_yield_results");
+  // System.out.println(combined_yield_results);
+  // System.out.println("");
+
+  ProcessBuilder pb =
+      new ProcessBuilder(
+          "bash",
+          "./max_yields.sh",
+          combined_yield_results,
+          best_yield_raster,
+          best_month_raster);
+  System.out.println("");
+  System.out.println("");
+  System.out.println("compositeRaster creates raster with name:");
+  System.out.println("best_yield_raster");
+  System.out.println(best_yield_raster);
+  System.out.println("best_month_raster");
+  System.out.println(best_month_raster);
+  System.out.println("");
+  System.out.println("");
+
+  String grass_script_folder=run_script_folder + "../more_GRASS_scripts/universal/";
+  callProcess(pb, grass_script_folder);
+} // end calculateProduction
+
+
+Well, this is max_yields:
+
+#!/bin/bash
+
+# the idea is to search over all the months in the year to see which month provides the best yield
+
+# argument $1 is the line_list, with the following pattern:
+# "raster_month_1,raster_month_2,raster_month_3,raster_month_4,raster_month_5,raster_month_6,raster_month_7,raster_month_8,raster_month_9,raster_month_10,raster_month_11,raster_month_12"
+
+# argument $2 is the raster name to save the result with the maximum of all cells
+# argument $3 is the raster name to save the result with the maximum index of all cells
+
+r.series --overwrite input=$1 output=$2 method=maximum
+r.series --overwrite input=$1 output=$3 method=max_raster
+
+
+
+
+ALRIGHT
+so now I know the following rasters are actually run for the average of all years to get the best planting month for a given raster, defined as 
+
+// SPECIFIC TO THE CROP NAME
+// the name of the raster for: the months with the best pixel in all month's rasters
+this.month_result_name[i] =
+    "BestMonth_noGCMcalendar_p0_"
+        + this.snx_name[i]
+        + "__"
+        + this.run_descriptor[i]
+        + "_"
+        + wet_or_dry
+        + "_"
+        + rf_or_ir;
+
+so given that "i" is the scenario index, this means for each scenario the bestmonth raster is created just once, and represents the index of the month that was determined to be the highest yielding after averaging all years.
+
+Singularity mink_sandbox:~/Code/mink> g.mlist -r | grep BestMonth | grep Aug04
+BestMonth_noGCMcalendar_p0_whK001IR__Aug04_updatedN_wet_IR
+BestMonth_noGCMcalendar_p0_whK001RF__Aug04_updatedN_wet_RF
+BestMonth_noGCMcalendar_p0_whK002IR__Aug04_updatedN_wet_IR
+BestMonth_noGCMcalendar_p0_whK002RF__Aug04_updatedN_wet_RF
+BestMonth_noGCMcalendar_p0_whK006IR__Aug04_updatedN_wet_IR
+BestMonth_noGCMcalendar_p0_whK006RF__Aug04_updatedN_wet_RF
+BestMonth_noGCMcalendar_p0_whK007IR__Aug04_updatedN_wet_IR
+BestMonth_noGCMcalendar_p0_whK007RF__Aug04_updatedN_wet_RF
+BestMonth_noGCMcalendar_p0_whK009IR__Aug04_updatedN_wet_IR
+BestMonth_noGCMcalendar_p0_whK009RF__Aug04_updatedN_wet_RF
+BestMonth_noGCMcalendar_p0_whK010IR__Aug04_updatedN_wet_IR
+BestMonth_noGCMcalendar_p0_whK010RF__Aug04_updatedN_wet_RF
+BestMonth_noGCMcalendar_p0_whK011IR__Aug04_updatedN_wet_IR
+BestMonth_noGCMcalendar_p0_whK011RF__Aug04_updatedN_wet_RF
+BestMonth_noGCMcalendar_p0_whK012IR__Aug04_updatedN_wet_IR
+BestMonth_noGCMcalendar_p0_whK012RF__Aug04_updatedN_wet_RF
+BestMonth_noGCMcalendar_p0_whK013IR__Aug04_updatedN_wet_IR
+BestMonth_noGCMcalendar_p0_whK013RF__Aug04_updatedN_wet_RF
+BestMonth_noGCMcalendar_p0_whK015IR__Aug04_updatedN_wet_IR
+BestMonth_noGCMcalendar_p0_whK015RF__Aug04_updatedN_wet_RF
+BestMonth_noGCMcalendar_p0_whK016IR__Aug04_updatedN_wet_IR
+BestMonth_noGCMcalendar_p0_whK016RF__Aug04_updatedN_wet_RF
+BestMonth_noGCMcalendar_p0_whK076IR__Aug04_updatedN_wet_IR
+BestMonth_noGCMcalendar_p0_whK076RF__Aug04_updatedN_wet_RF
+
+so we can see each cultivar gets its own bestmonth raster.

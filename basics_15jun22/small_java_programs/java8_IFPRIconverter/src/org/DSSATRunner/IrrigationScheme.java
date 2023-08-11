@@ -2,17 +2,11 @@ package org.DSSATRunner;
 
 public interface IrrigationScheme {
 
+  public abstract void initialize();
 
-	
-	public abstract void initialize();
-	
-	public abstract void initialize(
-			int plantingDate,
-			int nYears
-			);
+  public abstract void initialize(int plantingDate, int nYears);
 
-	public abstract String buildIrrigationBlock() throws Exception;
-	
-	public abstract void specialPurposeMethod(Object[] inputObjectArray) throws Exception;
+  public abstract String buildIrrigationBlock() throws Exception;
 
+  public abstract void specialPurposeMethod(Object[] inputObjectArray) throws Exception;
 }

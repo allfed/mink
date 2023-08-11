@@ -4,125 +4,128 @@ import java.util.Date;
 
 public class TimerUtility {
 
-	private long overallStartNanos = -3;
-	private long overallEndNanos = -4;
-	
-	private long endNanos = -1;
-	private long startNanos = -2;
+  private long overallStartNanos = -3;
+  private long overallEndNanos = -4;
 
-	private long diffNanos = -3;
-	
-	
-	public TimerUtility() {
-		startNanos        = System.nanoTime();
-		overallStartNanos = startNanos;
-	}
-	
-	
-	
-	public void tic() {
-		startNanos = System.nanoTime();
-	}
-	
-	public long tocNanos() {
-		endNanos = System.nanoTime();
-		
-		return endNanos - startNanos;
-	}
+  private long endNanos = -1;
+  private long startNanos = -2;
 
-	public double tocMillis() {
-		endNanos = System.nanoTime();
-		
-		return (endNanos - startNanos) / 1000000.0;
-	}
+  private long diffNanos = -3;
 
-	public double tocSeconds() {
-		endNanos = System.nanoTime();
-		
-		return (endNanos - startNanos) / 1000000000.0;
-	}
+  public TimerUtility() {
+    startNanos = System.nanoTime();
+    overallStartNanos = startNanos;
+  }
 
-	public double tocMinutes() {
-		endNanos = System.nanoTime();
-		
-		return (endNanos - startNanos) / 1000000000.0 / 60.0;
-	}
+  public void tic() {
+    startNanos = System.nanoTime();
+  }
 
-	public long TOCNanos() {
-		endNanos = System.nanoTime();
-		diffNanos = endNanos - startNanos;
-		startNanos = System.nanoTime();
-		
-		return diffNanos;
-	}
+  public long tocNanos() {
+    endNanos = System.nanoTime();
 
-	public double TOCMillis() {
-		endNanos = System.nanoTime();
+    return endNanos - startNanos;
+  }
 
-		diffNanos = endNanos - startNanos;
-		startNanos = System.nanoTime();
+  public double tocMillis() {
+    endNanos = System.nanoTime();
 
-		return diffNanos / 1000000.0;
-	}
+    return (endNanos - startNanos) / 1000000.0;
+  }
 
-	public double TOCSeconds() {
-		endNanos = System.nanoTime();
+  public double tocSeconds() {
+    endNanos = System.nanoTime();
 
-		diffNanos = endNanos - startNanos;
-		startNanos = System.nanoTime();
+    return (endNanos - startNanos) / 1000000000.0;
+  }
 
-		return diffNanos / 1000000000.0;
-	}
+  public double tocMinutes() {
+    endNanos = System.nanoTime();
 
-	public double TOCMinutes() {
-		endNanos = System.nanoTime();
-		diffNanos = endNanos - startNanos;
-		startNanos = System.nanoTime();
-		
-		return diffNanos / 1000000000.0 / 60.0;
-	}
+    return (endNanos - startNanos) / 1000000000.0 / 60.0;
+  }
 
-	public long sinceStartNanos() {
-		overallEndNanos = System.nanoTime();
-		
-		return overallEndNanos - overallStartNanos;
-	}
+  public long TOCNanos() {
+    endNanos = System.nanoTime();
+    diffNanos = endNanos - startNanos;
+    startNanos = System.nanoTime();
 
-	public double sinceStartMillis() {
-		overallEndNanos = System.nanoTime();
-		
-		return (overallEndNanos - overallStartNanos) / 1000000.0;
-		
-	}
+    return diffNanos;
+  }
 
-	public double sinceStartSeconds() {
-		overallEndNanos = System.nanoTime();
-		
-		return (overallEndNanos - overallStartNanos) / 1000000000.0;
-	}
+  public double TOCMillis() {
+    endNanos = System.nanoTime();
 
-	public double sinceStartMinutess() {
-		overallEndNanos = System.nanoTime();
-		
-		return (overallEndNanos - overallStartNanos) / 1000000000.0 / 60.0;
-	}
+    diffNanos = endNanos - startNanos;
+    startNanos = System.nanoTime();
 
-	public String sinceStartMessage(String message) {
-		
-		double totalSeconds = sinceStartSeconds();
-		float totalMinutes = (float)(totalSeconds / 60.0);
-		float totalHours   = (float)(totalSeconds / 3600.0);
-		
-		String outputMessage = "  == time since start for " + message + " = " + totalSeconds + "s or " +
-				 totalMinutes + "m or " + totalHours + "h (current = " + new Date() + ") ==";
-		
-		return outputMessage;
-		
-	}
-	
-	public String sinceStartMessage() {
-		return sinceStartMessage("");
-	}
+    return diffNanos / 1000000.0;
+  }
 
+  public double TOCSeconds() {
+    endNanos = System.nanoTime();
+
+    diffNanos = endNanos - startNanos;
+    startNanos = System.nanoTime();
+
+    return diffNanos / 1000000000.0;
+  }
+
+  public double TOCMinutes() {
+    endNanos = System.nanoTime();
+    diffNanos = endNanos - startNanos;
+    startNanos = System.nanoTime();
+
+    return diffNanos / 1000000000.0 / 60.0;
+  }
+
+  public long sinceStartNanos() {
+    overallEndNanos = System.nanoTime();
+
+    return overallEndNanos - overallStartNanos;
+  }
+
+  public double sinceStartMillis() {
+    overallEndNanos = System.nanoTime();
+
+    return (overallEndNanos - overallStartNanos) / 1000000.0;
+  }
+
+  public double sinceStartSeconds() {
+    overallEndNanos = System.nanoTime();
+
+    return (overallEndNanos - overallStartNanos) / 1000000000.0;
+  }
+
+  public double sinceStartMinutess() {
+    overallEndNanos = System.nanoTime();
+
+    return (overallEndNanos - overallStartNanos) / 1000000000.0 / 60.0;
+  }
+
+  public String sinceStartMessage(String message) {
+
+    double totalSeconds = sinceStartSeconds();
+    float totalMinutes = (float) (totalSeconds / 60.0);
+    float totalHours = (float) (totalSeconds / 3600.0);
+
+    String outputMessage =
+        "  == time since start for "
+            + message
+            + " = "
+            + totalSeconds
+            + "s or "
+            + totalMinutes
+            + "m or "
+            + totalHours
+            + "h (current = "
+            + new Date()
+            + ") ==";
+
+    return outputMessage;
+  }
+
+  public String sinceStartMessage() {
+    return sinceStartMessage("");
+  }
 }
-

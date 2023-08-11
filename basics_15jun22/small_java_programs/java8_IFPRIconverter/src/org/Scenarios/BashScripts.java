@@ -24,29 +24,52 @@ import java.io.*;
 import java.util.*;
 
 public class BashScripts {
+  // This is a shared flag to signal whether 'q' has been pressed.
+  private static volatile boolean shouldExit = false;
 
+  public BashScripts() {
+    // Start listening for 'q' key press when an instance is created
+    startKeyListener();
+  }
+
+  private void startKeyListener() {
+    new Thread(
+            () -> {
+              try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+                char c;
+                while ((c = (char) reader.read()) != 'q') {
+                  // Do nothing, just waiting for 'q'
+                }
+                shouldExit = true; // Set the flag
+              } catch (IOException e) {
+                e.printStackTrace();
+              }
+            })
+        .start();
+  }
   // YIELD CALCULATION SCRIPTS
 
   // initialize spam for the appropriate region (croplands and historical yields)
-  public static void initSPAM(
-      String run_script_folder, String crop_code)
+  public static void initSPAM(String run_script_folder, String crop_code)
       throws InterruptedException, IOException {
     // create the main control list for each month
-    ProcessBuilder pb =
-        new ProcessBuilder(
-            "bash",
-            "./combine_spam_datasets.sh",
-            crop_code
-        );
+    ProcessBuilder pb = new ProcessBuilder("bash", "./combine_spam_datasets.sh", crop_code);
+    System.out.println("crop_code");
+    System.out.println(crop_code);
 
-    String prerun_script_folder=run_script_folder + "prerun_scripts/";
+
+    String prerun_script_folder = run_script_folder + "prerun_scripts/";
+    System.out.println("prerun_script_folder");
+    System.out.println(prerun_script_folder);
     callProcess(pb, prerun_script_folder);
-
   } // end initSPAM
 
   // make the mask for winter wheat countries where take max of wheat yield rather than average
   public static void makeCountryMask(
-      String run_script_folder, String countries_csv, String crop_area_raster, String winter_wheat_mask_raster_name)
+      String run_script_folder,
+      String countries_csv,
+      String crop_area_raster,
+      String winter_wheat_mask_raster_name)
       throws InterruptedException, IOException {
     // create the main control list for each month
     ProcessBuilder pb =
@@ -57,13 +80,12 @@ public class BashScripts {
             crop_area_raster,
             winter_wheat_mask_raster_name);
 
-        String grass_script_folder=run_script_folder + "../more_GRASS_scripts/universal/";
+    String grass_script_folder = run_script_folder + "../more_GRASS_scripts/universal/";
     callProcess(pb, grass_script_folder);
   } // end makeCountryMask
 
   // tell grass which geographic region to create and modify rasters for
-  public static void setGRASSRegion(
-      String run_script_folder, Config config)
+  public static void setGRASSRegion(String run_script_folder, Config config)
       throws InterruptedException, IOException {
     // create the main control list for each month
     // create the region to use
@@ -87,62 +109,41 @@ public class BashScripts {
             + " ewres="
             + ewres;
 
-    ProcessBuilder pb =
-        new ProcessBuilder(
-            "bash",
-            "./setGRASSRegion.sh",
-            region_to_use);
+    ProcessBuilder pb = new ProcessBuilder("bash", "./setGRASSRegion.sh", region_to_use);
 
-    String prerun_script_folder=run_script_folder + "prerun_scripts/";
+    String prerun_script_folder = run_script_folder + "prerun_scripts/";
     callProcess(pb, prerun_script_folder);
-
   } // end makeCountryMask
 
   // create the region
-  public static void setOrCreateMapset(
-      String run_script_folder, Config config)
+  public static void setOrCreateMapset(String run_script_folder, Config config)
       throws InterruptedException, IOException {
     // create the main control list for each month
     // create the region to use
     String run_descriptor = String.valueOf(config.model_configuration.run_descriptor);
 
-    ProcessBuilder pb =
-        new ProcessBuilder(
-            "bash",
-            "./setOrCreateMapset.sh",
-            run_descriptor);
+    ProcessBuilder pb = new ProcessBuilder("bash", "./setOrCreateMapset.sh", run_descriptor);
 
-    String prerun_script_folder=run_script_folder + "prerun_scripts/";
+    String prerun_script_folder = run_script_folder + "prerun_scripts/";
     callProcess(pb, prerun_script_folder);
-
   } // end makeCountryMask
 
-  public static void makeMegaEnvironmentMasks(
-    String run_script_folder
-  ) throws InterruptedException, IOException {
+  public static void makeMegaEnvironmentMasks(String run_script_folder)
+      throws InterruptedException, IOException {
     // import from .pack files all the megaenvironments as rasters
-    ProcessBuilder pb =
-        new ProcessBuilder(
-            "bash",
-            "./unpack_all_me_rasters.sh");
+    ProcessBuilder pb = new ProcessBuilder("bash", "./unpack_all_me_rasters.sh");
 
-    String prerun_script_folder=run_script_folder + "prerun_scripts/";
+    String prerun_script_folder = run_script_folder + "prerun_scripts/";
     callProcess(pb, prerun_script_folder);
-
   } // end makeMegaEnvironmentMasks
 
-  public static void makeNitrogenRasters(
-    String run_script_folder
-  ) throws InterruptedException, IOException {
+  public static void makeNitrogenRasters(String run_script_folder)
+      throws InterruptedException, IOException {
     // import from .pack files all the megaenvironments as rasters
-    ProcessBuilder pb =
-        new ProcessBuilder(
-            "bash",
-            "./unpack_all_nitrogen_rasters.sh");
+    ProcessBuilder pb = new ProcessBuilder("bash", "./unpack_all_nitrogen_rasters.sh");
 
-    String prerun_script_folder=run_script_folder + "prerun_scripts/";
+    String prerun_script_folder = run_script_folder + "prerun_scripts/";
     callProcess(pb, prerun_script_folder);
-
   } // end makeNitrogenRasters
 
   // initialize GRASS to the proper region and other initialization tasks
@@ -177,8 +178,8 @@ public class BashScripts {
               + "\t"
               + months[i]
               + "\n";
-        // System.out.println("crop_area_raster_for_this_snx");
-        // System.out.println(crop_area_raster_for_this_snx);
+      // System.out.println("crop_area_raster_for_this_snx");
+      // System.out.println(crop_area_raster_for_this_snx);
     }
 
     // create the region to use
@@ -210,8 +211,6 @@ public class BashScripts {
 
     callProcess(pb, run_script_folder);
   } // end initGRASS
-
-
 
   // actually run the full set of commands to calculate yields in every point on the
   // raster. This is the main function which runs DSSAT
@@ -310,13 +309,9 @@ public class BashScripts {
     // System.out.println("");
 
     ProcessBuilder pb =
-        new ProcessBuilder(
-            "bash",
-            "./average_rasters.sh",
-            raster_names_to_average,
-            scenario_tag);
+        new ProcessBuilder("bash", "./average_rasters.sh", raster_names_to_average, scenario_tag);
 
-        String grass_script_folder=run_script_folder + "../more_GRASS_scripts/universal/";
+    String grass_script_folder = run_script_folder + "../more_GRASS_scripts/universal/";
     callProcess(pb, grass_script_folder);
   } // end runAverageCropsCommand
 
@@ -348,7 +343,7 @@ public class BashScripts {
             mask_name_for_max,
             raster_result_name);
 
-        String grass_script_folder=run_script_folder + "../more_GRASS_scripts/universal/";
+    String grass_script_folder = run_script_folder + "../more_GRASS_scripts/universal/";
     callProcess(pb, grass_script_folder);
   } // end runAverageCropsCommand
 
@@ -377,7 +372,7 @@ public class BashScripts {
             overall_yield_raster,
             results_folder);
 
-    String export_script_folder=run_script_folder + "export_scripts/";
+    String export_script_folder = run_script_folder + "export_scripts/";
     callProcess(pb, export_script_folder);
   } // end runAverageCropsCommand
 
@@ -413,7 +408,7 @@ public class BashScripts {
             crop_area_raster,
             scenario_tag_for_production);
 
-    String grass_script_folder=run_script_folder + "../more_GRASS_scripts/universal/";
+    String grass_script_folder = run_script_folder + "../more_GRASS_scripts/universal/";
     callProcess(pb, grass_script_folder);
   } // end calculateProduction
 
@@ -441,44 +436,41 @@ public class BashScripts {
     // calculate wet weight at harvest by multiplying by appropriate coefficient
     ProcessBuilder pb =
         new ProcessBuilder(
-            "bash",
-            "./scale_raster.sh",
-            original_raster_name,
-            coefficient,
-            scaled_raster_name);
+            "bash", "./scale_raster.sh", original_raster_name, coefficient, scaled_raster_name);
 
-    String grass_script_folder=run_script_folder + "../more_GRASS_scripts/universal/";
+    String grass_script_folder = run_script_folder + "../more_GRASS_scripts/universal/";
     callProcess(pb, grass_script_folder);
   } // end calculateProduction
 
-    public static void setIntersectionWithMegaenvironmentMasks(String run_script_folder, String initial_mask, String megaEnvMasks,String mask_for_this_snx) throws IOException, InterruptedException {
-        // Takes a subset of the initial mask which contains nonnull megaenvironments,
-        // and returns the resulting mask.
+  public static void setIntersectionWithMegaenvironmentMasks(
+      String run_script_folder, String initial_mask, String megaEnvMasks, String mask_for_this_snx)
+      throws IOException, InterruptedException {
+    // Takes a subset of the initial mask which contains nonnull megaenvironments,
+    // and returns the resulting mask.
 
-        // System.out.println("");
-        // System.out.println("");
-        // System.out.println("getIntersectionWithMegaenvironmentMasks creates raster with name:");
-        // System.out.println(mask_for_this_snx);
-        // System.out.println("");
-        // System.out.println("");
-        // System.out.println("initial_mask");
-        // System.out.println(initial_mask);
-        // System.out.println("list_of_megaenvironment_masks");
-        // System.out.println(megaEnvMasks);
-        // System.out.println("final_mask");
-        // System.out.println(mask_for_this_snx);
+    // System.out.println("");
+    // System.out.println("");
+    // System.out.println("getIntersectionWithMegaenvironmentMasks creates raster with name:");
+    // System.out.println(mask_for_this_snx);
+    // System.out.println("");
+    // System.out.println("");
+    // System.out.println("initial_mask");
+    // System.out.println(initial_mask);
+    // System.out.println("list_of_megaenvironment_masks");
+    // System.out.println(megaEnvMasks);
+    // System.out.println("final_mask");
+    // System.out.println(mask_for_this_snx);
 
-        ProcessBuilder pb =
-            new ProcessBuilder(
-                "bash",
-                "./combine_megaenvironment_masks.sh",
-                initial_mask,
-                megaEnvMasks,
-                mask_for_this_snx);
-        String grass_script_folder=run_script_folder + "../more_GRASS_scripts/universal/";
-        callProcess(pb, grass_script_folder);
-    }
-
+    ProcessBuilder pb =
+        new ProcessBuilder(
+            "bash",
+            "./combine_megaenvironment_masks.sh",
+            initial_mask,
+            megaEnvMasks,
+            mask_for_this_snx);
+    String grass_script_folder = run_script_folder + "../more_GRASS_scripts/universal/";
+    callProcess(pb, grass_script_folder);
+  }
 
   // use averaged yields to calculate production for rainfed and irrigated
   public static void calculateOverallYield(
@@ -506,7 +498,7 @@ public class BashScripts {
             crop_area_raster,
             scenario_tag_for_overall_yields);
 
-    String grass_script_folder=run_script_folder + "../more_GRASS_scripts/universal/";
+    String grass_script_folder = run_script_folder + "../more_GRASS_scripts/universal/";
     callProcess(pb, grass_script_folder);
   } // end calculateOverallYields
 
@@ -530,7 +522,7 @@ public class BashScripts {
             sum_raster,
             "../../../" + results_folder);
 
-    String grass_script_folder=run_script_folder + "../more_GRASS_scripts/universal/";
+    String grass_script_folder = run_script_folder + "../more_GRASS_scripts/universal/";
     callProcess(pb, grass_script_folder);
   } // end calculateOverallYields
 
@@ -556,75 +548,96 @@ public class BashScripts {
             combined_yield_results,
             best_yield_raster,
             best_month_raster);
-    // System.out.println("");
-    // System.out.println("");
-    // System.out.println("compositeRaster creates raster with name:");
-    // System.out.println("best_yield_raster");
-    // System.out.println(best_yield_raster);
-    // System.out.println("best_month_raster");
-    // System.out.println(best_month_raster);
-    // System.out.println("");
-    // System.out.println("");
+    System.out.println("");
+    System.out.println("");
+    System.out.println("compositeRaster creates raster with name:");
+    System.out.println("best_yield_raster");
+    System.out.println(best_yield_raster);
+    System.out.println("best_month_raster");
+    System.out.println(best_month_raster);
+    System.out.println("");
+    System.out.println("");
 
-    String grass_script_folder=run_script_folder + "../more_GRASS_scripts/universal/";
+    String grass_script_folder = run_script_folder + "../more_GRASS_scripts/universal/";
     callProcess(pb, grass_script_folder);
   } // end calculateProduction
 
   // UTILITIES
 
-  public static void createPNG(String run_script_folder, String[] raster_list, String results_folder)
-        throws InterruptedException, IOException {
+  public static void createPNG(
+      String run_script_folder, String[] raster_list, String results_folder)
+      throws InterruptedException, IOException {
 
-      List<String> commands = new ArrayList<>();
-      commands.add("bash");
-      commands.add("./render_all_rasters_same_scale.sh");
-      commands.add(results_folder);
-      commands.addAll(Arrays.asList(raster_list));
-    
-      ProcessBuilder pb = new ProcessBuilder(commands);
+    List<String> commands = new ArrayList<>();
+    commands.add("bash");
+    commands.add("./render_all_rasters_same_scale.sh");
+    commands.add(results_folder);
+    commands.addAll(Arrays.asList(raster_list));
 
-      String export_script_folder=run_script_folder + "export_scripts/";
-      callProcess(pb, export_script_folder);
+    ProcessBuilder pb = new ProcessBuilder(commands);
+
+    String export_script_folder = run_script_folder + "export_scripts/";
+    callProcess(pb, export_script_folder);
   }
-    
+
   public static void callProcess(ProcessBuilder pb, String run_script_folder)
-        throws InterruptedException, IOException {
-      pb.inheritIO();
-      pb.redirectErrorStream(true);
-      pb.directory(new File(run_script_folder));
-      Process process = pb.start(); // Added semicolon here
-      // Create a new thread to handle the error stream
-      new Thread(() -> {
-          try (BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
-              String str = null;
-              while ((str = stdError.readLine()) != null) {
-                  System.err.println(str);  // print to standard error
+      throws InterruptedException, IOException {
+    pb.inheritIO();
+    pb.redirectErrorStream(true);
+    pb.directory(new File(run_script_folder));
+    Process process = pb.start(); // Added semicolon here
+
+    // Create a new thread to handle the error stream
+    new Thread(
+            () -> {
+              try (BufferedReader stdError =
+                  new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+                String str = null;
+                while ((str = stdError.readLine()) != null) {
+                  System.err.println(str); // print to standard error
+                }
+              } catch (IOException e) {
+                e.printStackTrace();
               }
-          } catch (IOException e) {
-              e.printStackTrace();
-          }
-      }).start(); // Added semicolon here
-      BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-      String str = null;
-      while ((str = stdInput.readLine()) != null) {
-          // displaying the output on the console
-          System.out.println(str);
-      }
+            })
+        .start();
 
-      process.waitFor();
-      if (process.exitValue() == 1) {
-          StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-          StackTraceElement caller = stackTrace[2];  
-          StackTraceElement callerOfCaller = stackTrace[3];  
-          List<String> commands = pb.command(); // Added semicolon here
-          System.out.println("Error occurred in bash script: " + commands.get(1));
-          System.out.println("Error occurred in bash command initiated from: " + caller.getFileName() + ": line " + caller.getLineNumber()); // Fixed concatenation here
-          System.out.println("The calling method was invoked from: " + callerOfCaller.getFileName() + ": line " + callerOfCaller.getLineNumber()); // Fixed concatenation here
-          System.out.println("ERROR: process exited with value 1 (Error)");
-          System.exit(1);
-      }
+    BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-      assert process.exitValue() != 1;
+    String str = null;
+    while ((str = stdInput.readLine()) != null) {
+      // displaying the output on the console
+      System.out.println(str);
+    }
+
+    if (shouldExit) {
+      System.out.println(
+          "q was pressed! Exiting after finishing the current process. run with continueDSSAT flag"
+              + " to continue where you left off.");
+      System.exit(0);
+    }
+
+    process.waitFor();
+    if (process.exitValue() == 1) {
+      StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+      StackTraceElement caller = stackTrace[2];
+      StackTraceElement callerOfCaller = stackTrace[3];
+      List<String> commands = pb.command(); // Added semicolon here
+      System.out.println("Error occurred in bash script: " + commands.get(1));
+      System.out.println(
+          "Error occurred in bash command initiated from: "
+              + caller.getFileName()
+              + ": line "
+              + caller.getLineNumber()); // Fixed concatenation here
+      System.out.println(
+          "The calling method was invoked from: "
+              + callerOfCaller.getFileName()
+              + ": line "
+              + callerOfCaller.getLineNumber()); // Fixed concatenation here
+      System.out.println("ERROR: process exited with value 1 (Error)");
+      System.exit(1);
+    }
+
+    assert process.exitValue() != 1;
   } // end callProcess
-
-  } // end BashScripts class
+} // end BashScripts class
