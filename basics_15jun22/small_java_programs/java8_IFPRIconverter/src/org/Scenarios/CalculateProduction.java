@@ -12,120 +12,254 @@ public class CalculateProduction {
 
     BashScripts.setGRASSRegion(script_folder, scenarios.config);
 
+    calculateRFandIRProductionGivenHarvestYields(
+        script_folder,
+        scenarios,
+        scenarios.best_planting_month_yield_name,
+        scenarios.best_planting_month_name,
+        scenarios.best_planting_month_maturity_name,
+        scenarios.combined_yield_name_rf_or_ir,
+        scenarios.combined_production_name_rf_or_ir,
+        scenarios.combined_planting_month_name_rf_or_ir,
+        scenarios.combined_days_to_maturity_name_rf_or_ir,
+        scenarios.combined_yield_name,
+        scenarios.combined_production_name,
+        true);
+
+    sumRainfedAndIrrigated(
+        script_folder,
+        scenarios,
+        scenarios.combined_production_name_rf_or_ir, // input
+        scenarios.combined_production_name, // input
+        scenarios.combined_yield_name // output
+        );
+
+    // if (scenarios.create_average_png) {
+    //   createAveragePNG(script_folder, scenarios, cultivar_groups_rasters,
+    // combined_yields_rf_or_ir);
+    // }
+
+    if (scenarios.calculate_each_year_best_month) {
+      for (int year_index = 0; year_index < scenarios.years.length; year_index++) {
+        // create the appropriate arrays for the year in question (one for each scenario)
+        String[] best_planting_month_yield_name_this_year = new String[scenarios.n_scenarios];
+        String[] best_planting_month_name_this_year = new String[scenarios.n_scenarios];
+        String[] combined_yield_name_rf_or_ir_this_year = new String[scenarios.n_scenarios];
+        String[] combined_production_name_rf_or_ir_this_year = new String[scenarios.n_scenarios];
+        String[] combined_planting_month_name_rf_or_ir_this_year =
+            new String[scenarios.n_scenarios];
+        String[] combined_days_to_maturity_name_rf_or_ir_this_year =
+            new String[scenarios.n_scenarios];
+        String[] combined_yield_name_this_year = new String[scenarios.n_scenarios];
+        String[] combined_production_name_this_year = new String[scenarios.n_scenarios];
+
+        // construct the raster names to be once per scenario, for the year in this loop (the year
+        // at year_index)
+        for (int i = 0; i < scenarios.n_scenarios; i++) {
+          best_planting_month_yield_name_this_year[i] =
+              scenarios.best_planting_month_yield_name_all_years[i][year_index];
+          best_planting_month_name_this_year[i] =
+              scenarios.best_planting_month_name_all_years[i][year_index];
+          combined_yield_name_rf_or_ir_this_year[i] =
+              scenarios.combined_yield_name_rf_or_ir[i] + "_y" + scenarios.years[year_index];
+          combined_production_name_rf_or_ir_this_year[i] =
+              scenarios.combined_production_name_rf_or_ir[i] + "_y" + scenarios.years[year_index];
+          combined_planting_month_name_rf_or_ir_this_year[i] =
+              scenarios.combined_planting_month_name_rf_or_ir[i]
+                  + "_y"
+                  + scenarios.years[year_index];
+          combined_days_to_maturity_name_rf_or_ir_this_year[i] =
+              scenarios.combined_days_to_maturity_name_rf_or_ir[i]
+                  + "_y"
+                  + scenarios.years[year_index];
+          combined_production_name_this_year[i] =
+              scenarios.combined_production_name[i] + "_y" + scenarios.years[year_index];
+          combined_yield_name_this_year[i] =
+              scenarios.combined_yield_name[i] + "_y" + scenarios.years[year_index];
+        }
+
+        calculateRFandIRProductionGivenHarvestYields(
+            script_folder,
+            scenarios,
+            best_planting_month_yield_name_this_year,
+            best_planting_month_name_this_year,
+            new String[] {""}, // no days to maturity data on a yearly basis is available.
+            combined_yield_name_rf_or_ir_this_year,
+            combined_production_name_rf_or_ir_this_year,
+            combined_planting_month_name_rf_or_ir_this_year,
+            new String[] {""}, // no days to maturity data on a yearly basis is available.
+            combined_yield_name_this_year,
+            combined_production_name_this_year,
+            false);
+
+        sumRainfedAndIrrigated(
+            script_folder,
+            scenarios,
+            combined_production_name_rf_or_ir_this_year, // input
+            combined_production_name_this_year, // input
+            combined_yield_name_this_year // output
+            );
+      }
+    }
+  } // end CalculateProduction function
+
+  private static <T> T getVerifiedFirst(List<T> list) {
+    assert verifyAllEqualUsingALoop(list);
+    return list.get(0);
+  }
+
+  // can either calculate production for a single year, or for different multiple years
+  // it either uses the average harvest or the harvest for a single year
+  public static void calculateRFandIRProductionGivenHarvestYields(
+      String script_folder,
+      Scenarios scenarios,
+      String[] best_planting_month_yield_name,
+      String[] best_planting_month_name,
+      String[] best_planting_month_maturity_name,
+      String[] combined_yield_name_rf_or_ir,
+      String[] combined_production_name_rf_or_ir,
+      String[] combined_planting_month_name_rf_or_ir,
+      String[] combined_days_to_maturity_name_rf_or_ir,
+      String[] combined_yield_name,
+      String[] combined_production_name,
+      boolean calculate_maturity)
+      throws InterruptedException, IOException {
+
     // average yield results for each crop and irrigation grouping (regardless of cultivar)
 
-    // group together the rasters of the cultivars to average
-
+    // the yield
     List<List<String>> cultivar_groups_rasters =
-        getCultivarGroups(scenarios, scenarios.best_planting_raster_name);
-    List<List<String>> cultivar_groups_croplands =
-        getCultivarGroups(scenarios, scenarios.mask_for_this_snx);
-    List<List<String>> scenario_tags_for_averaging =
-        getCultivarGroups(scenarios, scenarios.scenario_tag_for_averaging_rf_or_ir);
-    List<List<String>> scenario_tags_for_production =
-        getCultivarGroups(scenarios, scenarios.scenario_tag_for_production_rf_or_ir);
+        getCultivarGroups(scenarios, best_planting_month_yield_name);
+
+    // the planting months
+    List<List<String>> cultivar_groups_planting_months =
+        getCultivarGroups(scenarios, best_planting_month_name);
+
+    List<List<String>> cultivar_groups_days_to_maturity =
+        calculate_maturity
+            ? getCultivarGroups(scenarios, best_planting_month_maturity_name)
+            : new ArrayList<>();
+
+    List<List<String>> combined_yields_rf_or_ir =
+        getCultivarGroups(scenarios, combined_yield_name_rf_or_ir);
+    List<List<String>> combined_production_rf_or_ir =
+        getCultivarGroups(scenarios, combined_production_name_rf_or_ir);
+    List<List<String>> combined_yields = getCultivarGroups(scenarios, combined_yield_name);
+    List<List<String>> combined_production = getCultivarGroups(scenarios, combined_production_name);
+    List<List<String>> scenario_tags_for_planting_month =
+        getCultivarGroups(scenarios, combined_planting_month_name_rf_or_ir);
+    List<List<String>> scenario_tags_for_days_to_maturity =
+        calculate_maturity
+            ? getCultivarGroups(scenarios, combined_days_to_maturity_name_rf_or_ir)
+            : new ArrayList<>();
+
     List<List<String>> results_folder_groups =
         getCultivarGroups(scenarios, scenarios.results_folder);
     List<List<String>> crop_groups = getCultivarGroups(scenarios, scenarios.crop_name);
     List<List<String>> irrigation_groups = getCultivarGroups(scenarios, scenarios.rf_or_ir);
 
     for (int i = 0; i < cultivar_groups_rasters.size(); i++) {
+      assert (cultivar_groups_rasters.size() == 2)
+          : "ERROR: only one crop processed at a time, and you need both rainfed and irrigated.";
+      // these are different within the same cultivar group.
       List<String> rasters = cultivar_groups_rasters.get(i);
+      List<String> planting_months = cultivar_groups_planting_months.get(i);
+      List<String> days_to_maturity =
+          calculate_maturity ? cultivar_groups_days_to_maturity.get(i) : new ArrayList<>();
+
+      // concatenate the rasters in the group into a comma separated string
+      String raster_names_to_combine = getCommaSeparatedString(rasters);
+      String planting_months_to_combine = getCommaSeparatedString(planting_months);
+      String days_to_maturity_to_combine =
+          calculate_maturity ? getCommaSeparatedString(days_to_maturity) : null;
 
       // skip if no rasters in the cultivar group
       if (rasters.size() == 0) {
         continue;
       }
 
-      // get the irrigation name and assert they're all the same
-      List<String> irrigation_group = irrigation_groups.get(i);
-      assert verifyAllEqualUsingALoop(irrigation_group);
-      String irrigation = irrigation_group.get(0);
+      // These are going to be combined for every element of the cultivar group. So just get the
+      // first one.
+      // But also make sure they're all the same within the cultivar group.
+      String irrigation = getVerifiedFirst(irrigation_groups.get(i));
+      String crop = getVerifiedFirst(crop_groups.get(i));
+      String cg_combined_yield_name_rf_or_ir = getVerifiedFirst(combined_yields_rf_or_ir.get(i));
+      String cg_combined_yield_name = getVerifiedFirst(combined_yields.get(i));
+      String cg_combined_production_name_rf_or_ir =
+          getVerifiedFirst(combined_production_rf_or_ir.get(i));
+      String cg_combined_production_name = getVerifiedFirst(combined_production.get(i));
+      String cg_combined_planting_month_name_rf_or_ir =
+          getVerifiedFirst(scenario_tags_for_planting_month.get(i));
+      String cg_combined_days_to_maturity_name_rf_or_ir =
+          calculate_maturity ? getVerifiedFirst(scenario_tags_for_days_to_maturity.get(i)) : null;
+      String results_folder = getVerifiedFirst(results_folder_groups.get(i));
 
-      // get the results folders and assert they're all the same
-      List<String> crops = crop_groups.get(i);
-      assert verifyAllEqualUsingALoop(crops);
-      String crop = crops.get(0);
+      String crop_area_raster = getCropAreaRaster(scenarios, crop, irrigation);
 
-      // get the average yield tag and assert they're all the same
-      List<String> averaging_tags = scenario_tags_for_averaging.get(i);
-      assert verifyAllEqualUsingALoop(averaging_tags);
-      String averaging_tag = averaging_tags.get(0);
-
-      // get the production tag and assert they're all the same
-      List<String> production_tags = scenario_tags_for_production.get(i);
-      assert verifyAllEqualUsingALoop(production_tags);
-      String production_tag = production_tags.get(0);
-
-      // get the results folders and assert they're all the same
-      List<String> results_folders = results_folder_groups.get(i);
-      assert verifyAllEqualUsingALoop(results_folders);
-      String results_folder = results_folders.get(0);
-
-      // combine the rasters in the group into a single comma separated string
-      String raster_names_to_average = getCombinedString(rasters);
-
-      // average the yield results for the current crop and irrigation grouping
-      averageAndCalculateProduction(
+      // average or find max of the yield results for the current crop and irrigation grouping
+      // (so that would average all cultivars for the crop)
+      combineAndCalculateProductionRForIR(
           crop,
-          irrigation,
-          scenarios.all_or_crop_specific,
+          crop_area_raster,
           scenarios.create_average_png,
           scenarios.calculate_rf_or_ir_specific_average_yield,
           scenarios.calculate_rf_or_ir_specific_production,
           script_folder,
-          raster_names_to_average,
-          averaging_tag,
-          production_tag,
-          scenarios.config,
+          raster_names_to_combine,
+          planting_months_to_combine,
+          days_to_maturity_to_combine,
+          cg_combined_yield_name_rf_or_ir,
+          cg_combined_production_name_rf_or_ir,
+          cg_combined_planting_month_name_rf_or_ir,
+          cg_combined_days_to_maturity_name_rf_or_ir,
+          calculate_maturity,
           results_folder);
     }
+  }
 
-    // sum the rainfed and irrigated yields and save as ascii
-    sumRainfedAndIrrigated(script_folder, scenarios);
+  // public static void createAveragePNG(
+  //     String script_folder,
+  //     Scenarios scenarios,
+  //     List<List<String>> cultivar_groups_rasters,
+  //     List<List<String>> combined_yields_rf_or_ir)
+  //     throws InterruptedException, IOException {
 
-    if (scenarios.create_average_png) {
-      createAveragePNG(
-          script_folder, scenarios, cultivar_groups_rasters, scenario_tags_for_averaging);
-    }
-  } // end CalculateProduction function
+  //   String historical_yield_raster =
+  //       scenarios.config.getCropNameCaps(scenarios.crop_name[0]) + "_yield";
+  //   List<String> rasters_to_render = new ArrayList<>();
+  //   rasters_to_render.add(historical_yield_raster);
 
-  public static void createAveragePNG(
-      String script_folder,
-      Scenarios scenarios,
-      List<List<String>> cultivar_groups_rasters,
-      List<List<String>> scenario_tags_for_averaging)
-      throws InterruptedException, IOException {
+  //   for (int i = 0; i < cultivar_groups_rasters.size(); i++) {
+  //     List<String> rasters = cultivar_groups_rasters.get(i);
 
-    String historical_yield_raster =
-        scenarios.config.getCropNameCaps(scenarios.crop_name[0]) + "_yield";
-    List<String> rasters_to_render = new ArrayList<>();
-    rasters_to_render.add(historical_yield_raster);
+  //     // skip if no rasters in the cultivar group
+  //     if (rasters.size() == 0) {
+  //       continue;
+  //     }
 
-    for (int i = 0; i < cultivar_groups_rasters.size(); i++) {
-      List<String> rasters = cultivar_groups_rasters.get(i);
+  //     List<String> averaging_tags = combined_yields_rf_or_ir.get(i);
 
-      // skip if no rasters in the cultivar group
-      if (rasters.size() == 0) {
-        continue;
-      }
+  //     String averaging_tag = averaging_tags.get(0);
+  //     rasters_to_render.add(averaging_tag);
+  //   }
 
-      List<String> averaging_tags = scenario_tags_for_averaging.get(i);
-
-      String averaging_tag = averaging_tags.get(0);
-      rasters_to_render.add(averaging_tag);
-    }
-
-    BashScripts.createPNG(
-        script_folder,
-        rasters_to_render.toArray(new String[0]), // convert to array here
-        scenarios.results_folder[0]);
-  } // end createAveragePNG function
+  //   BashScripts.createPNG(
+  //       script_folder,
+  //       rasters_to_render.toArray(new String[0]), // convert to array here
+  //       scenarios.results_folder[0]);
+  // } // end createAveragePNG function
 
   // https://www.baeldung.com/java-list-all-equal
-  public boolean verifyAllEqualUsingALoop(List<String> list) {
-    for (String s : list) {
-      if (!s.equals(list.get(0))) return false;
+  // later modified by chatgpt to make it generic
+  private static <T> boolean verifyAllEqualUsingALoop(List<T> list) {
+    if (list.isEmpty()) {
+      return true;
+    }
+    T firstItem = list.get(0);
+    for (T item : list) {
+      if (!item.equals(firstItem)) {
+        return false;
+      }
     }
     return true;
   }
@@ -153,8 +287,8 @@ public class CalculateProduction {
     for (int i = 0; i < scenarios.n_scenarios; i++) {
       String crop = scenarios.crop_name[i];
       String scenario_RF_or_IR =
-          scenarios.scenario_tag_for_averaging_rf_or_ir[i].substring(
-              scenarios.scenario_tag_for_averaging_rf_or_ir[i].length() - 2);
+          scenarios.combined_yield_name_rf_or_ir[i].substring(
+              scenarios.combined_yield_name_rf_or_ir[i].length() - 2);
 
       assert ("IR".equals(scenario_RF_or_IR) || "RF".equals(scenario_RF_or_IR));
 
@@ -178,7 +312,7 @@ public class CalculateProduction {
     return scenariosPerCropAndIrrigation;
   }
 
-  public static String getCombinedString(List<String> cultivar_group)
+  public static String getCommaSeparatedString(List<String> cultivar_group)
       throws InterruptedException, IOException {
     // average the yield results for the current crop and irrigation grouping
     // by combining the rasters in the group into a single comma separated string
@@ -196,35 +330,56 @@ public class CalculateProduction {
     return raster_names_to_average;
   }
 
-  public static void averageAndCalculateProduction(
+  public static void combineAndCalculateProductionRForIR(
       String crop,
-      String irrigation,
-      String all_or_crop_specific,
+      String crop_area_raster,
       boolean create_average_png,
       boolean calculate_rf_or_ir_specific_average_yield,
       boolean calculate_rf_or_ir_specific_production,
       String script_folder,
-      String raster_names_to_average,
-      String scenario_tag_for_averaging_rf_or_ir,
-      String scenario_tag_for_production_rf_or_ir,
-      Config config,
+      String raster_names_to_combine,
+      String planting_months_to_combine,
+      String days_to_maturity_to_combine,
+      String combined_yield_name_rf_or_ir,
+      String combined_production_name_rf_or_ir,
+      String combined_planting_month_name_rf_or_ir,
+      String combined_days_to_maturity_name_rf_or_ir,
+      boolean calculate_maturity,
       String results_folder)
       throws InterruptedException, IOException {
 
-    // average all the cultivars for the crop to estimate the crop's overall yield
+    // average or find max of all the cultivars for the crop to estimate the crop's overall yield
     // this is specific to whether IR or RF
-    // UNLESS this is soybean.. in which case get the best cultivar's (maturity group's) yield
+    // For soybean we get the best cultivar's (maturity group's) yield
+    // For wheat we sometimes get the best cultivar's yield, and sometimes get the average, based on
+    // the country
+    // (max is for winter wheat)
     if (calculate_rf_or_ir_specific_average_yield) {
-      // System.out.println("crop");
-      // System.out.println(crop);
       if (crop.equals("soybean")) {
-        // gets the max of  all available yields in each cell (all regions)
+
+        // gets the max of all available yields in each cell (all regions)
         BashScripts.compositeRaster(
             script_folder,
-            raster_names_to_average,
-            scenario_tag_for_averaging_rf_or_ir,
-            "deleteme_best_maturity_group_soybean",
+            raster_names_to_combine, // input rasters to average
+            combined_yield_name_rf_or_ir, // output best raster yield value
+            combined_planting_month_name_rf_or_ir, // output a grass gis raster of the name from
+            // which the maximum yielding maturity group was
+            // chosen
             results_folder);
+
+        if (calculate_maturity) {
+          // use the best_maturity_group_soybean_key to choose the planting month of interest
+          // planting_months_to_combine
+          BashScripts.useKeyRasterToMapToValueRaster(
+              script_folder,
+              combined_planting_month_name_rf_or_ir, // input key raster for which cultivar to get
+              // value from
+              planting_months_to_combine, // input rasters to get the values from
+              combined_days_to_maturity_name_rf_or_ir); // output raster with days to maturity of
+          // best
+          // cultivar in each cell
+        }
+
       } else if (crop.equals("wheat")) {
         // gets the max of  all available yields in each cell for regions in the
         // winter_wheat_dominant map, and otherwise just gets the average
@@ -234,17 +389,61 @@ public class CalculateProduction {
         // use the highest yielding variety rather than the overall average of relevant varieties.
         BashScripts.getBestOrAverageBasedOnCountryMasks(
             script_folder,
-            raster_names_to_average,
-            "winter_wheat_countries_mask",
-            scenario_tag_for_averaging_rf_or_ir,
+            raster_names_to_combine, // input
+            "winter_wheat_countries_mask", // input
+            combined_yield_name_rf_or_ir, // output
             results_folder);
+
+        BashScripts.useKeyRasterAndMaskForGettingMaxOrAverage(
+            script_folder,
+            planting_months_to_combine, // input
+            "winter_wheat_countries_mask", // input
+            "mode", // method of averaging
+            raster_names_to_combine, // input
+            combined_planting_month_name_rf_or_ir // output
+            );
+
+        if (calculate_maturity) {
+          // TODO: write script that can get the maturity group based on either a mask or average
+          BashScripts.useKeyRasterAndMaskForGettingMaxOrAverage(
+              script_folder,
+              days_to_maturity_to_combine, // input
+              "winter_wheat_countries_mask", // input
+              "average", // method of averaging
+              raster_names_to_combine, // input
+              combined_days_to_maturity_name_rf_or_ir // output
+              );
+        }
+
       } else {
         // gets the average of all available yields in each cell
-        BashScripts.runAverageCropsCommand(
+        BashScripts.averageRasters(
             script_folder,
-            raster_names_to_average,
-            scenario_tag_for_averaging_rf_or_ir,
+            raster_names_to_combine, // input list to average
+            combined_yield_name_rf_or_ir, // output averaged list
+            "0", // minimum yields
+            "average", // method of average
             results_folder);
+
+        // gets the average of planting months in each cell
+        BashScripts.averageRasters(
+            script_folder,
+            planting_months_to_combine, // input list to average
+            combined_planting_month_name_rf_or_ir, // output averaged list
+            "0", // minimum planting month to consider
+            "mode", // method of average
+            results_folder);
+
+        // gets the average of days to maturity in each cell
+        if (calculate_maturity) {
+          BashScripts.averageRasters(
+              script_folder,
+              days_to_maturity_to_combine, // input raster
+              combined_days_to_maturity_name_rf_or_ir, // output raster
+              "0", // minimum days to maturity to consider
+              "median", // method of average
+              results_folder);
+        }
       }
     }
 
@@ -252,36 +451,46 @@ public class CalculateProduction {
     // area raster refers to rainfed or irrigated area of a crop, but is not specific to a
     // cultivar (or variety)
 
-    String prefix = "";
-
     if (calculate_rf_or_ir_specific_production) {
-      if (all_or_crop_specific.equals("all")) {
-        prefix = "ALL_CROPS";
-      } else if (all_or_crop_specific.equals("specific")) {
-        prefix = config.getCropNameCaps(crop);
-      } else {
-        System.out.println("Error: make sure all_or_crop_specific is all or specific");
-        System.exit(1);
-      }
-      String crop_area_raster =
-          prefix + "_" + (irrigation.equals("RF") ? "rainfed_cropland" : "irrigated_cropland");
-
       BashScripts.calculateProduction(
           script_folder,
-          scenario_tag_for_averaging_rf_or_ir,
+          combined_yield_name_rf_or_ir,
           crop_area_raster,
-          scenario_tag_for_production_rf_or_ir);
+          combined_production_name_rf_or_ir);
     }
   }
 
-  public static void sumRainfedAndIrrigated(String script_folder, Scenarios scenarios)
-      throws InterruptedException, IOException {
+  public static String getCropAreaRaster(Scenarios scenarios, String crop, String irrigation) {
+
+    String prefix = "";
+
+    if (scenarios.all_or_crop_specific.equals("all")) {
+      prefix = "ALL_CROPS";
+    } else if (scenarios.all_or_crop_specific.equals("specific")) {
+      prefix = scenarios.config.getCropNameCaps(crop);
+    } else {
+      System.out.println("Error: make sure all_or_crop_specific is all or specific");
+      System.exit(1);
+    }
+    String crop_area_raster =
+        prefix + "_" + (irrigation.equals("RF") ? "rainfed_cropland" : "irrigated_cropland");
+
+    return crop_area_raster;
+  }
+
+  public static void sumRainfedAndIrrigated(
+      String script_folder,
+      Scenarios scenarios,
+      String[] combined_production_name_rf_or_ir, // input
+      String[] combined_production_name, // output
+      String[] combined_yield_name // output
+      ) throws InterruptedException, IOException {
     // sums the averaged crop production rasters, if there's an RF tag and associated IR tag. Saves
     // the results as an .asc file.
 
     // rainfed and irrigated are identified from snx_name last 2 letters (either "RF" or "IR"). this
     // will be used to specify for the first 2 letters appended to the
-    // scenarios.scenario_tag_for_production
+    // scenarios.combined_production_name
 
     // run a series of crops of the same species in order to act in aggregate on them
     // we are aggregating over rainfed and irrigated production (if rainfed and irrigated exist for
@@ -292,8 +501,15 @@ public class CalculateProduction {
 
     // Initialize an empty map to remember completed rf_or_ir tags
     ArrayList<String> completed_tags = new ArrayList<>();
+    // set the unique scenario tags to the uniqueCrops variable
 
-    for (String tag : scenarios.unique_scenario_tags_for_production) {
+    Set<String> unique_combined_production_name = new TreeSet<String>();
+    unique_combined_production_name.addAll(Arrays.asList(combined_production_name));
+
+    assert unique_combined_production_name.size() == 1
+        : "ERROR: only one crop (e.g. wheat, maize) processing allowed at a time";
+
+    for (String tag : unique_combined_production_name) {
       // loop through the unique crops
 
       String raster_names_to_sum = "";
@@ -305,16 +521,16 @@ public class CalculateProduction {
 
         // only consider the scenarios which are running the current crop for averaging
         // we only need to use the results from a given scenario tag once
-        if (!tag.equals(scenarios.scenario_tag_for_production[i])) {
+        if (!tag.equals(combined_production_name[i])) {
           continue;
         }
 
         // If the map does not already contain an entry for this scenario type, continue
         // this allows us to find the data for a scenario tag
-        if (completed_tags.contains(scenarios.scenario_tag_for_production_rf_or_ir[i])) {
+        if (completed_tags.contains(combined_production_name_rf_or_ir[i])) {
           continue;
         }
-        completed_tags.add(scenarios.scenario_tag_for_production_rf_or_ir[i]);
+        completed_tags.add(combined_production_name_rf_or_ir[i]);
         number_of_loops++;
         // add a comma after the raster names
         if (!raster_names_to_sum.equals("")) {
@@ -326,23 +542,10 @@ public class CalculateProduction {
           crop_area_to_sum = crop_area_to_sum + ",";
         }
 
-        raster_names_to_sum =
-            raster_names_to_sum + scenarios.scenario_tag_for_production_rf_or_ir[i];
+        raster_names_to_sum = raster_names_to_sum + combined_production_name_rf_or_ir[i];
 
-        String prefix = "";
-
-        if (scenarios.all_or_crop_specific.equals("all")) {
-          prefix = "ALL_CROPS";
-        } else if (scenarios.all_or_crop_specific.equals("specific")) {
-          prefix = scenarios.config.getCropNameCaps(scenarios.crop_name[i]);
-        } else {
-          System.out.println("Error: make sure all_or_crop_specific is all or specific");
-          System.exit(1);
-        }
         String crop_area_raster =
-            prefix
-                + "_"
-                + (scenarios.rf_or_ir[i].equals("RF") ? "rainfed_cropland" : "irrigated_cropland");
+            getCropAreaRaster(scenarios, scenarios.crop_name[i], scenarios.rf_or_ir[i]);
 
         crop_area_to_sum = crop_area_to_sum + crop_area_raster;
 
@@ -354,14 +557,14 @@ public class CalculateProduction {
       assert number_of_loops == 2;
 
       if (scenarios.calculate_rf_plus_ir_production) {
-        // sum rainfed and irrigated yield rasters to the appropriate scenario_tag_for_production
+        // sum rainfed and irrigated yield rasters to the appropriate combined_production_name
         // note that the last_index_of_crop is the last index where the tag matched and we had a new
         // IR or RF specific production.
-        // but scenario_tag_for_production is not specific to ir or rf
+        // but combined_production_name is not specific to ir or rf
         BashScripts.sumRasters(
             script_folder,
-            raster_names_to_sum,
-            scenarios.scenario_tag_for_production[last_index_of_crop], // to save here
+            raster_names_to_sum, // input rasters
+            combined_production_name[last_index_of_crop], // output raster
             scenarios.results_folder[last_index_of_crop]);
       }
 
@@ -370,52 +573,37 @@ public class CalculateProduction {
         // sum rainfed and irrigated area rasters to the appropriate cropland
         BashScripts.sumRasters(
             script_folder,
-            crop_area_to_sum,
-            // "ALL_CROPS_cropland", // see comment, ideally this isn't hardcoded
-            // BELOW should be crop_area_raster... but need to figure that out in the code (assert
-            // comment a few hundred lines above...)
-            // instead I've hardcoded it and added an assert to make sure someone doesn't try to use
-            // broken functionality
-            scenarios.crop_name[last_index_of_crop] + "_cropland", // to save here
+            crop_area_to_sum, // input rasters
+            scenarios.crop_name[last_index_of_crop] + "_cropland", // output raster
             scenarios.results_folder[last_index_of_crop]);
 
         // use production and crop area to calculate average yield rf and ir
         // (just divide them as average yield is total production / total area)
         BashScripts.calculateOverallYield(
             script_folder,
-            scenarios.scenario_tag_for_production[last_index_of_crop],
-            // "ALL_CROPS_cropland", // see comment, ideally this isn't hardcoded
-            // BELOW should be crop_area_raster... but need to figure that out in the code (assert
-            // comment a few hundred lines above...)
-            // instead I've hardcoded it and added an assert to make sure someone doesn't try to use
-            // broken functionality
-            scenarios.crop_name[last_index_of_crop] + "_cropland", // to save here
-            scenarios.scenario_tag_for_overall_yield[last_index_of_crop]);
+            combined_production_name[last_index_of_crop], // input raster
+            scenarios.crop_name[last_index_of_crop] + "_cropland", // input raster
+            combined_yield_name[last_index_of_crop] // output
+            );
       }
 
       // process the overall yield rasters to .asc files
       if (scenarios.make_rasters_comparing_overall_to_historical) {
         String crop_caps =
-            scenarios.config.getCropNameCaps(
-                scenarios.crop_name[last_index_of_crop]);
-
-        // System.out.println("crop_caps");
-        // System.out.println(crop_caps);
+            scenarios.config.getCropNameCaps(scenarios.crop_name[last_index_of_crop]);
 
         BashScripts.exportToCountries(
             script_folder,
             crop_caps,
-            scenarios.scenario_tag_for_overall_yield[last_index_of_crop],
+            combined_yield_name[last_index_of_crop],
             scenarios.results_folder[last_index_of_crop]);
       }
 
       // create a png of the overall yield if create_overall_png is true
       if (scenarios.create_overall_png) {
         String historical_yield_raster =
-            scenarios.config.getCropNameCaps(
-                    scenarios.crop_name[last_index_of_crop])
-                + "_yield";
-        String overall_yield_raster = scenarios.scenario_tag_for_overall_yield[last_index_of_crop];
+            scenarios.config.getCropNameCaps(scenarios.crop_name[last_index_of_crop]) + "_yield";
+        String overall_yield_raster = combined_yield_name[last_index_of_crop];
         String[] rasters_to_render = {historical_yield_raster, overall_yield_raster};
         BashScripts.createPNG(
             script_folder, rasters_to_render, scenarios.results_folder[last_index_of_crop]);

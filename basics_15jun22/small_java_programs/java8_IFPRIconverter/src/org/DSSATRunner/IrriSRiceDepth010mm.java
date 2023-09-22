@@ -47,7 +47,7 @@ public class IrriSRiceDepth010mm implements IrrigationScheme {
 
   private double fixedFloodDepth =
       10.0; // mm; this is to try out different depths to see if we can get different water usages
-            // and yields.
+  // and yields.
   private String fixedFloodDepthString = DSSATHelperMethods.padWithZeros(fixedFloodDepth, 5);
 
   public String buildIrrigationBlock() throws Exception {

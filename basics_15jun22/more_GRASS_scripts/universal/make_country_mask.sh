@@ -33,9 +33,9 @@ IFS="
 # debug="debug"
 
 
-db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
+db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf/'
 db.connect -p
-v.db.connect driver=dbf database='/mnt/data/grassdata/world/DSSAT_essentials_12may11/dbf/' map=cntry05 table=cntry05 -o
+v.db.connect driver=dbf database='/mnt/data/grassdata/world/PERMANENT/dbf/' map=cntry05 table=cntry05 -o
 
 g.region rast=$align_raster
 

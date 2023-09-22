@@ -5,6 +5,9 @@ crop_area_raster=$3
 minimum_physical_area=$4
 
 set -e 
+# this delay of 0.1s might be helpful, but is probably unnecessary
+sleep 0.1
+
 
 #
 # This script is responsible for generating the following files in the output file (to_DSSAT) using r.out.new:
@@ -23,9 +26,9 @@ set -e
 # 
 # it gets these details by importing them from GRASS GIS maps, and the details passed in from the 
 
-echo ""
-echo "running build_dailystyle"
-echo ""
+# echo ""
+# echo "running build_dailystyle"
+# echo ""
 
 output_file=to_DSSAT/
 weather_mask=$crop_area_raster
@@ -39,15 +42,6 @@ soils_raster=soil_profile_number_int@DSSAT_essentials_12may11 # which raster con
 #### even then isn't necessary....
 #elevation=base_2000_elev@$climate_mapset # which raster contains the elevation for each location
 
-
-# the gcm_list is the list of GCMs that we wish to build datasets for. the options
-#    are base_2000 and then {cnr,csi,ech,mir}_{a1,a2,b1}_{2030,2050,2080}
-#    put each one you want on a different line
-
-gcm_list=\
-"
-noGCMcalendar
-"
 
 # masking settings
 # you can do some masking of the area you want to extract using these
@@ -76,10 +70,10 @@ growing_radius=0 # 0.0 # number of pixels
 # echo "    ++ making an ALL raster ++"
 g.region $region_to_use
 
-echo ""
-echo "Region: "
-g.region -g
-echo ""
+# echo ""
+# echo "Region: "
+# g.region -g
+# echo ""
 
 # this is the main control where we list the crop cases we wish to model
 # the columns are tab delimited...
@@ -124,17 +118,6 @@ echo ""
 #    cases...
 
 
-# this is a list of offsets from the target month that you would like to try.
-# integers only please...
-#  0 means the target month
-# +1 means the month after the target month
-# -1 means the month before the target month
-month_shifter_list=\
-"
-0
-"
-
-sleep 1
 
 
 
@@ -155,18 +138,13 @@ mkdir -p $output_dir   # create the directory, if necessary
 
 other_initial=`echo -e "initial_soil_nitrogen_mass@DSSAT_essentials_12may11\tinitial_root_mass@DSSAT_essentials_12may11\tinitial_surface_residue_mass@DSSAT_essentials_12may11"`
 wheat_revised_initial=`echo -e "initial_soil_nitrogen_mass_23may13@DSSAT_essentials_12may11\tinitial_root_mass@DSSAT_essentials_12may11\tinitial_surface_residue_mass@DSSAT_essentials_12may11"`
-
-# pick one of the gcm cases from the list
-for gcm in $gcm_list; do
-
-
 # now pick one of the crop cases
 for spam_line in $main_control_list
 do
   # pull out the different pieces of the line and store them separately for easy reference
   spam_raster_to_use_for_mask=`echo "$spam_line" | cut -f1`
                     crop_name=`echo "$spam_line" | cut -f2`
-                  description=`echo "$spam_line" | cut -f3`
+        output_stats_basename=`echo "$spam_line" | cut -f3`
                       N_level=`echo "$spam_line" | cut -f4`
               calendar_prefix=`echo "$spam_line" | cut -f5`
 
@@ -177,28 +155,12 @@ do
   fi
 
 
-                    initial_N=`echo "$simple_initial" | cut -f1`
-          initial_root_weight=`echo "$simple_initial" | cut -f2`
-       initial_surface_weight=`echo "$simple_initial" | cut -f3`
-                 #    id_raster=`echo "$spam_line" | cut -f9`
-                 # skip_climate=`echo "$spam_line" | cut -f10`
+                initial_N=`echo "$simple_initial" | cut -f1`
+      initial_root_weight=`echo "$simple_initial" | cut -f2`
+   initial_surface_weight=`echo "$simple_initial" | cut -f3`
+             #    id_raster=`echo "$spam_line" | cut -f9`
+             # skip_climate=`echo "$spam_line" | cut -f10`
 
-  # echo "spam_raster_to_use_for_mask"
-  # echo $spam_raster_to_use_for_mask
-  # echo "crop_name"
-  # echo $crop_name
-  # echo "description"
-  # echo $description
-  # echo "N_level"
-  # echo $N_level
-  # echo "calendar_prefix"
-  # echo $calendar_prefix
-  # echo "initial_N"
-  # echo $initial_N
-  # echo "initial_root_weight"
-  # echo $initial_root_weight
-  # echo "initial_surface_weight"
-  # echo $initial_surface_weight
 
   # define the appropriate mask
   r.mapcalc "deleteme_raster_representing_region=1" 
@@ -213,10 +175,6 @@ do
   r.mapcalc deleteme_initial_root_weight    = "$initial_root_weight" 2>&1 #| grep -v "%"
   r.mapcalc deleteme_initial_surface_weight = "$initial_surface_weight" 2>&1 #| grep -v "%"
 
-# here is where we go through the shifts against the target planting month
-for month_shifter in $month_shifter_list
-do
-
   # let us allow for specific months in the master control list by saying anything
   # that is less than two characters long gets interpreted literally
   # this will more-or-less be an undocumented feature for the moment (17nov11)
@@ -228,21 +186,16 @@ do
     # proceed as normal
 
     # define the planting calendar
-    original_planting_month_raster=${calendar_prefix}_${gcm}@${calendar_mapset}
+    original_planting_month_raster=${calendar_prefix}_noGCMcalendar@${calendar_mapset}
   fi
 
-  text_month_shifter=${month_shifter/-/n} # convert the negative sign to an n for use in the names...
-
   # define the name for this particular offset
-  planting_month_raster=${calendar_prefix}_${gcm}_p${text_month_shifter}
-  # echo "original_planting_month_raster"
-  # echo $original_planting_month_raster
-  # echo "month_shifter"
-  # echo $month_shifter
+  planting_month_raster=${calendar_prefix}_noGCMcalendar_p0
   
   # compute the appropriate planting month by shifting the target month and then wrapping the months that
   # go outside of 1 to 12
-  r.mapcalc "${original_planting_month_raster}_${month_shifter}" = "eval(cand_month = $original_planting_month_raster + ($month_shifter), \
+  # if original_planting_month_raster is a constant, this just fills the whole masked area as a raster containing a number corresponding to the month represented by the constant
+  r.mapcalc "${original_planting_month_raster}_0" = "eval(cand_month = $original_planting_month_raster, \
                                             too_low_fixed  = if( cand_month    <=  0, 12 + cand_month,    cand_month    ), \
                                             too_high_fixed = if( too_low_fixed >= 13, too_low_fixed - 12, too_low_fixed ), \
                                             too_high_fixed \
@@ -259,63 +212,60 @@ do
   # non-climate stuff into another. but they need to match up.
 
   # make the new, smaller lists...
-    nonclimate_list="$soils_raster,${original_planting_month_raster}_${month_shifter},deleteme_N_to_use,$initial_N,$initial_root_weight,$initial_surface_weight,$weather_mask"
+  nonclimate_list="$soils_raster,${original_planting_month_raster}_0,deleteme_N_to_use,$initial_N,$initial_root_weight,$initial_surface_weight,$weather_mask"
 
   # do the exporting
   # define the name of the output file
-    start_output_name=${output_file}${planting_month_raster}_${crop_name}__${description}
+  start_output_name=${output_file}${output_stats_basename}
+  real_output_file=${start_output_name}
 
-    real_output_file=${start_output_name}
+  # make a header file with all the names of the maps in order so we can figure out what they are later
+  echo "$nonclimate_list" | tr "," "\n" | cat -n > ${real_output_file}.cols.txt
 
-    # make a header file with all the names of the maps in order so we can figure out what they are later
-    echo "$nonclimate_list" | tr "," "\n" | cat -n > ${real_output_file}.cols.txt
+  # exporting $planting_month_raster $crop_name $description 
 
-    # exporting $planting_month_raster $crop_name $description 
-
-     # Beware the MAGIC PATH!!! this is a non-standard grass program. so you need to know the actual path
-     # this is what actually makes the giant text tables
-     # test part is just saying we don't mind if this throws errors (always seems to even if correct operation)
-     /usr/local/grass-6.5.svn/bin/r.out.new \
-       input=${nonclimate_list} \
-       output=${real_output_file} \
-       -l || test $? = 1 
+  # Beware the MAGIC PATH!!! this is a non-standard grass program. so you need to know the actual path
+  # this is what actually makes the giant text tables
+  # test part is just saying we don't mind if this throws errors (always seems to even if correct operation)
+  /usr/local/grass-6.5.svn/bin/r.out.new \
+     input=${nonclimate_list} \
+     output=${real_output_file} \
+     -l || test $? = 1 
 
   # try some provenance from here...
   # the idea here is to record all the important settings so that you can reproduce this dataset
   # later and/or have the information when you have to do a write-up about your results
-    echo "--- provenance started at `date` ---" > ${real_output_file}.provenance.txt
-    echo "this dir: `pwd`" >> ${real_output_file}.provenance.txt
-    echo "this script: $0" >> ${real_output_file}.provenance.txt
-    echo "nonclimate_list below" >> ${real_output_file}.provenance.txt
-    echo "$nonclimate_list" >> ${real_output_file}.provenance.txt
-    echo "" >> ${real_output_file}.provenance.txt
-    echo "`echo "$nonclimate_list" | sed "s/,/\n/g" | cat -n`" >> ${real_output_file}.provenance.txt
-    echo "" >> ${real_output_file}.provenance.txt
-    echo "" >> ${real_output_file}.provenance.txt
-    echo "output_file = $output_file" >> ${real_output_file}.provenance.txt
-    echo "region_to_use = $region_to_use" >> ${real_output_file}.provenance.txt
-    echo "weather_mask = $weather_mask" >> ${real_output_file}.provenance.txt
+  echo "--- provenance started at `date` ---" > ${real_output_file}.provenance.txt
+  echo "this dir: `pwd`" >> ${real_output_file}.provenance.txt
+  echo "this script: $0" >> ${real_output_file}.provenance.txt
+  echo "nonclimate_list below" >> ${real_output_file}.provenance.txt
+  echo "$nonclimate_list" >> ${real_output_file}.provenance.txt
+  echo "" >> ${real_output_file}.provenance.txt
+  echo "`echo "$nonclimate_list" | sed "s/,/\n/g" | cat -n`" >> ${real_output_file}.provenance.txt
+  echo "" >> ${real_output_file}.provenance.txt
+  echo "" >> ${real_output_file}.provenance.txt
+  echo "output_file = $output_file" >> ${real_output_file}.provenance.txt
+  echo "region_to_use = $region_to_use" >> ${real_output_file}.provenance.txt
+  echo "weather_mask = $weather_mask" >> ${real_output_file}.provenance.txt
 #    echo "climate_mapset=$climate_mapset" >> ${real_output_file}.provenance.txt
-    echo "calendar_mapset=$calendar_mapset" >> ${real_output_file}.provenance.txt
-    echo "soils_raster=$soils_raster" >> ${real_output_file}.provenance.txt
+  echo "calendar_mapset=$calendar_mapset" >> ${real_output_file}.provenance.txt
+  echo "soils_raster=$soils_raster" >> ${real_output_file}.provenance.txt
 #    echo "elevation=$elevation" >> ${real_output_file}.provenance.txt
-    echo "" >> ${real_output_file}.provenance.txt
-    echo "minimum_physical_area=$minimum_physical_area" >> ${real_output_file}.provenance.txt
-    echo "growing_radius=$growing_radius" >> ${real_output_file}.provenance.txt
-    echo "" >> ${real_output_file}.provenance.txt
-    echo "month_shifter_list=" >> ${real_output_file}.provenance.txt
-    echo "$month_shifter_list" >> ${real_output_file}.provenance.txt
-    echo "" >> ${real_output_file}.provenance.txt
-    echo "main_control_list=" >> ${real_output_file}.provenance.txt
-    echo "$main_control_list" >> ${real_output_file}.provenance.txt
-
-done # month_shifter
-
+  echo "" >> ${real_output_file}.provenance.txt
+  echo "minimum_physical_area=$minimum_physical_area" >> ${real_output_file}.provenance.txt
+  echo "growing_radius=$growing_radius" >> ${real_output_file}.provenance.txt
+  echo "" >> ${real_output_file}.provenance.txt
+  echo "" >> ${real_output_file}.provenance.txt
+  echo "main_control_list=" >> ${real_output_file}.provenance.txt
+  echo "$main_control_list" >> ${real_output_file}.provenance.txt
 
 done # spam_line
 
-done # gcm
 
-echo ""
-echo "done running build_dailystyle"
-echo ""
+#this says to remove any mask! so that's because we don't expect to see any more grass gis being used until post-processing, and this allows for consistency, rather than just being left with the mask that happened to be for the last cultivar (mask_unwanted_pixels was the last script to set the mask)
+g.remove MASK #2>&1 | grep -v "" # silenced
+
+
+# echo ""
+# echo "done running build_dailystyle"
+# echo ""

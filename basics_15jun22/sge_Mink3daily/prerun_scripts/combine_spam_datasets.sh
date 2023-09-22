@@ -12,6 +12,9 @@ fi
 
 crop_caps=$1
 
+echo "crop_caps"
+echo crop_caps
+
 # get paths
 . ../default_paths_etc.sh # imports historical_results_directory and spam_data_folder and export_scripts
 
@@ -23,7 +26,7 @@ area_categories=(
     "R" # rainfed
 )
 
-
+echo "going by area"
 for area_category in "${area_categories[@]}"; do
     if [ $area_category == "A" ]; then
         area_name=""
@@ -36,6 +39,8 @@ for area_category in "${area_categories[@]}"; do
     # this is for reading in some MAPSPAM data acquired from https://www.mapspam.info/
     # and placed in /grassdata/world/spam
     # (imports the geotiffs)
+    echo "importing"
+    echo "spam2010V2r0_global_H_${crop_caps}_${area_category}.tif output=${crop_caps}${area_name}_cropland"
     r.in.gdal input=spam2010V2r0_global_H_${crop_caps}_${area_category}.tif output=${crop_caps}${area_name}_cropland --quiet --overwrite
 
     # if the first crop, then don't add a comma
@@ -69,5 +74,5 @@ cd ${export_scripts}
 cd -
 
 echo ""
-echo "All rasters created for all spam crops and historical rasters exported"
+echo "All rasters created for $crop_caps and historical rasters exported"
 echo ""

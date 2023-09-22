@@ -1,0 +1,535 @@
+had to remove extra unnecessary co2 and snx filenames from the reassemble script names, as these existed elsewhere already
+
+in mink3daily_wrapper.sh, reassemble call:
+
+./mink3daily_reassemble_outputs.sh $FIX_THIS $co2_to_use $chunks_per_case $X_to_use $magic_code
+
+note:
+
+${daily_to_use##*/}=Outdoor_crops_control
+${plantingDateInMonthShiftInDays/-/n} = 0
+{data_to_use%%_data}=/mnt/data/basics_15jun22/sge_Mink3daily/chunks_to_GRASS/cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_STATS.txt
+
+I need 
+
+$FIX_THIS must be Outdoor_crops_control_d0_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_STATS
+
+which would be
+
+
+in mink3daily_reassemble_outputs.sh, getting data_file_base_name as first argument:
+
+data_file_short_name=`basename $data_file_base_name`
+
+
+originally bash defines input_file as:
+
+input_file=${chunked_output_data_dir}${X_template%%.*X}_${co2_to_use}_${data_file_short_name}
+
+therefore  we need
+
+${chunked_output_data_dir} = /mnt/data/basics_15jun22/sge_Mink3daily/chunks_to_GRASS/
+${X_template} = cnINVIGOR5440IR.SNX
+${co2_to_use}=379
+${data_file_short_name}=Outdoor_crops_control_d0_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_STATS
+
+in bash we have...
+
+
+$java_to_use "$memory_string" -cp $classpath $classname ${input_file} $chunk_file $n_threads_total
+
+
+based on below arguments, $input_file is going to need to be:
+
+/mnt/data/basics_15jun22/sge_Mink3daily/chunks_to_GRASS/cnINVIGOR5440IR_379_Outdoor_crops_control_d0_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_STATS
+
+
+
+based on the below in java ... reassembleMatrixTextFileByLinesInfixBeforeUnderscore
+
+String originalBaseName = commandLineOptions[0];
+
+(inputFilenameNoInfix=originalBaseName)
+
+String chunkFirst = inputFilenameNoInfix.substring(0, inputFilenameNoInfix.lastIndexOf("_"));
+String chunkLast = inputFilenameNoInfix.substring(inputFilenameNoInfix.lastIndexOf("_") + 1);
+
+
+That is splitting without cutting out ... so then this is added in...
+String chunkName = chunkFirst + "_" + 0 + "_" + chunkLast;
+
+Object[] rowsColsFormatDelimiter = MatrixOperations.readInfoFile(chunkName);
+
+
+public static Object[] readInfoFile(String basefilename) throws Exception {
+
+  String InfoFileName = basefilename + ".info.txt";
+
+to get something of form
+
+/mnt/data/basics_15jun22/sge_Mink3daily/chunks_to_GRASS/cnINVIGOR5440IR_379_Outdoor_crops_control_d0_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_0_STATS.info.txt
+
+
+chunkName = chunkFirst + "_" + chunkIndex + "_" + chunkLast;
+if (!(new File(chunkName + ".info.txt").exists())) {
+
+
+
+9.11.23
+
+alright, I've got some issues 
+
+I have the apparent problem that there are only 21 pixels existing in my _geog.txt
+
+it's probably overwriting rather than creating a new one on reassembly?
+let's check if the different chunks
+
+input_file
+/mnt/data/basics_15jun22/sge_Mink3daily/chunks_to_GRASS/cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_STATS
+is the only thing created by reassembly I've learned. So the above explanation doesn't work.
+
+
+
+so this is one part of the geog.txt I just modified:
+I don't see any other creation reference to geog.txt in the scripts
+
+
+tiled_parrelizer:
+
+for entry in $scripts_list
+do
+  # current_chunk_index=$(echo $entry | cut -d':' -f1)
+  # script_path=$(echo $entry | cut -d':' -f2-)
+  current_chunk_index="${entry%%:*}" # Everything before the first ':'
+  script_path="${entry#*:}" # Everything after the first ':'
+
+  echo "-- $current_chunk_index / $chunks_per_case `date` --"
+
+
+  old_chunk_here=${chunk_file}${data_file_short_name}_${current_chunk_index}
+  new_chunk_here=${chunk_file}CZX${QRC_here}XZC_${data_file_short_name}_${current_chunk_index} # (DMR) I removed the planting month day thing. I never use it, and the new functionality with planting months should make it obsolete
+
+  mv ${old_chunk_here}_data.txt      ${new_chunk_here}_data.txt
+  mv ${old_chunk_here}_data.info.txt ${new_chunk_here}_data.info.txt
+  mv ${old_chunk_here}_geog.txt      ${new_chunk_here}_geog.txt
+  mv ${old_chunk_here}_geog.info.txt ${new_chunk_here}_geog.info.txt
+
+
+  # do a very simple wheat checking thing
+  wheat_test=`echo "$crop_nitro_name" | grep wheat`
+
+
+
+  if [ -z "$wheat_test" ]; then
+
+  # create all bash scripts that will be run in parallel
+  ./mink3daily_run_DSSAT_tile.sh $script_path $new_chunk_here $daily_to_use $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter
+
+  else
+    echo "   !!!! running coordination style for suspected wheat... !!!!"
+    ./mink3daily_run_DSSAT_tile.sh  $script_path $new_chunk_here $daily_to_use $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter USE_CIMMYT_BETA
+  fi
+    counter=$((counter + 1))
+done
+
+
+
+
+and in the java:
+
+//////
+    // a couple magic numbers //
+    ////////////////////////////
+
+    long soilColIndex = 0;
+    long firstPlantingDayIndex = 1;
+    long nitrogenLevelIndex = 2;
+
+    long nitrogenKgPerHaCol = 3; // this is the daily style; old = 70;
+    long rootWeightCol = 4; // 71; // old = 72; noticed on 18jul12
+    long surfaceResidueWeightCol = 5; // 72; // old = 71; noticed on 18jul12
+
+    // i am always running real, so we need something to use for fertilizer schemes if happy looks
+    // silly
+    final int defaultFlowering = 4;
+    final int defaultMaturity = 8;
+
+    ////////////////////////////////////////
+    // set up stuff that we actually know //
+    ////////////////////////////////////////
+
+    String fullTempXFileName = pathToDSSATDirectory + tempXFileName;
+    File fullTempXFile = new File(fullTempXFileName);
+
+    // open up a writer for the statistics output file
+    File statisticsFileObject = new File(yieldOutputBaseName + "_STATS.txt");
+    PrintWriter statisticsOut = new PrintWriter(statisticsFileObject);
+
+    ///////////////////////////////
+    // start doing the real work //
+    ///////////////////////////////
+
+    int plantingWindowSpacing = nDaysInMonth / nPlantingWindowsPerMonth;
+    if (plantingWindowSpacing < 1) {
+      plantingWindowSpacing = 1;
+    }
+
+    // write out the DSSAT initialization file...
+    FunTricks.writeStringToFile(magicInitializationContents, magicInitializationFilePath);
+
+    // initialize the fertilizer scheme
+    // this could be done elsewhere, but just in case, i'm doing it here.
+    // we're starting out with the defaults. but in the future this might
+    // get extended....
+    nitrogenFertilizerScheme.initialize();
+
+    // read in the fundamental data
+    // Beware the MAGIC NUMBER!!! gonna force these into memory.
+    int formatIndexToForce = 1;
+    MultiFormatMatrix dataMatrix =
+        MatrixOperations.read2DMFMfromTextForceFormat(
+            gisTableBaseName + "_data", formatIndexToForce);
+    MultiFormatMatrix geogMatrix =
+        MatrixOperations.read2DMFMfromTextForceFormat(
+            gisTableBaseName + "_geog", formatIndexToForce);
+
+    int nLinesInDataFile = (int) dataMatrix.getDimensions()[0];
+
+    // since this implementation (using the multiple years with a single random seed, rather
+    // than multiple random seeds with a single year) has the seeds and years as invariants, do
+    // them up front to save on a little search and replace overhead...
+    randomSeedCode = DSSATHelperMethods.padWithZeros(firstRandomSeed, 5);
+    nYearsCode = DSSATHelperMethods.padWithZeros(nFakeYears, 5);
+    // now forcing happy and real to be done every time
+    nHappyYearsCode = DSSATHelperMethods.padWithZeros(nFakeYears, 5);
+    co2ppmCode = DSSATHelperMethods.padWithZeros(co2ppm, 4);
+
+    IrrigationScheme dummyScheme = new IrriSNone();
+    dummyScheme.initialize();
+
+
+    that's right before the lat/long looping which uses geogMatrix like this:
+
+
+    latitude = geogMatrix.getValue(lineIndex, 2); // Beware the MAGIC NUMBER!!!
+    longitude = geogMatrix.getValue(lineIndex, 3); // Beware the MAGIC NUMBER!!!
+
+
+
+
+OKAY
+
+so what could be causing the _geog.txt file to only have 21 lines, if the reassembly does not create it?
+It seems like the fact that I do rainfed, then irrigated, means that the geog.txt is overwritten for irrigated.
+
+and in fact:
+number_of_pixels
+3
+number_of_pixels
+4
+number_of_pixels
+3
+number_of_pixels
+3
+number_of_pixels
+4
+number_of_pixels
+4
+for irrigated equals 21!
+
+so we have an overwriting when the irrigated is run.
+Now, the actual name in to_DSSAT is:
+11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_geog.txt
+which of course does not reference the cultivar or whether it's rainfed/irrigated!
+I guess this is causing issues with overwrite...
+
+It doesn't seem like the tiled_parallelizer code is causing the issue, as it doesn't really change the _geog.txt name at all other than regarding planting months. It used to use 
+So then the issue must be:
+
+in tiled_parallelizer:
+
+data_file_base_name=$1
+
+is basename of:
+data_file_short_name
+11_noGCMcalendar_p0_rapeseed__Aug10_updatedN
+
+that's just not enough info. It needs to have the irrigation and cultivar too.
+this should apply to both _geog and _data.
+
+an issue is the mink3daily_run_DSSAT_tile doesn't take in this data_file_short_name... because we're running using the 3rd entry of the init file:
+
+/mnt/data/on_node_home20337_644545708/from_GRASS/CZXon_node_home3960_428788219XZC_d0_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_0
+
+
+
+
+
+the init file is generated in run_DSSAT_tile
+
+'echo \"$gisTableBaseName\"            >> $runner_init_file
+gisTableBaseName=${on_node_input_data_dir}${data_file_short_name} # this should get pulled from the argument
+
+and above this:
+
+data_file_base_name=$2
+data_file_short_name=`basename $data_file_base_name`
+
+you can see how changing the 
+
+from the tiled_parrelizer:
+./mink3daily_run_DSSAT_tile.sh $script_path $new_chunk_here $daily_to_use $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter
+
+so $2 would be $new_chunk_here
+
+defined as:
+
+new_chunk_here=${chunk_file}CZX${QRC_here}XZC_${data_file_short_name}_${current_chunk_index} # (DMR) I removed the planting month day thing. I never use it, and the new functionality with planting months should make it obsolete
+
+and so changing data_file_short name should actually work after all! it's safest to keep these very specific to prevent any accidental overwriting of data...
+
+
+we still need to be careful, even if we alter data_file_short_name in the tiled_parallelizer, earlier on this may change things in bad ways...
+
+it's the same as $data_to_use in the wrapper... which is sent to reassemble and the parrelizer. Parrelizer looks good to add this.
+
+for reassembly though:
+data_file_short_name=`basename $data_file_base_name`
+input_file=${chunked_output_data_dir}${data_file_short_name}
+
+interesting...
+input_file is:
+/mnt/data/basics_15jun22/sge_Mink3daily/chunks_to_GRASS/cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_STATS
+
+so that's a contradiction. I see the tiled parallelizer as only having "11_noGCMcalendar_p0_rapeseed__Aug10_updatedN" but the reassembler has much more data.
+
+Ah.
+
+the reason is I'm passing two different arguments in my bashscripts in java!
+
+First, I need to ensure that I can still find the appropriate file to reassemble when I add information to the chunk names saved by Mink3p2daily.
+
+so the chunkified results should be saved
+
+here's where chunks_to_grass (chunked_output_data_dir has it) is created in the run in run_DSSAT_tile
+
+
+
+   yieldOutputBaseName=${on_node_output_dir}${X_template%%.*X}_${co2ppm}_${data_file_short_name} # this is new...
+  # clean_yieldOutputBaseName=${X_template%%.*X}_${co2ppm}_${data_file_short_name} # this is new...
+   clean_yieldOutputBaseName=${X_template%%.*X}_${co2ppm}_${daily_to_use##*/}_${data_file_short_name} # this is new...
+
+
+cp ${yieldOutputBaseName}_STATS.cols.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.cols.txt
+ if [ $number_of_pixels -ne 0 ]; then
+  cp ${yieldOutputBaseName}_STATS.txt      ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.txt
+  cp ${yieldOutputBaseName}_STATS.info.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.info.txt
+  cp ${yieldOutputBaseName}_provenance.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_provenance.txt
+  fi
+
+
+so it's copying DSSAT output from on_node_home to the chunks_to_grass
+okay, that's an issue:
+here's the 4th line...
+($yieldOutputBaseName)
+/mnt/data/on_node_home20337_644545708/to_GRASS/cnINVIGOR5440IR_379_CZXon_node_home3960_428788219XZC_d0_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_0
+
+it's copying from to_grass to chunks_to_grass, which isn't right.
+so I'll fix that.
+And the 3rd line is 
+/mnt/data/on_node_home20337_644545708/from_GRASS/CZXon_node_home3960_428788219XZC_d0_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_0
+which is also wrong, should be chunks_from_grass.
+fixing that too
+(both fixes in default_paths_etc.sh)
+
+so back to the ensuring that I can still find the appropriate file to reassemble when I add information to the chunk names saved by Mink3p2daily... wait... this already has the info tacked on!
+it's tacked on here:
+yieldOutputBaseName=${on_node_output_dir}${X_template%%.*X}_${co2ppm}_${data_file_short_name} # this is new...
+so what I need to do is actually move this up to a higher level, so this information is not just in the saved data file, but all related $data_file_short_name variables. 
+
+I need to determine how the file to be reassembled is named, and make sure that can have all the information in it.
+chunks_to_grass seems to have plenty of info in the file names...
+
+clean_yieldOutputBaseName=${X_template%%.*X}_${co2ppm}_${daily_to_use##*/}_${data_file_short_name} # this is new...
+daily_to_use is the dailyweathername...
+so it's adding in the outdoorcrops_control stuff.
+that's nice. I think i'll keep that as well.
+adding
+
+${X_template%%.*X}_${co2ppm}_${daily_to_use##*/}_
+
+to data_file_short_name
+
+clean_yieldOutputBaseName gets the extra daily_to_use stuff (was ${X_template%%.*X}_${co2ppm}_ adding only)
+
+
+note: I'm passing in:
+data_file_base_name
+
+
+for running:
+yield result name:
+this.yield_result_names[i][planting_month_index] =
+    month + "_noGCMcalendar_p0_" + this.crop_name[i] + "__" + this.run_descriptor[i];
+
+scenarios
+    .yield_result_names[scenario_and_pm.scenarioNumber][scenario_and_pm.plantingMonth]
+
+and actually pass in: script_folder + "to_DSSAT/" + yield_result_name,
+
+    for a name of:
+        script_folder + "to_DSSAT/"+month + "_noGCMcalendar_p0_" + this.crop_name[i] + "__" + this.run_descriptor[i]
+
+for reassembly:
+this.output_stats_basenames[i][planting_month_index] =
+    this.snx_name[i]
+        + "_"
+        + this.co2_level[i]
+        + "_"
+        + this.weather_prefix[i]
+        + "_"
+        + this.yield_result_names[i][planting_month_index];
+
+filetoprocess=scenarios
+    .output_stats_basenames[scenario_and_pm.scenarioNumber][
+    scenario_and_pm.plantingMonth],
+
+and actually pass in:
+    script_folder + "chunks_to_GRASS/" + filetoprocess + "_STATS.txt",
+for a final assembly name of:
+    script_folder + "chunks_to_GRASS/" +     this.snx_name[i] + "_" + this.co2_level[i] + "_" + this.weather_prefix[i] + "_" + month + "_noGCMcalendar_p0_" + this.crop_name[i] + "__" + this.run_descriptor[i] + "_STATS.txt"
+
+okay I'll make the decision to disgard the script folder and dir part (as this is already removed anyway bc of "basename" command applied) and standardize by making everything the current final_assembly name.
+
+
+running DSSAT on the new position:
+Exception in thread "main" java.io.FileNotFoundException: /mnt/data/basics_15jun22/sge_Mink3daily/to_DSSAT/cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_data.info.txt (No such file or directory)
+
+Object[] rowsColsFormatDelimiter = MatrixOperations.readInfoFile(inputFilename);
+
+
+/usr/bin/java "-mx1400M" -cp /mnt/data/basics_15jun22/small_java_programs/java8_IFPRIconverter/bin/ org.DSSATRunner.SplitTextMatrices /mnt/data/basics_15jun22/sge_Mink3daily/to_DSSAT/cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_data /mnt/data/basics_15jun22/sge_Mink3daily/chunks_from_GRASS/ 6
+
+
+so what creates that to_DSSAT?
+why doesn't it create with the right name?
+I'm seeing the creation of:
+11_noGCMcalendar_p0_rapeseed__Aug10_updatedN.provenance.txt
+which is clearly the old version. 
+
+Ah of course, build_daily_style is creating that.
+start_output_name=${output_file}${planting_month_raster}_${crop_name}__${description}
+
+
+well... it's too complicated to just set that to the value from the java directly. still have to build that anme in build_daily_style for now as I don't have all day.
+
+so, just adding the extra terms to the start_output_name.
+
+okay that seems fixed
+
+but now build_daily_style is too specific!
+I am building the rainfed, but not the irrigated. So, build daily style
+so clearly this needs to be month specific
+it actually builds out the geog... which says which cells to use for irrigated/rainfed.
+
+I'll try to just run everything... I think that could be more accurate
+mask_unwanted_pixels is per cultivar... so this should at least be done per cultivar
+crop_area_raster_for_this_snx is what controls the spam_raster_to_use_for_mask varibale
+I'm pretty sure this depends on irrigated / non irrigated.
+So I'll go ahead and run everything before for all scenarios and planting months.
+
+interestingly, whatever I did did not seem to create the IR 
+
+
+
+
+okay, so after deleting all the file directory folders and running DSSAT:
+
+~/C/m/b/s/chunks_from_GRASS (main|✚90) $ lt
+total 0
+~/C/m/b/s/chunks_from_GRASS (main|✚90) $ ls ../to_DSSAT/
+cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN.cols.txt
+cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_header.txt
+cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_geog.txt
+cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_geog.info.txt
+cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_data.txt
+cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_data.info.txt
+cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN.provenance.txt
+cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_header.txt
+cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN.cols.txt
+cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN.provenance.txt
+cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_geog.txt
+cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_geog.info.txt
+cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_data.txt
+cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_data.info.txt
+~/C/m/b/s/chunks_from_GRASS (main|✚90) $ ls ../to_GRASS/
+~/C/m/b/s/chunks_from_GRASS (main|✚90) $ ls ../chunks_to_GRASS/
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_5_STATS.cols.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_5_STATS.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_5_STATS.info.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_5_provenance.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_2_STATS.cols.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_2_STATS.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_2_STATS.info.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_2_provenance.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_3_STATS.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_3_STATS.cols.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_3_STATS.info.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_3_provenance.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_4_STATS.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_4_STATS.info.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_4_STATS.cols.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_4_provenance.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_1_STATS.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_1_STATS.info.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_1_STATS.cols.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_1_provenance.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_0_STATS.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_0_STATS.info.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_0_STATS.cols.txt
+CZXon_node_home24507_912194371XZC_cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_0_provenance.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_4_STATS.cols.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_4_STATS.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_4_STATS.info.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_4_provenance.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_0_STATS.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_0_STATS.info.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_0_STATS.cols.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_0_provenance.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_5_STATS.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_5_STATS.cols.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_5_STATS.info.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_5_provenance.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_2_STATS.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_2_STATS.info.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_2_STATS.cols.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_2_provenance.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_3_STATS.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_3_STATS.info.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_3_STATS.cols.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_3_provenance.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_1_STATS.cols.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_1_STATS.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_1_STATS.info.txt
+CZXon_node_home46_852636442XZC_cnINVIGOR5440IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_1_provenance.txt
+
+
+and running process I get:
+
+
+Exception in thread "main" java.io.FileNotFoundException: /mnt/data/basics_15jun22/sge_Mink3daily/chunks_to_GRASS/
+
+cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_0_STATS.info.txt
+
+ (No such file or directory)
+
+
+so the problem is the _CZX*_*XZC_ part...
+
+but the runner should prevent this!
+
+cp ${yieldOutputBaseName}_STATS.info.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.info.txt
+
+
+
+

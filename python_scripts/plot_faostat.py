@@ -11,6 +11,7 @@ from scipy.stats import linregress
 from osgeo import ogr
 import matplotlib.colors as mcolors
 import statsmodels.api as sm
+from statsmodels.tools.eval_measures import rmse as statmodel_rmse
 
 # Configuration dictionary for controlling various plots
 config = {
@@ -66,7 +67,7 @@ def plot_FAOSTAT_hist(df):
     fig, ax = plt.subplots()  # Explicitly create new figure and axes
 
     # filter dataframe to include only non-zero values
-    df = df[df["Average Yield 2000-2005 (kg/ha)"] != 0]
+    # df = df[df["Average Yield 2000-2005 (kg/ha)"] > 500]
 
     ax.hist(
         df["Average Yield 2000-2005 (kg/ha)"], bins=20, edgecolor="black"
@@ -82,7 +83,7 @@ def plot_hist(df, title):
     fig, ax = plt.subplots()  # Explicitly create new figure and axes
 
     # filter dataframe to include only non-zero values
-    df = df[df["average_yield"] != 0]
+    # df = df[df["average_yield"] > 500]
 
     ax.hist(df["average_yield"], bins=20, edgecolor="black")
     ax.set_title("Histogram of " + title + " Average Wheat Yield (2000-2005)")
@@ -94,8 +95,8 @@ def plot_hist(df, title):
 def plot_scatter(merged_data, title):
     """Plot scatter diagram of FAOSTAT vs custom data source"""
     # filter dataframe to include only non-zero values
-    merged_data = merged_data[merged_data["Average Yield 2000-2005 (kg/ha)"] != 0]
-    merged_data = merged_data[merged_data["average_yield"] != 0]
+    # merged_data = merged_data[merged_data["Average Yield 2000-2005 (kg/ha)"] > 500]
+    # merged_data = merged_data[merged_data["average_yield"] > 500]
 
     plt.figure()
 
@@ -125,29 +126,6 @@ def plot_scatter(merged_data, title):
     plt.xlabel("FAOSTAT Average Yield 2000-2005 (kg/ha)")
     plt.ylabel(title + " Average Yield")
     plt.show(block=False)
-
-
-def import_yield_and_area(result, plot_type, area_tif_file, yield_tif_file, plot_title):
-    """Handle .tif raster data, overlay them with world map, and create merged data"""
-    world = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
-
-    breakpoint()
-
-    # averaged_variable = get_average_yield_by_country(
-    #     world, yield_tif_file, area_tif_file, plot_title
-    # )
-
-    if config.get("plot_" + plot_type + "_hist", False):
-        plot_hist(averaged_variable, plot_type)
-
-    merged_data = pd.merge(
-        result, averaged_variable, left_on="ISO3", right_on="iso_a3", how="inner"
-    )
-
-    if config.get("plot_scatter", False):
-        plot_scatter(merged_data, plot_type)
-
-    return merged_data  # Add this line to return the merged data
 
 
 def plot_hist_side_by_side(crop, world, column_list):
@@ -194,6 +172,13 @@ def plot_hist_side_by_side(crop, world, column_list):
     plt.show(block=False)
 
 
+def linear_RMSE(expected, observed):
+    squared_diffs = log_ratios**2
+    mean_of_differences = np.mean(squared_diffs)
+    result = np.sqrt(mean_of_differences)
+    return result / np.log(2)
+
+
 def RMSE(expected, observed):
     log_ratios = np.log(observed / expected)
     squared_diffs = log_ratios**2
@@ -208,6 +193,38 @@ def weighted_RMSE(expected, observed, weights):
     avg_squared_diffs = np.average(weighted_squared_diffs, weights=weights)
     result = np.sqrt(avg_squared_diffs)
     return result / np.log(2)
+
+
+def d_statistic(expected, observed):
+    O = list(expected)
+    P = list(observed)
+
+    numerator = 0
+    denominator = 0
+
+    N = len(P)
+    if N != len(O):
+        raise ValueError("P and O must be the same length")
+
+    mean_O = sum(O) / N
+    print(P)
+    for i in range(N):
+        print("i")
+        print("len(P)")
+        print(i)
+        print(len(P))
+        P_prime = P[i] - mean_O
+        O_prime = O[i] - mean_O
+
+        numerator += (P[i] - O[i]) ** 2
+        denominator += (abs(P_prime) + abs(O_prime)) ** 2
+
+    if denominator == 0:
+        raise ValueError("Denominator is zero")
+
+    result = 1 - (numerator / denominator)
+
+    return result
 
 
 def get_stats(filtered_world, observed_col, expected_col, weights):
@@ -246,8 +263,10 @@ def get_stats(filtered_world, observed_col, expected_col, weights):
     print(f"weighted RMSE half: {weighted_rmse}")
     weighted_rmse = weighted_RMSE(expected_values, observed_results, weights)
     print(f"weighted RMSE data: {weighted_rmse}")
+    d_stat = d_statistic(expected_values, observed_results)
+    linear_rmse = statmodel_rmse(expected_values, observed_results)
 
-    return r_value**2, model.rsquared, rmse, weighted_rmse
+    return r_value**2, model.rsquared, rmse, weighted_rmse, d_stat, linear_rmse
 
 
 def scatter_country_averages(world, observed_col, expected_col, title):
@@ -306,7 +325,7 @@ def scatter_country_averages(world, observed_col, expected_col, title):
             fontsize=9,
         )
 
-    r_squared, WLS, rmse, weighted_rmse = get_stats(
+    r_squared, WLS, rmse, weighted_rmse, d_stat, linear_RMSE = get_stats(
         filtered_world,
         observed_col + "_average_yield",
         expected_col + "_average_yield",
@@ -330,6 +349,12 @@ def scatter_country_averages(world, observed_col, expected_col, title):
     y_pos4 = (
         plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * 0.75
     )  # 90% from the bottom
+    y_pos5 = (
+        plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * 0.7
+    )  # 90% from the bottom
+    y_pos6 = (
+        plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * 0.65
+    )  # 90% from the bottom
 
     plt.text(
         x_pos, y_pos1, f"R^2 = {r_squared:.2f}", fontsize=12
@@ -343,6 +368,12 @@ def scatter_country_averages(world, observed_col, expected_col, title):
     )  # Display weighted R-squared on the plot
     plt.text(
         x_pos, y_pos4, f"Weighted log RMSE = {weighted_rmse:.2f}", fontsize=12
+    )  # Display weighted R-squared on the plot
+    plt.text(
+        x_pos, y_pos5, f"d_stat = {d_stat:.2f}", fontsize=12
+    )  # Display weighted R-squared on the plot
+    plt.text(
+        x_pos, y_pos6, f"linear RMSE = {linear_RMSE:.2f} kg/ha", fontsize=12
     )  # Display weighted R-squared on the plot
     plt.title(title)
     plt.xlabel(expected_col + " Average Yield (kg/ha)")
@@ -416,7 +447,8 @@ def load_grass_csv(world, production_area_by_country, data_category):
 
 def remove_row_if_any_column_is_nan(world, columns):
     # Mask for rows where any of the specified columns are missing or zero
-    mask = world[columns].isna() | (world[columns] == 0)
+    # mask = world[columns].isna() | (world[columns] < 1000)
+    mask = world[columns].isna() | (world[columns] < 50)
     rows_to_update = mask.any(axis=1)
 
     # Set the values in the specified columns to NaN for those rows
@@ -442,7 +474,7 @@ def main():
         world,
         os.path.join(
             "/home/dmrivers/Code/mink/wth_control",
-            "by_country_379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_wheat__Aug03_revisedinit_wet_overall_yield.csv",
+            "by_country_379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_wheat__Aug04_updatedN_wet_overall_yield.csv",
         ),
         "model",
     )

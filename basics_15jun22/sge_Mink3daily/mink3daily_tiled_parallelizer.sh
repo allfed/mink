@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+set -e
 
 # this is an attempt to chunkify DSSAT runs automatically
 
@@ -31,7 +31,6 @@ if [ $# -ne 8 ]; then
   exit 1
 fi
 
-
 ### read in the arguments...
 
   data_file_base_name=$1
@@ -44,8 +43,10 @@ fi
       days_to_shift_planting=$8
 
 
+
   # this is likely have a full path on it, so we need to strip the path
   # in order to refer to it in its new location on the compute node
+  # (DMR) added in extra info here, and removed the same further down the chain, so there are no inadequately specified data files.
   data_file_short_name=`basename $data_file_base_name`
 
 
@@ -80,7 +81,7 @@ chunk_file=${chunked_input_data_dir}
 # the data files
 input_file=${input_data_dir}${data_file_short_name}_data
 
-#echo "$java_to_use \"$memory_string\" -cp $classpath $classname ${input_file} $chunk_file $chunks_per_case"
+# echo "$java_to_use \"$memory_string\" -cp $classpath $classname ${input_file} $chunk_file $chunks_per_case"
 nice $java_to_use "$memory_string" -cp $classpath $classname ${input_file} $chunk_file $chunks_per_case
 
 if [ $? -ne 0 ]; then
@@ -91,8 +92,6 @@ if [ $? -ne 0 ]; then
   echo ""
   exit
 fi
-
-
 
 # the geog files
 input_file=${input_data_dir}${data_file_short_name}_geog
@@ -122,38 +121,86 @@ QRC_here=$quasi_random_code
 ### run each chunk on a separate machine/thread
 #  for (( this_machine_thread_index=0 ; this_machine_thread_index < $machine_threads ; this_machine_thread_index++ ))
 
+scripts_list=""  # This variable will hold all the script paths
+for (( chunk_index=0 ; chunk_index < $chunks_per_case ; chunk_index++ ))
+do
+  # construct a list of bash scripts to launch as a newline separated string
+  quasi_random_code="on_node_home${RANDOM}_`date +%N`"
+  script_to_run_in_job=${staging_directory}script_to_run_${chunk_index}_r${quasi_random_code}.sh
+
+
+  # Append the script path to the scripts_list variable, combined with chunk_index
+  scripts_list+="${chunk_index}:${script_to_run_in_job}"$'\n'
+done
+
+
+IFS=$'\n'  # Change the Internal Field Separator to newline for the loop
 counter=0
+ran_suspected_wheat=false
+echo ""
+echo "creating script_to_run_in_job scripts..."
+echo ""
+for entry in $scripts_list
+do
+  # current_chunk_index=$(echo $entry | cut -d':' -f1)
+  # script_path=$(echo $entry | cut -d':' -f2-)
+  current_chunk_index="${entry%%:*}" # Everything before the first ':'
+  script_path="${entry#*:}" # Everything after the first ':'
 
-  for (( chunk_index=0 ; chunk_index < $chunks_per_case ; chunk_index++ ))
-  do
+  # echo "-- $current_chunk_index / $chunks_per_case `date` --"
 
-    echo "-- $chunk_index / $chunks_per_case `date` --"
+  old_chunk_here=${chunk_file}${data_file_short_name}_${current_chunk_index}
+  new_chunk_here=${chunk_file}CZX${QRC_here}XZC_${data_file_short_name}_${current_chunk_index} # (DMR) I removed the planting month day thing. I never use it, and the new functionality with planting months should make it obsolete
 
-
-
-    old_chunk_here=${chunk_file}${data_file_short_name}_${chunk_index}
-    new_chunk_here=${chunk_file}CZX${QRC_here}XZC_d${days_to_shift_planting/-/n}_${data_file_short_name}_${chunk_index}
-
-    mv ${old_chunk_here}_data.txt      ${new_chunk_here}_data.txt
-    mv ${old_chunk_here}_data.info.txt ${new_chunk_here}_data.info.txt
-    mv ${old_chunk_here}_geog.txt      ${new_chunk_here}_geog.txt
-    mv ${old_chunk_here}_geog.info.txt ${new_chunk_here}_geog.info.txt
+  mv ${old_chunk_here}_data.txt      ${new_chunk_here}_data.txt
+  mv ${old_chunk_here}_data.info.txt ${new_chunk_here}_data.info.txt
+  mv ${old_chunk_here}_geog.txt      ${new_chunk_here}_geog.txt
+  mv ${old_chunk_here}_geog.info.txt ${new_chunk_here}_geog.info.txt
 
 
-    # do a very simple wheat checking thing
-    wheat_test=`echo "$crop_nitro_name" | grep wheat`
-    if [ -z "$wheat_test" ]; then
-
-      mink3daily_run_DSSAT_tile.sh $new_chunk_here $daily_to_use $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter
-
-    else
-      echo "   !!!! running coordination style for suspected wheat... !!!!"
-      mink3daily_run_DSSAT_tile.sh $new_chunk_here $daily_to_use $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter USE_CIMMYT_BETA
-    fi
-
-    let "counter++"
-
-  done
+  # do a very simple wheat checking thing
+  wheat_test=`echo "$crop_nitro_name" | grep wheat`
 
 
 
+  if [ -z "$wheat_test" ]; then
+
+  # create all bash scripts that will be run in parallel
+  ./mink3daily_run_DSSAT_tile.sh $script_path $new_chunk_here $daily_to_use $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter
+
+  else
+    ran_suspected_wheat=true
+    ./mink3daily_run_DSSAT_tile.sh  $script_path $new_chunk_here $daily_to_use $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter USE_CIMMYT_BETA
+  fi
+    counter=$((counter + 1))
+done
+echo ""
+echo "done creating script_to_run_in_job scripts"
+echo ""
+
+if [ "$ran_suspected_wheat" = true ]; then
+    echo "   !!!! ran coordination style for suspected wheat at least once... !!!!"
+fi
+
+# run all the bash scripts we constructed in parallel
+
+
+script_path="${entry#*:}" # Everything after the first ':'
+
+# add xargs parallel launching line of code here to run them all in parallel at once
+
+# I've used cut -d':' -f2- to extract only the script path from the scripts_list because xargs will execute each of those paths.
+
+# The -P $chunks_per_case will attempt to run all chunks (one script per chunk) in parallel simultaneously. This can be lowered by changing chunks_per_case to the number of cpus in the system in question, in which case it will run chunks a few at a time, until it completes.
+# If any script fails, xargs will stop, and the shell script will receive an error code.
+echo ""
+echo "running the script_to_run_in_job scripts (which run DSSAT in parallel, so you see progress for all of them asynchronously)"
+echo ""
+printf "%s\n" $scripts_list | cut -d':' -f2- | xargs -I {} -P $chunks_per_case bash {}
+echo ""
+echo "done running the script_to_run_in_job scripts"
+echo ""
+
+echo ""
+echo "completed all chunks"
+echo ""

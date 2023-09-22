@@ -1,0 +1,79 @@
+5 chunks
+329 seconds
+
+canola (rainfed and irrigated)
+389 pixels
+n_scenarios
+2
+Region: 
+n=70
+s=-20
+w=-90
+e=40
+nsres=1.875
+ewres=1.25
+rows=48
+cols=104
+cells=4992
+
+running again for 1 chunk:
+duration (seconds): 239!
+Region: 
+n=70
+s=-20
+w=-90
+e=40
+nsres=1.875
+ewres=1.25
+rows=48
+cols=104
+cells=4992
+
+
+So I'm clearly doing something wrong here.
+ideas:
+    - maybe the staging area script is doing too many pixels (can't be this, pixels look non-overlapping)
+
+    I noticed that the staging area has quite a lot of script_to_run_1,  script_to_run_2, script_to_run_3, script_to_run_4 repeated many times.
+    redoing... chunks_per_case=5 ... and I see... indeed! it is creating many copies of these pixels over and over again, as if the mink3p2daily script which generates these was being run many times...
+
+HAHA! I found the issue. I was indeed looping and running the whole thing 5 times.
+
+So now I get
+Region: 
+n=70
+s=-20
+w=-90
+e=40
+nsres=1.875
+ewres=1.25
+rows=48
+cols=104
+cells=4992
+
+duration (seconds)
+85
+
+that's a speedup of 239/85 ~= 3x
+
+now, if I were using fewer cores for web browser, signal, slack, things would probably go quicker. 
+
+leaving open only sublime...
+
+57 seconds!
+
+
+~=2.3x speedup
+
+great.
+I have a suspicion that what's really slowing down the whole thing is file read/write.
+It would be good to use the automatic planting to try to exclude bad planting dates.
+
+55 seconds with 6 cores
+
+56 seconds for 4 cores
+56 seconds for 10 cores
+130 seconds for 1 cores
+so I'll stick with 6 cores I guess. 4 cores might be a 
+
+Now it's down to 46 seconds. But I think that's because I'm not recompiling java 6 times anymore

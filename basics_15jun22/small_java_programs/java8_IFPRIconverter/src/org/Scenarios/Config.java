@@ -21,11 +21,15 @@ public class Config {
     this.crop_lower_to_caps_dictionary.put("wheat", "WHEA");
     this.crop_lower_to_caps_dictionary.put("potato", "POTA");
   }
-  
+
   public String getCropNameCaps(String cropName) {
     String code = crop_lower_to_caps_dictionary.get(cropName);
     if (code == null) {
-      throw new IllegalArgumentException("ERROR: No value found for crop name: " + cropName + ". \n Available options:"+crop_lower_to_caps_dictionary.keySet().toString());
+      throw new IllegalArgumentException(
+          "ERROR: No value found for crop name: "
+              + cropName
+              + ". \n Available options:"
+              + crop_lower_to_caps_dictionary.keySet().toString());
     }
     return code;
   }
@@ -365,12 +369,12 @@ public class Config {
     assert all_properties.equals("nitrogen ")
             || all_properties.equals("nitrogen_irrigated nitrogen_rainfed ")
         : "remaining unspecified properties in config yaml file can either have only nitrogen field"
-              + " specified, or at least one crop with nitrogen_irrigated and nitrogen_rainfed"
-              + " specified\n"
-              + " (if you specify the nitrogen, this is integer kg/ha in all cropland. If you"
-              + " specify raster maps for each crop, you need irrigated and rainfed raster nitrogen"
-              + " maps in kg/ha, which should be loaded in the initialization, which can be found"
-              + " in the prerun_scripts/upack_all_nitrogen_rasters.sh). Unset properties: \n"
+            + " specified, or at least one crop with nitrogen_irrigated and nitrogen_rainfed"
+            + " specified\n"
+            + " (if you specify the nitrogen, this is integer kg/ha in all cropland. If you"
+            + " specify raster maps for each crop, you need irrigated and rainfed raster nitrogen"
+            + " maps in kg/ha, which should be loaded in the initialization, which can be found"
+            + " in the prerun_scripts/upack_all_nitrogen_rasters.sh). Unset properties: \n"
             + all_properties;
     return config;
   }

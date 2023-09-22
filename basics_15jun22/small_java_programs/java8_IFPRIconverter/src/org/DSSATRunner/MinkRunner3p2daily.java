@@ -17,9 +17,9 @@ public class MinkRunner3p2daily {
     //  System.out.print(i + " " + commandLineOptions[i]);
     // }
 
-    System.out.println();
-    System.out.println("running Mink3p2daily.java (from MinkRunner3p2daily.java)");
-    System.out.println();
+    // System.out.println();
+    // System.out.println("running Mink3p2daily.java (from MinkRunner3p2daily.java)");
+    // System.out.println();
 
     String initFileName = commandLineOptions[0];
 
@@ -29,12 +29,12 @@ public class MinkRunner3p2daily {
 
     runnerObject.doSimulationsOnExistingWeather();
 
-    System.out.println();
-    System.out.println("done running Mink3p2daily");
-    System.out.println();
+    // System.out.println();
+    // System.out.println("done running Mink3p2daily");
+    // System.out.println();
 
-    System.out.println(bigTimer.tocMillis() + " ms for RUNNER...");
+    // System.out.println(bigTimer.tocMillis() + " ms for RUNNER...");
 
-    System.out.println(bigTimer.sinceStartMessage());
+    // System.out.println(bigTimer.sinceStartMessage());
   } // main
 }

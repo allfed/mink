@@ -108,7 +108,7 @@ export_scripts="${BASE}export_scripts/"
 
 
       # normal temperature/original style
-#      wheat_original_DSSAT_dir=${BASE}/actual_program_4.5_wheat/
+     # wheat_original_DSSAT_dir=${BASE}/actual_program_4.5_wheat/
       # heat tolerant attempt
 #      wheat_original_DSSAT_dir=${BASE}/actual_program_4.5_wheat_heattolerant/
 
@@ -122,12 +122,10 @@ export_scripts="${BASE}export_scripts/"
 #    original_X_files_dir=${BASE}SNX_files/meta_templates/full_wheat_search/
 
 #doesn't exist on Github- except for from_GRASS and logs (IJ). Others are still there on Morgan's JASMIN account
-         output_file_dir=to_DSSAT/
-         yield_dir=chunks_to_GRASS/
-          input_data_dir=${BASE}${output_file_dir}
+          input_data_dir=${BASE}to_DSSAT/
   chunked_input_data_dir=${BASE}chunks_from_GRASS/
          output_data_dir=${BASE}to_GRASS/
- chunked_output_data_dir=${BASE}${yield_dir}
+ chunked_output_data_dir=${BASE}chunks_to_GRASS/
                 logs_dir=${BASE}logs/
 
              weather_dir=${BASE}dailyweather/
@@ -143,9 +141,9 @@ export_scripts="${BASE}export_scripts/"
       on_node_runner_dir=${on_node_home}basics_15jun22/small_java_programs/
 
      on_node_weather_dir=${on_node_home}dailyweather/
-  on_node_input_data_dir=${on_node_home}from_GRASS/
+  on_node_input_data_dir=${on_node_home}chunks_from_GRASS/
 
-      on_node_output_dir=${on_node_home}to_GRASS/
+      on_node_output_dir=${on_node_home}chinks_to_GRASS/
 
                    X_dir=${on_node_DSSAT_dir}X_files/
 

@@ -1957,7 +1957,7 @@ public class DSSATRunnerIrrigation {
         8
             + extraStartIndices
                 .length; // min / max/ mean / std / bad / happy mean / happy std / real maturity
-                         // mean / real maturity std / happy maturity mean / happy maturity std
+    // mean / real maturity std / happy maturity mean / happy maturity std
     FunTricks.writeInfoFile(yieldOutputBaseName + "_STATS", nRows, nCols, delimiter);
 
     /////////////////////////////////////////// end new plan
@@ -2496,7 +2496,7 @@ public class DSSATRunnerIrrigation {
         8
             + extraStartIndices
                 .length; // min / max/ mean / std / bad / happy mean / happy std / real maturity
-                         // mean / real maturity std / happy maturity mean / happy maturity std
+    // mean / real maturity std / happy maturity mean / happy maturity std
     FunTricks.writeInfoFile(yieldOutputBaseName + "_STATS", nRows, nCols, delimiter);
 
     /////////////////////////////////////////// end new plan

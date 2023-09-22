@@ -1,0 +1,61 @@
+Noleto Luz Pequeno, Diego, Ixchel Manuela Hernandez-Ochoa, Matthew Reynolds, Kai Sonder, Anabel Molero-Milan, Richard Robertson, Marta da Silva Sabino Lopes, Wei Xiong, Martin Kropff and Senthold Asseng. 2021. Climate impact and adaptation to heat and drought stress of regional and global wheat production. Environ. Res. Lett. https://doi.org/10.1088/1748-9326/abd970
+
+ 
+
+Hernandez-Ochoa, Ixhel M., Diego Notello Luz Penqueno, Matthew Reynolds, Md Ali Babar, Kai Sonder, Anabel Molero Mila, Gerrit Hoogenboom, Ricky Robertson, Stefan Gerber, Diane L. Rowland, Clyde W. Fraisse, Senthold Asseng. 2019. Adapting Irrigated and rainfed wheat to climate change in semi-arid environments: Management, breeding options and land use change. European Journal Of Agronomy. Volume 109, September 2019, 125915. https://doi.org/10.1016/j.eja.2019.125915
+
+ 
+
+Raymundo, Rubi, Senthold Asseng, Richard Robertson, Athanasios Petsakos, Gerrit Hoogenboom, Roberto Quiroz, Guy Hareau, Joost Wolf. 2018. Climate change impact on global potato production. European Journal of Agronomy. 100:87-98. https://doi.org/10.1016/j.eja.2017.11.008
+
+Gbegbelegbe, S., D. Cammarano, S. Asseng, R. Robertson, U. Chung, M. Adam, O. Abdalla, T. Payne, M. Reynolds, K. Sonder, B. Shiferaw, G. Nelson. 2017. Baseline simulation for global wheat production with CIMMYT mega-environment specific cultivars. Field Crops Research vol. 202, pp. 122-135. http://dx.doi.org/10.1016/j.fcr.2016.06.010
+
+ 
+
+Chung, Uran; Gbegbelegbe, Sika; Shiferaw, Bekele; Robertson, Richard D.; Yun, JI; Tesfaye, Kindie; Hoogenboom, Gerrit; and Sonder, Kai. Modeling the effect of a heat wave on maize production in the USA and its implications on food security in the developing world. Weather and Climate Extremes (2014). Volumes 5–6, Pages 67-77. http://dx.doi.org/10.1016/j.wace.2014.07.002
+
+ 
+ STATS
+
+ https://journals.ametsoc.org/view/journals/bams/63/11/1520-0477_1982_063_1309_scoteo_2_0_co_2.xml
+
+ Computing a quantitative index of association, covariation
+ or correlation between an observed (O) and model-predicted
+ (P) variate can take a variety of forms 
+
+ d = 1 - [(sum from i=1 to N of (P_i - O_i)^2) / (sum from i=1 to N of (|P'_i| + |O'_i|)^2]
+ where P'_i = P_i — mean(O) and O'_i = O_i - mean(O)
+
+0<=d<=1
+
+
+The Global Gridded Crop Model Intercomparison phase 1 simulation dataset
+https://www.nature.com/articles/s41597-019-0023-8
+
+from that, table 3:
+https://www.nature.com/articles/s41597-019-0023-8/tables/11
+
+
+downloaded by following citation 204
+https://zenodo.org/record/1403171
+
+from that paper:
+The default set-up was based on fixed planting dates for each grid cell from the Sacks et al. crop calendar64, with additional detail in the conterminous US provided by crop calendar data of the US Department of Agriculture100. All crops were first simulated using a range of cultivar phenology parameters and the cultivar which best reproduced the harvest dates from the Sacks et al. crop calendar64 was selected to be used in the default set-up. For maize, grid cells described in the SPAM2000 (spatial allocation model) dataset101 as “rainfed high input” or “irrigated” were assumed to use high-yielding hybrid cultivars, parameterized with 50% higher max grain number and 10% higher grain filling rate. Fertilizer levels in the default setting were the same as those used in the harmonized scenario (fullharm)37, with half applied at planting and half applied 40 days later. Wheat cultivar groups were selected based on mega-environments102 and then phenology parameters were calibrated as with other crops. Soybean cultivars were selected based on standard maturity groups and were then calibrated to reproduce Sacks et al.64 harvest dates3. In the fullharm and harmnon settings, growing periods of all crops were calibrated in the same manner to reproduce given GGCMI growing periods37.
+
+
+37:
+The Global Gridded Crop Model Intercomparison: data and modeling protocols for Phase 1 (v1.0)
+
+this is in Documents/allfed
+
+by clicking "globus endpoint phase1" button here:http://www.rdcep.org/research-projects/ggcmi
+
+actually the above doesn't help me much
+
+in fact, nitrogen applied isn't reported?
+
+table 4 and 6 are useful to understand the downloaded phase1 data.
+
+so I'll extract wheat planting dates, Days from planting to maturity, and yield to see how my model is doing.
+and that will help me run at a given planting date and see if my model matches theirs any better... 
+https://zenodo.org/record/1403173

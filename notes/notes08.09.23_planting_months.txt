@@ -222,3 +222,69 @@ BestMonth_noGCMcalendar_p0_whK076IR__Aug04_updatedN_wet_IR
 BestMonth_noGCMcalendar_p0_whK076RF__Aug04_updatedN_wet_RF
 
 so we can see each cultivar gets its own bestmonth raster.
+
+9.14.23
+
+I need a plan to get the planting months as a data output
+    along with maturity_group and n_bad_things
+    and also the overall yield for each year.
+
+I can't just pull out the 
+
+I need to also figure out how to report the yield over time, if I am not allowed to figure out the planting months by averaging each year. I will have to probably just get the median planting months for cultivars, and use that to select the data out.
+
+But this has the complication that given a set of rasters, I need to use another raster as a 'key' for those rasters.
+
+
+r.mapcalc expression="output_raster = \
+if(key_raster == 1, raster1, \
+if(key_raster == 2, raster2, \
+if(key_raster == 3, raster3, \
+if(key_raster == 4, raster4, \
+if(key_raster == 5, raster5, null())))))"
+
+So, the month_result_name raster needs be used to pick out the appropriate maturity time, n_bad_things, and to also pick out each year (because I had to average years to get the planting month of choice). 
+
+Eh. I'll just throw more compute at the problem and take the 6 week moving average if I'm running planting dates every 2 weeks. I can do this for each year and for the whole thing. That way I can compare.
+
+So then I can just not average anything if I'm not averaging over years?
+
+
+
+okay. But some things are area weighted, and others are not. The crop area in each cell matters.
+I think it doesn't make any sense to do weighting, because maturity time, n_bad_things are both just spoe
+
+how does best_planting_raster_name compare with month_result_name?
+
+this.yield_result_name[i] =
+    "BestYield_noGCMcalendar_p0_" + this.crop_name[i] + "__" + this.run_descriptor[i];
+// SPECIFIC TO THE CROP NAME
+this.scenario_tag[i] =
+    this.co2_level[i]
+        + "_"
+        + this.weather_prefix[i]
+        + "_"
+        + this.yield_result_name[i]
+        + "_"
+        + wet_or_dry;
+// SPECIFIC TO THE CULTIVAR AND WATERING STRATEGY
+this.scenario_tag_with_snx[i] = this.snx_name[i] + "_" + this.scenario_tag[i];
+// best_planting_raster_name is the name of the raster that is shown as a png image
+this.best_planting_raster_name[i] = this.scenario_tag_with_snx[i] + "_" + this.real_or_happy;
+
+// SPECIFIC TO THE CROP NAME
+// the name of the raster for: the months with the best pixel in all month's rasters
+this.month_result_name[i] =
+    "BestMonth_noGCMcalendar_p0_"
+        + this.snx_name[i]
+        + "__"
+        + this.run_descriptor[i]
+        + "_"
+        + wet_or_dry
+        + "_"
+        + rf_or_ir;
+
+so month result depends on snx, run_descriptor, irrigation
+and best planting raster depends on crop name, run_descriptor, snx name
+
+(but SNX already has the irrigation in it... so it's no different)

@@ -1,0 +1,467 @@
+debugging why it seems like overall yield for a specific year is specific to irirgation or rainfed (por possibly a cultivar?) but the overall yield for all years is not specific to this same thing.
+
+ideas:
+    it could be the crop area is limited to these regions for the by-year thing?
+
+    sumRainfedAndIrrigated gets combined_yield_name
+
+
+    sumRainfedAndIrrigated(
+        script_folder,
+        scenarios,
+        combined_yield_name_this_year,
+        combined_production_name_this_year,
+        combined_production_name_rf_or_ir_this_year);
+
+
+        sumRainfedAndIrrigated(
+            script_folder,
+            scenarios,
+            scenarios.combined_yield_name,
+            scenarios.combined_production_name,
+            scenarios.combined_production_name_rf_or_ir);
+there could be just the failure to sum them, and I'm looking at an old outputted raster?
+
+within sumRainfedAndIrrigated, we have:
+
+if (scenarios.calculate_average_yield_rf_and_ir) {
+
+  // sum rainfed and irrigated area rasters to the appropriate cropland
+  BashScripts.sumRasters(
+      script_folder,
+      crop_area_to_sum,
+      scenarios.crop_name[last_index_of_crop] + "_cropland", // to save here
+      scenarios.results_folder[last_index_of_crop]);
+
+  // use production and crop area to calculate average yield rf and ir
+  // (just divide them as average yield is total production / total area)
+  BashScripts.calculateOverallYield(
+      script_folder,
+      combined_production_name[last_index_of_crop],
+      scenarios.crop_name[last_index_of_crop] + "_cropland", // to save here
+      combined_yield_name[last_index_of_crop]);
+}
+
+so this must be FALSE! 
+in all cases
+calculateOverallYield
+takes crop area
+scenarios.crop_name[last_index_of_crop] + "_cropland"
+which is always the same (unless there's a mask!)
+
+
+so it must therefore have to do with the production.
+so that's True!
+the production has a similiarly limited crop area.
+
+
+the conditional is true, and this is what's making the production
+
+if (scenarios.calculate_rf_plus_ir_production) {
+  // sum rainfed and irrigated yield rasters to the appropriate combined_production_name
+  // note that the last_index_of_crop is the last index where the tag matched and we had a new
+  // IR or RF specific production.
+  // but combined_production_name is not specific to ir or rf
+  BashScripts.sumRasters(
+      script_folder,
+      raster_names_to_sum, // input rasters
+      combined_production_name[last_index_of_crop], // output raster
+      scenarios.results_folder[last_index_of_crop]);
+}
+
+and in turn:
+
+// If the map does not already contain an entry for this scenario type, continue
+// this allows us to find the data for a scenario tag
+if (completed_tags.contains(combined_production_name_rf_or_ir[i])) {
+  continue;
+}
+completed_tags.add(combined_production_name_rf_or_ir[i]);
+...
+raster_names_to_sum = raster_names_to_sum + combined_production_name_rf_or_ir[i];
+
+so the issue seems to come from the rf_or_ir specific production, which is similiarly limited in geographic scope.
+
+Also, when I look at IR for overall, it's seemingly much larger in terms of number of pixels than the IR or RF specific size.
+
+so it's either a cultivar, or some other error (maybe just really low yields cut off by the minimum?)
+
+
+that also means it's not a sumRainfedAndIrrigated error at all most likely.
+
+combined production is calculated here:
+
+
+calculateRFandIRProductionGivenHarvestYields(
+    script_folder,
+    scenarios,
+    scenarios.best_planting_month_yield_name,
+    scenarios.best_planting_month_name,
+    scenarios.best_planting_month_maturity_name,
+    scenarios.combined_yield_name_rf_or_ir,
+    scenarios.combined_production_name_rf_or_ir,
+    scenarios.combined_planting_month_name_rf_or_ir,
+    scenarios.combined_days_to_maturity_name_rf_or_ir,
+    scenarios.combined_yield_name,
+    scenarios.combined_production_name,
+    true);
+
+    for average year
+    and 
+    here for each year:
+
+    calculateRFandIRProductionGivenHarvestYields(
+        script_folder,
+        scenarios,
+        best_planting_month_yield_name_this_year,
+        best_planting_month_name_this_year,
+        new String[] {""}, // no days to maturity data on a yearly basis is available.
+        combined_yield_name_rf_or_ir_this_year,
+        combined_production_name_rf_or_ir_this_year,
+        combined_planting_month_name_rf_or_ir_this_year,
+        new String[] {""}, // no days to maturity data on a yearly basis is available.
+        combined_production_name_this_year,
+        combined_yield_name_this_year,
+        false);
+
+
+if I'm running some dssat runs in the middle, full processing run takes 158 seconds ... 2.5 minutes
+
+and I've learned setting the minimum doesn't really change anything
+and perhaps quite interestingly... setting the minimum to 0 rather than 500 didn't change anything?? 
+
+and 3400 seconds or... only 56 minutes to process!
+
+still same issues after rerunning processing with missing pixels
+
+interesting...
+each cultivar:
+whK016RF_379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_wheat__Aug04_updatedN_wet_real_y1
+whK001RF_379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_wheat__Aug04_updatedN_wet_real_y1
+
+has the same missing pixel area!
+so if we're summing together the different cultivars to get the average production, if they all have the same map, we have a problem.
+but in terms of average over all years...
+
+so do I still have issues with yield rf_or_ir with missing pixels?
+
+
+okay so I've identified that whK013RF is the correct map that is the area being used for all the different years.
+like K016 and K001 are both the K013RF map.
+and of course whK013RF is the first cultivar (scenario index 0)
+
+so probably the issue is with 
+
+getVerifiedFirst
+
+getting the first crop area or something.
+
+so what does combineAndCalculateProductionRForIR actually do?
+
+these are the ones I'm just getting the first index of:
+
+irrigation_groups
+crop_groups
+combined_yields_rf_or_ir
+combined_yields
+combined_production_rf_or_ir
+combined_production
+scenario_tags_for_planting_month
+scenario_tags_for_days_to_maturity
+results_folder_groups
+
+
+
+cg_combined_yield_name is not even used?
+
+
+so I need to understand this function...
+
+but first, I want to fix the bug if I can
+
+
+so where are 
+whK016RF_379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_wheat__Aug04_updatedN_wet_real_y1
+whK001RF_379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_wheat__Aug04_updatedN_wet_real_y1
+being assigned?
+
+this.yield_name[i] =
+    "BestYield_noGCMcalendar_p0_" + this.crop_name[i] + "__" + this.run_descriptor[i];
+
+
+this.best_planting_month_yield_name_all_years[i][year_index] =
+    this.snx_name[i]
+        + "_"
+        + this.co2_level[i]
+        + "_"
+        + this.weather_prefix[i]
+        + "_"
+        + this.yield_name[i]
+        + "_"
+        + wet_or_dry
+        + "_"
+        + this.real_or_happy
+        + "_y"
+        + this.years[year_index];
+
+yeah. I think that one.
+
+best_planting_month_yield_name_all_years
+
+so then it's being assignedthrough raster_name_best_this_year
+
+which is again called 
+
+best_planting_month_yield_name
+
+in findbestyields.
+
+
+
+
+
+
+// Determine the best yield and best planting month for each grid cell, given a raster for each
+// planting month raster_names_to_combine, and assign this to a single "BestYield" and a single
+// "BestMonth" raster. BestMonth stores the index of the month with the best yield, while
+// BestYield stores a raster of the actual yield per hectare when planting in the BestMonth.)
+public static void findBestYields(
+    String script_folder,
+    String[] planting_months,
+    String[] raster_names_to_combine, // the input rasters
+    String best_planting_month_yield_name, // the output yield raster
+    String best_planting_month_name, // the output best planting month raster
+    String results_folder)
+    throws InterruptedException, IOException {
+  // combines rasters by choosing the best of each pixel in a list of rasters and
+  // creating the "best_planting_month_yield_name" raster as an output
+
+  // raster name at first planting month
+  String combined_yields_results = raster_names_to_combine[0];
+
+  for (int planting_month_index = 1;
+      planting_month_index < planting_months.length;
+      planting_month_index++) {
+    // create a suitable list of rasters to compare
+    combined_yields_results =
+        combined_yields_results + "," + raster_names_to_combine[planting_month_index];
+  }
+
+  // System.out.println("running composite raster");
+  BashScripts.compositeRaster(
+      script_folder,
+      combined_yields_results, // input rasters to find max among
+      best_planting_month_yield_name, // output max yield raster name
+      best_planting_month_name, // output a grass gis raster of this name for which month max was
+      // chosen from
+      results_folder);
+
+  // BashScripts.createPNG(script_folder, best_planting_month_yield_name, results_folder);
+
+} // findBestYields
+
+
+
+and so ultimately best_planting_month_yield_name is being assigned as the maximum yield for a given set of planting months.
+but somehow, we're not assigning the proper combined_yields_results... because they must all be the first scenario index or something.
+
+
+// System.out.println("running composite raster");
+BashScripts.compositeRaster(
+    script_folder,
+    combined_yields_results, // input rasters to find max among
+    best_planting_month_yield_name, // output max yield raster name
+    best_planting_month_name, // output a grass gis raster of this name for which month max was
+    // chosen from
+    results_folder);
+
+
+    best_planting_month_yield_name
+
+so the composite raster should get the best of many planting months. They should all be the same in terms of irrigation and cultivar for the list of combined_yields_results, and only differ by planting months, and there should be (11 or.. whoops) 12 of them.
+
+two samples.
+yes there are 11. lol. I should have 12...
+
+whK009IR_379_Outdoor_crops_control_1_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_2
+whK009IR_379_Outdoor_crops_control_2_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_2
+whK009IR_379_Outdoor_crops_control_3_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_2
+whK009IR_379_Outdoor_crops_control_4_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_2
+whK009IR_379_Outdoor_crops_control_5_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_2
+whK009IR_379_Outdoor_crops_control_6_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_2
+whK009IR_379_Outdoor_crops_control_7_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_2
+whK009IR_379_Outdoor_crops_control_8_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_2
+whK009IR_379_Outdoor_crops_control_9_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_2
+whK009IR_379_Outdoor_crops_control_10_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_2
+whK009IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_2
+
+
+
+whK002IR_379_Outdoor_crops_control_1_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_1
+whK002IR_379_Outdoor_crops_control_2_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_1
+whK002IR_379_Outdoor_crops_control_3_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_1
+whK002IR_379_Outdoor_crops_control_4_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_1
+whK002IR_379_Outdoor_crops_control_5_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_1
+whK002IR_379_Outdoor_crops_control_6_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_1
+whK002IR_379_Outdoor_crops_control_7_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_1
+whK002IR_379_Outdoor_crops_control_8_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_1
+whK002IR_379_Outdoor_crops_control_9_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_1
+whK002IR_379_Outdoor_crops_control_10_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_1
+whK002IR_379_Outdoor_crops_control_11_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_1
+
+
+so these are in fact not all the same. and there are more than one per year.
+
+taking a look at them...
+
+
+alright so I have a separate error now: I ran the 12th planting month, but am unable to run a process including the 12 planting month. works with 11 though.
+
+
+
+
+running composite raster to get best yields on the results (should differ with cultivar):
+whK015IR_379_Outdoor_crops_control_12_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_7
+output yield name:
+whK015IR_379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_wheat__Aug04_updatedN_wet_real_y7
+running composite raster to get best yields on the results (should differ with cultivar):
+whK010RF_379_Outdoor_crops_control_12_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_1
+output yield name:
+whK010RF_379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_wheat__Aug04_updatedN_wet_real_y1
+Raster map <whK010RF_379_Outdoor_crops_control_12_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_1> not found
+Raster map <whK010RF_379_Outdoor_crops_control_12_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_1> not found
+Error occurred in bash script: ./max_yields.sh
+Error occurred in bash command initiated from: BashScripts.java: line 756
+The calling method was invoked from: Scenarios.java: line 1606
+ERROR: process exited with value 1 (Error)
+
+
+so the issue is with:
+
+
+raster_names_all_months_this_year, // input rasters
+
+
+defined as:
+
+for (int planting_month_index = 0;
+    planting_month_index < planting_months.length;
+    planting_month_index++) {
+  raster_names_all_months_this_year[planting_month_index] =
+      raster_names_all_years_wet_or_dry[planting_month_index][year_index];
+}
+
+
+this.yield_names[i][planting_month_index] =
+    month + "_noGCMcalendar_p0_" + this.crop_name[i] + "__" + this.run_descriptor[i];
+
+// SPECIFIC TO THE CULTIVAR AND WATERING STRATEGY AND MONTH AND YEAR AND
+// WHETHER WET WEIGHT OR DRY WEIGHT
+this.raster_names_all_years_wet_or_dry[i][planting_month_index][year_index] =
+    this.snx_name[i]
+        + "_"
+        + this.co2_level[i]
+        + "_"
+        + this.weather_prefix[i]
+        + "_"
+        + this.yield_names[i][planting_month_index]
+        + "_"
+        + this.real_or_happy
+        + "_"
+        + wet_or_dry
+        + "_"
+        + this.years[year_index];
+
+so tis same error occurs whether or not the 11 preceding months are run.
+
+And I get:
+
+
+  SUCCESS in REASSEMBLY: whK010RF_379_Outdoor_crops_control_12_noGCMcalendar_p0_wheat__Aug04_updatedN_STATS
+
+
+  whK010RF_379_Outdoor_crops_control_12_noGCMcalendar_p0_wheat__Aug04_updatedN: 
+    Bad things (out of 47 total cells real for each year ran (each year and pixel can add one error)):
+        Maturity: 0
+        Flowering: 0
+        Emergence: 16
+        Other ("extras"): 0
+  converting from wet weight
+  converting from wet weight
+  converting from wet weight
+  converting from wet weight
+  converting from wet weight
+  converting from wet weight
+  converting from wet weight
+
+
+  SUCCESS in REASSEMBLY: whK010IR_379_Outdoor_crops_control_12_noGCMcalendar_p0_wheat__Aug04_updatedN_STATS
+
+
+  converting from wet weight
+  converting from wet weight
+  converting from wet weight
+  converting from wet weight
+  converting from wet weight
+  converting from wet weight
+  converting from wet weight
+
+
+
+well... whK010RF_379_Outdoor_crops_control_12_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_1 needed to be converted from dry. So let's see if that ever happened...
+
+
+ah. this was a stupid dry->wet_or_dry bug in the code! it wasn't even updating things...
+OKAY GREAT. THAT BUG IS SOLVED.
+
+
+
+
+
+So now,  back to looking at the issue with missing pixels!
+
+indeed..
+whK002IR_379_Outdoor_crops_control_8_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_1.png
+and
+whK009IR_379_Outdoor_crops_control_7_noGCMcalendar_p0_wheat__Aug04_updatedN_real_wet_2.png
+are both showing yield only on the pixels which are supposed to be for  whK013RF.
+
+these are
+raster_names_all_years_wet_or_dry
+
+these are generated by convert_to_wet_weight.
+so how about whK002IR_379_Outdoor_crops_control_8_noGCMcalendar_p0_wheat__Aug04_updatedN_real_1
+
+I expect the scaling isn't the issue... and I would be wrong :P
+
+    |
+    |
+    |                it seems like it might actually be:
+    |
+    |                this.raster_names_all_years_dry[i][planting_month_index][year_index] =
+    |                    this.snx_name[i]
+    |                        + "_"
+    |                        + this.co2_level[i]
+    |                        + "_"
+    |                        + this.weather_prefix[i]
+    |                        + "_"
+    |                        + this.yield_names[i][planting_month_index]
+    |                        + "_"
+    |                        + this.real_or_happy
+    |                        + "_"
+    |                        + this.years[year_index];
+    |           these, I believe, are created upon assembly in mink3daily_wrapper!
+
+    whK002IR_379_Outdoor_crops_control_8_noGCMcalendar_p0_wheat__Aug04_updatedN_real_1
+    is right pixels!
+
+
+so I'd expect the scenario number was not properly being assigned for the input wrapper to the assembly...
+or maybe it goes back to the actual map for cropland cultivars not updating for each one? but why would that differ by year?
+
+
+LOL
+
+well..
+
+the problem was I forgot to initialize grass before each process run, so the mask it was using was wrong. 

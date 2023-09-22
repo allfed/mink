@@ -65,7 +65,7 @@ public class THIAveragesFromDailyWeatherByMonth {
 
     final double lowestReasonableTemperatureForFiguringTHIinF =
         58.0; // weird thing happen below 58F, because it is designed for use above there; so we are
-              // going to censor from there...
+    // going to censor from there...
 
     final double initForyesterdaysTmin = -999.999;
     final int initForPreviousYearInFile = -987656;

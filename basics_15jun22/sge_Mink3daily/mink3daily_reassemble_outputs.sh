@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -e
 
 
 # this is an attempt to chunkify DSSAT runs automatically
@@ -26,7 +27,6 @@ if [ $# -lt 4 ]; then
   exit 1
 fi
 
-
 ### read in the arguments...
 
   data_file_base_name=$1
@@ -34,9 +34,6 @@ fi
              n_chunks=$3
            X_template=$4
            magic_code=$5
-#           plantingDateInMonthShiftInDays=$6
-
-
 
   # this is likely have a full path on it, so we need to strip the path
   # in order to refer to it in its new location on the compute node
@@ -60,7 +57,7 @@ n_threads_total=$n_chunks
 
 java_to_use=$java_on_headnode
 
-    classpath=${original_runner_dir}/java8_IFPRIconverter/bin/
+    classpath=${original_runner_dir}java8_IFPRIconverter/bin/
     classname=org.DSSATRunner.ReassembleSplitTextMatrices
 
 memory_string="-mx1400M"
@@ -69,31 +66,33 @@ memory_string="-mx1400M"
 # which directory to dump them into
 chunk_file=${output_data_dir}
 
-# the data files
-input_file=${chunked_output_data_dir}${X_template%%.*X}_${co2_to_use}_${data_file_short_name}
+# the data files # (DMR) modified this to simplify, needs a different first argument now
+input_file=${chunked_output_data_dir}${data_file_short_name}
+
+# exit 1
 base_input=`basename $input_file`
 
-echo -e "\n\ncodd=[$chunked_output_data_dir]; xt=[${X_template%%.*X}]\nCF = [$chunk_file] ; IF = [$input_file] ; NT = [$n_threads_total] \n\n\n"
+# echo -e "\n\ncodd=[$chunked_output_data_dir]; xt=[${X_template%%.*X}]\nCF = [$chunk_file] ; IF = [$input_file] ; NT = [$n_threads_total] \n\n\n"
 
-# echo $input_file
-# exit
-$java_to_use "$memory_string" -cp $classpath $classname /home/dmrivers/Code/mink/basics_15jun22/sge_Mink3daily/chunks_to_GRASS/mzJ029w00_379_Outdoor-crops-control_D__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE_STATS $chunk_file $n_threads_total
+# echo "$java_to_use \"$memory_string\" -cp $classpath $classname ${input_file} $chunk_file $n_threads_total"
+$java_to_use "$memory_string" -cp $classpath $classname ${input_file} $chunk_file $n_threads_total
+
+# nice $java_to_use "$memory_string" -cp $classpath $classname ${input_file} $chunk_file $chunks_per_case
+
 
 test_exit_code=$?
-echo "exit code was [$test_exit_code]"
+# echo "exit code was [$test_exit_code]"
 
 # if we were able to reassemble things, then we'll go ahead and move them
 if [ $test_exit_code -eq 0 ]; then
 
+  # (DMR) removed all instances of magic code here... they are already data_file_short_name
+
   # copy over the provenance files
-  zip -jq ${output_data_dir}${magic_code}${X_template%%.*X}_${co2_to_use}_${data_file_short_name%%_STATS}_provenance.zip ${chunked_output_data_dir}${X_template%%.*X}_${co2_to_use}_${data_file_short_name%%_STATS}*provenance.txt
+  zip -jq ${output_data_dir}${data_file_short_name%%_STATS}_provenance.zip ${chunked_output_data_dir}${data_file_short_name%%_STATS}*provenance.txt
 
   # copy over the cols file
-  cp ${chunked_output_data_dir}${X_template%%.*X}_${co2_to_use}_${data_file_short_name%%_STATS}_0_STATS.cols.txt ${output_data_dir}${magic_code}${X_template%%.*X}_${co2_to_use}_${data_file_short_name}.cols.txt
-
-  # rename the output file...
-  mv -v ${output_data_dir}${X_template%%.*X}_${co2_to_use}_${data_file_short_name}.txt ${output_data_dir}${magic_code}${X_template%%.*X}_${co2_to_use}_${data_file_short_name}.txt
-  mv -v ${output_data_dir}${X_template%%.*X}_${co2_to_use}_${data_file_short_name}.info.txt ${output_data_dir}${magic_code}${X_template%%.*X}_${co2_to_use}_${data_file_short_name}.info.txt
+  cp ${chunked_output_data_dir}${data_file_short_name%%_STATS}_0_STATS.cols.txt ${output_data_dir}${data_file_short_name}.cols.txt
 
   echo ""
   echo ""

@@ -1,0 +1,51 @@
+maturity and best planting month
+
+BashScripts.generateRasterFromColumns(
+    script_folder, String.join("\n", table_to_build_raster), fileToProcess + "_" + colname);
+
+the above generates rasters:
+    scenarios.output_stats_basenames[scenario_and_pm.scenarioNumber][scenario_and_pm.plantingMonth]_real_maturity_mean
+    scenarios.output_stats_basenames[scenario_and_pm.scenarioNumber][scenario_and_pm.plantingMonth]_n_bad_things
+
+where output_stats_basenames is:
+    snx_name_co2_level[i]_weather_prefix[i]_month_noGCMcalendar_p0_crop_name[i]__run_descriptor[i]
+
+
+given the set of rasters which we averaged over the years, only including the minimum
+at what point, and how, should I then average the days to maturity?
+findbestyields seems promising as it is run for both the allyears function and is called after averaging into certain rasters.
+
+for allyears:
+    it has not had any minimum applied yet.
+    calculateBestYieldAllYears runs findBestYields for all years
+
+for the averageaccrossyears result:
+    runAverageCropsCommand was run with a minimum to get the raster_name_this_month
+    findBestYields was run directly with that averageaccrossyears result
+
+
+findBestYields:
+    for all years:
+        We are going to SKIP and leave for later.
+            it's only calculated as an average of all years (wow!)
+            the minimum needs to be applied to this, as it has not already been applied
+            As for the maturity, luckily we already have this for each year and can simply use planting months as a key.
+    for averageaccrossyears result:
+        compositeRaster gives us best_month_result_name
+        this can be used directly as a key to determine the maturity
+        So I would need to first filter out the rasters below the minimum, and only then average together the days to maturities, BUT, I'm too lazy to do that as the mean maturity is already reported....
+                At that point, I could use the key generated to select amongst the averaged maturity rasters made in previous sentence.... if I wanted to do all that...
+
+        So instead, I'll just use the mean value for days_to_maturity 
+
+(Q: how do we actually use the generated raster to determine maturity?
+ A: We have to select it based on relevant key rasters.)
+
+the confusion now is what to name the output days_to_maturity?
+
+BashScripts.useKeyRasterToMapToValueRaster(
+    script_folder,
+    "key_raster_for_which_rasters_were_chosen", // input key raster for which cultivar to get value from
+    planting_months_to_average, //input rasters to get the values from
+    ??????); // output raster with days to maturity of best cultivar in each cell
+

@@ -217,7 +217,7 @@ public class Mink3p2daily {
   private NitrogenOnlyFertilizerScheme nitrogenFertilizerScheme = null;
   private IrrigationScheme irrigationScheme = null;
 
-  private String[] dssatExecutionCommand = new String[3];
+  // private String[] dssatExecutionCommand = new String[3];
   //  private String[] weatherExecutionCommand = new String[7];
 
   ///////////////////////////////////////////////////////////////
@@ -387,9 +387,8 @@ public class Mink3p2daily {
         // we think we have what we want, so get the two letter code
         cropTwoLetterCode =
             xFileAsArray[lineIndex].substring(
-                3,
-                5); // Beware the MAGIC NUMBER!!! where the two letter code appears: immediately
-                    // after the treatment/cultivar number
+                3, 5); // Beware the MAGIC NUMBER!!! where the two letter code appears: immediately
+        // after the treatment/cultivar number
         break;
       }
     }
@@ -523,9 +522,9 @@ public class Mink3p2daily {
     // System.out.println(nameOfDSSATExecutable);
     // System.out.println("magicInitializationFile");
     // System.out.println(magicInitializationFile);
-    dssatExecutionCommand[0] = pathToDSSATDirectory + nameOfDSSATExecutable;
-    dssatExecutionCommand[1] = "n";
-    dssatExecutionCommand[2] = magicInitializationFile;
+    // dssatExecutionCommand[0] = pathToDSSATDirectory + nameOfDSSATExecutable;
+    // dssatExecutionCommand[1] = "n";
+    // dssatExecutionCommand[2] = magicInitializationFile;
 
     magicDSSATSummaryToReadPath = pathToDSSATDirectory + magicDSSATSummaryToRead;
     // System.out.println("magicDSSATSummaryToReadPath");
@@ -2098,6 +2097,8 @@ public class Mink3p2daily {
         throw fnfe;
       }
       System.out.println("HAPPYbyname: file not found...  (no error file)");
+      // System.out.println("continuing...");
+      // return new int[] {-1};
     }
 
     // parse the output file for the necessary goodies...
@@ -2502,7 +2503,7 @@ public class Mink3p2daily {
           realEmergenceEntirePixel.useLongValue(daysSincePlantingForEvent);
           realYearlyEmergence[fakeYearIndex].useLongValue(daysSincePlantingForEvent);
         } else { // System.out.println("grab real results: emergence failed...; not counting in
-                 // average");
+          // average");
           realBadThingsCountsEntirePixel.useLongValue(1000); // assess a problem...
           realYearlyEmergence[fakeYearIndex].useLongValue(magicValueToUseWithBadMaturities);
         }
@@ -2517,7 +2518,7 @@ public class Mink3p2daily {
           realAnthesisEntirePixel.useLongValue(daysSincePlantingForEvent);
           realYearlyAnthesis[fakeYearIndex].useLongValue(daysSincePlantingForEvent);
         } else { // System.out.println("grab real results: flowering failed...; not counting in
-                 // average");
+          // average");
           realBadThingsCountsEntirePixel.useLongValue(1000000); // assess a problem...
           realYearlyAnthesis[fakeYearIndex].useLongValue(magicValueToUseWithBadMaturities);
         }
@@ -2529,7 +2530,7 @@ public class Mink3p2daily {
               DSSATHelperMethods.yyyyDDDdifferencerIgnoreLeap(plantingDate, maturityToUse);
           daysSincePlantingForMaturity =
               daysSincePlantingForEvent; // used lower down.... just to be clear in case "forEvent"
-                                         // gets moved or changed
+          // gets moved or changed
           if (daysSincePlantingForEvent > 0) {
             realMaturityEntirePixel.useLongValue(daysSincePlantingForEvent);
             realYearlyMaturity[fakeYearIndex].useLongValue(daysSincePlantingForEvent);
@@ -2541,7 +2542,7 @@ public class Mink3p2daily {
             realYearlyMaturity[fakeYearIndex].useLongValue(magicValueToUseWithNegativeYields);
           }
         } else { // System.out.println("grab real results: maturity failed...; not counting in
-                 // maturity average");
+          // maturity average");
           realBadThingsCountsEntirePixel.useLongValue(1000000000); // assess a problem...
           realYearlyMaturity[fakeYearIndex].useLongValue(magicValueToUseWithBadMaturities);
         }
@@ -3035,16 +3036,37 @@ public class Mink3p2daily {
     SystemCallWithTimeout happyRunnerThing = new SystemCallWithTimeout();
     SystemCallWithTimeout realRunnerThing = new SystemCallWithTimeout();
 
-    System.out.println();
-    System.out.println("-- starting through data in Mink3p2daily.java --");
-    System.out.println();
-    System.out.println("nLinesInDataFile (number of cells)");
-    System.out.println(nLinesInDataFile);
-    System.out.println();
+    // System.out.println();
+    // System.out.println("-- starting through data in Mink3p2daily.java --");
+    // System.out.println();
+    // System.out.println("nLinesInDataFile (number of cells)");
+    // System.out.println(nLinesInDataFile);
+    // System.out.println();
+    double[] sreals = new double[nLinesInDataFile];
+    double[] shappys = new double[nLinesInDataFile];
     for (int lineIndex = 0; lineIndex < nLinesInDataFile; lineIndex++) {
-
+      long time1 = 0;
+      long time2 = 0;
+      long time3 = 0;
+      long time4 = 0;
+      long time5 = 0;
+      long time6 = 0;
+      long time7 = 0;
+      long time8 = 0;
+      long time9 = 0;
+      long time10 = 0;
+      long time11 = 0;
+      long time12 = 0;
+      long time13 = 0;
+      long time14 = 0;
+      long time15 = 0;
+      long time16 = 0;
+      long time17 = 0;
+      long time18 = 0;
+      long startTime = System.currentTimeMillis();
       latitude = geogMatrix.getValue(lineIndex, 2); // Beware the MAGIC NUMBER!!!
       longitude = geogMatrix.getValue(lineIndex, 3); // Beware the MAGIC NUMBER!!!
+      time1 = System.currentTimeMillis();
       // print latitude and longitude
       // System.out.println("longitude");
       // System.out.println(longitude);
@@ -3102,6 +3124,7 @@ public class Mink3p2daily {
       realBadThingsCountsEntirePixel.reset();
       realTimeToPlantingEntirePixel.reset();
       realNoPlantingEntirePixel.reset();
+      time2 = System.currentTimeMillis();
 
       // ok, so the very first time through, these are not yet defined, so they do not need to be
       // reset. after that, they are fair game.
@@ -3136,6 +3159,7 @@ public class Mink3p2daily {
           DSSATHelperMethods.firstPlantingDateFromMonth(
               (int) dataMatrix.getValue(lineIndex, firstPlantingDayIndex)); // nonClimateInfo[3];
       nitrogenLevel = dataMatrix.getValue(lineIndex, nitrogenLevelIndex); // nonClimateInfo[4];
+      time3 = System.currentTimeMillis();
 
       // brute force padding
       // System.out.println("soilType");
@@ -3162,6 +3186,7 @@ public class Mink3p2daily {
       elseTimerStats.useDoubleValue(elseTimer.tocMillis());
       weatherTimer.tic();
 
+      time4 = System.currentTimeMillis();
       // Beware the MAGIC NUMBER!!!
 
       // find the right latitude to use...
@@ -3198,6 +3223,7 @@ public class Mink3p2daily {
 
       originalWeatherFileLocation =
           baseNameOfDailyWeather + "_" + latitudeToUse + "_" + longitudeToUse + weatherDataSuffix;
+      time5 = System.currentTimeMillis();
 
       originalWeatherFile = new File(originalWeatherFileLocation);
 
@@ -3220,6 +3246,7 @@ public class Mink3p2daily {
         // System.out.println("\tthe weather file at [" + originalWeatherFileLocation + "];
         // lineIndex=" + lineIndex + " SUCCEEDED! :] ");
 
+        time6 = System.currentTimeMillis();
         finalWeatherFileLocation = magicWeatherStationNameToUse + ".WTH";
         finalWeatherFile = new File(finalWeatherFileLocation);
 
@@ -3231,6 +3258,7 @@ public class Mink3p2daily {
         FunTricks.copyFileUsingStream(originalWeatherFile, finalWeatherFile);
 
         weatherTimerStats.useDoubleValue(weatherTimer.tocMillis());
+        time7 = System.currentTimeMillis();
 
         // loop over the planting windows and random seeds
         for (int plantingWindowIndex = 0;
@@ -3290,6 +3318,7 @@ public class Mink3p2daily {
 
           elseTimer.tic();
 
+          time8 = System.currentTimeMillis();
           // now we do this inside the loop....
           XHappyStuffToWrite =
               XHappyInvariantsReplaced.replaceAll(
@@ -3350,6 +3379,7 @@ public class Mink3p2daily {
 
           elseTimerStats.useDoubleValue(elseTimer.tocMillis());
 
+          time9 = System.currentTimeMillis();
           writingTimer.tic();
           FunTricks.writeStringToFile(XHappyStuffToWrite, fullTempXFile);
           // System.out.println("fullTempXFile");
@@ -3373,27 +3403,34 @@ public class Mink3p2daily {
           // (int)Math.ceil(maxRunTime * Math.pow(bumpUpMultiplier, rerunIndex)),
           // testIntervalToUse);
 
+          // int X = 5; // Set this to the desired number of concurrent processes (between 1 and 12)
+          // ExecutorService executorService = Executors.newFixedThreadPool(X);
+          // First chunk of code
+          time10 = System.currentTimeMillis();
           ProcessBuilder pb = new ProcessBuilder("bash", "./run_dssat.sh");
+          // pb.inheritIO();
           pb.directory(pathToDSSATDirectoryAsFile);
-          pb.redirectErrorStream(true);  // combine stdout and stderr
+          pb.redirectErrorStream(true); // combine stdout and stderr
 
           Process process = pb.start();
-          BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+          BufferedReader reader =
+              new BufferedReader(new InputStreamReader(process.getInputStream()));
 
           StringBuilder output = new StringBuilder();
           String line;
           while ((line = reader.readLine()) != null) {
-              output.append(line).append("\n");
+            output.append(line).append("\n");
           }
+          // Your code here
+          time11 = System.currentTimeMillis();
 
           // int exitValue = process.waitFor();
 
           // if (exitValue != 0 || output.toString().contains("*** buffer overflow detected ***")) {
-          if (output.toString().contains("*** buffer overflow detected ***")) {
-              System.err.println("Buffer overflow detected in the external process. Exiting.");
-              System.exit(1);
-          }
-
+          // if (output.toString().contains("*** buffer overflow detected ***")) {
+          //   System.err.println("Buffer overflow detected in the external process. Exiting.");
+          //   System.exit(1);
+          // }
 
           // MAY WANT TO COMMENT THIS BACK IN IF USING HAPPYRUNNER (DMR)
           // happyRunnerThing.run();
@@ -3474,6 +3511,16 @@ public class Mink3p2daily {
           //          endingIndicesForSplitUpNamesHere = (int[])spacingFindings[1];
 
           //          readingTimerStats.useDoubleValue(readingTimer.tocMillis());
+
+          // DEBUGGING STUFF FOR BUFFER OVERFLOW BELOW
+          // System.out.println("phenologyInDays");
+          // System.out.println(phenologyInDays);
+          // if ( phenologyInDays[0] == -1) {
+          //   System.out.println("ERROR: UHOH. Looks like happy by name was not generated. This
+          // means DSSAT has failed! Exiting.");
+          //   System.exit(1);
+
+          // }
 
           // i no longer care about saving time by dropping bad happy results. we're just going to
           // plow through regardless
@@ -3615,7 +3662,7 @@ public class Mink3p2daily {
               }
             }
 
-            System.out.println("   testing for overview (first line; after happy)");
+            // System.out.println("   testing for overview (first line; after happy)");
             overviewToTry = magicOverviewToRead;
             overviewTestFile =
                 new File(
@@ -3623,8 +3670,8 @@ public class Mink3p2daily {
 
             // check if the first option exists.
             if (!overviewTestFile.exists()) {
-              System.out.println(
-                  "    didn't find [" + overviewTestFile + "], so trying the next one...");
+              // System.out.println(
+              // "    didn't find [" + overviewTestFile + "], so trying the next one...");
               // switch to the other possible known file name
               overviewToTry = magicAltOverviewToRead;
               overviewTestFile =
@@ -3632,13 +3679,14 @@ public class Mink3p2daily {
                       overviewToTry); // assuming it is in the current working directory, of course
               // and try this one....
               if (overviewTestFile.exists()) {
-                System.out.println("    FOUND IT! [" + overviewTestFile + "]");
+                // System.out.println("    FOUND IT! [" + overviewTestFile + "]");
                 weShouldBotherParsingOverviewDotOut = true;
-              } else {
-                System.out.println("    didn't find [" + overviewTestFile + "], either");
               }
+              // else {
+              //   System.out.println("    didn't find [" + overviewTestFile + "], either");
+              // }
             } else {
-              System.out.println("    FOUND IT! [" + overviewTestFile + "]");
+              // System.out.println("    FOUND IT! [" + overviewTestFile + "]");
               weShouldBotherParsingOverviewDotOut = true;
             }
 
@@ -3668,6 +3716,7 @@ public class Mink3p2daily {
           // make the X file //
           /////////////////////
 
+          time12 = System.currentTimeMillis();
           // create the fertilizer block...
           fertilizerBlock =
               nitrogenFertilizerScheme.buildNitrogenOnlyBlock(
@@ -3699,6 +3748,7 @@ public class Mink3p2daily {
           XStuffToWrite =
               XStuffToWrite.replaceAll(
                   nYearsOrRandomSeedsPlaceholder, DSSATHelperMethods.padWithZeros(nFakeYears, 5));
+          time13 = System.currentTimeMillis();
 
           // pull the values from the data matrix
           // Beware the MAGIC NUMBER!!! the columns in the data file corresponding to the various
@@ -3762,23 +3812,26 @@ public class Mink3p2daily {
 
           realTimer.tic();
           pb.directory(pathToDSSATDirectoryAsFile);
-          pb.redirectErrorStream(true);  // combine stdout and stderr
+          pb.redirectErrorStream(true); // combine stdout and stderr
 
+          time14 = System.currentTimeMillis();
           process = pb.start();
           reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
           output = new StringBuilder();
           while ((line = reader.readLine()) != null) {
-              output.append(line).append("\n");
+            output.append(line).append("\n");
           }
 
           // exitValue = process.waitFor();
 
           // if (exitValue != 0 || output.toString().contains("*** buffer overflow detected ***")) {
           if (output.toString().contains("*** buffer overflow detected ***")) {
-              System.err.println("Buffer overflow detected in the external process. Exiting.");
-              System.exit(1);
+            System.err.println("Buffer overflow detected in the external process. Exiting.");
+            System.exit(1);
           }
+
+          time15 = System.currentTimeMillis();
 
           // MAY WANT TO COMMENT THIS BACK IN IF USING REALRUNNER (DMR)
           // happyRunnerThing.run();
@@ -3874,7 +3927,7 @@ public class Mink3p2daily {
                     overviewToTry); // assuming it is in the current working directory, of course
             overviewTestFile.delete(); // clear it out after reading it?
           } // if weShouldBotherParsingOverviewDotOut, but outside the initialization block for
-            // lineIndex == 0
+          // lineIndex == 0
 
           readingTimerStats.useDoubleValue(readingTimer.tocMillis());
 
@@ -3888,6 +3941,7 @@ public class Mink3p2daily {
       // when finished with a pixel, then write out a line to the output file //
       //////////////////////////////////////////////////////////////////////////
 
+      time16 = System.currentTimeMillis();
       elseTimer.tic();
       // do the summary out stuff
 
@@ -4158,6 +4212,7 @@ public class Mink3p2daily {
           } // wantThisIndex
         } // end if(allFlag)
       } // there is something in this pixel worth recording
+      time17 = System.currentTimeMillis();
 
       statisticsOutLine += "\n";
 
@@ -4180,45 +4235,115 @@ public class Mink3p2daily {
         projectedTime = timeSinceStart / (lineIndex + 1) * nLinesInDataFile;
         timeRemaining = projectedTime - timeSinceStart;
 
-        System.out.println(
-            "prog: "
-                + (lineIndex + 1)
-                + "/"
-                + nLinesInDataFile
-                + " = "
-                + FunTricks.fitInNCharacters((100 * (lineIndex + 1.0) / nLinesInDataFile), 5)
-                + "\tr/w/l/e/W: "
-                + FunTricks.fitInNCharacters(readingTimerStats.getMean(), 6)
-                + "/"
-                + FunTricks.fitInNCharacters(writingTimerStats.getMean(), 6)
-                + "/"
-                + FunTricks.fitInNCharacters(logTimerStats.getMean(), 6)
-                + "/"
-                + FunTricks.fitInNCharacters(elseTimerStats.getTotalDouble() / (lineIndex + 1), 6)
-                + "/"
-                + FunTricks.fitInNCharacters(weatherTimerStats.getMean(), 6)
-                + "\tave R: "
-                + FunTricks.fitInNCharacters(realTimerStats.getMean(), 6)
-                + " ave H: "
-                + FunTricks.fitInNCharacters(happyTimerStats.getMean(), 6)
-                + " N/P/R = "
-                + FunTricks.fitInNCharacters(timeSinceStart, 6)
-                + "/"
-                + FunTricks.fitInNCharacters(projectedTime, 6)
-                + "/"
-                + FunTricks.fitInNCharacters(timeRemaining, 6)
-                + "\t"
-                + FunTricks.fitInNCharacters(timeRemaining / 60, 6));
+        // PRINTOUT short simple output, to reduce excessive spamming of stdout when running in
+        // parallel
+        System.out.print((lineIndex + 1) + "/" + nLinesInDataFile + " ");
+        // to see full progress, uncomment below
+        // System.out.println(
+        //     "prog: "
+        //         + (lineIndex + 1)
+        //         + "/"
+        //         + nLinesInDataFile
+        //         + " = "
+        //         + FunTricks.fitInNCharacters((100 * (lineIndex + 1.0) / nLinesInDataFile), 5)
+        //         + "\tr/w/l/e/W: "
+        //         + FunTricks.fitInNCharacters(readingTimerStats.getMean(), 6)
+        //         + "/"
+        //         + FunTricks.fitInNCharacters(writingTimerStats.getMean(), 6)
+        //         + "/"
+        //         + FunTricks.fitInNCharacters(logTimerStats.getMean(), 6)
+        //         + "/"
+        //         + FunTricks.fitInNCharacters(elseTimerStats.getTotalDouble() / (lineIndex + 1),
+        // 6)
+        //         + "/"
+        //         + FunTricks.fitInNCharacters(weatherTimerStats.getMean(), 6)
+        //         + "\tave R: "
+        //         + FunTricks.fitInNCharacters(realTimerStats.getMean(), 6)
+        //         + " ave H: "
+        //         + FunTricks.fitInNCharacters(happyTimerStats.getMean(), 6)
+        //         + " N/P/R = "
+        //         + FunTricks.fitInNCharacters(timeSinceStart, 6)
+        //         + "/"
+        //         + FunTricks.fitInNCharacters(projectedTime, 6)
+        //         + "/"
+        //         + FunTricks.fitInNCharacters(timeRemaining, 6)
+        //         + "\t"
+        //         + FunTricks.fitInNCharacters(timeRemaining / 60, 6));
       }
       logTimerStats.useDoubleValue(logTimer.tocMillis());
+      long endTime = System.currentTimeMillis();
+      long elapsedTime = endTime - startTime;
+      double elapsedTimeInSeconds = (double) elapsedTime / 1000.0;
+
+      long[] intervals = new long[17];
+      intervals[0] = time1 - startTime;
+      intervals[1] = time2 - time1;
+      intervals[2] = time3 - time2;
+      intervals[3] = time4 - time3;
+      intervals[4] = time5 - time4;
+      intervals[5] = time6 - time5;
+      intervals[6] = time7 - time6;
+      intervals[7] = time8 - time7;
+      intervals[8] = time9 - time8;
+      intervals[9] = time10 - time9;
+      intervals[10] = time11 - time10;
+      intervals[11] = time12 - time11;
+      intervals[12] = time13 - time12;
+      intervals[13] = time14 - time13;
+      intervals[14] = time15 - time14;
+      intervals[15] = time16 - time15;
+      intervals[16] = endTime - time17;
+
+      // Output the fraction of elapsed time for each interval
+      // for (int i = 0; i < intervals.length; i++) {
+      //   double fractioni = (double) intervals[i] / elapsedTime;
+      //   String formattedFraction =
+      //       String.format("%.2f", fractioni * 100); // To get it as a percentage
+      //   System.out.println(
+      //       "Interval " + (i + 1) + " took " + formattedFraction + "% of the total time.");
+      // }
+
+      double fractionh = (double) (time11 - time10) / elapsedTime;
+      String shappy = String.format("%.2f", (double) (time11 - time10) / 1000);
+      String formattedFractionh =
+          String.format("%.2f", fractionh * 100); // To get it as a percentage
+      // System.out.println(
+      //     "RunDSSAThappy took " + shappy + "s, " + formattedFractionh + "% of the total time.");
+
+      double fractionr = (double) (time15 - time14) / elapsedTime;
+      String sreal = String.format("%.2f", (double) (time15 - time14) / 1000);
+      String formattedFractionr =
+          String.format("%.2f", fractionr * 100); // To get it as a percentage
+      // System.out.println(
+      //     "RunDSSATreal took " + sreal + "s, " + formattedFractionr + "% of the total time.");
+
+      String formattedTime = String.format("%.2f", elapsedTimeInSeconds);
+      // Output the elapsed time
+      // System.out.println("Elapsed time in seconds: " + formattedTime);
+      shappys[lineIndex] = (double) (time11 - time10) / 1000;
+      sreals[lineIndex] = (double) (time15 - time14) / 1000;
     } // end for for lineIndex // old end of while loop
+
+    double sumr = 0.0;
+    for (double value : sreals) {
+      sumr += value;
+    }
+    System.out.println("");
+    System.out.println("Timings:");
+    System.out.println("   mean real: " + String.format("%.2f", sumr / sreals.length) + " seconds");
+
+    double sumh = 0.0;
+    for (double value : shappys) {
+      sumh += value;
+    }
+    System.out.println(
+        "   mean happy: " + String.format("%.2f", sumh / shappys.length) + " seconds");
 
     // close out the output files
     statisticsOut.flush();
     statisticsOut.close();
 
     /////////////////////////////////////////
-    // when all done, write out info files //
     /////////////////////////////////////////
     // Beware the MAGIC NUMBER!!!
     String columnList =
@@ -4318,6 +4443,8 @@ public class Mink3p2daily {
 
     columnList += "\n";
 
+    // this actually does not need to be run differently between files!
+
     FunTricks.writeStringToFile(columnList, yieldOutputBaseName + "_STATS.cols.txt");
     if (nLinesInDataFile == 0) {
       System.out.println("All we did was make some empty STATS columns");
@@ -4343,8 +4470,8 @@ public class Mink3p2daily {
             + 2
             + 1
             + 2; // min / max/ mean / std / bad / happy mean / happy std / real anthesis mean / real
-                 // anthesis std / real maturity mean / real maturity std / happy maturity mean /
-                 // happy maturity std
+    // anthesis std / real maturity mean / real maturity std / happy maturity mean /
+    // happy maturity std
     // min / max/ mean / std / bad / happy mean / happy std / real anthesis mean / real anthesis std
     // / real maturity mean / real maturity std / happy maturity mean / happy maturity std
     // time / no planting / exactly zero / n real / n happy
@@ -4389,13 +4516,17 @@ public class Mink3p2daily {
 
     System.out.println(
         " total time in DSSAT loop = "
-            + totalDSSATTimeMillis / 1000 / 60
-            + "min ; per run average = "
-            + totalDSSATTimeMillis / nLinesInDataFile / nFakeYears / nPlantingWindowsPerMonth
+            + String.format("%.2f", totalDSSATTimeMillis / 1000)
+            + "seconds ; per run average = "
+            + String.format(
+                "%.2f",
+                totalDSSATTimeMillis / nLinesInDataFile / nFakeYears / nPlantingWindowsPerMonth)
             + "ms");
     System.out.println(
         "overall per run average = "
-            + overallTimeMillis / nLinesInDataFile / nFakeYears / nPlantingWindowsPerMonth
+            + String.format(
+                "%.2f",
+                overallTimeMillis / nLinesInDataFile / nFakeYears / nPlantingWindowsPerMonth)
             + "ms");
   } // main
 

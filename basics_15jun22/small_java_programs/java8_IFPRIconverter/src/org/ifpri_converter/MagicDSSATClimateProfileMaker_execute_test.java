@@ -195,7 +195,7 @@ public class MagicDSSATClimateProfileMaker_execute_test {
           nBeforeMonthly
               + nMonths
                   * 0; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                       // variable
+      // variable
       for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
         monthlySW[monthIndex] =
             Double.parseDouble(lineContentsSplit[shifter + monthIndex]) * SWmultiplier;
@@ -210,7 +210,7 @@ public class MagicDSSATClimateProfileMaker_execute_test {
           nBeforeMonthly
               + nMonths
                   * 1; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                       // variable
+      // variable
       for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
         monthlyTmax[monthIndex] =
             Double.parseDouble(lineContentsSplit[shifter + monthIndex])
@@ -222,7 +222,7 @@ public class MagicDSSATClimateProfileMaker_execute_test {
           nBeforeMonthly
               + nMonths
                   * 2; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                       // variable
+      // variable
       for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
         monthlyTmin[monthIndex] =
             Double.parseDouble(lineContentsSplit[shifter + monthIndex])
@@ -233,7 +233,7 @@ public class MagicDSSATClimateProfileMaker_execute_test {
           nBeforeMonthly
               + nMonths
                   * 3; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                       // variable
+      // variable
       for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
         monthlyPrec[monthIndex] = Double.parseDouble(lineContentsSplit[shifter + monthIndex]);
         if (monthlyPrec[monthIndex] < 0) {
@@ -245,7 +245,7 @@ public class MagicDSSATClimateProfileMaker_execute_test {
           nBeforeMonthly
               + nMonths
                   * 4; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                       // variable
+      // variable
       for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
         monthlyRainydays[monthIndex] = Double.parseDouble(lineContentsSplit[shifter + monthIndex]);
         if (monthlyRainydays[monthIndex] < 0) {

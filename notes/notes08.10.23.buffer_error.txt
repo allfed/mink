@@ -30,4 +30,52 @@ Singularity mink_sandbox:~/Code/mink>
 
 
 
-this is the status when there are buffer errors
+above is the status when there are buffer errors
+
+
+
+
+
+when there are no errors (midrun):
+
+Singularity mink_sandbox:~/Code/mink> ipcs -m
+
+------ Shared Memory Segments --------
+key        shmid      owner      perms      bytes      nattch     status      
+0x00000000 2          dmrivers   600        524288     2          dest         
+0x51090027 4          dmrivers   600        1          1                       
+0x00000000 7          dmrivers   600        1048576    2          dest         
+0x00000000 12         dmrivers   600        524288     2          dest         
+0x00000000 15         dmrivers   600        524288     2          dest         
+0x00000000 17         dmrivers   606        11967336   2          dest         
+0x00000000 18         dmrivers   606        11967336   2          dest         
+0x00000000 24         dmrivers   600        524288     2          dest         
+0x00000000 27         dmrivers   600        524288     2          dest         
+0x00000000 28         dmrivers   600        1048576    2          dest         
+0x00000000 33         dmrivers   600        524288     2          dest         
+0x00000000 34         dmrivers   600        524288     2          dest         
+0x00000000 35         dmrivers   600        16777216   2          dest         
+0x00000000 36         dmrivers   600        16777216   2          dest         
+0x00000000 42         dmrivers   600        524288     2          dest         
+0x00000000 44         dmrivers   600        67108864   2          dest         
+0x00000000 47         dmrivers   600        524288     2          dest         
+0x00000000 51         dmrivers   600        4194304    2          dest         
+0x00000000 55         dmrivers   600        4194304    2          dest         
+0x00000000 58         dmrivers   600        524288     2          dest         
+
+Singularity mink_sandbox:~/Code/mink> ipcs -s
+
+------ Semaphore Arrays --------
+key        semid      owner      perms      nsems     
+0x51090026 2          dmrivers   600        1         
+0x51090024 3          dmrivers   600        1         
+
+Singularity mink_sandbox:~/Code/mink> 
+
+
+
+
+
+after completion with no errors (no DSSAT running at all):
+
+

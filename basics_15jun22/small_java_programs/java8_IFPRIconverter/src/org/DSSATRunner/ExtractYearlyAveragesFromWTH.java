@@ -357,7 +357,7 @@ public class ExtractYearlyAveragesFromWTH {
             outputFileObject.delete();
           } // (outputFileObject.exists())
         } // (int lineIndex = magicFirstLineToWorkOn; lineIndex < originalAsArray.length;
-          // lineIndex++)
+        // lineIndex++)
       } // (fileIndex == 0)
 
       for (int lineIndex = magicFirstLineToWorkOn;

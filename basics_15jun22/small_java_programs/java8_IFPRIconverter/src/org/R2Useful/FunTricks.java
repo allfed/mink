@@ -77,7 +77,7 @@ public class FunTricks {
     infoOutSteam.print(
         formatIndex
             + "\t = The MultiFormatMatrix format the matrix was stored in\n"); // Beware the MAGIC
-                                                                               // NUMBER!!!
+    // NUMBER!!!
     infoOutSteam.print(delimiter + "\t = The string used to delimit elements in the Rows\n");
 
     infoOutSteam.flush();
@@ -378,7 +378,7 @@ public class FunTricks {
 
     String chunkName = chunkFirst + "_" + 0 + "_" + chunkLast;
 
-    System.out.println("input no infix = [" + inputFilenameNoInfix + "]");
+    // System.out.println("input no infix = [" + inputFilenameNoInfix + "]");
 
     Object[] rowsColsFormatDelimiter = MatrixOperations.readInfoFile(chunkName);
 
@@ -400,8 +400,8 @@ public class FunTricks {
 
     String outputName = outputPrefix + chunkBaseFirst + "_" + chunkLast;
 
-    System.out.println("[" + outputPrefix + "][" + chunkBaseFirst + "][" + chunkLast + "]");
-    System.out.println("output prefix = " + outputName);
+    // System.out.println("[" + outputPrefix + "][" + chunkBaseFirst + "][" + chunkLast + "]");
+    // System.out.println("output prefix = " + outputName);
 
     // imperfect check if all the chunks are there...
     for (int chunkIndex = 0; chunkIndex < nChunks; chunkIndex++) {

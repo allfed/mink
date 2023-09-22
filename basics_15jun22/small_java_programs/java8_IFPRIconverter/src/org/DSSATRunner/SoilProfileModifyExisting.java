@@ -13,7 +13,7 @@ public class SoilProfileModifyExisting {
   private boolean haveCountedProfiles = false;
 
   private int nProfiles;
-  //	private int nLinesInOriginalFile;
+  //  private int nLinesInOriginalFile;
 
   private String originalFileName;
 
@@ -114,9 +114,10 @@ public class SoilProfileModifyExisting {
     // count up the number of profiles in the file provided... //
     /////////////////////////////////////////////////////////////
 
-    System.out.println(
-        "WARNING: " + this.getClass().getCanonicalName() + " assumes a fixed order for the values");
-    System.out.println("Use dumpExampleProfile() to see an example of the order.");
+    // System.out.println(
+    //     "WARNING: " + this.getClass().getCanonicalName() + " assumes a fixed order for the
+    // values");
+    // System.out.println("Use dumpExampleProfile() to see an example of the order.");
 
     originalFileName = filename;
 
@@ -142,11 +143,11 @@ public class SoilProfileModifyExisting {
     boolean mostRecentLineWasWhitespace = false;
     while (lineContents != null) {
 
-      //			System.out.println("p = " + nProfilesCounter + "; [" + nLinesCounter + "] = [" +
+      //      System.out.println("p = " + nProfilesCounter + "; [" + nLinesCounter + "] = [" +
       // lineContents + "]");
 
       if (lineContents.length() > 0 && lineContents.charAt(0) == '!') {
-        //				System.out.println("replaced initial line with whitespace due to comment...");
+        //        System.out.println("replaced initial line with whitespace due to comment...");
         lineContents = "";
       }
 
@@ -168,10 +169,11 @@ public class SoilProfileModifyExisting {
             break;
           } else if (lineContents.length() > 0 && lineContents.charAt(0) == '!') {
             lineContents = "";
-            //						System.out.println("WS: replaced line index [" + nLinesCounter + "] with
+            //            System.out.println("WS: replaced line index [" + nLinesCounter + "] with
             // whitespace due to comment...");
           }
-          //					System.out.println("  WS: p = " + nProfilesCounter + "; [" + nLinesCounter + "] =
+          //          System.out.println("  WS: p = " + nProfilesCounter + "; [" + nLinesCounter +
+          // "] =
           // [" + lineContents + "]");
         }
       } else {
@@ -186,7 +188,8 @@ public class SoilProfileModifyExisting {
         if (lineContents != null) {
           if (lineContents.length() > 0 && lineContents.charAt(0) == '!') {
             lineContents = "";
-            //						System.out.println("replaced line index [" + nLinesCounter + "] with whitespace
+            //            System.out.println("replaced line index [" + nLinesCounter + "] with
+            // whitespace
             // due to comment...");
           }
         }
@@ -194,26 +197,26 @@ public class SoilProfileModifyExisting {
     }
 
     if (mostRecentLineWasWhitespace) {
-      //			System.out.println("WS   FINAL count is " + nLinesCounter + " lines making up " +
+      //      System.out.println("WS   FINAL count is " + nLinesCounter + " lines making up " +
       // nProfilesCounter + " profiles...");
       this.nProfiles = nProfilesCounter;
-      //			this.nLinesInOriginalFile = nLinesCounter;
+      //      this.nLinesInOriginalFile = nLinesCounter;
 
     } else {
-      //			System.out.println("REAL FINAL count is " + nLinesCounter + " lines making up " +
+      //      System.out.println("REAL FINAL count is " + nLinesCounter + " lines making up " +
       // (nProfilesCounter + 1) + " profiles...");
       this.nProfiles = nProfilesCounter + 1;
-      //			this.nLinesInOriginalFile = nLinesCounter;
+      //      this.nLinesInOriginalFile = nLinesCounter;
     }
 
-    System.out.println(
-        "File ["
-            + filename
-            + "] has "
-            + nLinesCounter
-            + " lines making up "
-            + nProfilesCounter
-            + " profiles...");
+    // System.out.println(
+    //     "File ["
+    //         + filename
+    //         + "] has "
+    //         + nLinesCounter
+    //         + " lines making up "
+    //         + nProfilesCounter
+    //         + " profiles...");
 
     haveCountedProfiles = true;
     fileReader.close();
@@ -226,7 +229,7 @@ public class SoilProfileModifyExisting {
       throw new Exception();
     }
 
-    System.out.println("initializing arrays... nProfiles = " + nProfiles);
+    // System.out.println("initializing arrays... nProfiles = " + nProfiles);
 
     // first index is for soil profile, second is for soil layer (if necessary
     profileNames = new String[nProfiles];
@@ -294,7 +297,7 @@ public class SoilProfileModifyExisting {
       throw new Exception();
     }
 
-    //		System.out.println("initializing arrays... nProfiles = " + nProfiles);
+    //    System.out.println("initializing arrays... nProfiles = " + nProfiles);
 
     // first index is for soil profile, second is for soil layer (if necessary
 
@@ -347,15 +350,15 @@ public class SoilProfileModifyExisting {
     // count up the number of profiles in the file provided... //
     /////////////////////////////////////////////////////////////
     int nProfilesCounter = 0;
-    //		int nLinesCounter = 0;
+    //    int nLinesCounter = 0;
     int nSoilLayersHere = 0;
     String lineContents = fileReader.readLine();
     // treat comments like whitespace
     boolean haveFoundFirstProfile = false;
-    //		boolean mostRecentLineWasWhitespace = false;
+    //    boolean mostRecentLineWasWhitespace = false;
     while (lineContents != null) {
 
-      //			System.out.println("p = " + nProfilesCounter + "; [" + nLinesCounter + "] = [" +
+      //      System.out.println("p = " + nProfilesCounter + "; [" + nLinesCounter + "] = [" +
       // lineContents + "]");
 
       // check for an initial line beginning with "*SOILS" since they often have something like that
@@ -366,7 +369,7 @@ public class SoilProfileModifyExisting {
         }
       }
       if (lineContents.length() > 0 && lineContents.charAt(0) == '!') {
-        //				System.out.println("replaced initial line with whitespace due to comment...");
+        //        System.out.println("replaced initial line with whitespace due to comment...");
         lineContents = "";
       }
 
@@ -380,21 +383,22 @@ public class SoilProfileModifyExisting {
         if (haveFoundFirstProfile) {
           nProfilesCounter++;
         }
-        //				mostRecentLineWasWhitespace = true;
+        //        mostRecentLineWasWhitespace = true;
 
         // and then read through until we don't have any more whitespace
         while (lineContents.trim().length() == 0) {
-          //					nLinesCounter++;
+          //          nLinesCounter++;
           lineContents = fileReader.readLine();
           if (lineContents == null) {
             // we hit the end of the file, so break out...
             break;
           } else if (lineContents.length() > 0 && lineContents.charAt(0) == '!') {
             lineContents = "";
-            //						System.out.println("WS: replaced line index [" + nLinesCounter + "] with
+            //            System.out.println("WS: replaced line index [" + nLinesCounter + "] with
             // whitespace due to comment...");
           }
-          //					System.out.println("  WS: p = " + nProfilesCounter + "; [" + nLinesCounter + "] =
+          //          System.out.println("  WS: p = " + nProfilesCounter + "; [" + nLinesCounter +
+          // "] =
           // [" + lineContents + "]");
         }
       } else {
@@ -573,12 +577,13 @@ public class SoilProfileModifyExisting {
           }
         }
 
-        //				nLinesCounter++;
+        //        nLinesCounter++;
         lineContents = fileReader.readLine();
         if (lineContents != null) {
           if (lineContents.length() > 0 && lineContents.charAt(0) == '!') {
             lineContents = "";
-            //						System.out.println("replaced line index [" + nLinesCounter + "] with whitespace
+            //            System.out.println("replaced line index [" + nLinesCounter + "] with
+            // whitespace
             // due to comment...");
           }
         } // zero out comment lines
@@ -597,7 +602,7 @@ public class SoilProfileModifyExisting {
       return -2;
     }
 
-    //		System.out.println("We will try to dump something to the screen...");
+    //    System.out.println("We will try to dump something to the screen...");
 
     // search for first matching soil profile
 
@@ -614,10 +619,10 @@ public class SoilProfileModifyExisting {
 
       // since we will sometimes be checking to make sure that a new name isn't already used, we'll
       // forego this now...
-      //			System.out.println("available names are:");
-      //			for (int searchIndex = 0; searchIndex < nProfiles; searchIndex++) {
-      //				System.out.println("[" + searchIndex + "] = [" + profileNames[searchIndex] + "]");
-      //			}
+      //      System.out.println("available names are:");
+      //      for (int searchIndex = 0; searchIndex < nProfiles; searchIndex++) {
+      //        System.out.println("[" + searchIndex + "] = [" + profileNames[searchIndex] + "]");
+      //      }
     }
 
     return soilProfileIndex;
@@ -630,7 +635,7 @@ public class SoilProfileModifyExisting {
       return null;
     }
 
-    //		System.out.println("We will try to dump something to the screen...");
+    //    System.out.println("We will try to dump something to the screen...");
 
     // search for first matching soil profile
 
@@ -817,10 +822,10 @@ public class SoilProfileModifyExisting {
       double organicCarbonAmount, double depthInCentimeters) {
 
     // these numbers were magically provided by tao li of IRRI in late april of 2012
-    //		RAINFED
-    //		0-40cm C:N = 20:1
-    //		40-60cm C:N = 16:1
-    //		60-cm C:N = 11:1
+    //    RAINFED
+    //    0-40cm C:N = 20:1
+    //    40-60cm C:N = 16:1
+    //    60-cm C:N = 11:1
 
     double nitrogenGuess = Double.NaN;
     if (depthInCentimeters <= 40) {
@@ -837,10 +842,10 @@ public class SoilProfileModifyExisting {
       double organicCarbonAmount, double depthInCentimeters) {
 
     // these numbers were magically provided by tao li of IRRI in late april of 2012
-    //		IRRIGATED:
-    //			0-20cm C:N = 20:1
-    //			20-45cm C:N = 16:1
-    //			45-cm C:N = 11:1
+    //    IRRIGATED:
+    //      0-20cm C:N = 20:1
+    //      20-45cm C:N = 16:1
+    //      45-cm C:N = 11:1
 
     double nitrogenGuess = Double.NaN;
     if (depthInCentimeters <= 20) {
@@ -867,23 +872,24 @@ public class SoilProfileModifyExisting {
       String newlineToUse)
       throws Exception {
 
-    //		double[] clayStableFractionAbove,
-    //		double[] loamStableFractionAbove,
-    //		double[] sandStableFractionAbove
-    //		double[] standardDepths
-    //		String startingDateCode,
-    //		double incorporationRate,
-    //		double incorporationDepth,
-    //		double surfaceResidueWeight, // putting this in the experiment file rather than in the soil
+    //    double[] clayStableFractionAbove,
+    //    double[] loamStableFractionAbove,
+    //    double[] sandStableFractionAbove
+    //    double[] standardDepths
+    //    String startingDateCode,
+    //    double incorporationRate,
+    //    double incorporationDepth,
+    //    double surfaceResidueWeight, // putting this in the experiment file rather than in the
+    // soil
     // definition
-    //		, double organicCarbonToNitrogenConversionFactor // replacing this with a magic conversion
+    //    , double organicCarbonToNitrogenConversionFactor // replacing this with a magic conversion
     // table by depth
     if (!isFull) {
       System.out.println("The soil profiles are empty currently...");
       return null;
     }
 
-    //		System.out.println("We will try to dump something to the screen...");
+    //    System.out.println("We will try to dump something to the screen...");
 
     // search for first matching soil profile
 
@@ -985,13 +991,13 @@ public class SoilProfileModifyExisting {
 
     // we do this by looking at how many 10cm slabs (including partials) there are and dropping 1.
     // we also want to enforce the ORYZA limitation of no more than 10 total layers...
-    //		int nExtraLayersNeeded = Math.max(0,
-    //				Math.min(
-    //				-1 + (int)Math.ceil(this.layerDepthAtBase_SLB[soilProfileIndex][0] /
+    //    int nExtraLayersNeeded = Math.max(0,
+    //        Math.min(
+    //        -1 + (int)Math.ceil(this.layerDepthAtBase_SLB[soilProfileIndex][0] /
     // magicThicknessWarningThreshold),
-    //				magicMaximumNumberOfLayers - nSoilLayers
-    //				)
-    //				);
+    //        magicMaximumNumberOfLayers - nSoilLayers
+    //        )
+    //        );
     int nExtraLayersNeeded = nExtraLayersNeededSoFar;
 
     warningString +=
@@ -1088,63 +1094,65 @@ public class SoilProfileModifyExisting {
               ? magicDefaultValueToUse
               : drainedUpperLimit_SDUL[soilProfileIndex][layerIndex];
 
-      //			the original line from the VB code has:
-      //			thickness  * BulkDensity * SOC % * 100,000
-      //			for the units, this means:
-      //			cm/100     * g/cm^3      * %     * 100,000
-      //			or
-      //			cm         * g/cm^3      * %     *   1,000
-      //			= 1000 * g/cm^2
-      //			now 100 cm = 1 m -> 10^4 cm^2 = 1 m^2 -> 1 cm^2 = 10^-4 m^2
-      //			so...
-      //			= 1000 * g / (10^-4 m^2)
-      //			= 10^3 * 10^4 * g / m^2
-      //			also, (100 m)^2 = 1 ha -> 10^4 m^2 = 1ha -> 1 m^2 = 10^-4 ha
-      //			so...
-      //			= 10^3 * 10^4 * g / (10^04 ha)
-      //			= 10^3 * g/ha
-      //			furthermore 1000 g = 1 kg -> 1 g = 10^-3 kg
-      //			so...
-      //			= 10^3 * (10^-3 kg) / ha = kg/ha
-      //			so at the end we get kg/ha
-      //			of course, it can't be that easy....
-      //			before the SOC numbers get sent to the hydraulic parameters thing, they get transformed
+      //      the original line from the VB code has:
+      //      thickness  * BulkDensity * SOC % * 100,000
+      //      for the units, this means:
+      //      cm/100     * g/cm^3      * %     * 100,000
+      //      or
+      //      cm         * g/cm^3      * %     *   1,000
+      //      = 1000 * g/cm^2
+      //      now 100 cm = 1 m -> 10^4 cm^2 = 1 m^2 -> 1 cm^2 = 10^-4 m^2
+      //      so...
+      //      = 1000 * g / (10^-4 m^2)
+      //      = 10^3 * 10^4 * g / m^2
+      //      also, (100 m)^2 = 1 ha -> 10^4 m^2 = 1ha -> 1 m^2 = 10^-4 ha
+      //      so...
+      //      = 10^3 * 10^4 * g / (10^04 ha)
+      //      = 10^3 * g/ha
+      //      furthermore 1000 g = 1 kg -> 1 g = 10^-3 kg
+      //      so...
+      //      = 10^3 * (10^-3 kg) / ha = kg/ha
+      //      so at the end we get kg/ha
+      //      of course, it can't be that easy....
+      //      before the SOC numbers get sent to the hydraulic parameters thing, they get
+      // transformed
       // one more time
-      //			Int(SOC(K) / (TKL(K) * BD(K) * 10000000# * 0.58) * 1000000#) / 1000000#
-      //			of course, one fo the multiply-and-divide's is about truncating decimals, so we will
+      //      Int(SOC(K) / (TKL(K) * BD(K) * 10000000# * 0.58) * 1000000#) / 1000000#
+      //      of course, one fo the multiply-and-divide's is about truncating decimals, so we will
       // forget about that
-      //			but, it seems to be basically undoing the thickness and bulk density part, introduces a
+      //      but, it seems to be basically undoing the thickness and bulk density part, introduces
+      // a
       // factor related to 0.58
-      //			and then some big power of ten.
+      //      and then some big power of ten.
       //
-      //			all on one line now, let us do algebra:
-      //			SOM(K)
-      //			=
-      //			(SOC(K) / (TKL(K) * BD(K) * 10,000,000 * 0.58) * 1,000,000) / 1,000,000
-      //			=
-      //			 SOC(K) / (TKL(K) * BD(K) * 10,000,000 * 0.58)
-      //			= (TKL(K)  * BD(K) * SOC-as-% * 100,000) / (TKL(K) * BD(K) * 10,000,000 * 0.58)
-      //			= (SOC-as-% * 1e5) / (1e7 * 0.58)
-      //			= SOC-as-% * 1e-2 / 0.58
-      //			= SOC-as-fraction / 0.58
+      //      all on one line now, let us do algebra:
+      //      SOM(K)
+      //      =
+      //      (SOC(K) / (TKL(K) * BD(K) * 10,000,000 * 0.58) * 1,000,000) / 1,000,000
+      //      =
+      //       SOC(K) / (TKL(K) * BD(K) * 10,000,000 * 0.58)
+      //      = (TKL(K)  * BD(K) * SOC-as-% * 100,000) / (TKL(K) * BD(K) * 10,000,000 * 0.58)
+      //      = (SOC-as-% * 1e5) / (1e7 * 0.58)
+      //      = SOC-as-% * 1e-2 / 0.58
+      //      = SOC-as-fraction / 0.58
       //
-      //			apparently, 0.58 is the typical fraction of elemental carbon in organic matter
+      //      apparently, 0.58 is the typical fraction of elemental carbon in organic matter
       //
-      //			so, the original is dividing by 0.58, but i think that is ridiculous: what if we
-      //			had a soil layer that was 100% organic matter (say, i dump a bunch of compost on)
-      //			then we would have elemental carbon of 100% / 0.58 = 172.4%.
+      //      so, the original is dividing by 0.58, but i think that is ridiculous: what if we
+      //      had a soil layer that was 100% organic matter (say, i dump a bunch of compost on)
+      //      then we would have elemental carbon of 100% / 0.58 = 172.4%.
       //
-      //			we should be multiplying, so that is what i'm going to do...
+      //      we should be multiplying, so that is what i'm going to do...
 
       // let's try dropping the 100000
 
-      //			(SPLITlayerDepthAtBase_SLB[nExtraLayersNeeded + layerIndex] -
+      //      (SPLITlayerDepthAtBase_SLB[nExtraLayersNeeded + layerIndex] -
       // SPLITlayerDepthAtBase_SLB[nExtraLayersNeeded + layerIndex - 1]) *
-      //			bulkDensity_SBDM[soilProfileIndex][layerIndex] *
+      //      bulkDensity_SBDM[soilProfileIndex][layerIndex] *
 
       // Beware the MAGIC NUMBER!!! 0.58 is the fraction of elemental carbon typically found in
       // organic matter
-      //			;organicCarbon_SLOC[soilProfileIndex][layerIndex]
+      //      ;organicCarbon_SLOC[soilProfileIndex][layerIndex]
       SPLITorganicCarbon_SLOC[nExtraLayersNeeded + layerIndex] =
           (float)
               ((organicCarbon_SLOC[soilProfileIndex][layerIndex] == magicDefaultValueInSource)
@@ -1157,7 +1165,7 @@ public class SoilProfileModifyExisting {
               / 100
               * SPLITbulkDensity_SBDM[nExtraLayersNeeded + layerIndex]
               * 100000;
-      //			SPLITbaseOrganicCarbon_kg_per_ha  [nExtraLayersNeeded + layerIndex] =
+      //      SPLITbaseOrganicCarbon_kg_per_ha  [nExtraLayersNeeded + layerIndex] =
       // SPLITorganicCarbon_SLOC[nExtraLayersNeeded + layerIndex] *
       //      (SPLITlayerDepthAtBase_SLB[nExtraLayersNeeded + layerIndex] -
       // SPLITlayerDepthAtBase_SLB[nExtraLayersNeeded + layerIndex - 1])/100 *
@@ -1175,7 +1183,7 @@ public class SoilProfileModifyExisting {
               irrigatedOrganicCarbonToOrganicNitrogenConverter(
                   SPLITbaseOrganicCarbon_kg_per_ha[nExtraLayersNeeded + layerIndex],
                   SPLITlayerDepthAtBase_SLB[nExtraLayersNeeded + layerIndex]);
-      //			(float) (organicCarbonToNitrogenConversionFactor *
+      //      (float) (organicCarbonToNitrogenConversionFactor *
       // SPLITbaseOrganicCarbon_kg_per_ha[nExtraLayersNeeded + layerIndex]);
       // do the initial soil nitrogen bit
       // add in nitrogen from residues
@@ -1183,7 +1191,7 @@ public class SoilProfileModifyExisting {
     }
 
     // now try to split up the puddled layers if necessary...
-    //		for (int layerIndex = 0; layerIndex < nExtraLayersNeeded + 1; layerIndex++) { //
+    //    for (int layerIndex = 0; layerIndex < nExtraLayersNeeded + 1; layerIndex++) { //
     // nExtraLayersNeeded + 1
     firstSPLITLayerHere = 0; // this actually needs to be zero. it will get bumped up as we go along
     for (int sourceLayerIndex = 0;
@@ -1232,20 +1240,22 @@ public class SoilProfileModifyExisting {
                     * (nExtraLayersNeededBySourceLayer[sourceLayerIndex] - counterInsideSplitLayer);
         counterInsideSplitLayer++;
 
-        //			SPLITlayerDepthAtBase_SLB[layerIndex] = (layerIndex + 1) *
+        //      SPLITlayerDepthAtBase_SLB[layerIndex] = (layerIndex + 1) *
         // layerDepthAtBase_SLB[soilProfileIndex][sourceLayerIndex] /
         // (nExtraLayersNeededBySourceLayer[sourceLayerIndex] + 1);
 
-        //			SPLITclay_SLCL[layerIndex]            = clay_SLCL[soilProfileIndex][sourceLayerIndex];
-        //			SPLITsilt_SLSI[layerIndex]            = silt_SLSI[soilProfileIndex][sourceLayerIndex];
-        //			SPLITbulkDensity_SBDM[layerIndex]     =
+        //      SPLITclay_SLCL[layerIndex]            =
+        // clay_SLCL[soilProfileIndex][sourceLayerIndex];
+        //      SPLITsilt_SLSI[layerIndex]            =
+        // silt_SLSI[soilProfileIndex][sourceLayerIndex];
+        //      SPLITbulkDensity_SBDM[layerIndex]     =
         // bulkDensity_SBDM[soilProfileIndex][sourceLayerIndex];
-        //			SPLITpH[layerIndex]                   =
+        //      SPLITpH[layerIndex]                   =
         // phInWater_SLHW[soilProfileIndex][sourceLayerIndex];
         //
-        //			SPLITlowerLimit_SLLL[layerIndex]        =
+        //      SPLITlowerLimit_SLLL[layerIndex]        =
         // lowerLimit_SLLL[soilProfileIndex][sourceLayerIndex];
-        //			SPLITdrainedUpperLimit_SDUL[layerIndex] =
+        //      SPLITdrainedUpperLimit_SDUL[layerIndex] =
         // drainedUpperLimit_SDUL[soilProfileIndex][sourceLayerIndex];
 
         // Beware the UGLY terniary operator (to shorten up a bunch of assignments...)
@@ -1277,8 +1287,8 @@ public class SoilProfileModifyExisting {
                 : drainedUpperLimit_SDUL[soilProfileIndex][sourceLayerIndex];
 
         // see big ugly note above: we are converting to kg/ha....
-        //			SPLITorganicCarbon_SLOC[layerIndex]   =
-        // (float)(organicCarbon_SLOC[soilProfileIndex][sourceLayerIndex] *	0.58 / 100.0);
+        //      SPLITorganicCarbon_SLOC[layerIndex]   =
+        // (float)(organicCarbon_SLOC[soilProfileIndex][sourceLayerIndex] * 0.58 / 100.0);
         SPLITorganicCarbon_SLOC[layerIndex] =
             (float)
                 ((organicCarbon_SLOC[soilProfileIndex][sourceLayerIndex]
@@ -1293,17 +1303,19 @@ public class SoilProfileModifyExisting {
                 * SPLITbulkDensity_SBDM[layerIndex]
                 * 100000;
 
-        //	 		if (layerIndex == 0) {
-        //				SPLITbaseOrganicCarbon_kg_per_ha  [layerIndex] = SPLITorganicCarbon_SLOC[layerIndex] *
+        //      if (layerIndex == 0) {
+        //        SPLITbaseOrganicCarbon_kg_per_ha  [layerIndex] =
+        // SPLITorganicCarbon_SLOC[layerIndex] *
         // (SPLITlayerDepthAtBase_SLB[layerIndex] - 0)/100 * SPLITbulkDensity_SBDM[layerIndex] *
         // 100000;
-        //			} else {
-        //				SPLITbaseOrganicCarbon_kg_per_ha  [layerIndex] = SPLITorganicCarbon_SLOC[layerIndex] *
-        //	      (SPLITlayerDepthAtBase_SLB[layerIndex] - SPLITlayerDepthAtBase_SLB[layerIndex -
+        //      } else {
+        //        SPLITbaseOrganicCarbon_kg_per_ha  [layerIndex] =
+        // SPLITorganicCarbon_SLOC[layerIndex] *
+        //        (SPLITlayerDepthAtBase_SLB[layerIndex] - SPLITlayerDepthAtBase_SLB[layerIndex -
         // 1])/100 *
-        //	      SPLITbulkDensity_SBDM[layerIndex] *
-        //	      100000;
-        //			}
+        //        SPLITbulkDensity_SBDM[layerIndex] *
+        //        100000;
+        //      }
       } // for layerIndex within here...
     } // for sourceLayerIndex
 
@@ -1314,10 +1326,10 @@ public class SoilProfileModifyExisting {
     int firstLayerBelowNitroDepth = -1;
 
     for (int realLayerIndex = 0; realLayerIndex < nSPLITSoilLayers; realLayerIndex++) {
-      //			if (SPLITlayerDepthAtBase_SLB[realLayerIndex] >= incorporationDepth &&
+      //      if (SPLITlayerDepthAtBase_SLB[realLayerIndex] >= incorporationDepth &&
       // firstLayerBelowResidueIncorporationDepth < 0) {
-      //				firstLayerBelowResidueIncorporationDepth = realLayerIndex;
-      //			}
+      //        firstLayerBelowResidueIncorporationDepth = realLayerIndex;
+      //      }
       if (SPLITlayerDepthAtBase_SLB[realLayerIndex] >= depthForNitrogen
           && firstLayerBelowNitroDepth < 0) {
         firstLayerBelowNitroDepth = realLayerIndex;
@@ -1331,30 +1343,30 @@ public class SoilProfileModifyExisting {
         "* initial surface residues should go in the experiment file, while roots go here..."
             + newlineToUse;
     // let's put surface residues in the very top layer...
-    //		SPLITresidueContributionOrganicCarbon_kg_per_ha[0] = (float)surfaceResidueWeight ;
-    //		warningString += "* putting unincorporated surface residues entirely in the top (SPLIT)
+    //    SPLITresidueContributionOrganicCarbon_kg_per_ha[0] = (float)surfaceResidueWeight ;
+    //    warningString += "* putting unincorporated surface residues entirely in the top (SPLIT)
     // layer\n";
     // split up the residue appropriately; weighted by thickness, i guess
     // the top layer will get any "unincorporated stuff"
-    //		double relevantThickness = -1;
-    //		System.out.println("residue layer below = " + firstLayerBelowResidueIncorporationDepth);
-    //		relevantThickness = Math.min(incorporationDepth, SPLITlayerThicknessCM[0]);
-    //		SPLITresidueContributionOrganicCarbon_kg_per_ha[0] = (float)((1 - incorporationRate) *
+    //    double relevantThickness = -1;
+    //    System.out.println("residue layer below = " + firstLayerBelowResidueIncorporationDepth);
+    //    relevantThickness = Math.min(incorporationDepth, SPLITlayerThicknessCM[0]);
+    //    SPLITresidueContributionOrganicCarbon_kg_per_ha[0] = (float)((1 - incorporationRate) *
     // surfaceResidueWeight +
-    //		   incorporationRate * surfaceResidueWeight *
-    //		   relevantThickness / incorporationDepth);
+    //       incorporationRate * surfaceResidueWeight *
+    //       relevantThickness / incorporationDepth);
     //
-    //		// note the <= condition...
-    //		for (int layerIndex = 1; layerIndex <= firstLayerBelowResidueIncorporationDepth;
+    //    // note the <= condition...
+    //    for (int layerIndex = 1; layerIndex <= firstLayerBelowResidueIncorporationDepth;
     // layerIndex++) {
     //
-    //			relevantThickness = Math.min(incorporationDepth - SPLITlayerDepthAtBase_SLB[layerIndex -
+    //      relevantThickness = Math.min(incorporationDepth - SPLITlayerDepthAtBase_SLB[layerIndex -
     // 1], SPLITlayerThicknessCM[0]);
     //
-    //			SPLITresidueContributionOrganicCarbon_kg_per_ha[layerIndex] = (float)(
-    //				   incorporationRate * surfaceResidueWeight *
-    //				   relevantThickness / incorporationDepth);
-    //		}
+    //      SPLITresidueContributionOrganicCarbon_kg_per_ha[layerIndex] = (float)(
+    //           incorporationRate * surfaceResidueWeight *
+    //           relevantThickness / incorporationDepth);
+    //    }
 
     // let's put the root mass evenly across only the puddling layers...
     warningString += "* putting root mass evenly across puddled layers" + newlineToUse;
@@ -1384,7 +1396,7 @@ public class SoilProfileModifyExisting {
                   + (residueNitrogenPercent / 100)
                       * SPLITresidueContributionOrganicCarbon_kg_per_ha[layerIndex]);
 
-      //						(float) (organicCarbonToNitrogenConversionFactor *
+      //            (float) (organicCarbonToNitrogenConversionFactor *
       // SPLITbaseOrganicCarbon_kg_per_ha[layerIndex] +
     }
 
@@ -1403,7 +1415,7 @@ public class SoilProfileModifyExisting {
       // bulk density is g/cm^3
       // total mass in grams... density * depth * length * width
       if (SPLITlayerDepthAtBase_SLB[topLayerIndex] <= depthForNitrogen) {
-        //				System.out.println("A: lI = " + topLayerIndex + "; lD = " +
+        //        System.out.println("A: lI = " + topLayerIndex + "; lD = " +
         // layerDepthAtBase_SLB[profileIndex][topLayerIndex] + "; dFN = " + depthForNitrogen);
         // keep all of this layer
         totalSoilMassGrams +=
@@ -1411,9 +1423,9 @@ public class SoilProfileModifyExisting {
                 * SPLITlayerThicknessCM[topLayerIndex]
                 * (100 * 100)
                 * (100 * 100);
-        //				this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] * (100*100) * (100*100);
+        //        this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] * (100*100) * (100*100);
       } else {
-        //				System.out.println("B: lI = " + topLayerIndex + "; lD = " +
+        //        System.out.println("B: lI = " + topLayerIndex + "; lD = " +
         // layerDepthAtBase_SLB[profileIndex][topLayerIndex] + "; dFN = " + depthForNitrogen);
         // count only the top part that we need...
         // so we key off of the previous layer's depth...
@@ -1426,7 +1438,7 @@ public class SoilProfileModifyExisting {
     }
 
     double fractionalContributionOfLayer = -325;
-    //		double nitrogenMassHereGrams = -5;
+    //    double nitrogenMassHereGrams = -5;
     // NOTE: nonstandard condition of <=
     for (int topLayerIndex = 0; topLayerIndex <= firstLayerBelowNitroDepth; topLayerIndex++) {
       // this layer mass / total active layers mass
@@ -1450,33 +1462,33 @@ public class SoilProfileModifyExisting {
       }
       // ppm = total nitrogen mass / total soil mass * 10^6;
       // we want to use the whole layer, even for the deepest one
-      //			nitrogenMassHereGrams = fractionalContributionOfLayer * totalInitialNitrogenKgPerHa *
+      //      nitrogenMassHereGrams = fractionalContributionOfLayer * totalInitialNitrogenKgPerHa *
       // 1000;
       SPLITnitrateAmountKgPerHa[topLayerIndex] =
           (float) (fractionalContributionOfLayer * totalInitialNitrogenKgPerHa);
-      //	this is a ppm computation; oryza wants kg/ha so far as i can tell...
-      //	SPLITnitrateAmount[topLayerIndex] = (float) (
-      //			nitrogenMassHereGrams / (SPLITbulkDensity_SBDM[topLayerIndex] *
-      //			SPLITlayerThicknessCM[topLayerIndex] * (100*10) * (100*10) ) * 1000000
-      //			);
-      //			System.out.println(topLayerIndex + " fContr = " + fractionalContributionOfLayer);
+      //  this is a ppm computation; oryza wants kg/ha so far as i can tell...
+      //  SPLITnitrateAmount[topLayerIndex] = (float) (
+      //      nitrogenMassHereGrams / (SPLITbulkDensity_SBDM[topLayerIndex] *
+      //      SPLITlayerThicknessCM[topLayerIndex] * (100*10) * (100*10) ) * 1000000
+      //      );
+      //      System.out.println(topLayerIndex + " fContr = " + fractionalContributionOfLayer);
     }
 
     /*
     for (int layerIndex = 0; layerIndex < nSPLITSoilLayers; layerIndex++) {
-    	System.out.println(layerIndex + " -> depth = " + SPLITlayerDepthAtBase_SLB[layerIndex] +
-    			" ; thic = " + SPLITlayerThicknessCM[layerIndex] +
-    			" ; c = " + SPLITclay_SLCL[layerIndex] +
-    			" ; s = " + SPLITsilt_SLSI[layerIndex] +
-    			" ;\tBD = " + SPLITbulkDensity_SBDM[layerIndex] +
-    			" ; SOC% = " + SPLITorganicCarbon_SLOC[layerIndex] +
-    			" ; baseOC = " + SPLITbaseOrganicCarbon_kg_per_ha[layerIndex] +
-    			" ; residue = " + SPLITresidueContributionOrganicCarbon_kg_per_ha[layerIndex] +
-    			" ;\ttot OC = " + SPLITtotalOrganicCarbon_kg_per_ha[layerIndex] +
-    			" ; guess ON = " + SPLITorganicNitrogen_kg_per_ha[layerIndex] +
-    			" ; NO4 = " + SPLITnitrateAmountKgPerHa[layerIndex] +
-    			" ; pH = " + SPLITpH[layerIndex]
-    	);
+      System.out.println(layerIndex + " -> depth = " + SPLITlayerDepthAtBase_SLB[layerIndex] +
+          " ; thic = " + SPLITlayerThicknessCM[layerIndex] +
+          " ; c = " + SPLITclay_SLCL[layerIndex] +
+          " ; s = " + SPLITsilt_SLSI[layerIndex] +
+          " ;\tBD = " + SPLITbulkDensity_SBDM[layerIndex] +
+          " ; SOC% = " + SPLITorganicCarbon_SLOC[layerIndex] +
+          " ; baseOC = " + SPLITbaseOrganicCarbon_kg_per_ha[layerIndex] +
+          " ; residue = " + SPLITresidueContributionOrganicCarbon_kg_per_ha[layerIndex] +
+          " ;\ttot OC = " + SPLITtotalOrganicCarbon_kg_per_ha[layerIndex] +
+          " ; guess ON = " + SPLITorganicNitrogen_kg_per_ha[layerIndex] +
+          " ; NO4 = " + SPLITnitrateAmountKgPerHa[layerIndex] +
+          " ; pH = " + SPLITpH[layerIndex]
+      );
     }
 
     */
@@ -1506,12 +1518,12 @@ public class SoilProfileModifyExisting {
         VGN1,
         VGL1,
         KS1;
-    //		double T;
+    //    double T;
 
     double C2 =
         1.0; // a magic number having to do with compacting (1.0 means normal, bigger means smashed
-             // together, lower means fluffy/loose)
-    //		double IEC = 0.0; // a magic number that i don't know yet... but it actually needs to be
+    // together, lower means fluffy/loose)
+    //    double IEC = 0.0; // a magic number that i don't know yet... but it actually needs to be
     // zero at the moment
     // apparently it warns whether soil organic matter is available in the temporary file. but that
     // stuff never gets used, so i am cutting it out...
@@ -1594,10 +1606,11 @@ public class SoilProfileModifyExisting {
 
       // air entry pressure as T
       // 'CALCULATE AIR ENTRY PRESSURE T
-      //			W1 = -21.67 * s1 - 27.93 * C1 - 81.97 * F1 + 71.12 * (s1 * F1) + 8.29 * (C1 * F1) + 14.05
+      //      W1 = -21.67 * s1 - 27.93 * C1 - 81.97 * F1 + 71.12 * (s1 * F1) + 8.29 * (C1 * F1) +
+      // 14.05
       // * (s1 * C1) + 27.16;
-      //			W2 = W1 + (0.02 * (W1 * W1) - 0.113 * W1 - 0.7);
-      //			T = W2;
+      //      W2 = W1 + (0.02 * (W1 * W1) - 0.113 * W1 - 0.7);
+      //      T = W2;
 
       // saturated water content as F0
       // 'CALCULATE SATURATED WATER CONTENT F0
@@ -1631,7 +1644,7 @@ public class SoilProfileModifyExisting {
 
       // something having to do with saturated and field capacities
       // '!! THE DIFFERENT BETWEEN SATURATED AND FIELD CAPACITY
-      //			WCFC1[layerIndex] = WCST[layerIndex] - WCFC[layerIndex];
+      //      WCFC1[layerIndex] = WCST[layerIndex] - WCFC[layerIndex];
 
       B[layerIndex] =
           (Math.log(1500) - Math.log(33))
@@ -1642,7 +1655,7 @@ public class SoilProfileModifyExisting {
       // '!CALCULATE MOISTURE-CONDUCTIVITY PARAMETER N, KST
       N[layerIndex] = 1.0 / B[layerIndex];
 
-      //			WCAD[layerIndex] = (1000000.0 / A[layerIndex]) ^ (-1 / B[layerIndex])
+      //      WCAD[layerIndex] = (1000000.0 / A[layerIndex]) ^ (-1 / B[layerIndex])
       WCAD[layerIndex] =
           Math.pow((1000000.0 / A[layerIndex]), -N[layerIndex]); // (-1 / B[layerIndex]);
 
@@ -1773,8 +1786,9 @@ public class SoilProfileModifyExisting {
       VGA[layerIndex] = Math.exp(VGA1);
       VGL[layerIndex] = 10.0 * (Math.exp(VGL1) - 1.0) / (Math.exp(VGL1) + 1.0);
       VGN[layerIndex] = Math.exp(VGN1) + 1.0;
-      //			WCADagain[layerIndex] = Math.pow((1000000.0 / A[layerIndex]) , (-N[layerIndex]));
-      //			WCAD     [layerIndex] = Math.pow((1000000.0 / A[layerIndex]) , -N[layerIndex]); // (-1 /
+      //      WCADagain[layerIndex] = Math.pow((1000000.0 / A[layerIndex]) , (-N[layerIndex]));
+      //      WCAD     [layerIndex] = Math.pow((1000000.0 / A[layerIndex]) , -N[layerIndex]); // (-1
+      // /
       // B[layerIndex]);
 
       if (useWaterContentParameter) {
@@ -2148,7 +2162,8 @@ public class SoilProfileModifyExisting {
       // VGR: looks suspicious
       float magicOneHundredth = 0.01F;
       oryzaString += "* VGR is a magic number..." + newlineToUse;
-      //  		oryzaString += "VGR = " + (nSPLITSoilLayers * magicOneHundredth) + "   ! suspicious: " +
+      //      oryzaString += "VGR = " + (nSPLITSoilLayers * magicOneHundredth) + "   ! suspicious: "
+      // +
       // nSPLITSoilLayers + " * " + magicOneHundredth + newlineToUse;
       oryzaString += "VGR = ";
       for (int layerIndex = 0; layerIndex < nSPLITSoilLayers; layerIndex++) {
@@ -2303,8 +2318,8 @@ public class SoilProfileModifyExisting {
       double[] sandStableFractionAbove,
       String newlineToUse)
       throws Exception {
-    //		double incorporationRate,
-    //		double incorporationDepth,
+    //    double incorporationRate,
+    //    double incorporationDepth,
 
     // some magic numbers....
     double magicShallowKLdepthCM = 15.0;
@@ -2477,11 +2492,11 @@ public class SoilProfileModifyExisting {
     soilBlock += "</SoilWat>" + newlineToUse;
 
     // soil organic matter
-    //		double fractionBetweenLowerLimitAndDrainedUpperLimit,
-    //		double totalInitialNitrogenKgPerHa,
-    //		double depthForNitrogen,
-    //		double rootWeight,
-    //		double residueNitrogenPercent,
+    //    double fractionBetweenLowerLimitAndDrainedUpperLimit,
+    //    double totalInitialNitrogenKgPerHa,
+    //    double depthForNitrogen,
+    //    double rootWeight,
+    //    double residueNitrogenPercent,
 
     soilBlock += "<SoilOrganicMatter>" + newlineToUse;
     double rootCarbonToNitrogenRatio = 40.0; // Beware the MAGIC NUMBER!!!
@@ -2507,11 +2522,11 @@ public class SoilProfileModifyExisting {
     double sandThreshold =
         30; // anything above this percentage will use the sand carbon assumptions
     if (this.clay_SLCL[soilProfileIndex][0] > clayThreshold) {
-      //			System.out.println("   clay: " + this.clay_SLCL[profileIndex][0]);
+      //      System.out.println("   clay: " + this.clay_SLCL[profileIndex][0]);
       stableFractionToUse = clayStableFractionAbove;
     } else if (100 - this.clay_SLCL[soilProfileIndex][0] - this.silt_SLSI[soilProfileIndex][0]
         > sandThreshold) {
-      //			System.out.println("   sand: " + (100 - this.clay_SLCL[profileIndex][0] -
+      //      System.out.println("   sand: " + (100 - this.clay_SLCL[profileIndex][0] -
       // this.silt_SLSI[profileIndex][0]));
       stableFractionToUse = sandStableFractionAbove;
     } else {
@@ -2522,7 +2537,7 @@ public class SoilProfileModifyExisting {
     int firstStandardLayerBelowTarget = -1;
     double weightForBottom = -2;
     for (int layerIndex = 0; layerIndex < nSoilLayers; layerIndex++) {
-      //			soilDepth =
+      //      soilDepth =
       // FunTricks.fitInNCharacters(this.layerDepthAtBase_SLB[soilProfileIndex][layerIndex], 5);
 
       // find first standard depth that is below what we need
@@ -2542,14 +2557,14 @@ public class SoilProfileModifyExisting {
         stableCarbonPercentage[layerIndex] =
             this.organicCarbon_SLOC[soilProfileIndex][layerIndex]
                 * stableFractionToUse[firstStandardLayerBelowTarget];
-        //				System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
+        //        System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
         // top)");
       } else if (firstStandardLayerBelowTarget == nStandardDepths) {
         // this whole thing gets treated like the bottom...
         stableCarbonPercentage[layerIndex] =
             this.organicCarbon_SLOC[soilProfileIndex][layerIndex]
                 * stableFractionToUse[firstStandardLayerBelowTarget];
-        //				System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
+        //        System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
         // bottom)");
       } else {
         weightForBottom =
@@ -2563,13 +2578,14 @@ public class SoilProfileModifyExisting {
                 * (weightForBottom * stableFractionToUse[firstStandardLayerBelowTarget]
                     + (1.0 - weightForBottom)
                         * stableFractionToUse[firstStandardLayerBelowTarget - 1]);
-        //				System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
+        //        System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
         // middle)");
-        //				System.out.println("wFB = " + weightForBottom);
-        //				System.out.println("1 - wFB = " + (1.0 - weightForBottom));
-        //				System.out.println("upper frac = " +
+        //        System.out.println("wFB = " + weightForBottom);
+        //        System.out.println("1 - wFB = " + (1.0 - weightForBottom));
+        //        System.out.println("upper frac = " +
         // stableFractionToUse[firstStandardLayerBelowTarget]);
-        //				System.out.println("lower frac = " + stableFractionToUse[firstStandardLayerBelowTarget
+        //        System.out.println("lower frac = " +
+        // stableFractionToUse[firstStandardLayerBelowTarget
         // - 1]);
 
       }
@@ -2672,7 +2688,7 @@ public class SoilProfileModifyExisting {
       // bulk density is g/cm^3
       // total mass in grams... density * depth * length * width
       if (this.layerDepthAtBase_SLB[soilProfileIndex][topLayerIndex] <= depthForNitrogen) {
-        //				System.out.println("A: lI = " + topLayerIndex + "; lD = " +
+        //        System.out.println("A: lI = " + topLayerIndex + "; lD = " +
         // layerDepthAtBase_SLB[profileIndex][topLayerIndex] + "; dFN = " + depthForNitrogen);
         // keep all of this layer
         totalSoilMassGrams +=
@@ -2680,9 +2696,9 @@ public class SoilProfileModifyExisting {
                 * this.layerThicknessCM[soilProfileIndex][topLayerIndex]
                 * (100 * 100)
                 * (100 * 100);
-        //				this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] * (100*100) * (100*100);
+        //        this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] * (100*100) * (100*100);
       } else {
-        //				System.out.println("B: lI = " + topLayerIndex + "; lD = " +
+        //        System.out.println("B: lI = " + topLayerIndex + "; lD = " +
         // layerDepthAtBase_SLB[profileIndex][topLayerIndex] + "; dFN = " + depthForNitrogen);
         // count only the top part that we need...
         // so we key off of the previous layer's depth...
@@ -2710,7 +2726,7 @@ public class SoilProfileModifyExisting {
                 * (100 * 100)
                 * (100 * 100)
                 / totalSoilMassGrams;
-        //				this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] * (100*10) * (100*10) /
+        //        this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] * (100*10) * (100*10) /
         // totalSoilMassGrams;
       } else {
         // count only the top part that we need...
@@ -2733,15 +2749,16 @@ public class SoilProfileModifyExisting {
                   * (100 * 100)
                   * (100 * 100))
               * 1000000;
-      //			this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] * (100*10) * (100*10) ) * 1000000;
+      //      this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] * (100*10) * (100*10) ) *
+      // 1000000;
 
-      //			System.out.println("DSSAT: " + topLayerIndex + " fContr = " +
+      //      System.out.println("DSSAT: " + topLayerIndex + " fContr = " +
       // fractionalContributionOfLayer);
 
     }
 
     for (int layerIndex = 0; layerIndex < nSoilLayers; layerIndex++) {
-      //			soilDepth =
+      //      soilDepth =
       // FunTricks.fitInNCharacters(this.layerDepthAtBase_SLB[profileIndex][layerIndex], 5);
       bottomWaterShare = lowerLimit_SLLL[soilProfileIndex][layerIndex];
       topWaterShare = drainedUpperLimit_SDUL[soilProfileIndex][layerIndex];
@@ -2828,17 +2845,17 @@ public class SoilProfileModifyExisting {
       throws Exception {
 
     /*
-    		ICND  ICRN  ICRE  ICWD ICRES ICREN ICREP ICRIP ICRID ICNAME
-    		 1    MZ 84357  1000   -99  1.00  1.00 -99.0     1  1.00  0.00   100    15 -99
-    		@C  ICBL  SH2O  SNH4  SNO3
-    		 1    15 0.311   0.1   5.5
-    		 1    30 0.317   0.1   4.7
-    		 1    45 0.327   0.1   4.2
-    		 1    60 0.317   0.1  12.5
-    		 1    75 0.307   0.1  24.6
-    		 1    90 0.281   0.1  28.9
-    		 1   105 0.271   0.1  28.5
-    		 1   120 0.275   0.1  28.6
+        ICND  ICRN  ICRE  ICWD ICRES ICREN ICREP ICRIP ICRID ICNAME
+         1    MZ 84357  1000   -99  1.00  1.00 -99.0     1  1.00  0.00   100    15 -99
+        @C  ICBL  SH2O  SNH4  SNO3
+         1    15 0.311   0.1   5.5
+         1    30 0.317   0.1   4.7
+         1    45 0.327   0.1   4.2
+         1    60 0.317   0.1  12.5
+         1    75 0.307   0.1  24.6
+         1    90 0.281   0.1  28.9
+         1   105 0.271   0.1  28.5
+         1   120 0.275   0.1  28.6
     */
 
     int profileIndex = findProfileIndex(profileName);
@@ -2891,14 +2908,14 @@ public class SoilProfileModifyExisting {
 
     // find total mass of soil in these layers per ha
     double totalSoilMassGrams = 0.0;
-    //		double totalSoilMassGramsCompletelyAboveDesiredZone = 0.0;
+    //    double totalSoilMassGramsCompletelyAboveDesiredZone = 0.0;
     for (int topLayerIndex = 0; topLayerIndex < firstLayerBelowNitroDepth; topLayerIndex++) {
       // bulk density is g/cm^3
       // total mass in grams... density * depth * length * width
-      //			totalSoilMassGrams += this.bulkDensity_SBDM[profileIndex][topLayerIndex] *
-      //				this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] * (100*10) * (100*10);
+      //      totalSoilMassGrams += this.bulkDensity_SBDM[profileIndex][topLayerIndex] *
+      //        this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] * (100*10) * (100*10);
       if (this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] <= depthForNitrogen) {
-        //				System.out.println("A: lI = " + topLayerIndex + "; lD = " +
+        //        System.out.println("A: lI = " + topLayerIndex + "; lD = " +
         // layerDepthAtBase_SLB[profileIndex][topLayerIndex] + "; dFN = " + depthForNitrogen);
         // keep all of this layer
         totalSoilMassGrams +=
@@ -2907,7 +2924,7 @@ public class SoilProfileModifyExisting {
                 * (100 * 100)
                 * (100 * 100);
       } else {
-        //				System.out.println("B: lI = " + topLayerIndex + "; lD = " +
+        //        System.out.println("B: lI = " + topLayerIndex + "; lD = " +
         // layerDepthAtBase_SLB[profileIndex][topLayerIndex] + "; dFN = " + depthForNitrogen);
         // count only the top part that we need...
         // so we key off of the previous layer's depth...
@@ -2955,7 +2972,7 @@ public class SoilProfileModifyExisting {
               * 1000000;
     }
 
-    //		System.out.println("-- init nLayers = " + nLayers + " BF = " +
+    //    System.out.println("-- init nLayers = " + nLayers + " BF = " +
     // layerDepthAtBase_SLB[profileIndex].length + " --");
     for (int layerIndex = 0; layerIndex < nLayers; layerIndex++) {
       soilDepth =
@@ -2980,55 +2997,55 @@ public class SoilProfileModifyExisting {
     }
 
     /*
-    		*INITIAL CONDITIONS
-    		@C   PCR ICDAT  ICRT  ICND  ICRN  ICRE  ICWD ICRES ICREN ICREP ICRIP ICRID ICNAME
-    		 crop component number
-    		     previous crop code
-    		         initial conditions measurement date
-    		                root weight from previous crop
-    		                      nodule weight from previous crop
-    		                            rhizobia number
-    		                                  rhizobia effectiveness
-    		                                        water table depth
-    		                                             residue weight
-    		                                                    residue nitrogen content percent
-    		                                                         residue phosphorus content percent
-    		                                                               residue incorporation fraction
-    		                                                                     residue incorporation depth
-    		 1    MZ 84357  1000   -99  1.00  1.00 -99.0     1  1.00  0.00   100    15 -99
-    		@C  ICBL  SH2O  SNH4  SNO3
-    		    soil base layer depth
-    		          share of water (cm3 / cm3)
-    		                ammonium gN/Mg soil
-    		                      nitrate gN/Mg soil
-    		 1    15 0.311   0.1   5.5
-    		 1    30 0.317   0.1   4.7
-    		 1    45 0.327   0.1   4.2
-    		 1    60 0.317   0.1  12.5
-    		 1    75 0.307   0.1  24.6
-    		 1    90 0.281   0.1  28.9
-    		 1   105 0.271   0.1  28.5
-    		 1   120 0.275   0.1  28.6
+        *INITIAL CONDITIONS
+        @C   PCR ICDAT  ICRT  ICND  ICRN  ICRE  ICWD ICRES ICREN ICREP ICRIP ICRID ICNAME
+         crop component number
+             previous crop code
+                 initial conditions measurement date
+                        root weight from previous crop
+                              nodule weight from previous crop
+                                    rhizobia number
+                                          rhizobia effectiveness
+                                                water table depth
+                                                     residue weight
+                                                            residue nitrogen content percent
+                                                                 residue phosphorus content percent
+                                                                       residue incorporation fraction
+                                                                             residue incorporation depth
+         1    MZ 84357  1000   -99  1.00  1.00 -99.0     1  1.00  0.00   100    15 -99
+        @C  ICBL  SH2O  SNH4  SNO3
+            soil base layer depth
+                  share of water (cm3 / cm3)
+                        ammonium gN/Mg soil
+                              nitrate gN/Mg soil
+         1    15 0.311   0.1   5.5
+         1    30 0.317   0.1   4.7
+         1    45 0.327   0.1   4.2
+         1    60 0.317   0.1  12.5
+         1    75 0.307   0.1  24.6
+         1    90 0.281   0.1  28.9
+         1   105 0.271   0.1  28.5
+         1   120 0.275   0.1  28.6
     */
 
     // and now the soil analysis block....
     // the point here is to set the initial stable carbon...
 
     /*
-    		*SOIL ANALYSIS
-    		@A SADAT  SMHB  SMPX  SMKE  SANAME
-    		 1 16091   -99   -99   -99  -99
-    		@A  SABL  SADM  SAOC  SANI SAPHW SAPHB  SAPX  SAKE  SASC
-    		   base layer
-    		         bulk density
-    		               total organic carbon
-    		                     total nigrogetn
-    		                           pH in water
-    		                                pH in buffer
-    		                                       phosphorus extractable
-    		                                             potassium exchangable
-    		                                                   stable soil carbon
-    		SA_block_bottom_goes_here
+        *SOIL ANALYSIS
+        @A SADAT  SMHB  SMPX  SMKE  SANAME
+         1 16091   -99   -99   -99  -99
+        @A  SABL  SADM  SAOC  SANI SAPHW SAPHB  SAPX  SAKE  SASC
+           base layer
+                 bulk density
+                       total organic carbon
+                             total nigrogetn
+                                   pH in water
+                                        pH in buffer
+                                               phosphorus extractable
+                                                     potassium exchangable
+                                                           stable soil carbon
+        SA_block_bottom_goes_here
 
     */
 
@@ -3055,10 +3072,10 @@ public class SoilProfileModifyExisting {
     // double[] standardDepths, double[] clayStableFractionAbove, double[] loamStableFractionAbove,
     // double[] sandStableFractionAbove
 
-    //		double[] standardDepths  =         {   20,   40,   60,  1000000000};
-    //		double[] clayStableFractionAbove = { 0.80, 0.96, 0.98,  0.98};
-    //		double[] loamStableFractionAbove = { 0.80, 0.98, 0.98,  0.98};
-    //		double[] sandStableFractionAbove = { 0.93, 0.98, 0.98,  0.98};
+    //    double[] standardDepths  =         {   20,   40,   60,  1000000000};
+    //    double[] clayStableFractionAbove = { 0.80, 0.96, 0.98,  0.98};
+    //    double[] loamStableFractionAbove = { 0.80, 0.98, 0.98,  0.98};
+    //    double[] sandStableFractionAbove = { 0.93, 0.98, 0.98,  0.98};
 
     double[] stableFractionToUse = null;
 
@@ -3072,11 +3089,11 @@ public class SoilProfileModifyExisting {
     double sandThreshold =
         30; // anything above this percentage will use the sand carbon assumptions
     if (this.clay_SLCL[profileIndex][0] > clayThreshold) {
-      //			System.out.println("   clay: " + this.clay_SLCL[profileIndex][0]);
+      //      System.out.println("   clay: " + this.clay_SLCL[profileIndex][0]);
       stableFractionToUse = clayStableFractionAbove;
     } else if (100 - this.clay_SLCL[profileIndex][0] - this.silt_SLSI[profileIndex][0]
         > sandThreshold) {
-      //			System.out.println("   sand: " + (100 - this.clay_SLCL[profileIndex][0] -
+      //      System.out.println("   sand: " + (100 - this.clay_SLCL[profileIndex][0] -
       // this.silt_SLSI[profileIndex][0]));
       stableFractionToUse = sandStableFractionAbove;
     } else {
@@ -3106,14 +3123,14 @@ public class SoilProfileModifyExisting {
         stableCarbonPercentage[layerIndex] =
             this.organicCarbon_SLOC[profileIndex][layerIndex]
                 * stableFractionToUse[firstStandardLayerBelowTarget];
-        //				System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
+        //        System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
         // top)");
       } else if (firstStandardLayerBelowTarget == nStandardDepths) {
         // this whole thing gets treated like the bottom...
         stableCarbonPercentage[layerIndex] =
             this.organicCarbon_SLOC[profileIndex][layerIndex]
                 * stableFractionToUse[firstStandardLayerBelowTarget];
-        //				System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
+        //        System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
         // bottom)");
       } else {
         weightForBottom =
@@ -3127,13 +3144,14 @@ public class SoilProfileModifyExisting {
                 * (weightForBottom * stableFractionToUse[firstStandardLayerBelowTarget]
                     + (1.0 - weightForBottom)
                         * stableFractionToUse[firstStandardLayerBelowTarget - 1]);
-        //				System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
+        //        System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
         // middle)");
-        //				System.out.println("wFB = " + weightForBottom);
-        //				System.out.println("1 - wFB = " + (1.0 - weightForBottom));
-        //				System.out.println("upper frac = " +
+        //        System.out.println("wFB = " + weightForBottom);
+        //        System.out.println("1 - wFB = " + (1.0 - weightForBottom));
+        //        System.out.println("upper frac = " +
         // stableFractionToUse[firstStandardLayerBelowTarget]);
-        //				System.out.println("lower frac = " + stableFractionToUse[firstStandardLayerBelowTarget
+        //        System.out.println("lower frac = " +
+        // stableFractionToUse[firstStandardLayerBelowTarget
         // - 1]);
 
       }
@@ -3163,20 +3181,20 @@ public class SoilProfileModifyExisting {
     }
 
     /*
-    		*SOIL ANALYSIS
-    		@A SADAT  SMHB  SMPX  SMKE  SANAME
-    		 1 16091   -99   -99   -99  -99
-    		@A  SABL  SADM  SAOC  SANI SAPHW SAPHB  SAPX  SAKE  SASC
-    		   base layer
-    		         bulk density
-    		               total organic carbon
-    		                     total nigrogetn
-    		                           pH in water
-    		                                pH in buffer
-    		                                       phosphorus extractable
-    		                                             potassium exchangable
-    		                                                   stable soil carbon
-    		SA_block_bottom_goes_here
+        *SOIL ANALYSIS
+        @A SADAT  SMHB  SMPX  SMKE  SANAME
+         1 16091   -99   -99   -99  -99
+        @A  SABL  SADM  SAOC  SANI SAPHW SAPHB  SAPX  SAKE  SASC
+           base layer
+                 bulk density
+                       total organic carbon
+                             total nigrogetn
+                                   pH in water
+                                        pH in buffer
+                                               phosphorus extractable
+                                                     potassium exchangable
+                                                           stable soil carbon
+        SA_block_bottom_goes_here
 
     */
 
@@ -3201,17 +3219,17 @@ public class SoilProfileModifyExisting {
       throws Exception {
 
     /*
-    		ICND  ICRN  ICRE  ICWD ICRES ICREN ICREP ICRIP ICRID ICNAME
-    		 1    MZ 84357  1000   -99  1.00  1.00 -99.0     1  1.00  0.00   100    15 -99
-    		@C  ICBL  SH2O  SNH4  SNO3
-    		 1    15 0.311   0.1   5.5
-    		 1    30 0.317   0.1   4.7
-    		 1    45 0.327   0.1   4.2
-    		 1    60 0.317   0.1  12.5
-    		 1    75 0.307   0.1  24.6
-    		 1    90 0.281   0.1  28.9
-    		 1   105 0.271   0.1  28.5
-    		 1   120 0.275   0.1  28.6
+        ICND  ICRN  ICRE  ICWD ICRES ICREN ICREP ICRIP ICRID ICNAME
+         1    MZ 84357  1000   -99  1.00  1.00 -99.0     1  1.00  0.00   100    15 -99
+        @C  ICBL  SH2O  SNH4  SNO3
+         1    15 0.311   0.1   5.5
+         1    30 0.317   0.1   4.7
+         1    45 0.327   0.1   4.2
+         1    60 0.317   0.1  12.5
+         1    75 0.307   0.1  24.6
+         1    90 0.281   0.1  28.9
+         1   105 0.271   0.1  28.5
+         1   120 0.275   0.1  28.6
     */
 
     int profileIndex = findProfileIndex(profileName);
@@ -3264,13 +3282,13 @@ public class SoilProfileModifyExisting {
 
     // find total mass of soil in these layers per ha
     double totalSoilMassGrams = 0.0;
-    //		double totalSoilMassGramsCompletelyAboveDesiredZone = 0.0;
+    //    double totalSoilMassGramsCompletelyAboveDesiredZone = 0.0;
     // NOTE: nonstandard condition of <=
     for (int topLayerIndex = 0; topLayerIndex <= firstLayerBelowNitroDepth; topLayerIndex++) {
       // bulk density is g/cm^3
       // total mass in grams... density * depth * length * width
       if (this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] <= depthForNitrogen) {
-        //				System.out.println("A: lI = " + topLayerIndex + "; lD = " +
+        //        System.out.println("A: lI = " + topLayerIndex + "; lD = " +
         // layerDepthAtBase_SLB[profileIndex][topLayerIndex] + "; dFN = " + depthForNitrogen);
         // keep all of this layer
         totalSoilMassGrams +=
@@ -3278,9 +3296,9 @@ public class SoilProfileModifyExisting {
                 * this.layerThicknessCM[profileIndex][topLayerIndex]
                 * (100 * 100)
                 * (100 * 100);
-        //				this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] * (100*100) * (100*100);
+        //        this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] * (100*100) * (100*100);
       } else {
-        //				System.out.println("B: lI = " + topLayerIndex + "; lD = " +
+        //        System.out.println("B: lI = " + topLayerIndex + "; lD = " +
         // layerDepthAtBase_SLB[profileIndex][topLayerIndex] + "; dFN = " + depthForNitrogen);
         // count only the top part that we need...
         // so we key off of the previous layer's depth...
@@ -3307,7 +3325,7 @@ public class SoilProfileModifyExisting {
                 * (100 * 100)
                 * (100 * 100)
                 / totalSoilMassGrams;
-        //				this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] * (100*10) * (100*10) /
+        //        this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] * (100*10) * (100*10) /
         // totalSoilMassGrams;
       } else {
         // count only the top part that we need...
@@ -3329,14 +3347,15 @@ public class SoilProfileModifyExisting {
                   * (100 * 100)
                   * (100 * 100))
               * 1000000;
-      //			this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] * (100*10) * (100*10) ) * 1000000;
+      //      this.layerDepthAtBase_SLB[profileIndex][topLayerIndex] * (100*10) * (100*10) ) *
+      // 1000000;
 
-      //			System.out.println("DSSAT: " + topLayerIndex + " fContr = " +
+      //      System.out.println("DSSAT: " + topLayerIndex + " fContr = " +
       // fractionalContributionOfLayer);
 
     }
 
-    //		System.out.println("-- init nLayers = " + nLayers + " BF = " +
+    //    System.out.println("-- init nLayers = " + nLayers + " BF = " +
     // layerDepthAtBase_SLB[profileIndex].length + " --");
     for (int layerIndex = 0; layerIndex < nLayers; layerIndex++) {
       soilDepth =
@@ -3361,55 +3380,55 @@ public class SoilProfileModifyExisting {
     }
 
     /*
-    		*INITIAL CONDITIONS
-    		@C   PCR ICDAT  ICRT  ICND  ICRN  ICRE  ICWD ICRES ICREN ICREP ICRIP ICRID ICNAME
-    		 crop component number
-    		     previous crop code
-    		         initial conditions measurement date
-    		                root weight from previous crop
-    		                      nodule weight from previous crop
-    		                            rhizobia number
-    		                                  rhizobia effectiveness
-    		                                        water table depth
-    		                                             residue weight
-    		                                                    residue nitrogen content percent
-    		                                                         residue phosphorus content percent
-    		                                                               residue incorporation fraction
-    		                                                                     residue incorporation depth
-    		 1    MZ 84357  1000   -99  1.00  1.00 -99.0     1  1.00  0.00   100    15 -99
-    		@C  ICBL  SH2O  SNH4  SNO3
-    		    soil base layer depth
-    		          share of water (cm3 / cm3)
-    		                ammonium gN/Mg soil
-    		                      nitrate gN/Mg soil
-    		 1    15 0.311   0.1   5.5
-    		 1    30 0.317   0.1   4.7
-    		 1    45 0.327   0.1   4.2
-    		 1    60 0.317   0.1  12.5
-    		 1    75 0.307   0.1  24.6
-    		 1    90 0.281   0.1  28.9
-    		 1   105 0.271   0.1  28.5
-    		 1   120 0.275   0.1  28.6
+        *INITIAL CONDITIONS
+        @C   PCR ICDAT  ICRT  ICND  ICRN  ICRE  ICWD ICRES ICREN ICREP ICRIP ICRID ICNAME
+         crop component number
+             previous crop code
+                 initial conditions measurement date
+                        root weight from previous crop
+                              nodule weight from previous crop
+                                    rhizobia number
+                                          rhizobia effectiveness
+                                                water table depth
+                                                     residue weight
+                                                            residue nitrogen content percent
+                                                                 residue phosphorus content percent
+                                                                       residue incorporation fraction
+                                                                             residue incorporation depth
+         1    MZ 84357  1000   -99  1.00  1.00 -99.0     1  1.00  0.00   100    15 -99
+        @C  ICBL  SH2O  SNH4  SNO3
+            soil base layer depth
+                  share of water (cm3 / cm3)
+                        ammonium gN/Mg soil
+                              nitrate gN/Mg soil
+         1    15 0.311   0.1   5.5
+         1    30 0.317   0.1   4.7
+         1    45 0.327   0.1   4.2
+         1    60 0.317   0.1  12.5
+         1    75 0.307   0.1  24.6
+         1    90 0.281   0.1  28.9
+         1   105 0.271   0.1  28.5
+         1   120 0.275   0.1  28.6
     */
 
     // and now the soil analysis block....
     // the point here is to set the initial stable carbon...
 
     /*
-    		*SOIL ANALYSIS
-    		@A SADAT  SMHB  SMPX  SMKE  SANAME
-    		 1 16091   -99   -99   -99  -99
-    		@A  SABL  SADM  SAOC  SANI SAPHW SAPHB  SAPX  SAKE  SASC
-    		   base layer
-    		         bulk density
-    		               total organic carbon
-    		                     total nigrogetn
-    		                           pH in water
-    		                                pH in buffer
-    		                                       phosphorus extractable
-    		                                             potassium exchangable
-    		                                                   stable soil carbon
-    		SA_block_bottom_goes_here
+        *SOIL ANALYSIS
+        @A SADAT  SMHB  SMPX  SMKE  SANAME
+         1 16091   -99   -99   -99  -99
+        @A  SABL  SADM  SAOC  SANI SAPHW SAPHB  SAPX  SAKE  SASC
+           base layer
+                 bulk density
+                       total organic carbon
+                             total nigrogetn
+                                   pH in water
+                                        pH in buffer
+                                               phosphorus extractable
+                                                     potassium exchangable
+                                                           stable soil carbon
+        SA_block_bottom_goes_here
 
     */
 
@@ -3436,10 +3455,10 @@ public class SoilProfileModifyExisting {
     // double[] standardDepths, double[] clayStableFractionAbove, double[] loamStableFractionAbove,
     // double[] sandStableFractionAbove
 
-    //		double[] standardDepths  =         {   20,   40,   60,  1000000000};
-    //		double[] clayStableFractionAbove = { 0.80, 0.96, 0.98,  0.98};
-    //		double[] loamStableFractionAbove = { 0.80, 0.98, 0.98,  0.98};
-    //		double[] sandStableFractionAbove = { 0.93, 0.98, 0.98,  0.98};
+    //    double[] standardDepths  =         {   20,   40,   60,  1000000000};
+    //    double[] clayStableFractionAbove = { 0.80, 0.96, 0.98,  0.98};
+    //    double[] loamStableFractionAbove = { 0.80, 0.98, 0.98,  0.98};
+    //    double[] sandStableFractionAbove = { 0.93, 0.98, 0.98,  0.98};
 
     double[] stableFractionToUse = null;
 
@@ -3453,11 +3472,11 @@ public class SoilProfileModifyExisting {
     double sandThreshold =
         30; // anything above this percentage will use the sand carbon assumptions
     if (this.clay_SLCL[profileIndex][0] > clayThreshold) {
-      //			System.out.println("   clay: " + this.clay_SLCL[profileIndex][0]);
+      //      System.out.println("   clay: " + this.clay_SLCL[profileIndex][0]);
       stableFractionToUse = clayStableFractionAbove;
     } else if (100 - this.clay_SLCL[profileIndex][0] - this.silt_SLSI[profileIndex][0]
         > sandThreshold) {
-      //			System.out.println("   sand: " + (100 - this.clay_SLCL[profileIndex][0] -
+      //      System.out.println("   sand: " + (100 - this.clay_SLCL[profileIndex][0] -
       // this.silt_SLSI[profileIndex][0]));
       stableFractionToUse = sandStableFractionAbove;
     } else {
@@ -3487,14 +3506,14 @@ public class SoilProfileModifyExisting {
         stableCarbonPercentage[layerIndex] =
             this.organicCarbon_SLOC[profileIndex][layerIndex]
                 * stableFractionToUse[firstStandardLayerBelowTarget];
-        //				System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
+        //        System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
         // top)");
       } else if (firstStandardLayerBelowTarget == nStandardDepths) {
         // this whole thing gets treated like the bottom...
         stableCarbonPercentage[layerIndex] =
             this.organicCarbon_SLOC[profileIndex][layerIndex]
                 * stableFractionToUse[firstStandardLayerBelowTarget];
-        //				System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
+        //        System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
         // bottom)");
       } else {
         weightForBottom =
@@ -3508,13 +3527,14 @@ public class SoilProfileModifyExisting {
                 * (weightForBottom * stableFractionToUse[firstStandardLayerBelowTarget]
                     + (1.0 - weightForBottom)
                         * stableFractionToUse[firstStandardLayerBelowTarget - 1]);
-        //				System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
+        //        System.out.println("fSLBT = " + firstStandardLayerBelowTarget + " (supposed to be
         // middle)");
-        //				System.out.println("wFB = " + weightForBottom);
-        //				System.out.println("1 - wFB = " + (1.0 - weightForBottom));
-        //				System.out.println("upper frac = " +
+        //        System.out.println("wFB = " + weightForBottom);
+        //        System.out.println("1 - wFB = " + (1.0 - weightForBottom));
+        //        System.out.println("upper frac = " +
         // stableFractionToUse[firstStandardLayerBelowTarget]);
-        //				System.out.println("lower frac = " + stableFractionToUse[firstStandardLayerBelowTarget
+        //        System.out.println("lower frac = " +
+        // stableFractionToUse[firstStandardLayerBelowTarget
         // - 1]);
 
       }
@@ -3544,20 +3564,20 @@ public class SoilProfileModifyExisting {
     }
 
     /*
-    		*SOIL ANALYSIS
-    		@A SADAT  SMHB  SMPX  SMKE  SANAME
-    		 1 16091   -99   -99   -99  -99
-    		@A  SABL  SADM  SAOC  SANI SAPHW SAPHB  SAPX  SAKE  SASC
-    		   base layer
-    		         bulk density
-    		               total organic carbon
-    		                     total nigrogetn
-    		                           pH in water
-    		                                pH in buffer
-    		                                       phosphorus extractable
-    		                                             potassium exchangable
-    		                                                   stable soil carbon
-    		SA_block_bottom_goes_here
+        *SOIL ANALYSIS
+        @A SADAT  SMHB  SMPX  SMKE  SANAME
+         1 16091   -99   -99   -99  -99
+        @A  SABL  SADM  SAOC  SANI SAPHW SAPHB  SAPX  SAKE  SASC
+           base layer
+                 bulk density
+                       total organic carbon
+                             total nigrogetn
+                                   pH in water
+                                        pH in buffer
+                                               phosphorus extractable
+                                                     potassium exchangable
+                                                           stable soil carbon
+        SA_block_bottom_goes_here
 
     */
 
@@ -3572,18 +3592,18 @@ public class SoilProfileModifyExisting {
       throws Exception {
 
     /*
-    		*INITIAL CONDITIONS
-    		@C   PCR ICDAT  ICRT  ICND  ICRN  ICRE  ICWD ICRES ICREN ICREP ICRIP ICRID ICNAME
-    		 1    MZ 84357  1000   -99  1.00  1.00 -99.0     1  1.00  0.00   100    15 -99
-    		@C  ICBL  SH2O  SNH4  SNO3
-    		 1    15 0.311   0.1   5.5
-    		 1    30 0.317   0.1   4.7
-    		 1    45 0.327   0.1   4.2
-    		 1    60 0.317   0.1  12.5
-    		 1    75 0.307   0.1  24.6
-    		 1    90 0.281   0.1  28.9
-    		 1   105 0.271   0.1  28.5
-    		 1   120 0.275   0.1  28.6
+        *INITIAL CONDITIONS
+        @C   PCR ICDAT  ICRT  ICND  ICRN  ICRE  ICWD ICRES ICREN ICREP ICRIP ICRID ICNAME
+         1    MZ 84357  1000   -99  1.00  1.00 -99.0     1  1.00  0.00   100    15 -99
+        @C  ICBL  SH2O  SNH4  SNO3
+         1    15 0.311   0.1   5.5
+         1    30 0.317   0.1   4.7
+         1    45 0.327   0.1   4.2
+         1    60 0.317   0.1  12.5
+         1    75 0.307   0.1  24.6
+         1    90 0.281   0.1  28.9
+         1   105 0.271   0.1  28.5
+         1   120 0.275   0.1  28.6
     */
 
     int profileIndex = findProfileIndex(profileName);
@@ -3613,7 +3633,7 @@ public class SoilProfileModifyExisting {
     double nitrateAmount = (1.0 - magicFractionToAmmonium) * totalNitrogenPPMforBothNH4NO2;
 
     int nLayers = this.getNLayersInProfile(profileIndex);
-    //		System.out.println("-- init nLayers = " + nLayers + " BF = " +
+    //    System.out.println("-- init nLayers = " + nLayers + " BF = " +
     // layerDepthAtBase_SLB[profileIndex].length + " --");
     for (int layerIndex = 0; layerIndex < nLayers; layerIndex++) {
       soilDepth =
@@ -3638,33 +3658,33 @@ public class SoilProfileModifyExisting {
     }
 
     /*
-    		*INITIAL CONDITIONS
-    		@C   PCR ICDAT  ICRT  ICND  ICRN  ICRE  ICWD ICRES ICREN ICREP ICRIP ICRID ICNAME
-    		 crop component number
-    		     previous crop code
-    		         initial conditions measurement date
-    		                root weight from previous crop
-    		                      nodule weight from previous crop
-    		                            rhizobia number
-    		                                  rhizobia effectivness
-    		                                        ????
-    		                                             ?????
-    		                                                    ????
-    		                                                         ????
-    		 1    MZ 84357  1000   -99  1.00  1.00 -99.0     1  1.00  0.00   100    15 -99
-    		@C  ICBL  SH2O  SNH4  SNO3
-    		    soil base layer depth
-    		          share of water (cm3 / cm3)
-    		                ammonium gN/Mg soil
-    		                      nitrate gN/Mg soil
-    		 1    15 0.311   0.1   5.5
-    		 1    30 0.317   0.1   4.7
-    		 1    45 0.327   0.1   4.2
-    		 1    60 0.317   0.1  12.5
-    		 1    75 0.307   0.1  24.6
-    		 1    90 0.281   0.1  28.9
-    		 1   105 0.271   0.1  28.5
-    		 1   120 0.275   0.1  28.6
+        *INITIAL CONDITIONS
+        @C   PCR ICDAT  ICRT  ICND  ICRN  ICRE  ICWD ICRES ICREN ICREP ICRIP ICRID ICNAME
+         crop component number
+             previous crop code
+                 initial conditions measurement date
+                        root weight from previous crop
+                              nodule weight from previous crop
+                                    rhizobia number
+                                          rhizobia effectivness
+                                                ????
+                                                     ?????
+                                                            ????
+                                                                 ????
+         1    MZ 84357  1000   -99  1.00  1.00 -99.0     1  1.00  0.00   100    15 -99
+        @C  ICBL  SH2O  SNH4  SNO3
+            soil base layer depth
+                  share of water (cm3 / cm3)
+                        ammonium gN/Mg soil
+                              nitrate gN/Mg soil
+         1    15 0.311   0.1   5.5
+         1    30 0.317   0.1   4.7
+         1    45 0.327   0.1   4.2
+         1    60 0.317   0.1  12.5
+         1    75 0.307   0.1  24.6
+         1    90 0.281   0.1  28.9
+         1   105 0.271   0.1  28.5
+         1   120 0.275   0.1  28.6
     */
 
     return outputString;
@@ -4006,9 +4026,9 @@ public class SoilProfileModifyExisting {
     } // end for soilLayerIndex
   }
 
-  //	public void setLayerThicknessCM(float value, int profileIndex, int layerIndex) {
-  //		layerThicknessCM[profileIndex][layerIndex] = value;
-  //	}
+  //  public void setLayerThicknessCM(float value, int profileIndex, int layerIndex) {
+  //    layerThicknessCM[profileIndex][layerIndex] = value;
+  //  }
 
   public void getMasterHorizon_SLMH(String value, int profileIndex, int layerIndex) {
     masterHorizon_SLMH[profileIndex][layerIndex] = value;

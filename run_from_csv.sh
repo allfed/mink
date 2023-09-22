@@ -16,13 +16,13 @@ export GRASS_VERBOSE=0
 time_start=$SECONDS
 . basics_15jun22/sge_Mink3daily/default_paths_etc.sh
 . basics_15jun22/sge_Mink3daily/some_settings_46.sh
-cd /mnt/data/basics_15jun22/small_java_programs/java8_IFPRIconverter/src
 
-javac org/Scenarios/Config.java
-javac org/Scenarios/GenerateScenarios.java
-javac org/Scenarios/Scenarios.java
-javac org/Scenarios/CalculateProduction.java
-javac org/DSSATRunner/WriteCopyBlockForDailyWeather.java
+
+
+cd /mnt/data/basics_15jun22/sge_Mink3daily/
+# ./compile_java.sh Config.java GenerateScenarios.java Scenarios.java CalculateProduction.java WriteCopyBlockForDailyWeather.java Mink3p2daily.java SplitTextMatrices.java
+# ./compile_java.sh Config.java GenerateScenarios.java BashScripts.java Scenarios.java Mink3p2daily.java SplitTextMatrices.java
+./compile_java.sh Scenarios.java CalculateProduction.java BashScripts.java
 
 scenarios_csv_location="/mnt/data/basics_15jun22/sge_Mink3daily/scenarios/generated_scenarios.csv"
 config_file_location="/mnt/data/$1"
@@ -30,6 +30,7 @@ script_folder=/mnt/data/basics_15jun22/sge_Mink3daily/
 run_parameters_csv_folder="/mnt/data/basics_15jun22/sge_Mink3daily/parameters/"
 whether_run_DSSAT_or_process=$2
 
+cd /mnt/data/basics_15jun22/small_java_programs/java8_IFPRIconverter/bin
 java -ea org.Scenarios.Scenarios $scenarios_csv_location $script_folder $run_parameters_csv_folder $config_file_location $whether_run_DSSAT_or_process
 time_end=$SECONDS
 echo "duration (seconds)"

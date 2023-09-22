@@ -1,0 +1,50 @@
+automatic planting in DSSAT at bottom of x files (simulation block?)
+can't do it for happy plant...
+
+can set bounts for soil temp and soil moisture
+ eg 5cm in the ground, temp no more than this, not less than that, moisture bounds set as well
+originall for reasonable planting months for american states.
+looking to not get frozen out and not muddy.
+you can give it a window as well
+you can say want it to happen during this time
+doesn't give best yield, just very first day conditions are met
+can add "f" or Force that puts in the ground
+
+
+[SEPARATE QUESTION] okay so CSM? how to get substor etc?
+[SEPARATE QUESTION] other model (apsim) for cold...
+[SEPARATE QUESTION] should I use the 14 day limit on emergence then?
+
+apsim
+
+once was down at ufl
+australia apsim guru
+    tried to adapt mink to apsim
+    (12 years ago)
+    kinda sorta got it to work once
+    was real pain
+    joshua elliot has a tool for this
+
+DSSAT has the potato model
+crop code of pt does it!
+"Ruby" made a good potato model (he'll send me)
+
+temperature stress crop-by-crop would be a huge undertaking
+
+he is pretty sure maize and wheat have cold weather things
+he thinks has a "chilling degree days"
+
+
+source code (some_settings script) 
+he implenmented so can have planting window and can change in X file, so instead of given day, just use rules
+he put a 14 day limit on emergence to account for dead seeds and squirrels etc
+
+he suggests 2 weeks, and a moving average
+I think moving average on either side should be good
+
+
+he suggests just filtering things out later on if they are too low yielding.
+
+happy plant is for phenology
+the happy plant only, then planting of real planting, didn't really save much time. better to run everything and filter out at the end
+he's reverted to saying we're planting same happy as real plant runs and run everything

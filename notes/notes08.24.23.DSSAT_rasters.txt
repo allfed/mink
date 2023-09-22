@@ -1,0 +1,84 @@
+there seems to be some issue.
+I want to figure out why when I run canola run, then canola process, it seems like there are no issues at all running, and then for some reason I'm not seeing all the planting months, even though it ran? 
+
+
+so specifically,
+
+"
+done running generateRasterFromColumns script
+
+
+running generateRasterFromColumns script
+
+
+done running generateRasterFromColumns script
+
+Invalid map <cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_real_1>
+Parse error
+Error occurred in bash script: ./scale_raster.sh
+Error occurred in bash command initiated from: BashScripts.java: line 468
+The calling method was invoked from: Scenarios.java: line 1278
+ERROR: process exited with value 1 (Error)
+"
+
+so cnINVIGOR5440RF_379_Outdoor_crops_control_11_noGCMcalendar_p0_rapeseed__Aug10_updatedN_real_1 does not exist as a raster.
+
+however, cnINVIGOR5440RF_379_Outdoor_crops_control_3_noGCMcalendar_p0_rapeseed__Aug10_updatedN_real_1 DOES exist, as well as _5_
+I don't get it, why this file is not being generated.
+
+so,
+
+this.raster_names_all_years_dry[i][planting_month_index][year_index] =
+    this.snx_name[i]
+        + "_"
+        + this.co2_level[i]
+        + "_"
+        + this.weather_prefix[i]
+        + "_"
+        + this.yield_result_names[i][planting_month_index]
+        + "_"
+        + real_or_happy
+        + "_"
+        + this.years[year_index];
+that is where the file is possibly stored?
+I don't know if it's created here or just loaded.
+
+Indeed, it is only loaded.
+It is the very first function used in process to create the _wet_real_ raster with it (scaling it).
+
+So there's something going on with mink3daily?
+It used to generate this raster but now doesn't?
+The git diff doesn't show anything different...
+
+startKeyListener might be breaking things...
+doesn't seem like it
+
+okay, seems like actually the GIS raster creation needs to happen at the processing stage! So the issue is of course the processing itself is not running the "read" and creating any GRASS files for some reason.
+
+
+
+// process the output from yields into a single text file in the to_DSSAT directory
+public static void generateRasterFromColumns(
+    String run_script_folder, String fullThingForImportTxtContents, String rasterName)
+    throws InterruptedException, IOException {
+
+  System.out.println("");
+  System.out.println("");
+  System.out.println("processResults creates raster with name:");
+  System.out.println(rasterName);
+  System.out.println("fullThingForImportTxtContents");
+  System.out.println(fullThingForImportTxtContents);
+  System.out.println("");
+  System.out.println("");
+  System.out.println("");
+  // create rasters from the yield per unit area
+  ProcessBuilder pb =
+      new ProcessBuilder(
+          "bash",
+          "./generateRasterFromColumns.sh",
+          fullThingForImportTxtContents,
+          rasterName);
+
+  callProcess(pb, run_script_folder);
+} // end processResults
+

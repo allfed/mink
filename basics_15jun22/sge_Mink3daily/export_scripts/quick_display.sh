@@ -22,7 +22,8 @@ else
 fi
 
 # Create a unique temporary directory for this script instance
-tmp_dir="$git_root/image_dump_${$}"
+tmp_dir="$git_root/image_dump_${RANDOM}_`date +%N`"
+echo $tmp_dir 1
 mkdir -p $tmp_dir
 
 export GRASS_PNGFILE=${tmp_dir}/${raster}.png
@@ -78,15 +79,17 @@ if [ -n "$raster_exists" ]; then
 
   # echo "colors"
 
-  r.colors map=$raster color=rainbow
+  # r.colors map=$raster color=rainbow
 
   # echo "done colors"
 
 
-  d.rast $raster vallist=$min-$max #2>&1 | grep -v "PNG"
+# below we generate rasters at GRASS_PNGFILE and copy them over to their appropriate location in the tmp_dir.
 
+
+  d.rast $raster vallist=$min-$max
   # When using cp, use $tmp_dir instead of ../../../
-  cp $GRASS_PNGFILE $tmp_dir/bg.png
+  cp $GRASS_PNGFILE $tmp_dir/heatmap.png
 
   if [ -n "$vector" ]; then
     d.vect $vector type=boundary color=black --quiet
@@ -100,17 +103,17 @@ if [ -n "$raster_exists" ]; then
     n_categories=`r.category $raster | wc -l`
 
     if [ $n_categories -lt 12 ]; then
-      eval d.legend map=$raster range=$min,$max at=1,50,2,5
-      #eval d.legend map=$raster at=1,50,2,5
+      eval d.legend --quiet map=$raster range=$min,$max at=1,50,2,5 2>&1 | grep -v "Color range exceeds"
+      #eval d.legend --quiet map=$raster at=1,50,2,5 2>&1 | grep -v "Color range exceeds"
     else
       # make a bigger legend
-      eval d.legend map=$raster range=$min,$max at=1,80,2,10
-      #eval d.legend map=$raster at=1,80,2,10
+      eval d.legend --quiet map=$raster range=$min,$max at=1,80,2,10 2>&1 | grep -v "Color range exceeds"
+      #eval d.legend --quiet map=$raster at=1,80,2,10 2>&1 | grep -v "Color range exceeds"
     fi
   else
     # not a categorical map
-      eval d.legend map=$raster range=$min,$max at=1,50,2,5 --quiet
-      #eval d.legend map=$raster at=1,50,2,5
+      eval d.legend --quiet map=$raster range=$min,$max at=1,50,2,5 --quiet 2>&1 | grep -v "Color range exceeds"
+      #eval d.legend --quiet map=$raster at=1,50,2,5 2>&1 | grep -v "Color range exceeds"
   fi
 
 cp $GRASS_PNGFILE $tmp_dir/legend.png
@@ -130,13 +133,22 @@ $raster : $extra_description" \
 cp $GRASS_PNGFILE $tmp_dir/text.png
 fi
 
-convert -composite -gravity center $tmp_dir/text.png $tmp_dir/bg.png $tmp_dir/resulttmp1.png | grep -v "PNG"
+# now that all the png files have been created, we merge them with the convert command
+
+# create a composite image with the text and heatmap called resulttmp1.png
+convert -composite -gravity center $tmp_dir/text.png $tmp_dir/heatmap.png $tmp_dir/resulttmp1.png | grep -v "PNG"
+
+# create a composite image with the text and heatmap and legend called resulttmp2.png
 convert -composite -gravity center $tmp_dir/resulttmp1.png $tmp_dir/legend.png $tmp_dir/resulttmp2.png | grep -v "PNG"
+
+# create a composite image with the text and heatmap and legend and regional map outline called resulttmp3.png
 convert -composite -gravity center $tmp_dir/resulttmp2.png $tmp_dir/vect.png $tmp_dir/resulttmp3.png | grep -v "PNG"
+
 echo ""
 echo location saving raster: 
 echo $location/$raster.png
 echo ""
+
 
 convert $tmp_dir/resulttmp3.png -background white -flatten $location/$raster.png | grep -v "PNG"
 

@@ -14,8 +14,8 @@ model_configuration:
   # Average the yields across the years being simulated
   average_yields: true
 
-  # Averages over the years if true. (Does not affect other operations if false).
-  calculate_average_production_over_time: true
+  # Calculate best planting month for each grid cell for each year (rather than for the average of all years)
+  calculate_each_year_best_month: false
 
   find_best_yields: true
 

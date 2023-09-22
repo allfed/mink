@@ -3901,15 +3901,15 @@ public class DSSATRunnerBigInits {
           13
               + OLDextraStartIndices.length
               + 2; // min / max/ mean / std / bad / happy mean / happy std / real anthesis mean /
-                   // real anthesis std / real maturity mean / real maturity std / happy maturity
-                   // mean / happy maturity std
+      // real anthesis std / real maturity mean / real maturity std / happy maturity
+      // mean / happy maturity std
     } else {
       nCols =
           13
               + extraStartIndices.length
               + 2; // min / max/ mean / std / bad / happy mean / happy std / real anthesis mean /
-                   // real anthesis std / real maturity mean / real maturity std / happy maturity
-                   // mean / happy maturity std
+      // real anthesis std / real maturity mean / real maturity std / happy maturity
+      // mean / happy maturity std
     }
     FunTricks.writeInfoFile(yieldOutputBaseName + "_STATS", nRows, nCols, delimiter);
 

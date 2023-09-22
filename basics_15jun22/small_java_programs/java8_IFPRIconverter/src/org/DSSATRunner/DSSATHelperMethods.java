@@ -134,7 +134,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 0; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       monthlySW[monthIndex] =
           Double.parseDouble(dataLineSplit[shifter + monthIndex]) * SWmultiplier;
@@ -149,7 +149,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 1; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       monthlyTmax[monthIndex] =
           Double.parseDouble(dataLineSplit[shifter + monthIndex])
@@ -161,7 +161,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 2; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       monthlyTmin[monthIndex] =
           Double.parseDouble(dataLineSplit[shifter + monthIndex])
@@ -172,7 +172,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 3; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       monthlyPrec[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]);
       if (monthlyPrec[monthIndex] < 0) {
@@ -184,7 +184,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 4; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       monthlyRainydays[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]);
       if (monthlyRainydays[monthIndex] < 0) {
@@ -446,7 +446,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 0; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlySW[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]) *
       // SWmultiplier;
@@ -462,7 +462,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 1; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlyTmax[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]) / 10;
       // // Beware the MAGIC NUMBER!! tenths of a degree
@@ -476,7 +476,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 2; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlyTmin[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]) / 10;
       // // Beware the MAGIC NUMBER!! tenths of a degree
@@ -489,7 +489,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 3; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlyPrec[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]);
       monthlyPrec[monthIndex] = dataTable.getValue(lineIndex, shifter + monthIndex);
@@ -502,7 +502,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 4; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlyRainydays[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]);
       monthlyRainydays[monthIndex] = dataTable.getValue(lineIndex, shifter + monthIndex);
@@ -753,7 +753,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 0; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlySW[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]) *
       // SWmultiplier;
@@ -769,7 +769,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 1; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlyTmax[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]) / 10;
       // // Beware the MAGIC NUMBER!! tenths of a degree
@@ -781,7 +781,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 2; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlyTmin[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]) / 10;
       // // Beware the MAGIC NUMBER!! tenths of a degree
@@ -792,7 +792,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 3; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlyPrec[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]);
       monthlyPrec[monthIndex] = dataTable.getValue(lineIndex, shifter + monthIndex);
@@ -805,7 +805,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 4; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlyRainydays[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]);
       monthlyRainydays[monthIndex] = dataTable.getValue(lineIndex, shifter + monthIndex);
@@ -835,7 +835,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 5; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
 
     //		contentsOfCLIFile += "  RICK   " + latitudeFormatted + "  " + longitudeFormatted + " " +
     // elevationFormatted
@@ -998,7 +998,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 0; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlySW[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]) *
       // SWmultiplier;
@@ -1014,7 +1014,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 1; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlyTmax[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]) / 10;
       // // Beware the MAGIC NUMBER!! tenths of a degree
@@ -1026,7 +1026,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 2; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlyTmin[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]) / 10;
       // // Beware the MAGIC NUMBER!! tenths of a degree
@@ -1037,7 +1037,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 3; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlyPrec[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]);
       monthlyPrec[monthIndex] = dataTable.getValue(lineIndex, shifter + monthIndex);
@@ -1050,7 +1050,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 4; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlyRainydays[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]);
       monthlyRainydays[monthIndex] = dataTable.getValue(lineIndex, shifter + monthIndex);
@@ -1080,7 +1080,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 5; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
 
     //		contentsOfCLIFile += "  RICK   " + latitudeFormatted + "  " + longitudeFormatted + " " +
     // elevationFormatted
@@ -1275,7 +1275,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 0; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlySW[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]) *
       // SWmultiplier;
@@ -1291,7 +1291,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 1; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlyTmax[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]) / 10;
       // // Beware the MAGIC NUMBER!! tenths of a degree
@@ -1305,7 +1305,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 2; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlyTmin[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]) / 10;
       // // Beware the MAGIC NUMBER!! tenths of a degree
@@ -1318,7 +1318,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 3; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlyPrec[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]);
       monthlyPrec[monthIndex] = dataTable.getValue(lineIndex, shifter + monthIndex);
@@ -1331,7 +1331,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 4; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       //			monthlyRainydays[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]);
       monthlyRainydays[monthIndex] = dataTable.getValue(lineIndex, shifter + monthIndex);
@@ -1768,7 +1768,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 0; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       monthlySW[monthIndex] =
           Double.parseDouble(dataLineSplit[shifter + monthIndex]) * SWmultiplier;
@@ -1783,7 +1783,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 1; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       monthlyTmax[monthIndex] =
           Double.parseDouble(dataLineSplit[shifter + monthIndex])
@@ -1795,7 +1795,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 2; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       monthlyTmin[monthIndex] =
           Double.parseDouble(dataLineSplit[shifter + monthIndex])
@@ -1806,7 +1806,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 3; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       monthlyPrec[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]);
       if (monthlyPrec[monthIndex] < 0) {
@@ -1818,7 +1818,7 @@ public class DSSATHelperMethods {
         nBeforeMonthly
             + nMonths
                 * 4; // Beware the MAGIC NUMBER!!! the column index of the first month for this
-                     // variable
+    // variable
     for (int monthIndex = 0; monthIndex < nMonths; monthIndex++) {
       monthlyRainydays[monthIndex] = Double.parseDouble(dataLineSplit[shifter + monthIndex]);
       if (monthlyRainydays[monthIndex] < 0) {

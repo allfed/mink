@@ -99,11 +99,10 @@ public class TestorClass2 {
     int monthIndexTheActualPlantingDateFallsIn =
         DSSATHelperMethods.monthIndexFromDayNumber(
             actualPlantingDayOfYearNumber); // the method gives a month index so add one to get the
-                                            // number....
+    // number....
     int monthTheActualPlantingDateFallsIn =
-        1
-            + monthIndexTheActualPlantingDateFallsIn; // the method gives a month index so add one
-                                                      // to get the number....
+        1 + monthIndexTheActualPlantingDateFallsIn; // the method gives a month index so add one
+    // to get the number....
     int firstDayOfMonthTheActualPlantingDateFallsIn =
         DSSATHelperMethods.firstPlantingDateFromMonth(monthTheActualPlantingDateFallsIn);
     int dateCodeForWhereWeWantToStartAsInteger =

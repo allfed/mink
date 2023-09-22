@@ -1,0 +1,188 @@
+the intention is to set DSSAT to keep within its own loop, rather than having to read in every time
+the question is whether CSM.for can do this -- not have to read in every time. it's really slow.
+
+
+C-----------------------------------------------------------------------
+C    Delete previouse copies of temporary input file
+C-----------------------------------------------------------------------
+      IF (RNMODE .NE. 'D') THEN
+        INQUIRE (FILE = FILEIO,EXIST = FEXIST)
+        IF (FEXIST) THEN
+          OPEN (LUNIO, FILE = FILEIO,STATUS = 'UNKNOWN',IOSTAT=ERRNUM)
+          CLOSE (LUNIO,STATUS = 'DELETE')
+        ENDIF
+        LN = LEN(TRIM(FILEIO))
+        FILEIOH = FILEIO
+        WRITE(FILEIOH(LN:LN),'(A1)') 'H'
+        INQUIRE (FILE = FILEIOH,EXIST = FEXIST)
+        IF (FEXIST) THEN
+          OPEN (LUNIO, FILE = FILEIOH,STATUS = 'UNKNOWN',IOSTAT=ERRNUM)
+          CLOSE (LUNIO,STATUS = 'DELETE')
+        ENDIF
+
+C-----------------------------------------------------------------------
+C    Open BATCH file
+C-----------------------------------------------------------------------
+        IF (INDEX('NQSFBET',RNMODE) .GT. 0) THEN
+           CALL GETLUN('BATCH ', LUNBIO)
+           FINDCH='$BATCH'
+           OPEN (LUNBIO, FILE = FILEB,STATUS = 'UNKNOWN',IOSTAT=ERRNUM)
+           IF (ERRNUM .NE. 0) CALL ERROR (ERRKEY,28,FILEB,LINBIO)
+           CALL FIND (LUNBIO,FINDCH,LINBIO,IFIND)
+           IF (IFIND .EQ. 0) CALL ERROR (ERRKEY,26,FILEB,LINBIO)
+        ENDIF
+      ENDIF 
+
+
+    " D   TempFile   NA    Debug: Skip input module and use existing TempFile.    ", &
+
+
+so I definitely want the year loop to be the thing I do, as it's ~15 times faster.
+
+
+C*********************************************************************** 
+C*********************************************************************** 
+C-----------------------------------------------------------------------
+C     BEGINNING of SEASONAL SIMULATION loop
+C-----------------------------------------------------------------------
+C     SEASONAL INITIALIZATION
+C*********************************************************************** 
+      SEAS_LOOP: DO WHILE (MULTI .NE. NYRS)
+C***********************************************************************
+      IF (NYRS .GT. 1) THEN 
+        MULTI = MULTI + 1
+      ELSE
+        MULTI = 1
+      ENDIF
+      IF (MULTI .GT. 1) THEN
+        RUN   = RUN + 1
+        CALL MULTIRUN(RUN, 0)  !chp 3/17/2011
+        YRSIM = YRSIM_SAVE
+        CALL YR_DOY(YRSIM,YR,ISIM)
+        YRSIM = (YR + MULTI - 1) * 1000 + ISIM
+        YREND = -99
+        IF (CONTROL%ErrCode /= 0) THEN
+          CONTROL%ErrCode = 0
+!         EXIT SEAS_LOOP
+          IF (INDEX('Q',RNMODE) > 0) EXIT SEAS_LOOP
+        ENDIF
+      ENDIF
+      IF (RNMODE .NE. 'Q' .OR. RUN .GT. 1) THEN
+        YRDOY = YRSIM
+      ENDIF
+      
+      CONTROL % DAS     = 0
+      CONTROL % RUN     = RUN
+      CONTROL % YRSIM   = YRSIM
+      CONTROL % YRDOY   = YRDOY
+      CONTROL % MULTI   = MULTI
+      CONTROL % DYNAMIC = SEASINIT
+      CALL PUT(CONTROL)
+   
+      CALL LAND(CONTROL, ISWITCH, 
+     &          YRPLT, MDATE, YREND)
+
+      YRDOY = INCYD(YRDOY,-1)
+C-----------------------------------------------------------------------
+C-----------------------------------------------------------------------
+C     BEGINNING of DAILY SIMULATION loop
+C-----------------------------------------------------------------------
+C-----------------------------------------------------------------------
+      DAY_LOOP: DO WHILE (YRDOY .GT. YREND)
+C-----------------------------------------------------------------------
+C     Increment day (YRDOY)
+C-----------------------------------------------------------------------
+      YRDOY = INCYD(YRDOY,1)
+
+C-----------------------------------------------------------------------
+C     Calculate days after simulation (DAS) 
+C-----------------------------------------------------------------------
+      CALL YR_DOY(YRDOY,YEAR,DOY)
+!     DAS   = MAX(0,TIMDIF(YRSIM,YRDOY))
+      DAS   = MAX(0,TIMDIF(INCYD(YRSIM,-1),YRDOY))
+      CONTROL % YRDOY   = YRDOY
+      CONTROL % DAS     = DAS
+C*********************************************************************** 
+C     RATE CALCULATIONS
+C*********************************************************************** 
+      CONTROL % DYNAMIC = RATE
+      CALL PUT(CONTROL)
+
+      CALL LAND(CONTROL, ISWITCH, 
+     &          YRPLT, MDATE, YREND)
+
+C*********************************************************************** 
+C     INTEGRATION 
+C*********************************************************************** 
+      CONTROL % DYNAMIC = INTEGR
+      CALL PUT(CONTROL)
+
+      CALL LAND(CONTROL, ISWITCH, 
+     &          YRPLT, MDATE, YREND)
+
+C*********************************************************************** 
+C     OUTPUT
+C*********************************************************************** 
+      CONTROL % DYNAMIC = OUTPUT
+      CALL PUT(CONTROL)
+
+      CALL LAND(CONTROL, ISWITCH, 
+     &          YRPLT, MDATE, YREND)
+
+C***********************************************************************
+      ENDDO DAY_LOOP   !End of daily loop
+C-----------------------------------------------------------------------
+C     END of DAILY SIMULATION loop
+C----------------------------------------------------------------------
+C*********************************************************************** 
+C     End of Season 
+C*********************************************************************** 
+      CONTROL % DYNAMIC = SEASEND
+      CALL PUT(CONTROL)
+
+      CALL LAND(CONTROL, ISWITCH, 
+     &          YRPLT, MDATE, YREND)
+
+C-----------------------------------------------------------------------
+      ENDDO SEAS_LOOP  
+C-----------------------------------------------------------------------
+C-----------------------------------------------------------------------
+C     END of SEASONAL SIMULATION loop
+C-----------------------------------------------------------------------
+C
+C-----------------------------------------------------------------------
+C    Check to see if all treatments have been run for RNMODE = 'A'
+C-----------------------------------------------------------------------
+      I = INDEX('A', RNMODE)
+      IF (INDEX('A',RNMODE) .GT. 0 .AND. TRTNUM .GE. TRTALL) THEN
+         DONE = .TRUE.
+      
+C-----------------------------------------------------------------------
+C
+C-----------------------------------------------------------------------
+      ELSE IF (INDEX('GDC',RNMODE) .GT. 0) THEN
+        DONE = .TRUE.
+!      ELSE IF (INDEX('FQ',RNMODE).GT. 0 .AND. YEAR .GE. YEAR_END)  THEN
+      ELSE IF (INDEX('FQ',RNMODE).GT. 0 .AND. YRDOY .GE. YRDOY_END) THEN
+        REPNO = REPNO + 1
+        CONTROL % REPNO = REPNO
+        IF (REPNO .GT. NREPS) THEN
+          DONE = .TRUE.
+        ELSE
+          RUN = 0
+        ENDIF
+      ELSE IF (INDEX('IE',RNMODE) .GT. 0) THEN
+        WRITE(*,1700)
+ 1700   FORMAT(/,1X,'Do you want to run more simulations ? ',
+     &         /,1X,'Y or N ? [Default = "N"] ===> ',$)
+        READ (5,1800) ANS
+ 1800   FORMAT(A1)
+        ANS = UPCASE(ANS)
+        IF (ANS .NE. 'Y') DONE = .TRUE.
+      ENDIF
+
+ 2000 CONTINUE
+      END DO RUN_LOOP 
+
+
+So what happens with a year-only loop?

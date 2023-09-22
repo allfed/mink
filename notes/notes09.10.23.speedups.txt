@@ -1,0 +1,543 @@
+
+the timings in java program:
+
+
+
+---------------
+completed 1 out of 1 planting months
+---------------
+
+
+Current working directory: /mnt/data/basics_15jun22/small_java_programs/java8_IFPRIconverter/bin
+
+running build_dailystyle
+
+
+Region: 
+n=70
+s=-20
+w=-90
+e=40
+nsres=1.875
+ewres=1.25
+rows=48
+cols=104
+cells=4992
+
+
+done running build_dailystyle
+
+
+====SUBMITTING RUN ===
+run: Aug10_updatedN
+crop name: rapeseed
+planting month: 11
+snx_name: cnINVIGOR5440IR(scenario index: 1)
+==================
+
+-- 0 / 6 Sun Sep 10 18:16:11 EDT 2023 --
+   !!!! running coordination style for suspected wheat... !!!!
+
+running mink3daily_run_DSSAT_tile.sh
+
+
+done running mink3daily_run_DSSAT_tile.sh
+
+-- 1 / 6 Sun Sep 10 18:16:11 EDT 2023 --
+   !!!! running coordination style for suspected wheat... !!!!
+
+running mink3daily_run_DSSAT_tile.sh
+
+
+done running mink3daily_run_DSSAT_tile.sh
+
+-- 2 / 6 Sun Sep 10 18:16:12 EDT 2023 --
+   !!!! running coordination style for suspected wheat... !!!!
+
+running mink3daily_run_DSSAT_tile.sh
+
+
+done running mink3daily_run_DSSAT_tile.sh
+
+-- 3 / 6 Sun Sep 10 18:16:12 EDT 2023 --
+   !!!! running coordination style for suspected wheat... !!!!
+
+running mink3daily_run_DSSAT_tile.sh
+
+
+done running mink3daily_run_DSSAT_tile.sh
+
+-- 4 / 6 Sun Sep 10 18:16:12 EDT 2023 --
+   !!!! running coordination style for suspected wheat... !!!!
+
+running mink3daily_run_DSSAT_tile.sh
+
+
+done running mink3daily_run_DSSAT_tile.sh
+
+-- 5 / 6 Sun Sep 10 18:16:12 EDT 2023 --
+   !!!! running coordination style for suspected wheat... !!!!
+
+running mink3daily_run_DSSAT_tile.sh
+
+
+done running mink3daily_run_DSSAT_tile.sh
+
+------ moving/unpacking ; Sun Sep 10 18:16:12 EDT 2023 ------
+------ moving/unpacking ; Sun Sep 10 18:16:12 EDT 2023 ------
+------ moving/unpacking ; Sun Sep 10 18:16:12 EDT 2023 ------
+------ moving/unpacking ; Sun Sep 10 18:16:12 EDT 2023 ------
+------ moving/unpacking ; Sun Sep 10 18:16:12 EDT 2023 ------
+------ moving/unpacking ; Sun Sep 10 18:16:12 EDT 2023 ------
+number_of_pixels
+3
+number_of_pixels
+3
+number_of_pixels
+4
+number_of_pixels
+4
+number_of_pixels
+3
+number_of_pixels
+4
+
+running Mink3p2daily.java (from MinkRunner3p2daily.java)
+
+
+running Mink3p2daily.java (from MinkRunner3p2daily.java)
+
+
+running Mink3p2daily.java (from MinkRunner3p2daily.java)
+
+
+running Mink3p2daily.java (from MinkRunner3p2daily.java)
+
+
+running Mink3p2daily.java (from MinkRunner3p2daily.java)
+
+
+running Mink3p2daily.java (from MinkRunner3p2daily.java)
+
+irrigation string [rapeseed] not in our list of supported crops; assuming scheme NONE.
+irrigation string [rapeseed] not in our list of supported crops; assuming scheme NONE.
+irrigation string [rapeseed] not in our list of supported crops; assuming scheme NONE.
+irrigation string [rapeseed] not in our list of supported crops; assuming scheme NONE.
+irrigation string [rapeseed] not in our list of supported crops; assuming scheme NONE.
+irrigation string [rapeseed] not in our list of supported crops; assuming scheme NONE.
+WARNING: org.DSSATRunner.SoilProfile assumes a fixed order for the values
+Use dumpExampleProfile() to see an example of the order.
+WARNING: org.DSSATRunner.SoilProfile assumes a fixed order for the values
+Use dumpExampleProfile() to see an example of the order.
+File [/mnt/data/on_node_home22819_364206659/DSSAT/HN.SOL] has 510 lines making up 27 profiles...
+initializing arrays... nProfiles = 27
+File [/mnt/data/on_node_home31986_118721325/DSSAT/HN.SOL] has 510 lines making up 27 profiles...
+initializing arrays... nProfiles = 27
+WARNING: org.DSSATRunner.SoilProfile assumes a fixed order for the values
+Use dumpExampleProfile() to see an example of the order.
+WARNING: org.DSSATRunner.SoilProfile assumes a fixed order for the values
+Use dumpExampleProfile() to see an example of the order.
+
+-- starting through data in Mink3p2daily.java --
+
+nLinesInDataFile (number of cells)
+3
+
+
+-- starting through data in Mink3p2daily.java --
+
+nLinesInDataFile (number of cells)
+3
+
+File [/mnt/data/on_node_home3789_874548811/DSSAT/HN.SOL] has 510 lines making up 27 profiles...
+initializing arrays... nProfiles = 27WARNING: org.DSSATRunner.SoilProfile assumes a fixed order for the values
+
+Use dumpExampleProfile() to see an example of the order.
+WARNING: org.DSSATRunner.SoilProfile assumes a fixed order for the values
+Use dumpExampleProfile() to see an example of the order.
+File [/mnt/data/on_node_home19088_239347176/DSSAT/HN.SOL] has 510 lines making up 27 profiles...
+initializing arrays... nProfiles = 27
+File [/mnt/data/on_node_home24551_993862704/DSSAT/HN.SOL] has 510 lines making up 27 profiles...
+
+-- starting through data in Mink3p2daily.java --
+
+nLinesInDataFile (number of cells)
+3
+
+File [/mnt/data/on_node_home4885_482831827/DSSAT/HN.SOL] has 510 lines making up 27 profiles...
+initializing arrays... nProfiles = 27
+initializing arrays... nProfiles = 27
+
+-- starting through data in Mink3p2daily.java --
+
+nLinesInDataFile (number of cells)
+4
+
+
+-- starting through data in Mink3p2daily.java --
+
+nLinesInDataFile (number of cells)
+4
+
+
+-- starting through data in Mink3p2daily.java --
+
+nLinesInDataFile (number of cells)
+4
+
+   testing for overview (first line; after happy)
+    didn't find [OVERVIEW.OUT], so trying the next one...
+    didn't find [Overview.OUT], either
+   testing for overview (first line; after happy)
+    didn't find [OVERVIEW.OUT], so trying the next one...
+    didn't find [Overview.OUT], either
+   testing for overview (first line; after happy)
+    didn't find [OVERVIEW.OUT], so trying the next one...
+    didn't find [Overview.OUT], either
+   testing for overview (first line; after happy)
+    didn't find [OVERVIEW.OUT], so trying the next one...
+    didn't find [Overview.OUT], either
+   testing for overview (first line; after happy)
+    didn't find [OVERVIEW.OUT], so trying the next one...
+    didn't find [Overview.OUT], either
+   testing for overview (first line; after happy)
+    didn't find [OVERVIEW.OUT], so trying the next one...
+    didn't find [Overview.OUT], either
+prog: 1/3 = 33.33   r/w/l/e/W: 2.9883/0.5328/   NaN/514.17/58.321   ave R: 339.62 ave H: 358.54 N/P/R = 1.5500/4.6501/3.1001    0.0517
+Elapsed time in seconds: 1.31
+prog: 1/4 =  25.0   r/w/l/e/W: 7.0093/0.3611/   NaN/454.76/81.894   ave R: 285.47 ave H: 277.52 N/P/R = 1.6356/6.5423/4.9067    0.0818
+Elapsed time in seconds: 1.15
+prog: 1/3 = 33.33   r/w/l/e/W: 7.3334/0.5139/   NaN/456.10/83.639   ave R: 491.09 ave H: 386.58 N/P/R = 1.7539/5.2616/3.5078    0.0585
+Elapsed time in seconds: 1.50
+prog: 1/4 =  25.0   r/w/l/e/W: 9.4034/0.7728/   NaN/573.79/60.209   ave R: 331.60 ave H: 283.24 N/P/R = 1.7871/7.1483/5.3612    0.0894
+Elapsed time in seconds: 1.34
+prog: 1/3 = 33.33   r/w/l/e/W: 3.6443/0.7988/   NaN/566.13/56.339   ave R: 478.15 ave H: 378.17 N/P/R = 1.8725/5.6176/3.7451    0.0624
+Elapsed time in seconds: 1.56
+prog: 1/4 =  25.0   r/w/l/e/W: 7.7855/0.5249/   NaN/608.95/39.230   ave R: 426.37 ave H: 366.67 N/P/R = 1.8242/7.2967/5.4725    0.0912
+Elapsed time in seconds: 1.50
+prog: 2/3 = 66.67   r/w/l/e/W: 1.9316/0.6159/37.299/302.86/30.101   ave R: 434.06 ave H: 280.69 N/P/R = 2.4226/3.6340/1.2113    0.0202
+Elapsed time in seconds: 0.83
+prog: 2/4 =  50.0   r/w/l/e/W: 3.9557/0.3816/49.050/272.18/42.148   ave R: 363.56 ave H: 273.67 N/P/R = 2.4983/4.9966/2.4983    0.0416
+Elapsed time in seconds: 0.81
+prog: 2/3 = 66.67   r/w/l/e/W: 4.1108/0.4775/69.311/261.84/43.082   ave R: 475.25 ave H: 373.18 N/P/R = 2.7268/4.0902/1.3634    0.0227
+Elapsed time in seconds: 0.90
+prog: 2/3 = 66.67   r/w/l/e/W: 2.3364/1.3589/71.133/337.32/30.258   ave R: 459.89 ave H: 321.25 N/P/R = 2.7789/4.1683/1.3894    0.0232
+Elapsed time in seconds: 0.83
+prog: 2/4 =  50.0   r/w/l/e/W: 5.0454/0.6283/80.713/343.36/31.492   ave R: 359.32 ave H: 423.64 N/P/R = 2.9513/5.9025/2.9513    0.0492
+Elapsed time in seconds: 1.07
+prog: 3/3 = 100.0   r/w/l/e/W: 1.6132/0.6233/19.317/220.87/20.577   ave R: 376.53 ave H: 265.91 N/P/R = 2.9846/2.9846/   0.0       0.0
+Elapsed time in seconds: 0.56
+ total time in DSSAT loop = 0.04556365061666667min ; per run average = 113.90912654166668ms
+overall per run average = 125.21896854166665ms
+
+done running Mink3p2daily
+
+3149.318483 ms for RUNNER...
+  == time since start for  = 3.150717897s or 0.052511964m or 8.751994E-4h (current = Sun Sep 10 22:16:16 UTC 2023) ==
+prog: 2/4 =  50.0   r/w/l/e/W: 4.3824/0.5399/47.824/354.52/21.477   ave R: 451.01 ave H: 430.90 N/P/R = 2.9637/5.9275/2.9637    0.0494
+Elapsed time in seconds: 1.08
+time_elapsed = 3.4610
+time_non_run = .2270
+time_run = 3.2340
+prog: 3/4 =  75.0   r/w/l/e/W: 2.9688/0.4412/25.136/210.57/28.858   ave R: 327.51 ave H: 270.93 N/P/R = 3.1141/4.1522/1.0380    0.0173
+Elapsed time in seconds: 0.62
+prog: 3/3 = 100.0   r/w/l/e/W: 2.9618/0.4508/40.469/198.86/29.524   ave R: 416.81 ave H: 328.31 N/P/R = 3.3553/3.3553/   0.0       0.0
+Elapsed time in seconds: 0.62
+ total time in DSSAT loop = 0.051012956916666664min ; per run average = 127.53239229166667ms
+overall per run average = 140.89560458333332ms
+
+done running Mink3p2daily
+
+3521.127883 ms for RUNNER...
+  == time since start for  = 3.522228362s or 0.058703806m or 9.783967E-4h (current = Sun Sep 10 22:16:16 UTC 2023) ==
+time_elapsed = 3.8000
+time_non_run = .2000
+time_run = 3.6000
+prog: 3/3 = 100.0   r/w/l/e/W: 1.7679/1.0505/36.253/243.11/20.814   ave R: 406.46 ave H: 311.01 N/P/R = 3.4300/3.4300/0.0000    0.0000
+Elapsed time in seconds: 0.65
+ total time in DSSAT loop = 0.051091054766666665min ; per run average = 127.72763691666667ms
+overall per run average = 143.71993816666665ms
+
+done running Mink3p2daily
+
+3578.41249 ms for RUNNER...
+  == time since start for  = 3.580184319s or 0.05966974m or 9.944957E-4h (current = Sun Sep 10 22:16:16 UTC 2023) ==
+time_elapsed = 3.9000
+time_non_run = .2430
+time_run = 3.6570
+prog: 3/4 =  75.0   r/w/l/e/W: 3.6900/0.5285/41.391/247.16/21.500   ave R: 336.04 ave H: 369.75 N/P/R = 3.5643/4.7524/1.1881    0.0198
+Elapsed time in seconds: 0.61
+prog: 4/4 = 100.0   r/w/l/e/W: 2.3155/0.4081/17.147/166.43/22.208   ave R: 299.77 ave H: 244.20 N/P/R = 3.5341/3.5341/   0.0       0.0
+Elapsed time in seconds: 0.42
+ total time in DSSAT loop = 0.05042255895min ; per run average = 94.54229803125ms
+overall per run average = 110.9855164375ms
+
+done running Mink3p2daily
+
+3696.147318 ms for RUNNER...
+  == time since start for  = 3.697577907s or 0.0616263m or 0.001027105h (current = Sun Sep 10 22:16:16 UTC 2023) ==
+prog: 3/4 =  75.0   r/w/l/e/W: 3.1402/0.4564/24.596/248.46/15.130   ave R: 401.19 ave H: 343.74 N/P/R = 3.4773/4.6364/1.1591    0.0193
+Elapsed time in seconds: 0.51
+time_elapsed = 4.0020
+time_non_run = .2270
+time_run = 3.7750
+prog: 4/4 = 100.0   r/w/l/e/W: 2.8766/0.4480/27.744/192.63/16.447   ave R: 307.79 ave H: 317.19 N/P/R = 3.9793/3.9793/   0.0       0.0
+Elapsed time in seconds: 0.41
+ total time in DSSAT loop = 0.05806672136666667min ; per run average = 108.8751025625ms
+overall per run average = 124.87355590625ms
+
+done running Mink3p2daily
+
+4117.599867 ms for RUNNER...
+  == time since start for  = 4.118838414s or 0.06864731m or 0.0011441218h (current = Sun Sep 10 22:16:16 UTC 2023) ==
+prog: 4/4 = 100.0   r/w/l/e/W: 2.4094/0.4188/16.566/192.96/11.759   ave R: 355.47 ave H: 295.43 N/P/R = 3.8762/3.8762/   0.0       0.0
+Elapsed time in seconds: 0.40
+ total time in DSSAT loop = 0.05863067906666666min ; per run average = 109.93252325ms
+overall per run average = 121.52476703125ms
+
+done running Mink3p2daily
+
+4095.068813 ms for RUNNER...
+  == time since start for  = 4.096296149s or 0.0682716m or 0.00113786h (current = Sun Sep 10 22:16:17 UTC 2023) ==
+time_elapsed = 4.4080
+time_non_run = .2080
+time_run = 4.2000
+time_elapsed = 4.4260
+time_non_run = .2510
+time_run = 4.1750
+
+completed all chunks
+
+
+
+
+
+and the DSSAT elapsed:
+
+
+
+DSSAT time_elapsed = .1840
+DSSAT time_elapsed = .1360
+DSSAT time_elapsed = .1700
+DSSAT time_elapsed = .1430
+DSSAT time_elapsed = .1610
+DSSAT time_elapsed = .2820
+DSSAT time_elapsed = .1020
+DSSAT time_elapsed = .2050
+DSSAT time_elapsed = .1510
+DSSAT time_elapsed = .1970
+DSSAT time_elapsed = .1390
+DSSAT time_elapsed = .1190
+DSSAT time_elapsed = .2450
+DSSAT time_elapsed = .1170
+DSSAT time_elapsed = .2060
+DSSAT time_elapsed = .1790
+DSSAT time_elapsed = .1250
+DSSAT time_elapsed = .1480
+DSSAT time_elapsed = .1460
+DSSAT time_elapsed = .1880
+DSSAT time_elapsed = .1850
+DSSAT time_elapsed = .1340
+DSSAT time_elapsed = .1290
+DSSAT time_elapsed = .1920
+DSSAT time_elapsed = .1930
+DSSAT time_elapsed = .1400
+DSSAT time_elapsed = .1360
+DSSAT time_elapsed = .1840
+DSSAT time_elapsed = .1890
+DSSAT time_elapsed = .1520
+DSSAT time_elapsed = .1440
+DSSAT time_elapsed = .1860
+DSSAT time_elapsed = .2020
+DSSAT time_elapsed = .1390
+DSSAT time_elapsed = .1400
+DSSAT time_elapsed = .1950
+DSSAT time_elapsed = .2170
+DSSAT time_elapsed = .1020
+DSSAT time_elapsed = .1310
+DSSAT time_elapsed = .1620
+DSSAT time_elapsed = .0820
+DSSAT time_elapsed = .2140
+DSSAT time_elapsed = .1270
+DSSAT time_elapsed = .1400
+DSSAT time_elapsed = .0810
+DSSAT time_elapsed = .1420
+DSSAT time_elapsed = .2320
+DSSAT time_elapsed = .1210
+DSSAT time_elapsed = .1990
+DSSAT time_elapsed = .1240
+DSSAT time_elapsed = .1790
+DSSAT time_elapsed = .1450
+DSSAT time_elapsed = .1860
+DSSAT time_elapsed = .1340
+DSSAT time_elapsed = .1860
+DSSAT time_elapsed = .1280
+DSSAT time_elapsed = .2000
+DSSAT time_elapsed = .1110
+DSSAT time_elapsed = .1620
+DSSAT time_elapsed = .1280
+DSSAT time_elapsed = .1670
+DSSAT time_elapsed = .1070
+DSSAT time_elapsed = .1510
+DSSAT time_elapsed = .2700
+DSSAT time_elapsed = .3610
+DSSAT time_elapsed = .2910
+DSSAT time_elapsed = .2300
+DSSAT time_elapsed = .2450
+DSSAT time_elapsed = .3120
+DSSAT time_elapsed = .2800
+DSSAT time_elapsed = .2580
+DSSAT time_elapsed = .2910
+DSSAT time_elapsed = .4590
+DSSAT time_elapsed = .4010
+DSSAT time_elapsed = .3690
+DSSAT time_elapsed = .1740
+DSSAT time_elapsed = .2290
+DSSAT time_elapsed = .3130
+DSSAT time_elapsed = .2140
+DSSAT time_elapsed = .4600
+DSSAT time_elapsed = .5260
+DSSAT time_elapsed = .3880
+DSSAT time_elapsed = .4110
+DSSAT time_elapsed = .1890
+DSSAT time_elapsed = .4140
+DSSAT time_elapsed = .3900
+DSSAT time_elapsed = .1960
+DSSAT time_elapsed = .3450
+DSSAT time_elapsed = .2500
+DSSAT time_elapsed = .2110
+DSSAT time_elapsed = .4240
+DSSAT time_elapsed = .2640
+DSSAT time_elapsed = .2420
+DSSAT time_elapsed = .2510
+DSSAT time_elapsed = .1580
+DSSAT time_elapsed = .1480
+DSSAT time_elapsed = .2910
+DSSAT time_elapsed = .2890
+DSSAT time_elapsed = .2800
+DSSAT time_elapsed = .2050
+DSSAT time_elapsed = .2920
+DSSAT time_elapsed = .1500
+DSSAT time_elapsed = .1400
+DSSAT time_elapsed = .2140
+DSSAT time_elapsed = .2090
+
+Elapsed time in seconds: 1.31
+
+Elapsed time in seconds: 1.15
+
+Elapsed time in seconds: 1.50
+
+Elapsed time in seconds: 1.34
+
+Elapsed time in seconds: 1.56
+
+Elapsed time in seconds: 1.50
+
+Elapsed time in seconds: 0.83
+
+Elapsed time in seconds: 0.81
+
+Elapsed time in seconds: 0.90
+
+Elapsed time in seconds: 0.83
+
+Elapsed time in seconds: 1.07
+
+Elapsed time in seconds: 0.56
+
+Elapsed time in seconds: 1.08
+
+Elapsed time in seconds: 0.62
+
+Elapsed time in seconds: 0.62
+
+Elapsed time in seconds: 0.65
+
+Elapsed time in seconds: 0.61
+
+Elapsed time in seconds: 0.42
+
+Elapsed time in seconds: 0.51
+
+Elapsed time in seconds: 0.41
+
+Elapsed time in seconds: 0.40
+
+
+note: this includes both happy and non-happy runs, so need to divide by 2 from the java to get expected run time.
+so that's 0.9 mean converted to 0.45 expected for the rough DSSAT+other time, meaning 0.21 goes to DSSAT and 0.24 goes to the rest of the Java stuff, as 0.21 is the average dssat time.
+So half the time isn't even being spent running DSSAT.
+so there's a substantial non-DSSAT amount of time being spent. I suspect that's file read/write time.
+But it might be kind of hard to reduce this time... unless there's a way to substantially reduce file read/write?
+I already determined the copying and mkdir and stuff is not really a big contributor to the time required.
+
+I ran in non-parallel mode: approximately the same timing for everything (except things ran a bit slower, I suspect 6 is a bit too many at once and some processes are waiting)
+10 ms each loop would be... a difference between 0.400 and 0.410... insignifcant over all.
+
+
+
+and now I see pretty reliably on timing the java:
+time 101694395336067
+time 111694395336192
+time 121694395336210
+Interval 1 took 0.00% of the total time.
+Interval 2 took 0.00% of the total time.
+Interval 3 took 0.00% of the total time.
+Interval 4 took 0.00% of the total time.
+Interval 5 took 0.00% of the total time.
+Interval 6 took 0.00% of the total time.
+Interval 7 took 0.31% of the total time.
+Interval 8 took 0.00% of the total time.
+Interval 9 took 0.00% of the total time.
+Interval 10 took 0.00% of the total time.
+Interval 11 took 38.94% of the total time.
+Interval 12 took 5.61% of the total time.
+Interval 13 took 0.00% of the total time.
+Interval 14 took 3.43% of the total time.
+Interval 15 took 49.84% of the total time.
+Interval 16 took 1.56% of the total time.
+Interval 17 took 0.31% of the total time.
+RunDSSAThappy took 38.94% of the total time.
+RunDSSATreal took 49.84% of the total time.
+Elapsed time in seconds: 0.32
+prog: 286/389 = 73.52   r/w/l/e/W: 0.1735/0.0614/0.1755/21.285/0.9736   ave R: 169.27 ave H: 115.64 N/P/R = 88.222/119.99/31.772 0.5295
+
+
+so now I'm confused, looks like actually the runs are 40% and 50% of the total time respectively.
+
+
+So single example from java:
+
+RunDSSAThappy took 0.07s, 32.52% of the total time.
+RunDSSATreal took 0.11s, 51.46% of the total time.
+
+and directly from DSSAT:
+
+DSSAT time_elapsed = .0640
+DSSAT time_elapsed = .1030
+
+they agree!
+
+okay, so that concludes that there really isn't much time to be saved except for reducing DSSAT runtime.
+It's possible read/write could be going over the buffer available to write txt files... but I'm not sure. That could cause a bad interaction between the other java code and the DSSAT file read/write stuff.
+
+
+okay, I ran the full 1 thread version of DSSAT with 7 years:
+cnINVIGOR5440RF:
+real average in seconds: 0.15
+happy average in seconds: 0.1
+
+if it is actually each harvest that matters, should get 0.29 times the speed for real and happy on average (0.04 s, 0.03 s)
+if actually has to do with read/write so treatment would matter should get more than 0.29, maybe 0.7 times the speed or something.
+okay, I ran the full 1 thread version of DSSAT with ONLY 2 years:
+cnINVIGOR5440RF:
+real average in seconds: 0.15
+happy average in seconds: 0.1
+
+
+
+
+
+for rainfed.
+

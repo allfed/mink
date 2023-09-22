@@ -12,13 +12,13 @@ public class SplitTextMatrices {
     // handle the command line arguments...
     ////////////////////////////////////////////
 
-    System.out.print("command line arguments: \n");
-    bigTimer.tic();
-    for (int i = 0; i < commandLineOptions.length; i++) {
-      System.out.print(i + " " + commandLineOptions[i] + "; " + bigTimer.tocNanos() + " ns\n");
-      bigTimer.tic();
-    }
-    System.out.println();
+    // System.out.print("command line arguments: \n");
+    // bigTimer.tic();
+    // for (int i = 0; i < commandLineOptions.length; i++) {
+    //   System.out.print(i + " " + commandLineOptions[i] + "; " + bigTimer.tocNanos() + " ns\n");
+    //   bigTimer.tic();
+    // }
+    // System.out.println();
 
     if (commandLineOptions.length != 3) {
       System.out.println("Usage: SplitTextMatrices input_matrix_basename output_prefix nChunks");
@@ -29,7 +29,6 @@ public class SplitTextMatrices {
     String originalBaseName = commandLineOptions[0];
     String outputPrefix = commandLineOptions[1];
     int nChunks = Integer.parseInt(commandLineOptions[2]);
-
     FunTricks.splitMatrixTextFileByLinesInfixBeforeUnderscore(
         originalBaseName, outputPrefix, nChunks);
   } // main

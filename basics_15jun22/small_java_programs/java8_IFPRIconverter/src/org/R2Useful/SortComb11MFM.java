@@ -9,13 +9,13 @@ public class SortComb11MFM {
 
   public String getModuleInfo() {
     return "MffSortComb11. This module sorts a 2-d MFF matrix by the values in the specified"
-               + " column. That is, the rows are preserved together and are put in increasing order"
-               + " by the values in the specified column.<p>This will also sort a 1-d long array if"
-               + " supplied (otherwise pass in a null). This is so that the matrix could be"
-               + " restored to another form (e.g., a map). A long array is necessary due to the"
-               + " shortcomings of floats in storing large integers. A second long array will be"
-               + " created (and similarly sorted) to contain the original row number within the"
-               + " matrix.";
+        + " column. That is, the rows are preserved together and are put in increasing order"
+        + " by the values in the specified column.<p>This will also sort a 1-d long array if"
+        + " supplied (otherwise pass in a null). This is so that the matrix could be"
+        + " restored to another form (e.g., a map). A long array is necessary due to the"
+        + " shortcomings of floats in storing large integers. A second long array will be"
+        + " created (and similarly sorted) to contain the original row number within the"
+        + " matrix.";
   }
 
   // bad programming, there should really be a lock on these or something, but i'm going

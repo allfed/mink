@@ -154,7 +154,7 @@ public class IrriSRiceSomeDrySpellsA implements IrrigationScheme {
 
     double percolationRate =
         0.5; // IR008 mm/day; originally, i used 2mm, but i think it should be lower, so stealing
-             // 0.5 from a standard X file
+    // 0.5 from a standard X file
     double plowpanPuddlingDepth = 15; // IR010; dunno if this is actually read or not
     double initialBundHeight = 20.0; // IR009; mm
     double initialFloodDepth = 20.0; // IR003; mm

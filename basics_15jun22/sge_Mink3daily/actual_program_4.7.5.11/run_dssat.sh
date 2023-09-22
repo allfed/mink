@@ -4,7 +4,21 @@
 # script -c "./dscsm_compiled_fast.exe n deleteme.v45" > /dev/null
 
 # if want it to print out, uncomment below and comment above
- ./dscsm_compiled_fast.exe n deleteme.v45
+ # echo "running dscsm047_fast n deleteme.v45" >> /mnt/data/log.txt
+ # ./dscsm_compiled_fast.exe n deleteme.v45
+
+
+ # time_start=$(date +%s%3N)
+
+ ./dscsm047_debug n deleteme.v45 # >> /mnt/data/log.txt 2>&1
+
+ # time_end=$(date +%s%3N)
+ # time_elapsed=$(echo "scale=4; ($time_end - $time_start)/1000" | bc -l)
+
+ # echo "DSSAT time_elapsed = $time_elapsed" >> /mnt/data/log.txt #2>&1
+
+
+
 
 # (DMR) this copies the dssat out to a sub-folder so we can look at the individual 
 # cells being run. Can be deleted.

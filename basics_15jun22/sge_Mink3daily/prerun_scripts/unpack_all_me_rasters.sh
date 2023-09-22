@@ -11,8 +11,8 @@ echo ""
 for pack in *.pack; do
     raster_name="${pack%.*}"  # remove the .pack extension
 
-    if g.mlist -r type=rast pattern="$raster_name" --quiet; then
-        g.remove -f "$raster_name"  # use with caution!
+    if [ "$(g.mlist -r type=rast pattern="$raster_name" --quiet)" != "" ]; then
+        g.remove --q -f "$raster_name"  # use with caution!
     fi
 
     # create the raster

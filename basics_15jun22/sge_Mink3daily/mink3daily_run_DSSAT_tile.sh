@@ -3,9 +3,9 @@
 export  latitude_resolution=1.875  # these need to match the daily weather files
 export longitude_resolution=1.25  # these need to match the daily weather files
 
-echo ""
-echo "running mink3daily_run_DSSAT_tile.sh"
-echo ""
+# echo ""
+# echo "running mink3daily_run_DSSAT_tile.sh"
+# echo ""
 
 set -e
 
@@ -37,15 +37,15 @@ if [ $# -lt 8 ]; then
 
 fi
 
-  data_file_base_name=$1
-         daily_to_use=$2
-           X_template=`basename $3`
-      crop_nitro_name=$4
-            co2_level=$5
-       crop_irri_name=$6
-    plantingDateInMonthShiftInDays=$7
-          n_before_me=$8
-       use_old_string="$9"
+  script_to_run_in_job=$1
+  data_file_base_name=$2
+         daily_to_use=$3
+           X_template=`basename $4`
+      crop_nitro_name=$5
+            co2_level=$6
+       crop_irri_name=$7
+    plantingDateInMonthShiftInDays=$8
+          n_before_me=$9
 
   # this is likely have a full path on it, so we need to strip the path
   # in order to refer to it in its new location on the compute node
@@ -56,7 +56,7 @@ fi
 
 
 # ADDED this so that we have a clean run each time and can repeat this script (DMR)
-rm -rf $on_node_home
+# rm -rf $on_node_home
 
 
 ########################
@@ -75,10 +75,11 @@ rm -rf $on_node_home
  baseNameOfDailyWeather=${on_node_weather_dir}`basename $daily_to_use`
  
 # baseNameOfDailyWeather=${on_node_weather_dir}
+
        templateXFile=$magic_X_file
- yieldOutputBaseName=${on_node_output_dir}${X_template%%.*X}_${co2ppm}_${data_file_short_name} # this is new...
+ yieldOutputBaseName=${on_node_output_dir}${data_file_short_name} # this is new...
 # clean_yieldOutputBaseName=${X_template%%.*X}_${co2ppm}_${data_file_short_name} # this is new...
- clean_yieldOutputBaseName=${X_template%%.*X}_${co2ppm}_${daily_to_use##*/}_${data_file_short_name} # this is new...
+ clean_yieldOutputBaseName=${data_file_short_name} # this is new...
 
 ##################
 ### java setup ###
@@ -115,18 +116,8 @@ memory_string="-mx1400M"
 
 log_file=${log_file/___/_${chunk_index}_}
 
-script_to_run_in_job=${staging_directory}script_to_run_${chunk_index}_r${quasi_random_code}.sh
+# script_to_run_in_job=${staging_directory}script_to_run_${chunk_index}_r${quasi_random_code}.sh
 
-
-   if [ -n "$use_old_string" ]; then
-     echo -e "\n !!! !!! !!! !!!\n"
-     echo -e "------------- using a magical thingee to copy old beta executable into place.... --------"
-
-     # we need to point to the particular wheat directory instead of the usual one...
-     original_DSSAT_dir=$wheat_original_DSSAT_dir
-
-     echo -e " !!! !!! !!! !!!\n"
-   fi
 
 # build the block which will copy all those silly weather files. this will be ugly...
 # echo $daily_weather_copier_classname
@@ -138,22 +129,16 @@ script_to_run_in_job=${staging_directory}script_to_run_${chunk_index}_r${quasi_r
 copy_block=`$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution | uniq`
 # echo "copy_block"
 # echo $copy_block
-number_of_pixels=`echo "$copy_block" | wc -l`
+# number_of_pixels=`echo "$copy_block" | wc -l`
 # echo $number_of_pixels
 
 #  we_need_to_delay=`echo "if($n_before_me > -2 && $n_before_me <= $number_of_initial_cases_to_stagger) {1} else {0}" | bc`
-we_need_to_delay=0
+# we_need_to_delay=0
 
 # In the regular expression '^cp', the ^ symbol means "start of the line", and cp is the exact character sequence you are looking for. Therefore, grep '^cp' matches any line that starts with "cp". The wc -l command then counts the number of these lines.
 number_of_pixels=`echo "$copy_block" | grep '^cp' | wc -l`
 
     # echo "n_before_me = $n_before_me; maxstagger = $number_of_initial_cases_to_stagger ; n_pixels = $number_of_pixels / guess files per sec $guess_for_weather_files_per_second; need_to_delay = $we_need_to_delay"
-
-  if [ "$we_need_to_delay" = 1 ]; then
-    time_to_delay=`echo "scale=1 ; $number_of_pixels / $guess_for_weather_files_per_second" | bc`s
-  else
-    time_to_delay=0.1s
-  fi
 
   # echo "optionalHarvestInterval"
   # echo $optionalHarvestInterval
@@ -170,6 +155,8 @@ number_of_pixels=`echo "$copy_block" | grep '^cp' | wc -l`
 # echo $script_to_run_in_job
 # write out the job script....
 echo "#!/bin/bash
+
+  set -e # exit on error
 
   # write out the runner init file
   echo \"$allFlag\"                      > $runner_init_file
@@ -231,8 +218,9 @@ echo "#!/bin/bash
 #############################
 
 
+# echo \"------ moving/unpacking ; \`date\` ------\"
+time_start=\$(date +%s%3N)
 
-echo \"------ moving/unpacking ; \`date\` ------\"
 
   # create the appropriate directories
          mkdir -p $on_node_runner_dir
@@ -243,28 +231,21 @@ echo \"------ moving/unpacking ; \`date\` ------\"
          mkdir -p $on_node_output_dir
 
  # Added this recompile condition each time (DMR)
-  cd ${original_runner_dir}java8_IFPRIconverter/src/
-  javac org/DSSATRunner/Mink3p2daily.java
-  javac org/DSSATRunner/WriteCopyBlockForDailyWeather.java
-
-  mv org/DSSATRunner/Mink3p2daily.class ../bin/org/DSSATRunner/Mink3p2daily.class
-  mv org/DSSATRunner/WriteCopyBlockForDailyWeather.class ../bin/org/DSSATRunner/WriteCopyBlockForDailyWeather.class
-
-  cd -
 
   # move the stuff out
   # the runner needs all the subdirectories
-  cp -a $original_runner_dir*   ${on_node_runner_dir}
+  set +e  # Disable exit on error
+  cp -a $original_runner_dir*   ${on_node_runner_dir} 2>/dev/null
   # the rest do not want the subdirectories
-  cp $original_DSSAT_dir/*    ${on_node_DSSAT_dir}
-  cp ${data_file_base_name}_*  ${on_node_input_data_dir}
-  cp ${original_X_files_dir}${X_template} ${X_dir}
-  cp $runner_init_file         ${on_node_runner_init_file}
-
+  cp $original_DSSAT_dir/*    ${on_node_DSSAT_dir} 2>/dev/null
+  cp ${data_file_base_name}_*  ${on_node_input_data_dir} 2>/dev/null
+  cp ${original_X_files_dir}${X_template} ${X_dir} 2>/dev/null
+  cp $runner_init_file         ${on_node_runner_init_file} 2>/dev/null
+  set -e  # Re-enable exit on error
   # copy the daily weather
 $copy_block
-echo \"number_of_pixels\"
-echo \"$number_of_pixels\"
+# echo \"number_of_pixels\"
+# echo \"$number_of_pixels\"
 
 # i think what i really care about is if any things got copied at all..
 # however, if there are actually no valid cells, we don't want to error out
@@ -280,22 +261,23 @@ fi
   cd $on_node_DSSAT_dir
 
 
-  echo \"now in \`pwd\`\" >> $log_file
+  # echo \"now in \`pwd\`\" >> $log_file
 
-  echo \"\" >> $log_file
-  echo \"\" >> $log_file
-  echo \"\" >> $log_file
-  echo \"running on \$HOSTNAME\" >> $log_file
-  echo \"shell = \$SHELL\" >> $log_file
-  echo \"at \`date\`, we are attempting...\" >> $log_file
-  echo \"[[[${yieldOutputBaseName/_CZX*_*XZC_/_}]]]\" >> $log_file
-  echo \"\" >> $log_file
-  echo \"\" >> $log_file
-  echo \"\" >> $log_file
-  echo \"\" >> $log_file
-  echo \"--B--\" >> $log_file
-
+  # echo \"\" >> $log_file
+  # echo \"\" >> $log_file
+  # echo \"\" >> $log_file
+  # echo \"running on \$HOSTNAME\" >> $log_file
+  # echo \"shell = \$SHELL\" >> $log_file
+  # echo \"at \`date\`, we are attempting...\" >> $log_file
+  # echo \"[[[${yieldOutputBaseName/CZX*_*XZC_/}]]]\" >> $log_file
+  # echo \"\" >> $log_file
+  # echo \"\" >> $log_file
+  # echo \"\" >> $log_file
+  # echo \"\" >> $log_file
+  # echo \"--B--\" >> $log_file
+  time_before_run=\$(date +%s%3N)
    $java_to_use \"$memory_string\" -cp $classpath $classname $on_node_runner_init_file 
+  time_after_run=\$(date +%s%3N)
 
 # no idea why the below breaks things (DMR)
 # 2>&1 >> $log_file
@@ -307,25 +289,26 @@ fi
 #   if [ \$test_exit_code -eq 0 ]; then
 #     # copy the results back
 
-  cp ${yieldOutputBaseName}_STATS.cols.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.cols.txt
+  cp ${yieldOutputBaseName}_STATS.cols.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/CZX*_*XZC_/}_STATS.cols.txt
    if [ $number_of_pixels -ne 0 ]; then
-    cp ${yieldOutputBaseName}_STATS.txt      ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.txt
-    cp ${yieldOutputBaseName}_STATS.info.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_STATS.info.txt
-    cp ${yieldOutputBaseName}_provenance.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/_CZX*_*XZC_/_}_provenance.txt
+
+    cp ${yieldOutputBaseName}_STATS.txt      ${chunked_output_data_dir}${clean_yieldOutputBaseName/CZX*_*XZC_/}_STATS.txt
+    cp ${yieldOutputBaseName}_STATS.info.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/CZX*_*XZC_/}_STATS.info.txt
+    cp ${yieldOutputBaseName}_provenance.txt ${chunked_output_data_dir}${clean_yieldOutputBaseName/CZX*_*XZC_/}_provenance.txt
     fi
 
     # clean up the compute node mess
-    echo \"all is well, so clean up on-node-home\" >> $log_file
+    # echo \"all is well, so clean up on-node-home\" >> $log_file
     rm -rf $on_node_home
 
 # well, this is inconvenient so we don't do this for now (DMR)
 #     # and also get rid of the input chunks, since they will be many
 #     # with my new attempt at thread safety
 
-#     # rm ${data_file_base_name}_*
+    rm ${data_file_base_name}_*
 
-#     rm $script_to_run_in_job
-#     rm $runner_init_file
+    rm $script_to_run_in_job
+    rm $runner_init_file
 #   else
 #     # give a warning...
 #     echo \"something bad happened... leaving everything in place on the node...\" >> $log_file
@@ -333,29 +316,23 @@ fi
 # #    sleep 600
 # #    echo \"done sleeping and exiting at \`date\`\" >> $log_file
 #   fi
-  echo \"- done at \`date\` -\" >> $log_file
-  echo \"--E--\" >> $log_file
+  # echo \"- done at \`date\` -\" >> $log_file
+  # echo \"--E--\" >> $log_file
 
+  time_end=\$(date +%s%3N)
+
+  time_elapsed=\$(echo \"scale=4; (\$time_end - \$time_start)/1000\" | bc -l)
+  # time_non_run=\$(echo \"scale=4; (\$time_end - \$time_start - \$time_after_run + \$time_before_run)/1000\" | bc -l)
+  # time_run=\$(echo \"scale=4; (\$time_after_run - \$time_before_run)/1000\" | bc -l)
+
+  echo \"time_elapsed for script_to_run_in_job  = \$time_elapsed seconds\"
+  # echo \"time_non_run  = \$time_non_run\"
+  # echo \"time_run  = \$time_run\" 
 
         " > $script_to_run_in_job # end of ssh command....
 
-echo ""
-echo "done running mink3daily_run_DSSAT_tile.sh"
-echo ""
+chmod +x "${script_to_run_in_job}"
 
-
-echo ""
-echo "running the script generated from mink3daily_run_DSSAT_tile"
-echo ""
-
-cd staging_area
-
-latest_script=`ls *.sh -rt | tail -n 1`
-
-chmod +x $latest_script 
-
-./$latest_script
-
-echo ""
-echo "done running the generated script"
-echo ""
+# echo ""
+# echo "done running mink3daily_run_DSSAT_tile.sh"
+# echo ""
