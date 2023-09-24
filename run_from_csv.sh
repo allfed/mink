@@ -22,7 +22,7 @@ time_start=$SECONDS
 cd /mnt/data/basics_15jun22/sge_Mink3daily/
 # ./compile_java.sh Config.java GenerateScenarios.java Scenarios.java CalculateProduction.java WriteCopyBlockForDailyWeather.java Mink3p2daily.java SplitTextMatrices.java
 # ./compile_java.sh Config.java GenerateScenarios.java BashScripts.java Scenarios.java Mink3p2daily.java SplitTextMatrices.java
-./compile_java.sh Scenarios.java CalculateProduction.java BashScripts.java
+./compile_java.sh Scenarios.java CalculateProduction.java BashScripts.java Mink3p2daily.java
 
 scenarios_csv_location="/mnt/data/basics_15jun22/sge_Mink3daily/scenarios/generated_scenarios.csv"
 config_file_location="/mnt/data/$1"

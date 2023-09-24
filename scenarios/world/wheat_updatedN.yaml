@@ -4,6 +4,9 @@ model_configuration:
   run_crop_model: false
   process_results: false
 
+  # number of parallel chunks to run DSSAT at once with (multithreaded handled through linux bash script)
+  n_chunks: 6
+
 
   # THE FOLLOWING MODEL CONFIGURATION VARIABLES ARE ONLY APPLICABLE
   # TO THE PROCESS_RESULTS SCENARIOS
@@ -61,6 +64,11 @@ physical_parameters:
   # minimum area cropland in a pixel to consider, in hectares. Any smaller pixel is ignored.
   minimum_physical_area: 0.05
 
+  # minimum yield to average in kg/ha
+  minimum_yield: -3
+
+
+  
   # add in nitrogen and water stress for 'real', ignore them for 'happy'
   real_or_happy: real
 

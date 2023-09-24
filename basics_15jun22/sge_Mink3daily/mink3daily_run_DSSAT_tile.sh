@@ -157,56 +157,48 @@ number_of_pixels=`echo "$copy_block" | grep '^cp' | wc -l`
 echo "#!/bin/bash
 
   set -e # exit on error
-
-  # write out the runner init file
-  echo \"$allFlag\"                      > $runner_init_file
-  echo \"$allExtraToRecordCSV\"         >> $runner_init_file
-  echo \"$gisTableBaseName\"            >> $runner_init_file
-  echo \"$templateXFile\"               >> $runner_init_file
-  echo \"$yieldOutputBaseName\"         >> $runner_init_file
-  echo \"$on_node_DSSAT_dir\"           >> $runner_init_file # ADDED THIS (DMR)
-  echo \"$nameOfDSSATExecutable\"       >> $runner_init_file
-  echo \"$baseNameOfDailyWeather\"      >> $runner_init_file
-  echo \"$SWmultiplier\"                >> $runner_init_file
-  echo \"$weatherDataSuffixWithDot\"           >> $runner_init_file
-  echo \"$fakePlantingYear\"            >> $runner_init_file
-  echo \"$nFakeYears\"                  >> $runner_init_file
-  echo \"$magicSoilPrefix\"             >> $runner_init_file
-  echo \"$spinUpTimeDays\"              >> $runner_init_file
-  echo \"$nPlantingWindowsPerMonth\"    >> $runner_init_file
-  echo \"$plantingWindowLengthDays\"    >> $runner_init_file
-  echo \"$co2ppm\"                      >> $runner_init_file
-  echo \"$cropToUse\"                   >> $runner_init_file
-#  echo \"$nHappyPlantRunsForPhenology\" >> $runner_init_file
-  echo \"$happyYieldThresholdToDoRealRuns\"               >> $runner_init_file
-  echo \"$phenologyBufferInDays\"       >> $runner_init_file
-  echo \"$happyMaturityThresholdToDoRealRuns\"            >> $runner_init_file
-
-  echo \"$crop_irri_name\"              >> $runner_init_file
-
-  echo \"$fractionBetweenLowerLimitAndDrainedUpperLimit\" >> $runner_init_file
-#  echo \"$nitrogenPPMforBothNH4NO2\"   >> $runner_init_file
-  echo \"$depthForNitrogen\"            >> $runner_init_file
-  echo \"$residueNitrogenPercent\"      >> $runner_init_file
-  echo \"$incorporationRate\"           >> $runner_init_file
-  echo \"$incorporationDepth\"          >> $runner_init_file
-  echo \"$clayLoamSandStableCarbonRatesFilename\"         >> $runner_init_file
-  echo \"$optionalHarvestInterval\"     >> $runner_init_file
-  echo \"$plantingDateInMonthShiftInDays\"     >> $runner_init_file
-
-  echo \"$latitude_resolution\"         >> $runner_init_file
-  echo \"$longitude_resolution\"        >> $runner_init_file
-
-  echo \"$maxRunTime\"                  >> $runner_init_file
-  echo \"$bumpUpMultiplier\"            >> $runner_init_file
-  echo \"$testIntervalToUse\"           >> $runner_init_file
-  echo \"$rerunAttemptsMax\"            >> $runner_init_file
-
-  echo \"$keepHappyYields\"             >> $runner_init_file
-  echo \"$keepRealDaysToEmergence\"     >> $runner_init_file
-  echo \"$keepRealDaysToAnthesis\"      >> $runner_init_file
-  echo \"$keepRealDaysToMaturity\"      >> $runner_init_file
   
+  # write out the runner init file
+  echo \"allFlag=$allFlag\"                      > $runner_init_file
+  echo \"allExtraToRecordCSV=$allExtraToRecordCSV\"         >> $runner_init_file
+  echo \"gisTableBaseName=$gisTableBaseName\"            >> $runner_init_file
+  echo \"templateXFile=$templateXFile\"               >> $runner_init_file
+  echo \"yieldOutputBaseName=$yieldOutputBaseName\"         >> $runner_init_file
+  echo \"on_node_DSSAT_dir=$on_node_DSSAT_dir\"           >> $runner_init_file # ADDED THIS (DMR)
+  echo \"nameOfDSSATExecutable=$nameOfDSSATExecutable\"       >> $runner_init_file
+  echo \"baseNameOfDailyWeather=$baseNameOfDailyWeather\"      >> $runner_init_file
+  echo \"SWmultiplier=$SWmultiplier\"                >> $runner_init_file
+  echo \"weatherDataSuffixWithDot=$weatherDataSuffixWithDot\"           >> $runner_init_file
+  echo \"fakePlantingYear=$fakePlantingYear\"            >> $runner_init_file
+  echo \"nFakeYears=$nFakeYears\"                  >> $runner_init_file
+  echo \"magicSoilPrefix=$magicSoilPrefix\"             >> $runner_init_file
+  echo \"spinUpTimeDays=$spinUpTimeDays\"              >> $runner_init_file
+  echo \"nPlantingWindowsPerMonth=$nPlantingWindowsPerMonth\"    >> $runner_init_file
+  echo \"plantingWindowLengthDays=$plantingWindowLengthDays\"    >> $runner_init_file
+  echo \"co2ppm=$co2ppm\"                      >> $runner_init_file
+  echo \"cropToUse=$cropToUse\"                   >> $runner_init_file
+  echo \"phenologyBufferInDays=$phenologyBufferInDays\"       >> $runner_init_file
+  echo \"happyMaturityThresholdToDoRealRuns=$happyMaturityThresholdToDoRealRuns\"            >> $runner_init_file
+  echo \"crop_irri_name=$crop_irri_name\"              >> $runner_init_file
+  echo \"fractionBetweenLowerLimitAndDrainedUpperLimit=$fractionBetweenLowerLimitAndDrainedUpperLimit\" >> $runner_init_file
+  echo \"depthForNitrogen=$depthForNitrogen\"            >> $runner_init_file
+  echo \"residueNitrogenPercent=$residueNitrogenPercent\"      >> $runner_init_file
+  echo \"incorporationRate=$incorporationRate\"           >> $runner_init_file
+  echo \"incorporationDepth=$incorporationDepth\"          >> $runner_init_file
+  echo \"clayLoamSandStableCarbonRatesFilename=$clayLoamSandStableCarbonRatesFilename\"         >> $runner_init_file
+  echo \"optionalHarvestInterval=$optionalHarvestInterval\"     >> $runner_init_file
+  echo \"plantingDateInMonthShiftInDays=$plantingDateInMonthShiftInDays\"     >> $runner_init_file
+  echo \"latitude_resolution=$latitude_resolution\"         >> $runner_init_file
+  echo \"longitude_resolution=$longitude_resolution\"        >> $runner_init_file
+  echo \"maxRunTime=$maxRunTime\"                  >> $runner_init_file
+  echo \"bumpUpMultiplier=$bumpUpMultiplier\"            >> $runner_init_file
+  echo \"testIntervalToUse=$testIntervalToUse\"           >> $runner_init_file
+  echo \"rerunAttemptsMax=$rerunAttemptsMax\"            >> $runner_init_file
+  echo \"keepHappyYields=$keepHappyYields\"             >> $runner_init_file
+  echo \"keepRealDaysToEmergence=$keepRealDaysToEmergence\"     >> $runner_init_file
+  echo \"keepRealDaysToAnthesis=$keepRealDaysToAnthesis\"      >> $runner_init_file
+  echo \"keepRealDaysToMaturity=$keepRealDaysToMaturity\"      >> $runner_init_file
+    
   
 ###################
 ### do the work ###
@@ -275,13 +267,9 @@ fi
   # echo \"\" >> $log_file
   # echo \"\" >> $log_file
   # echo \"--B--\" >> $log_file
-  time_before_run=\$(date +%s%3N)
+  # time_before_run=\$(date +%s%3N)
    $java_to_use \"$memory_string\" -cp $classpath $classname $on_node_runner_init_file 
-  time_after_run=\$(date +%s%3N)
-
-# no idea why the below breaks things (DMR)
-# 2>&1 >> $log_file
-
+  # time_after_run=\$(date +%s%3N)
 
 
 # this used to be part of the above run (DMR)
@@ -301,10 +289,6 @@ fi
     # echo \"all is well, so clean up on-node-home\" >> $log_file
     rm -rf $on_node_home
 
-# well, this is inconvenient so we don't do this for now (DMR)
-#     # and also get rid of the input chunks, since they will be many
-#     # with my new attempt at thread safety
-
     rm ${data_file_base_name}_*
 
     rm $script_to_run_in_job
@@ -319,13 +303,13 @@ fi
   # echo \"- done at \`date\` -\" >> $log_file
   # echo \"--E--\" >> $log_file
 
-  time_end=\$(date +%s%3N)
+  # time_end=\$(date +%s%3N)
 
-  time_elapsed=\$(echo \"scale=4; (\$time_end - \$time_start)/1000\" | bc -l)
-  # time_non_run=\$(echo \"scale=4; (\$time_end - \$time_start - \$time_after_run + \$time_before_run)/1000\" | bc -l)
-  # time_run=\$(echo \"scale=4; (\$time_after_run - \$time_before_run)/1000\" | bc -l)
+  # time_elapsed=\$(echo \"scale=4; (\$time_end - \$time_start)/1000\" | bc -l)
+  # # time_non_run=\$(echo \"scale=4; (\$time_end - \$time_start - \$time_after_run + \$time_before_run)/1000\" | bc -l)
+  # # time_run=\$(echo \"scale=4; (\$time_after_run - \$time_before_run)/1000\" | bc -l)
 
-  echo \"time_elapsed for script_to_run_in_job  = \$time_elapsed seconds\"
+  # echo \"time_elapsed for script_to_run_in_job  = \$time_elapsed seconds\"
   # echo \"time_non_run  = \$time_non_run\"
   # echo \"time_run  = \$time_run\" 
 

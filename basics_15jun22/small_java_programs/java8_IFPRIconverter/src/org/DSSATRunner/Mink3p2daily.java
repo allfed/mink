@@ -2,6 +2,7 @@ package org.DSSATRunner;
 
 import java.io.*;
 import java.util.Date;
+import java.util.Properties;
 import org.R2Useful.*;
 
 public class Mink3p2daily {
@@ -431,60 +432,50 @@ public class Mink3p2daily {
 
   public void readInitFile() throws IOException, Exception {
 
-    String[] initFileContents = FunTricks.readTextFileToArray(initFileName);
-    // System.out.println("readInitFile: " + initFileName);
+    Properties props = new Properties();
+    props.load(new FileInputStream(initFileName));
 
-    int storageIndex = 0;
-    allFlag = Boolean.parseBoolean(initFileContents[storageIndex++]);
-    allExtraToRecordCSV = initFileContents[storageIndex++];
-    gisTableBaseName = initFileContents[storageIndex++];
-    templateXFile = initFileContents[storageIndex++];
-    yieldOutputBaseName = initFileContents[storageIndex++];
-    pathToDSSATDirectory = initFileContents[storageIndex++];
-    nameOfDSSATExecutable = initFileContents[storageIndex++];
-    baseNameOfDailyWeather = initFileContents[storageIndex++];
-    SWmultiplier = Double.parseDouble(initFileContents[storageIndex++]);
-    weatherDataSuffix = initFileContents[storageIndex++];
-    //      firstRandomSeed          = Integer.parseInt(
-    //              initFileContents[storageIndex++]);
-    fakePlantingYear = Integer.parseInt(initFileContents[storageIndex++]);
-    nFakeYears = Integer.parseInt(initFileContents[storageIndex++]);
-    magicSoilPrefix = initFileContents[storageIndex++];
-    spinUpTimeDays = Integer.parseInt(initFileContents[storageIndex++]);
-    nPlantingWindowsPerMonth = Integer.parseInt(initFileContents[storageIndex++]);
-    plantingWindowLengthDays = Integer.parseInt(initFileContents[storageIndex++]);
+    allFlag = Boolean.parseBoolean(props.getProperty("allFlag"));
+    allExtraToRecordCSV = props.getProperty("allExtraToRecordCSV");
+    gisTableBaseName = props.getProperty("gisTableBaseName");
+    templateXFile = props.getProperty("templateXFile");
+    yieldOutputBaseName = props.getProperty("yieldOutputBaseName");
+    pathToDSSATDirectory = props.getProperty("on_node_DSSAT_dir");
+    nameOfDSSATExecutable = props.getProperty("nameOfDSSATExecutable");
+    baseNameOfDailyWeather = props.getProperty("baseNameOfDailyWeather");
+    SWmultiplier = Double.parseDouble(props.getProperty("SWmultiplier"));
+    weatherDataSuffix = props.getProperty("weatherDataSuffixWithDot");
+    fakePlantingYear = Integer.parseInt(props.getProperty("fakePlantingYear"));
+    nFakeYears = Integer.parseInt(props.getProperty("nFakeYears"));
+    magicSoilPrefix = props.getProperty("magicSoilPrefix");
+    spinUpTimeDays = Integer.parseInt(props.getProperty("spinUpTimeDays"));
+    nPlantingWindowsPerMonth = Integer.parseInt(props.getProperty("nPlantingWindowsPerMonth"));
+    plantingWindowLengthDays = Integer.parseInt(props.getProperty("plantingWindowLengthDays"));
 
-    co2ppm = Integer.parseInt(initFileContents[storageIndex++]);
+    co2ppm = Integer.parseInt(props.getProperty("co2ppm"));
 
-    cropFertilizerSchemeToUse = initFileContents[storageIndex++];
+    cropFertilizerSchemeToUse = props.getProperty("cropToUse");
 
-    //      nHappyPlantRunsForPhenology     = Integer.parseInt(
-    //              initFileContents[storageIndex++]);
-    happyYieldThresholdToDoRealRuns = Integer.parseInt(initFileContents[storageIndex++]);
-    phenologyBufferInDays = Integer.parseInt(initFileContents[storageIndex++]);
-    happyMaturityThresholdToDoRealRuns = Integer.parseInt(initFileContents[storageIndex++]);
+    phenologyBufferInDays = Integer.parseInt(props.getProperty("phenologyBufferInDays"));
+    happyMaturityThresholdToDoRealRuns =
+        Integer.parseInt(props.getProperty("happyMaturityThresholdToDoRealRuns"));
 
-    irrigationSchemeToUse = initFileContents[storageIndex++];
+    irrigationSchemeToUse = props.getProperty("crop_irri_name");
     fractionBetweenLowerLimitAndDrainedUpperLimit =
-        Double.parseDouble(initFileContents[storageIndex++]);
-    //      nitrogenPPMforBothNH4NO2 = Double.parseDouble(
-    //              initFileContents[storageIndex++]);
-
-    depthForNitrogen = Double.parseDouble(initFileContents[storageIndex++]);
-    residueNitrogenPercent = Double.parseDouble(initFileContents[storageIndex++]);
-    incorporationRate = Double.parseDouble(initFileContents[storageIndex++]);
-    incorporationDepth = Double.parseDouble(initFileContents[storageIndex++]);
-    clayLoamSandStableCarbonRatesFilename = initFileContents[storageIndex++];
+        Double.parseDouble(props.getProperty("fractionBetweenLowerLimitAndDrainedUpperLimit"));
+    depthForNitrogen = Double.parseDouble(props.getProperty("depthForNitrogen"));
+    residueNitrogenPercent = Double.parseDouble(props.getProperty("residueNitrogenPercent"));
+    incorporationRate = Double.parseDouble(props.getProperty("incorporationRate"));
+    incorporationDepth = Double.parseDouble(props.getProperty("incorporationDepth"));
+    clayLoamSandStableCarbonRatesFilename =
+        props.getProperty("clayLoamSandStableCarbonRatesFilename");
     String initsAsString = FunTricks.readTextFileToString(initFileName);
-    // System.out.println("initsAsString");
-    // System.out.println(initsAsString);
-    // System.out.println("clayLoamSandStableCarbonRatesFilename");
-    // System.out.println(clayLoamSandStableCarbonRatesFilename);
-    optionalHarvestInterval = Integer.parseInt(initFileContents[storageIndex++]);
-    plantingDateInMonthShiftInDays = Integer.parseInt(initFileContents[storageIndex++]);
+    optionalHarvestInterval = Integer.parseInt(props.getProperty("optionalHarvestInterval"));
+    plantingDateInMonthShiftInDays =
+        Integer.parseInt(props.getProperty("plantingDateInMonthShiftInDays"));
 
-    latitudeSpacingOfWeatherFiles = Double.parseDouble(initFileContents[storageIndex++]);
-    longitudeSpacingOfWeatherFiles = Double.parseDouble(initFileContents[storageIndex++]);
+    latitudeSpacingOfWeatherFiles = Double.parseDouble(props.getProperty("latitude_resolution"));
+    longitudeSpacingOfWeatherFiles = Double.parseDouble(props.getProperty("longitude_resolution"));
 
     // i want to be able to feed in the time-out controls from the outside, but with defaults...
     // i think they are already defined in the declarations, so we have the defaults, we just need
@@ -492,19 +483,23 @@ public class Mink3p2daily {
     // overwrite them if they are here...
 
     // making mandatory in this version (08sep20)
-    maxRunTime = Integer.parseInt(initFileContents[storageIndex++]); // MAGIC at the moment
-    bumpUpMultiplier = Double.parseDouble(initFileContents[storageIndex++]); // MAGIC at the moment
-    testIntervalToUse = Integer.parseInt(initFileContents[storageIndex++]); // MAGIC at the moment
-    rerunAttemptsMax = Integer.parseInt(initFileContents[storageIndex++]); // MAGIC at the moment
+    maxRunTime = Integer.parseInt(props.getProperty("maxRunTime")); // MAGIC at the moment
+    bumpUpMultiplier =
+        Double.parseDouble(props.getProperty("bumpUpMultiplier")); // MAGIC at the moment
+    testIntervalToUse =
+        Integer.parseInt(props.getProperty("testIntervalToUse")); // MAGIC at the moment
+    rerunAttemptsMax =
+        Integer.parseInt(props.getProperty("rerunAttemptsMax")); // MAGIC at the moment
 
     // and some of the more detailed things that we may or may not want to keep
-    keepHappyYields = Boolean.parseBoolean(initFileContents[storageIndex++]); // MAGIC at the moment
+    keepHappyYields =
+        Boolean.parseBoolean(props.getProperty("keepHappyYields")); // MAGIC at the moment
     keepRealDaysToEmergence =
-        Boolean.parseBoolean(initFileContents[storageIndex++]); // MAGIC at the moment
+        Boolean.parseBoolean(props.getProperty("keepRealDaysToEmergence")); // MAGIC at the moment
     keepRealDaysToAnthesis =
-        Boolean.parseBoolean(initFileContents[storageIndex++]); // MAGIC at the moment
+        Boolean.parseBoolean(props.getProperty("keepRealDaysToAnthesis")); // MAGIC at the moment
     keepRealDaysToMaturity =
-        Boolean.parseBoolean(initFileContents[storageIndex++]); // MAGIC at the moment
+        Boolean.parseBoolean(props.getProperty("keepRealDaysToMaturity")); // MAGIC at the moment
 
     //      now prepare the dependent magic numbers...
 

@@ -63,6 +63,7 @@ public class Config {
     public boolean create_average_png;
     public boolean create_overall_png;
     public String winter_wheat_countries_csv;
+    public String n_chunks;
 
     @Override
     public String toString() {
@@ -100,6 +101,8 @@ public class Config {
           + create_overall_png
           + ", winter_wheat_countries_csv="
           + winter_wheat_countries_csv
+          + ", n_chunks="
+          + n_chunks
           + '}';
     }
   }
@@ -122,6 +125,7 @@ public class Config {
     public List<String> planting_months;
     public List<String> years;
     public String minimum_physical_area;
+    public String minimum_yield;
 
     @Override
     public String toString() {
@@ -165,6 +169,8 @@ public class Config {
           + years
           + ", minimum_physical_area="
           + minimum_physical_area
+          + ", minimum_yield="
+          + minimum_yield
           + '}';
     }
   }
@@ -218,10 +224,11 @@ public class Config {
 
     String all_properties =
         "region_to_use_n region_to_use_s region_to_use_e region_to_use_w nsres ewres co2_level"
-            + " run_descriptor minimum_physical_area winter_wheat_countries_csv irrigation_to_try"
-            + " weather_prefix weather_folder results_folder planting_months years real_or_happy"
-            + " all_or_crop_specific run_crop_model process_results calculate_as_wet_weight"
-            + " average_yields calculate_each_year_best_month find_best_yields"
+            + " run_descriptor minimum_physical_area minimum_yield n_chunks"
+            + " winter_wheat_countries_csv irrigation_to_try weather_prefix weather_folder"
+            + " results_folder planting_months years real_or_happy all_or_crop_specific"
+            + " run_crop_model process_results calculate_as_wet_weight average_yields"
+            + " calculate_each_year_best_month find_best_yields"
             + " calculate_rf_or_ir_specific_average_yield calculate_rf_or_ir_specific_production"
             + " calculate_rf_plus_ir_production calculate_average_yield_rf_and_ir"
             + " make_rasters_comparing_overall_to_historical create_each_year_png"
@@ -259,6 +266,12 @@ public class Config {
       } else if (line.startsWith("minimum_physical_area: ")) {
         all_properties = all_properties.replace("minimum_physical_area ", "");
         config.physical_parameters.minimum_physical_area = line.split(": ")[1].trim();
+      } else if (line.startsWith("minimum_yield: ")) {
+        all_properties = all_properties.replace("minimum_yield ", "");
+        config.physical_parameters.minimum_yield = line.split(": ")[1].trim();
+      } else if (line.startsWith("n_chunks: ")) {
+        all_properties = all_properties.replace("n_chunks ", "");
+        config.model_configuration.n_chunks = line.split(": ")[1].trim();
       } else if (line.startsWith("winter_wheat_countries_csv: ")) {
         all_properties = all_properties.replace("winter_wheat_countries_csv ", "");
         config.model_configuration.winter_wheat_countries_csv = line.split(": ")[1].trim();

@@ -37,6 +37,8 @@ public class Scenarios {
   public int n_scenarios;
   public String all_or_crop_specific;
   public String minimum_physical_area;
+  public String minimum_yield;
+  public String n_chunks;
   public String[] crop_name;
   public Config config;
 
@@ -157,6 +159,8 @@ public class Scenarios {
     this.all_or_crop_specific = config.physical_parameters.all_or_crop_specific;
 
     this.minimum_physical_area = config.physical_parameters.minimum_physical_area;
+    this.minimum_yield = config.physical_parameters.minimum_yield;
+    this.n_chunks = config.model_configuration.n_chunks;
 
     this.real_or_happy = config.physical_parameters.real_or_happy;
 
@@ -901,7 +905,8 @@ public class Scenarios {
               .output_stats_basenames[scenario_and_pm.scenarioNumber][
               scenario_and_pm.plantingMonth],
           scenarios.fertilizer_scheme[scenario_and_pm.scenarioNumber],
-          "6"); // TODO: put the number of threads used (num chunks) in the config file!
+          scenarios
+              .n_chunks); // TODO: put the number of threads used (num chunks) in the config file!
 
       System.out.println("");
       System.out.println("");
@@ -989,7 +994,7 @@ public class Scenarios {
           // scenarios
           // .yield_names[scenario_and_pm.scenarioNumber][scenario_and_pm.plantingMonth],
           scenarios.fertilizer_scheme[scenario_and_pm.scenarioNumber],
-          "6",
+          scenarios.n_chunks,
           scenarios
               .run_descriptor[
               scenario_and_pm
@@ -1043,7 +1048,7 @@ public class Scenarios {
         averageAcrossYears(
             script_folder,
             scenarios.years,
-            "0", // minimum allowed yield to average
+            scenarios.minimum_yield, // minimum allowed yield to average
             raster_name_all_years_this_month_wet_or_dry,
             scenarios
                 .raster_names_average_year[scenario_and_pm.scenarioNumber][
@@ -1390,7 +1395,8 @@ public class Scenarios {
       }
 
       for (int colIndex = 0; colIndex < expectedColumnCount; colIndex++) {
-        data[colIndex][rowIndex] = parts[colIndex].isEmpty() ? "null" : parts[colIndex];
+        data[colIndex][rowIndex] = parts[colIndex];
+        // data[colIndex][rowIndex] = parts[colIndex].isEmpty() ? "null" : parts[colIndex];
       }
     }
 
