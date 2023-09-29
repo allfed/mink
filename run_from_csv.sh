@@ -5,24 +5,44 @@
 
 set -e # exit if a command fails
 
-if [ $# -eq 0 ]; then
-  echo "Usage: $0 [scenario_config_file_location] [DSSAT,process,both]"
+COMPILE_FLAG=0 # Default to not compile
+
+# Handle the --compile or -c flag using getopts
+while getopts ":c" option; do
+  case $option in
+    c) COMPILE_FLAG=1 ;;
+    \?) echo "Usage: $0 [-c] [scenario_config_file_location] [DSSAT,process,both]"
+        exit 1 ;;
+  esac
+done
+
+# Remove the options from the positional parameters
+shift $((OPTIND-1))
+
+# Check if the positional arguments are present
+if [ $# -lt 2 ]; then
+  echo "Usage: $0 [-c] [scenario_config_file_location] [DSSAT,process,both]"
   exit
 fi
 
 export GRASS_VERBOSE=0
 
-
 time_start=$SECONDS
 . basics_15jun22/sge_Mink3daily/default_paths_etc.sh
 . basics_15jun22/sge_Mink3daily/some_settings_46.sh
 
-
-
 cd /mnt/data/basics_15jun22/sge_Mink3daily/
-# ./compile_java.sh Config.java GenerateScenarios.java Scenarios.java CalculateProduction.java WriteCopyBlockForDailyWeather.java Mink3p2daily.java SplitTextMatrices.java
-# ./compile_java.sh Config.java GenerateScenarios.java BashScripts.java Scenarios.java Mink3p2daily.java SplitTextMatrices.java
-./compile_java.sh Scenarios.java CalculateProduction.java BashScripts.java Mink3p2daily.java
+
+# Only compile if the flag is present
+if [ $COMPILE_FLAG -eq 1 ]; then
+  cd /mnt/data/basics_15jun22/sge_Mink3daily/
+  ./compile_java.sh Scenarios.java CalculateProduction.java BashScripts.java Mink3p2daily.java ScenariosProcessor.java ScenariosRunner.java PlantingScenario.java
+  # Other useful ones below
+  # ./compile_java.sh Config.java GenerateScenarios.java Scenarios.java CalculateProduction.java WriteCopyBlockForDailyWeather.java Mink3p2daily.java SplitTextMatrices.java
+  # ./compile_java.sh Config.java GenerateScenarios.java BashScripts.java Scenarios.java Mink3p2daily.java SplitTextMatrices.java
+
+fi
+
 
 scenarios_csv_location="/mnt/data/basics_15jun22/sge_Mink3daily/scenarios/generated_scenarios.csv"
 config_file_location="/mnt/data/$1"

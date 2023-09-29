@@ -55,12 +55,8 @@ public class BashScripts {
       throws InterruptedException, IOException {
     // create the main control list for each month
     ProcessBuilder pb = new ProcessBuilder("bash", "./combine_spam_datasets.sh", crop_code);
-    System.out.println("crop_code");
-    System.out.println(crop_code);
 
     String prerun_script_folder = run_script_folder + "prerun_scripts/";
-    System.out.println("prerun_script_folder");
-    System.out.println(prerun_script_folder);
     callProcess(pb, prerun_script_folder);
   } // end initSPAM
 
@@ -137,10 +133,10 @@ public class BashScripts {
     callProcess(pb, prerun_script_folder);
   } // end makeMegaEnvironmentMasks
 
-  public static void makeNitrogenRasters(String run_script_folder)
+  public static void makeNitrogenRasters(String run_script_folder, String crop_name)
       throws InterruptedException, IOException {
     // import from .pack files all the megaenvironments as rasters
-    ProcessBuilder pb = new ProcessBuilder("bash", "./unpack_all_nitrogen_rasters.sh");
+    ProcessBuilder pb = new ProcessBuilder("bash", "./unpack_all_nitrogen_rasters.sh", crop_name);
 
     String prerun_script_folder = run_script_folder + "prerun_scripts/";
     callProcess(pb, prerun_script_folder);
@@ -274,7 +270,10 @@ public class BashScripts {
       String weather_folder,
       String output_stats_basename,
       String fertilizer_scheme,
-      String chunks_per_case)
+      String chunks_per_case,
+      String run_descriptor,
+      String lat_res,
+      String lon_res)
       throws InterruptedException, IOException {
 
     ProcessBuilder pb =
@@ -288,7 +287,10 @@ public class BashScripts {
             fertilizer_scheme,
             co2_level,
             crop_name,
-            chunks_per_case);
+            chunks_per_case,
+            run_descriptor,
+            lat_res,
+            lon_res);
     // System.out.println("");
     // System.out.println("");
     // System.out.println(
@@ -349,7 +351,9 @@ public class BashScripts {
       String output_stats_basename,
       String fertilizer_scheme,
       String chunks_per_case,
-      String run_descriptor)
+      String run_descriptor,
+      String lat_res,
+      String lon_res)
       throws InterruptedException, IOException {
 
     // System.out.println("");
@@ -372,7 +376,9 @@ public class BashScripts {
             co2_level,
             crop_name,
             chunks_per_case,
-            run_descriptor);
+            run_descriptor,
+            lat_res,
+            lon_res);
 
     callProcess(pb, script_folder);
   } // end processResults
@@ -546,6 +552,8 @@ public class BashScripts {
       String run_script_folder,
       String crop_caps_name,
       String overall_yield_raster,
+      String planting_month_raster,
+      String days_to_maturity_raster,
       String results_folder)
       throws InterruptedException, IOException {
     // System.out.println("");
@@ -561,9 +569,11 @@ public class BashScripts {
     ProcessBuilder pb =
         new ProcessBuilder(
             "bash",
-            "./export_by_country_yield_and_production.sh",
+            "./export_by_country_data.sh",
             crop_caps_name,
             overall_yield_raster,
+            planting_month_raster,
+            days_to_maturity_raster,
             results_folder);
 
     String export_script_folder = run_script_folder + "export_scripts/";

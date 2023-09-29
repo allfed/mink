@@ -93,14 +93,14 @@ export JAVA_HOME=/usr/bin/java
         mesa-libGLU-devel libXmu-devel libX11-devel tcl-devel tk-devel geos \
     fftw-devel libtiff-devel lesstif-devel python-devel numpy wxPython wxGTK-devel \
     gcc gcc-c++ bison flex ncurses-devel proj-epsg proj-nad xml2 subversion \
-    geos-devel blas-devel lapack-devel xorg-x11-xauth 
+    geos-devel blas-devel lapack-devel xorg-x11-xauth python3
 
     ## add okay repo, install gpg key and then ffmpeg
     rpm -ivh http://repo.okay.com.mx/centos/7/x86_64/release/okay-release-1-5.el7.noarch.rpm \
     && yum install -y ffmpeg-devel
 
     yum -y install ImageMagick
-    sudo yum install -y java-11-openjdk-devel
+    yum install -y java-11-openjdk-devel
 
     curl -L https://services.gradle.org/distributions/gradle-5.0-bin.zip > /tmp/gradle-5.0-bin.zip
     unzip -d /opt/gradle /tmp/gradle-5.0-bin.zip

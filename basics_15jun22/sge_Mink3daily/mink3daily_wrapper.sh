@@ -13,7 +13,8 @@ IFS="
      co2_to_use=$6
     irri_to_use=$7
 chunks_per_case=$8
-     magic_code=$9
+     lat_res=${10}
+     lon_res=${11}
 
 plantingDateInMonthShiftInDays=0
 sleeptime=0.0s
@@ -55,7 +56,8 @@ source default_paths_etc.sh
 # nonCLIMATE  daily (subdir/tag)  SNX fertilizer  CO2 irrigation
 
   if [ $1 = "run" ]; then
-    ./mink3daily_tiled_parallelizer.sh $data_to_use $daily_to_use $X_to_use $crop_to_use $co2_to_use $irri_to_use $chunks_per_case $plantingDateInMonthShiftInDays #1>>$screen_dump 2>&1
+    # echo "./mink3daily_tiled_parallelizer.sh $data_to_use $daily_to_use $X_to_use $crop_to_use $co2_to_use $irri_to_use $chunks_per_case $plantingDateInMonthShiftInDays $lat_res $lon_res"
+    ./mink3daily_tiled_parallelizer.sh $data_to_use $daily_to_use $X_to_use $crop_to_use $co2_to_use $irri_to_use $chunks_per_case $plantingDateInMonthShiftInDays $lat_res $lon_res #1>>$screen_dump 2>&1
   else
 
     # DMR I heavily modified naming here for simplicity...

@@ -1,0 +1,32 @@
+steps to analyze a crop:
+    conda activate mink
+    add that crop to the keys in 
+    ~/C/m/python_scripts (main|✚414…) $ 
+    p convert_AGMIP_nc4s_to_tifs.py
+
+    crop=maize
+    crop=rice
+    crop=soybeans
+    crop=potato
+    crop=rapeseed
+
+    description=Sep27_genSNX
+    description=SepX_genSNX
+    description=Sep27_genSNX
+    description=Sep27_genSNX
+    description=Sep27_genSNX
+
+    # generate agmip
+    
+    Singularity mink_sandbox:~/Code/mink/basics_15jun22/sge_Mink3daily/export_scripts> 
+    ./render_all_rasters_same_scale.sh . AGMIP_princeton_RF_yield_mai_lowres_cleaned_2005 379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_maize__Sep26_genSNX_wet_averaged_RF
+
+    # view the AGMIP vs model rasters
+    firefox AGMIP_princeton_RF_yield_mai_lowres_cleaned_2005.png
+    firefox 379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_maize__Sep26_genSNX_wet_averaged_RF.png
+
+    Singularity mink_sandbox:~/Code/mink/basics_15jun22/sge_Mink3daily/export_scripts> ./render_all_rasters_same_scale.sh . ${crop_caps}_yield 379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_${crop}__${description}_wet_overall_yield 
+
+    # view the SPAM vs model rasters
+    firefox MAIZ_yield.png
+    firefox 379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_maize__Sep26_genSNX_wet_overall_yield.png

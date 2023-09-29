@@ -53,9 +53,13 @@ public class GenerateScenarios {
     System.out.println("run_script_folder");
     System.out.println(run_script_folder);
     for (Config.Crop crop : config.crops) {
+      System.out.println("crop.name");
+      System.out.println(crop.name);
       // make by-crop crop area rasters and present-day yield rasters
       String crop_code_caps = config.getCropNameCaps(crop.name);
       BashScripts.initSPAM(run_script_folder, crop_code_caps);
+      // make rasters for nitrogen
+      BashScripts.makeNitrogenRasters(run_script_folder, crop.name);
     }
 
     // make masks for winter wheat dominant countries
@@ -67,9 +71,6 @@ public class GenerateScenarios {
 
     // make masks for megaenvironments (regions where certain megaenvironments are)
     BashScripts.makeMegaEnvironmentMasks(run_script_folder);
-
-    // make rasters for nitrogen
-    BashScripts.makeNitrogenRasters(run_script_folder);
 
     generateScenariosCSV(
         run_script_folder,

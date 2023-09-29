@@ -80,7 +80,6 @@ cd /mnt/data
 ./build_dailystyle_NOCLIMATE_for_DSSAT_05jun14.sh
 ```
 
-<b>NOTE: SOMETIMES SEG FAULTS OCCUR WHEN RESTARTING THE PROCESS AFTER A SIGINT (cntrl+c during the DSSAT runs). IF THIS HAPPENS, RESTART YOUR COMPUTER AND IT SHOULD RESOLVE THE ISSUE.</b>
 
 You should see the following:
 ```bash
@@ -102,6 +101,41 @@ to_DSSAT/catdailyB__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
 0..4..8..11..15..18..22..25..29..33..36..40..43..47..50..54..58..61..65..68..72..75..79..83..86..90..93..97..100
 Removing raster <MASK>
 ```
+## Running a gridded crop model run
+There are a couple steps involved in trying out the software for the first time.
+You need to take a look at a few places in the repository to alter the physical parameters for crop modelling:
+
+```
+SNX_files: this folder holds the configuration for the actual SNX files that can be used by the program.
+In particular, to make things easier, you can alter data_to_generate_SNX_files.csv. Each row is a new SNX file, and the details around planting these crops can be found there.
+The cultivar-specific values will be replaced in the template found in shared_SNX_template.txt. Take a look and modify that file as needed.
+SNX files are generated in the generated_SNX_files directory.
+StableCarbonTable can also be modified.
+scenarios/ contains many config yaml files which are used to specify a given run. Be sure to take a look and customize as you wish. Physical crop-specific information is set in the physical_parameters settings. It's also probably improtant to modify the n_chunks to match the number of physical cores on your machine, for efficient DSSAT runs.
+These generate the actual distinct DSSAT runs which can be found in the generated_scenarios.csv.
+This file should not be modified directly, but demonstrates exactly which SNX files are being run under which settings. this provides the scenario_number for the java runs. If multiple planting months are attempted, the planting months (and years) are run several times for each scenario number.
+
+grassdata contains a great deal of information relevant to the runs.
+the "spam" folder contains crop-specific masks for where each crop is grown. It also indicates the number of plantings per year of each crop implicitly through "harvested area" ("_H") as opposed to "physical area" ("_A"). See the Readme_v2r0_Global.txt.
+
+nitrogen_maps contains information about the amount of nitrogen applied for each crop
+
+In addition, the PERMANENT mapset contains a pre-loaded vector with a map of each country circa ~2005.
+
+All other data should be loaded into grass from tif or ascii rasters.
+
+FAOSTAT data can be helpful for year-by-year analysis of the dataset.  
+
+Also, make sure to place the daily weather in the control_mink/ and catastrophe_mink/ folders (or whatever folder name you choose instead). The wth files must already be in the format needed for DSSAT.
+
+Parameters files:
+default_cultivar_mappings.csv contains which cultivars map to which megaenvironments. Pixels within a megaenvironment will average the yields of cultivars contained there.
+Not all crops use these cultivar mappings.
+
+moisture_contents multiplies the DSSAT supplied dry yields to their wet weight equivalents, useful for SPAM.
+
+```
+
 ## Feeling Confident (Run Directly)
 If you are feeling extremely confident, you can run MINK singularity container without testing slowly with the sandbox:
 To run MINK use `singularity exec -B ~/.Xauthority mink.sif grass` and hit ENTER.

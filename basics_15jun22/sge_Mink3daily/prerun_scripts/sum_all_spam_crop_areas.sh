@@ -59,8 +59,6 @@ crops=(
 )
 
 for area_category in "${area_categories[@]}"; do
-    echo "area_category"
-    echo "$area_category"
 
     if [ $area_category == "A" ]; then
         area_name=""
@@ -70,8 +68,6 @@ for area_category in "${area_categories[@]}"; do
         area_name="_rainfed"
     fi
     areas=""
-    echo "area_name"
-    echo "$area_name"
     for crop in "${crops[@]}"; do
         # echo "crop"
         # echo $crop
@@ -79,7 +75,7 @@ for area_category in "${area_categories[@]}"; do
         # this is for reading in some MAPSPAM data acquired from https://www.mapspam.info/
         # and placed in /grassdata/world/spam
         # (imports the geotiffs)
-        r.in.gdal input=spam2010V2r0_global_H_${crop}_${area_category}.tif output=${crop}${area_name}_cropland 2>&1 | grep -v "0..5..10" | grep -v "Reading raster map"
+        r.in.gdal input=spam2010V2r0_global_H_${crop}_${area_category}.tif output=${crop}${area_name}_cropland --quiet 2>&1 #| grep -v "0..5..10" | grep -v "Reading raster map"
 
 
         r.out.ascii input=${crop}${area_name}_cropland output=- > "${crop}${area_name}_cropland.asc"

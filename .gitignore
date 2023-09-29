@@ -1,5 +1,8 @@
 # exclude built singularity image
 *.sif
+*.~lock
+
+basics_15jun22/sge_Mink3daily/interrupted_run_locations/
 reports/
 wth_historical/
 wth_control/
@@ -21,6 +24,8 @@ basics_15jun22/sge_Mink3daily/chunks_from_GRASS/
 basics_15jun22/sge_Mink3daily/chunks_to_GRASS/
 basics_15jun22/sge_Mink3daily/to_DSSAT/
 basics_15jun22/sge_Mink3daily/to_GRASS/
+basics_15jun22/sge_Mink3daily/SNX_files/generated_SNX_files/
+basics_15jun22/sge_Mink3daily/SNX_files/archive/
 deleteme*
 archive/
 # Java compiled objectsu

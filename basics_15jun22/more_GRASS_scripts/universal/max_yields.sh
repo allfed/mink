@@ -9,5 +9,10 @@
 # argument $3 is the raster name to save the result with the maximum index of all cells
 
 r.series --overwrite input=$1 output=$2 method=maximum
-r.series --overwrite input=$1 output=$3 method=max_raster
+r.series --overwrite input=$1 output=deleteme_$3 method=max_raster
 
+# Ensure the key of the max raster result is a CELL type (categorical integer raster) rather than double (DCELL)
+# (because it is a raster representing the index of the raster which was chosen for the maximum)
+r.mapcalc "$3 = round(deleteme_$3)"  
+
+g.remove rast=deleteme_$3

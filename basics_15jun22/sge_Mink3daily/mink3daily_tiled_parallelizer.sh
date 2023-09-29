@@ -5,7 +5,7 @@ set -e
 # this is an attempt to chunkify DSSAT runs automatically
 
 
-if [ $# -ne 8 ]; then
+if [ $# -lt 9 ]; then
   
   echo ""
   echo "Usage: $0 data_file_base_name daily_to_use X_template crop_nitro_name co2_level crop_irri_name chunks_per_case"
@@ -33,16 +33,16 @@ fi
 
 ### read in the arguments...
 
-  data_file_base_name=$1
-         daily_to_use=$2
-           X_template=`basename $3`
-      crop_nitro_name=$4
-            co2_level=$5
-       crop_irri_name=$6
-      chunks_per_case=$7
-      days_to_shift_planting=$8
-
-
+   data_file_base_name=$1
+          daily_to_use=$2
+            X_template=`basename $3`
+       crop_nitro_name=$4
+             co2_level=$5
+        crop_irri_name=$6
+       chunks_per_case=$7
+days_to_shift_planting=$8
+   latitude_resolution=$9
+  longitude_resolution=${10}
 
   # this is likely have a full path on it, so we need to strip the path
   # in order to refer to it in its new location on the compute node
@@ -159,20 +159,18 @@ do
 
 
   # do a very simple wheat checking thing
-  wheat_test=`echo "$crop_nitro_name" | grep wheat`
+  # wheat_test=$(echo "$crop_nitro_name" | grep wheat || true)
+  # wheat_test=`echo "$crop_nitro_name" | grep wheat`
 
+  if [[ "$crop_nitro_name" =~ "wheat" ]]; then
 
-
-  if [ -z "$wheat_test" ]; then
-
-  # create all bash scripts that will be run in parallel
-  ./mink3daily_run_DSSAT_tile.sh $script_path $new_chunk_here $daily_to_use $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter
-
-  else
     ran_suspected_wheat=true
-    ./mink3daily_run_DSSAT_tile.sh  $script_path $new_chunk_here $daily_to_use $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter USE_CIMMYT_BETA
+    ./mink3daily_run_DSSAT_tile.sh  $script_path $new_chunk_here $daily_to_use $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter $latitude_resolution $longitude_resolution USE_CIMMYT_BETA
+  else
+    # create all bash scripts that will be run in parallel
+    ./mink3daily_run_DSSAT_tile.sh $script_path $new_chunk_here $daily_to_use $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter $latitude_resolution $longitude_resolution
   fi
-    counter=$((counter + 1))
+  counter=$((counter + 1))
 done
 echo ""
 echo "done creating script_to_run_in_job scripts"

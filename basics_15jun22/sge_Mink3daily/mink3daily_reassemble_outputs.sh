@@ -69,7 +69,6 @@ chunk_file=${output_data_dir}
 # the data files # (DMR) modified this to simplify, needs a different first argument now
 input_file=${chunked_output_data_dir}${data_file_short_name}
 
-# exit 1
 base_input=`basename $input_file`
 
 # echo -e "\n\ncodd=[$chunked_output_data_dir]; xt=[${X_template%%.*X}]\nCF = [$chunk_file] ; IF = [$input_file] ; NT = [$n_threads_total] \n\n\n"
@@ -94,16 +93,12 @@ if [ $test_exit_code -eq 0 ]; then
   # copy over the cols file
   cp ${chunked_output_data_dir}${data_file_short_name%%_STATS}_0_STATS.cols.txt ${output_data_dir}${data_file_short_name}.cols.txt
 
-  echo ""
-  echo ""
-  echo "SUCCESS in REASSEMBLY: $base_input"
-  echo ""
-  echo ""
 else
   echo ""
   echo ""
   echo "FAILURE TO REASSEMBLE: $base_input"
   echo ""
   echo ""
+  exit 1
 fi
 

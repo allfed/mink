@@ -239,26 +239,6 @@ ew_are_close_to_180=`echo "scale = 10 ; if( \
             sqrt(($o_w_d + 180)^2) < $magic_near_180_thresh \
                                ) {1} else {0}" | bc`
 
-echo "n: [$o_n] -> [$o_n_d]"
-echo "s: [$o_s] -> [$o_s_d]"
-echo "e: [$o_e] -> [$o_e_d]"
-echo "w: [$o_w] -> [$o_w_d]"
-echo "nsres: [$o_nsres] -> [$o_nsres_d]"
-echo "ewres: [$o_ewres] -> [$o_ewres_d]"
-echo "ew_are_ok = [$ew_are_ok]"
-echo "ew_res_is_ok = [$ew_res_is_ok]"
-echo "ew_are_close_to_180 = [$ew_are_close_to_180]"
-
-# if there are problems, try to fix them up...
-echo "  SKIPPING the fix close to 180 step..."
-if [ 0 = 1 ]; then
-if [ $ew_are_close_to_180 = 1 ]; then
-  echo "ew boundaries are close to 180. we're just gonna force it to 180 and go from there."
-  o_e_d=180
-  o_w_d=-180
-fi
-fi # end cutout
-
 if [ $ew_res_is_ok = 0 ]; then
   g.region -d # reset from default
   echo "resetting ew res [old = $o_ewres] to match ns res [$o_nsres]"

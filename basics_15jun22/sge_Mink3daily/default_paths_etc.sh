@@ -117,7 +117,7 @@ export_scripts="${BASE}export_scripts/"
 
 
 
-    original_X_files_dir=${BASE}SNX_files/
+    original_X_files_dir=${BASE}SNX_files/generated_SNX_files/
 #echo "!!! original X files directory changed for the moment !!!"
 #    original_X_files_dir=${BASE}SNX_files/meta_templates/full_wheat_search/
 

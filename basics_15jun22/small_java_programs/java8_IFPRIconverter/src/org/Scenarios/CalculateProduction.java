@@ -26,18 +26,16 @@ public class CalculateProduction {
         scenarios.combined_production_name,
         true);
 
-    sumRainfedAndIrrigated(
+    loopOverRainfedAndIrrigated(
         script_folder,
         scenarios,
-        scenarios.combined_production_name_rf_or_ir, // input
-        scenarios.combined_production_name, // input
-        scenarios.combined_yield_name // output
-        );
-
-    // if (scenarios.create_average_png) {
-    //   createAveragePNG(script_folder, scenarios, cultivar_groups_rasters,
-    // combined_yields_rf_or_ir);
-    // }
+        scenarios.combined_production_name_rf_or_ir,
+        scenarios.combined_production_name,
+        scenarios.combined_yield_name,
+        scenarios.combined_yield_name_rf_or_ir,
+        scenarios.combined_planting_month_name_rf_or_ir,
+        scenarios.combined_days_to_maturity_name_rf_or_ir,
+        true);
 
     if (scenarios.calculate_each_year_best_month) {
       for (int year_index = 0; year_index < scenarios.years.length; year_index++) {
@@ -92,13 +90,16 @@ public class CalculateProduction {
             combined_production_name_this_year,
             false);
 
-        sumRainfedAndIrrigated(
+        loopOverRainfedAndIrrigated(
             script_folder,
             scenarios,
-            combined_production_name_rf_or_ir_this_year, // input
-            combined_production_name_this_year, // input
-            combined_yield_name_this_year // output
-            );
+            combined_production_name_rf_or_ir_this_year,
+            combined_production_name_this_year,
+            combined_yield_name_this_year,
+            combined_yield_name_rf_or_ir_this_year,
+            combined_planting_month_name_rf_or_ir_this_year,
+            new String[] {""}, // no days to maturity data on a yearly basis is available.
+            false);
       }
     }
   } // end CalculateProduction function
@@ -355,7 +356,7 @@ public class CalculateProduction {
     // the country
     // (max is for winter wheat)
     if (calculate_rf_or_ir_specific_average_yield) {
-      if (crop.equals("soybean")) {
+      if (crop.equals("soybeans")) {
 
         // gets the max of all available yields in each cell (all regions)
         BashScripts.compositeRaster(
@@ -478,13 +479,21 @@ public class CalculateProduction {
     return crop_area_raster;
   }
 
-  public static void sumRainfedAndIrrigated(
+  /**
+   * Sums the production values for rainfed and irrigated conditions and performs additional
+   * calculations based on the scenarios.
+   */
+  public static void loopOverRainfedAndIrrigated(
       String script_folder,
       Scenarios scenarios,
-      String[] combined_production_name_rf_or_ir, // input
-      String[] combined_production_name, // output
-      String[] combined_yield_name // output
-      ) throws InterruptedException, IOException {
+      String[] combined_production_name_rf_or_ir,
+      String[] combined_production_name,
+      String[] combined_yield_name,
+      String[] combined_yield_name_rf_or_ir,
+      String[] combined_planting_month_name_rf_or_ir,
+      String[] combined_days_to_maturity_name_rf_or_ir,
+      boolean export_to_countries)
+      throws InterruptedException, IOException {
     // sums the averaged crop production rasters, if there's an RF tag and associated IR tag. Saves
     // the results as an .asc file.
 
@@ -549,6 +558,16 @@ public class CalculateProduction {
 
         crop_area_to_sum = crop_area_to_sum + crop_area_raster;
 
+        if (export_to_countries && scenarios.make_rasters_comparing_overall_to_historical) {
+          String crop_caps = scenarios.config.getCropNameCaps(scenarios.crop_name[i]);
+          BashScripts.exportToCountries(
+              script_folder,
+              crop_caps,
+              scenarios.combined_yield_name_rf_or_ir[i],
+              scenarios.combined_planting_month_name_rf_or_ir[i],
+              scenarios.combined_days_to_maturity_name_rf_or_ir[i],
+              scenarios.results_folder[i]);
+        }
         last_index_of_crop = i;
       }
 
@@ -569,26 +588,16 @@ public class CalculateProduction {
       }
 
       if (scenarios.calculate_average_yield_rf_and_ir) {
-
-        // sum rainfed and irrigated area rasters to the appropriate cropland
-        BashScripts.sumRasters(
+        processAverageYield(
             script_folder,
-            crop_area_to_sum, // input rasters
-            scenarios.crop_name[last_index_of_crop] + "_cropland", // output raster
-            scenarios.results_folder[last_index_of_crop]);
-
-        // use production and crop area to calculate average yield rf and ir
-        // (just divide them as average yield is total production / total area)
-        BashScripts.calculateOverallYield(
-            script_folder,
-            combined_production_name[last_index_of_crop], // input raster
-            scenarios.crop_name[last_index_of_crop] + "_cropland", // input raster
-            combined_yield_name[last_index_of_crop] // output
+            scenarios,
+            combined_production_name, // output rasters
+            combined_yield_name, // output rasters
+            last_index_of_crop,
+            crop_area_to_sum // input rasters
             );
       }
-
-      // process the overall yield rasters to .asc files
-      if (scenarios.make_rasters_comparing_overall_to_historical) {
+      if (export_to_countries && scenarios.make_rasters_comparing_overall_to_historical) {
         String crop_caps =
             scenarios.config.getCropNameCaps(scenarios.crop_name[last_index_of_crop]);
 
@@ -596,18 +605,55 @@ public class CalculateProduction {
             script_folder,
             crop_caps,
             combined_yield_name[last_index_of_crop],
+            "skip_me", // not available summed over rainfed and irrigated
+            "skip_me", // not available summed over rainfed and irrigated
             scenarios.results_folder[last_index_of_crop]);
-      }
-
-      // create a png of the overall yield if create_overall_png is true
-      if (scenarios.create_overall_png) {
-        String historical_yield_raster =
-            scenarios.config.getCropNameCaps(scenarios.crop_name[last_index_of_crop]) + "_yield";
-        String overall_yield_raster = combined_yield_name[last_index_of_crop];
-        String[] rasters_to_render = {historical_yield_raster, overall_yield_raster};
-        BashScripts.createPNG(
-            script_folder, rasters_to_render, scenarios.results_folder[last_index_of_crop]);
       }
     } // end loop over scenarios
   } // function sumRainfedAndIrrigated
+
+  /**
+   * Appends a string to a StringBuilder, prepending with a comma if the StringBuilder isn't empty.
+   */
+  private static void appendWithComma(StringBuilder sb, String text) {
+    if (sb.length() > 0) sb.append(",");
+    sb.append(text);
+  } // end appendWithComma function
+
+  /**
+   * Processes the average yield, summing the rainfed and irrigated area rasters and calculating the
+   * overall yield.
+   */
+  private static void processAverageYield(
+      String script_folder,
+      Scenarios scenarios,
+      String[] combined_production_name,
+      String[] combined_yield_name,
+      int last_index_of_crop,
+      String crop_area_to_sum)
+      throws InterruptedException, IOException {
+
+    BashScripts.sumRasters(
+        script_folder,
+        crop_area_to_sum,
+        scenarios.crop_name[last_index_of_crop] + "_cropland",
+        scenarios.results_folder[last_index_of_crop]);
+
+    BashScripts.calculateOverallYield(
+        script_folder,
+        combined_production_name[last_index_of_crop],
+        scenarios.crop_name[last_index_of_crop] + "_cropland",
+        combined_yield_name[last_index_of_crop]);
+
+    // If enabled, generate a PNG visualization of the overall yield
+    if (scenarios.create_overall_png) {
+      BashScripts.createPNG(
+          script_folder,
+          new String[] {
+            scenarios.config.getCropNameCaps(scenarios.crop_name[last_index_of_crop]) + "_yield",
+            combined_yield_name[last_index_of_crop]
+          },
+          scenarios.results_folder[last_index_of_crop]);
+    }
+  } // end processAverageYield function
 } // class CalculateProduction

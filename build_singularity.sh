@@ -14,5 +14,8 @@ fi
 
 echo "Building singularity"
 mkdir mink_sandbox
-sudo singularity build --sandbox mink_sandbox mink.def
+# sudo singularity build --sandbox mink_sandbox mink.def
+# I think the sudo is needed for installing java... not sure though. regardless it means we have to be sudo to run the singularity container, which sucks.
+# unless we figure out some other way...
+sudo singularity build --writeable --sandbox mink_sandbox mink.def
 # sudo singularity build mink.sif mink.def

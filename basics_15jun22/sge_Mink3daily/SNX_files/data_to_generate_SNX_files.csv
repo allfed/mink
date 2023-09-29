@@ -1,0 +1,103 @@
+SNX_filename,manual_harvest_binary,two_letter_crop_code,details,m_group_info,crop_specific_planting_details,harvest_date_if_potatoes_otherwise_n99,photo_L_if_soybean_C_otherwise,A_if_automatic_planting_R_otherwise,A_if_irrigated_N_otherwise,D_if_potatoes_M_otherwise,irrigation_depth,irrigation_threshold
+sbMGROUP11RF,0,SB,sbMGROUP11RF,990011 M GROUP  11,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,   -99,L,A,N,M,20,70
+mzK017RF,0,MZ,mzK017RF,CYMA05 SC403,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+whK076IR,0,WH,whK076IR,RRWW00 alt WW lowN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+mzK029RF,0,MZ,mzK029RF,IB0185 JACKSON HYBRI,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+whK002RF,0,WH,whK002RF,IB0200 PBW343BA ME1,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+ptATLANTICRF,1,PT,ptATLANTICRF,IB0005 ATLANTIC,   5.7   5.7     S     R    70     0     6  1000   -99   -99   -99     1,   110,C,A,N,D,20,70
+whK013IR,0,WH,whK013IR,IB1300 HalconsnaBA ME8AN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+whK011RF,0,WH,whK011RF,IB1100 SaratovBA ME6,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+mzK029IR,0,MZ,mzK029IR,IB0185 JACKSON HYBRI,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+mzMCCURDY84AARF,0,MZ,mzMCCURDY84AARF,IB0035 McCurdy 84aa,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+whK016IR,0,WH,whK016IR,IB1600 ChinaBBA ME10AN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+sbMGROUP15RF,0,SB,sbMGROUP15RF,990015 M GROUP  15,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,   -99,L,A,N,M,20,70
+whK001IR,0,WH,whK001IR,IB0100 Seri82BA ME1N,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+mzDEKALBXL71IR,0,MZ,mzDEKALBXL71IR,IB0009 DEKALB XL71,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+whK010IR,0,WH,whK010IR,IB1000 DebieraBA ME 5BN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+ptH001RF,1,PT,ptH001RF,RUBY01 Russet Bur [145],   4.8   4.8     S     R    71     0    06   960   -99   -99   -99    02,   145,C,A,N,D,30,40
+mzK014RF,0,MZ,mzK014RF,CYMA02 ZM521,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+ptSEBAGOIR,1,PT,ptSEBAGOIR,IB0002 SEBAGO,   5.7   5.7     S     R    70     0     6  1000   -99   -99   -99     1,   110,C,A,A,D,20,70
+sbMGROUP1RF,0,SB,sbMGROUP1RF,990001 M GROUP   1,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,   -99,L,A,N,M,20,70
+mzK024RF,0,MZ,mzK024RF,CT0002 PIO 31R88,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+sbMGROUP1IR,0,SB,sbMGROUP1IR,990001 M GROUP  01,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,   -99,L,A,A,M,20,70
+ptRUSSETBURBANKRF,1,PT,ptRUSSETBURBANKRF,IB0003 Russet Burbank,   5.7   5.7     S     R    70     0     6  1000   -99   -99   -99     1,   110,C,A,N,D,20,70
+whDFAULTIR,0,WH,whDFAULTIR,DFAULT DEFAULT,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+sbMGROUP13RF,0,SB,sbMGROUP13RF,990013 M GROUP  13,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,   -99,L,A,N,M,20,70
+mzK026IR,0,MZ,mzK026IR,CT0004 DEKALB XL82,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+mzK024IR,0,MZ,mzK024IR,CT0002 PIO 31R88,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+sbMGROUP13IR,0,SB,sbMGROUP13IR,990013 M GROUP  13,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,   -99,L,A,A,M,20,70
+mzPIO31G98RF,0,MZ,mzPIO31G98RF,IB0071 PIO 31G98,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+mzK014IR,0,MZ,mzK014IR,CYMA02 ZM521,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+whK015RF,0,WH,whK015RF,IB1500 Bacanora modified ME9,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+ptH002IR,1,PT,ptH002IR,RUBY02 Bintje     [150],   4.0   4.0     S     R    75     0    06   960   -99   -99   -99    02,   150,C,A,A,D,30,40
+mzK015RF,0,MZ,mzK015RF,CYMA03 BH660,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+whK007IR,0,WH,whK007IR,IB0700 DonErnestoBA ME4BN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+mzK013IR,0,MZ,mzK013IR,CYMA01 WH403,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+sbMGROUP3IR,0,SB,sbMGROUP3IR,990003 M GROUP  03,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,   -99,L,A,A,M,20,70
+sbMGROUP9RF,0,SB,sbMGROUP9RF,990009 M GROUP   9,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,   -99,L,A,N,M,20,70
+whNEWTONIR,0,WH,whNEWTONIR,IB0488 NEWTON,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+ptH003RF,1,PT,ptH003RF,RUBY03 LT1        [115],   4.8   4.8     S     R    71     0    06  1000   -99   -99   -99    02,   115,C,A,N,D,30,40
+whMANITOURF,0,WH,whMANITOURF,IB1500 MANITOU,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+mzK026RF,0,MZ,mzK026RF,CT0004 DEKALB XL82,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+sbMGROUP5IR,0,SB,sbMGROUP5IR,990005 M GROUP   5,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,   -99,L,A,A,M,20,70
+ptH007RF,1,PT,ptH007RF,RUBY07 Amarilis   [118],  3.33  3.33     S     R   100     0    06  1000   -99   -99   -99    02,   150,C,A,N,D,30,40
+sbMGROUP9IR,0,SB,sbMGROUP9IR,990009 M GROUP   9,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,   -99,L,A,A,M,20,70
+sbMGROUP5RF,0,SB,sbMGROUP5RF,990005 M GROUP   5,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,   -99,L,A,N,M,20,70
+mzMCCURDY84AAIR,0,MZ,mzMCCURDY84AAIR,IB0035 McCurdy 84aa,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+ptH004IR,1,PT,ptH004IR,RUBY04 Kufri Bahar[113],   7.0   7.0     S     R    70     0    06  1000   -99   -99   -99    02,   113,C,A,A,D,30,40
+whK006IR,0,WH,whK006IR,IB0600 BacanoraBA ME4AN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+whK010RF,0,WH,whK010RF,IB1000 DebieraBA ME 5B,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+ptH004RF,1,PT,ptH004RF,RUBY04 Kufri Bahar[113],   7.0   7.0     S     R    70     0    06  1000   -99   -99   -99    02,   113,C,A,N,D,30,40
+whDFAULTRF,0,WH,whDFAULTRF,DFAULT DEFAULT,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+mzDEKALBXL71RF,0,MZ,mzDEKALBXL71RF,IB0009 DEKALB XL71,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+mzGARST8808RF,0,MZ,mzGARST8808RF,IB0041 Garst 8808,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+cnINVIGOR5440IR,0,CN,cnINVIGOR5440IR,CA0001 Invigor5440,    80    80     S     R    17     0     2   -99   -99   -99   -99   -99,   -99,L,A,A,M,20,70
+whK007RF,0,WH,whK007RF,IB0700 DonErnestoBA ME4B,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+ptRUSSETBURBANKIR,1,PT,ptRUSSETBURBANKIR,IB0003 Russet Burbank,   5.7   5.7     S     R    70     0     6  1000   -99   -99   -99     1,   110,C,A,A,D,20,70
+mzK021IR,0,MZ,mzK021IR,IB0026 A632 x W117,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+mzGARST8808IR,0,MZ,mzGARST8808IR,IB0041 Garst 8808,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+sbMGROUP3RF,0,SB,sbMGROUP3RF,990003 M GROUP   3,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,   -99,L,A,N,M,20,70
+whNEWTONRF,0,WH,whNEWTONRF,IB0488 NEWTON,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+ptH001IR,1,PT,ptH001IR,RUBY01 Russet Bur [145],   4.8   4.8     S     R    71     0    06   960   -99   -99   -99    02,   145,C,A,A,D,30,40
+whK002IR,0,WH,whK002IR,IB0200 PBW343BA ME1N,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+ptH008IR,1,PT,ptH008IR,RUBY08 Achirana   [ 90],   3.3   3.3     S     R    70     0    06  1000   -99   -99   -99    02,   110,C,A,A,D,30,40
+mzK021RF,0,MZ,mzK021RF,IB0026 A632 x W117,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+whMANITOUIR,0,WH,whMANITOUIR,IB1500 MANITOU,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+whK013RF,0,WH,whK013RF,IB1300 HalconsnaBA ME8A,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+ptH002RF,1,PT,ptH002RF,RUBY02 Bintje     [150],   4.0   4.0     S     R    75     0    06   960   -99   -99   -99    02,   150,C,A,N,D,30,40
+mzK016IR,0,MZ,mzK016IR,CYMA04 SC513,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+mzK025IR,0,MZ,mzK025IR,CT0003 Suwan 3851,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+mzK013RF,0,MZ,mzK013RF,CYMA01 WH403,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+whK012RF,0,WH,whK012RF,IB1200 PehlivanBA ME7,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+ptH007IR,1,PT,ptH007IR,RUBY07 Amarilis   [118],  3.33  3.33     S     R   100     0    06  1000   -99   -99   -99    02,   150,C,A,A,D,30,40
+whK076RF,0,WH,whK076RF,RRWW00 alt WW low,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+whK011IR,0,WH,whK011IR,IB1100 SaratovBA ME6N,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+mzK025RF,0,MZ,mzK025RF,CT0003 Suwan 3851,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+mzK018RF,0,MZ,mzK018RF,CYMA06 PIO 30F32,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+mzK018IR,0,MZ,mzK018IR,CYMA06 PIO 30F32,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+whK006RF,0,WH,whK006RF,IB0600 BacanoraBA ME4A,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+sbMGROUP11IR,0,SB,sbMGROUP11IR,990011 M GROUP  11,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,   -99,L,A,A,M,20,70
+ptH008RF,1,PT,ptH008RF,RUBY08 Achirana   [ 90],   3.3   3.3     S     R    70     0    06  1000   -99   -99   -99    02,   110,C,A,N,D,30,40
+mzPIO3489RF,0,MZ,mzPIO3489RF,IB1066 PIO 3489,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+mzK023IR,0,MZ,mzK023IR,CT0001 CF1505,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+ptSEBAGORF,1,PT,ptSEBAGORF,IB0002 SEBAGO,   5.7   5.7     S     R    70     0     6  1000   -99   -99   -99     1,   110,C,A,N,D,20,70
+ptATLANTICIR,1,PT,ptATLANTICIR,IB0005 ATLANTIC,   5.7   5.7     S     R    70     0     6  1000   -99   -99   -99     1,   110,C,A,A,D,20,70
+ptH003IR,1,PT,ptH003IR,RUBY03 LT1        [115],   4.8   4.8     S     R    71     0    06  1000   -99   -99   -99    02,   115,C,A,A,D,30,40
+whK009RF,0,WH,whK009RF,IB0900 KanchanBA ME5A,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+mzK017IR,0,MZ,mzK017IR,CYMA05 SC403,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+mzK016RF,0,MZ,mzK016RF,CYMA04 SC513,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+sbMGROUP7IR,0,SB,sbMGROUP7IR,990007 M GROUP   7,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,   -99,L,A,A,M,20,70
+mzK015IR,0,MZ,mzK015IR,CYMA03 BH660,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+sbMGROUP15IR,0,SB,sbMGROUP15IR,990015 M GROUP  15,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,   -99,L,A,A,M,20,70
+mzK023RF,0,MZ,mzK023RF,CT0001 CF1505,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+whK016RF,0,WH,whK016RF,IB1600 ChinaBBA ME10A,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+whK015IR,0,WH,whK015IR,IB1500 Bacanora modified ME9N,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+whK012IR,0,WH,whK012IR,IB1200 PehlivanBA ME7N,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+sbMGROUP7RF,0,SB,sbMGROUP7RF,990007 M GROUP   7,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,   -99,L,A,N,M,20,70
+mzK027IR,0,MZ,mzK027IR,IB0035 McCurdy 84aa,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+mzPIO31G98IR,0,MZ,mzPIO31G98IR,IB0071 PIO 31G98,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+mzK027RF,0,MZ,mzK027RF,IB0035 McCurdy 84aa,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70
+whK009IR,0,WH,whK009IR,IB0900 KanchanBA ME5AN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+mzPIO3489IR,0,MZ,mzPIO3489IR,IB1066 PIO 3489,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,   -99,C,A,A,M,20,70
+cnINVIGOR5440RF,0,CN,cnINVIGOR5440RF,CA0001 Invigor5440,    80    80     S     R    17     0     2   -99   -99   -99   -99   -99,   -99,L,A,N,M,20,70
+whK001RF,0,WH,whK001RF,IB0100 Seri82BA ME1,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,   -99,C,A,N,M,20,70

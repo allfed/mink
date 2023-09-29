@@ -14,10 +14,6 @@ method=$3                         # method to average with
 findmax_rasters=$4                # rasters used to look for max locations (typically yields)
 output_raster=$5                  # output raster name
 
-# Create a mask with the specified raster
-# r.mask raster=$mask --overwrite
-
-./average_rasters.sh $to_combine_int_rasters "0" "" 
 
 # Calculate average of the rasters, but round the result to the nearest integer 
 r.series --overwrite input=$to_combine_int_rasters output="deleteme_avg_combined" method=average --quiet
@@ -55,11 +51,9 @@ for index in "${!to_combine_int_rasters_array[@]}"; do
 done
 
 
-# echo "$output_raster = if(isnull($mask), deleteme_avg_combined_integer, $max_combined_raster_mapcalc)"
-# exit 1
 # Create the output raster based on the mask condition, and the created mapcalc expression
 
-# echo "$output_raster = if(isnull($mask), deleteme_avg_combined_integer, $max_combined_raster_mapcalc)"
+
 # the mapcalc command should look something like this:
 # 379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_wheat__Aug04_updatedN_wet_planting_month_RF = 
 # if(isnull(winter_wheat_countries_mask),
@@ -99,9 +93,13 @@ done
 #         )
 #     )
 # )
-
+#
+# The above can be seen with the command (not shortened and in terrible formatting though!):
+#    echo "$output_raster = if(isnull($mask), deleteme_avg_combined_integer, $max_combined_raster_mapcalc)"
 
 r.mapcalc "$output_raster = if(isnull($mask), deleteme_avg_combined_integer, $max_combined_raster_mapcalc)"
+
+
 
 # remove temporary rasters
 g.remove -f rast=deleteme_avg_combined,deleteme_avg_combined_integer,deleteme_max_key_for_combining_rasters

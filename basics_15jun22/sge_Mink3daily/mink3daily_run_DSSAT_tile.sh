@@ -1,7 +1,7 @@
 #!/bin/bash
 # (DMR) DELETE ME AFTER YOU FIGURE OUT HOW TO RUN IN WRAPPER >>>>>
-export  latitude_resolution=1.875  # these need to match the daily weather files
-export longitude_resolution=1.25  # these need to match the daily weather files
+# export  latitude_resolution=1.875  # these need to match the daily weather files
+# export longitude_resolution=1.25  # these need to match the daily weather files
 
 # echo ""
 # echo "running mink3daily_run_DSSAT_tile.sh"
@@ -46,6 +46,8 @@ fi
        crop_irri_name=$7
     plantingDateInMonthShiftInDays=$8
           n_before_me=$9
+  latitude_resolution=${10}
+ longitude_resolution=${11}
 
   # this is likely have a full path on it, so we need to strip the path
   # in order to refer to it in its new location on the compute node
@@ -73,7 +75,6 @@ fi
 
     gisTableBaseName=${on_node_input_data_dir}${data_file_short_name} # this should get pulled from the argument
  baseNameOfDailyWeather=${on_node_weather_dir}`basename $daily_to_use`
- 
 # baseNameOfDailyWeather=${on_node_weather_dir}
 
        templateXFile=$magic_X_file
@@ -125,7 +126,6 @@ log_file=${log_file/___/_${chunk_index}_}
 # echo java_to_use -cp headnode_classpath daily_weather_copier_classname {prestaged_weather_dir}daily_to_use on_node_weather_dir data_file_base_name weatherDataSuffixWithDot latitude_resolution longitude_resolution
 
 # echo "$java_to_use $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution"
-
 copy_block=`$java_to_use -cp $headnode_classpath $daily_weather_copier_classname ${prestaged_weather_dir}$daily_to_use $on_node_weather_dir $data_file_base_name $weatherDataSuffixWithDot $latitude_resolution $longitude_resolution | uniq`
 # echo "copy_block"
 # echo $copy_block
@@ -314,7 +314,6 @@ fi
   # echo \"time_run  = \$time_run\" 
 
         " > $script_to_run_in_job # end of ssh command....
-
 chmod +x "${script_to_run_in_job}"
 
 # echo ""

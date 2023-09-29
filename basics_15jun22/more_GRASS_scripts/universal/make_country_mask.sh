@@ -77,14 +77,12 @@ for (( country_num=1 ; country_num <= n_countries ; country_num++ ))
 do
   country_name=`echo "$country_names_csv" | cut -d, -f${country_num}`
 
-  name_has_apostrophe=`echo "$country_name" | grep "'"`
-
   # here is a workaround for places with apostrophe's, like Cote d'Ivoire
   # counting up the number of nodes in the topology. if that is zero, we
   # will select using the "LIKE" sql command and tell people to replace the
   # apostrophe's with percent signs as wildcards...
 
-  if [ -n "$name_has_apostrophe" ]; then
+  if [[ "$country_name" =~ "'" ]]; then
     country_name_n_chunks=`echo "$country_name" | awk -F "'" '{ print NF }'`
 
     delimiter="'"
@@ -117,14 +115,13 @@ fi # end if whole world
 cat_list=${cat_list:1}
 
 ### pull out the desired pieces
-v.extract input=$country_vector output=deleteme_vectors_we_want list=$cat_list --o --q $invert_flag
+v.extract input=$country_vector output=deleteme_vectors_we_want list=$cat_list --o $invert_flag
 
 n_found=`v.db.select deleteme_vectors_we_want -c col=CNTRY_NAME | wc -l`
 
 if [ $n_countries -ne $n_found ]; then
   echo "$n_countries requested, $n_found extracted   !!! NOT ALL REQUESTED COUNTRIES WERE FOUND !!!"
-else
-  echo "$n_countries requested, $n_found extracted"
+  exit 1
 fi
 
    found_list=`v.db.select deleteme_vectors_we_want -c col=CNTRY_NAME | sort`
@@ -133,7 +130,6 @@ fi
      sought_list=`echo "$sought_list" | sed "s/,$found_country,/,,/g ; s/^$found_country,/,/g ; s/,$found_country$/,/g ; s/^$found_country$//g"`
    done
 
-   echo "      not found: {$sought_list}"
    echo "      are found: `echo "$found_list" | tr "\n" ","`"
 
 
@@ -154,12 +150,3 @@ v.to.rast input=deleteme_vectors_we_want output=$output_raster use=val value=1 -
 
 # go back to the original region (ADDED BY DMR)
 g.region rast=$align_raster
-
-#v.to.rast input=deleteme_vectors_we_want output=deleteme_large_mask use=val value=1 --o --q
-
-#g.region zoom=deleteme_large_mask
-
-#r.mapcalc $output_raster = "deleteme_large_mask"
-
-
-

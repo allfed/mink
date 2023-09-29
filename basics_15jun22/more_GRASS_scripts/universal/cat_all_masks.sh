@@ -13,7 +13,8 @@ declare -a masks=( "whK013" "whK016" "whK015" "whK010" "whK076" "whK012" "whK011
 for mask in "${masks[@]}"; do
     echo "Processing $mask..."
     # Run the command with the mask as an argument
-    ./save_ascii.sh "mask_for_${mask}IR"
+    # this saves in the git dir root directory
+    ./save_ascii.sh . "mask_for_${mask}IR"
     # Use cat to display the output
     cat "mask_for_$mask.asc"
 done
