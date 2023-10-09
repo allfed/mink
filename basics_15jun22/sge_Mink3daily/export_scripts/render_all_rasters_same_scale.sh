@@ -45,16 +45,29 @@ for raster in "$@"; do
   min=`echo "$stats" | grep min= | cut -d= -f2`
   max=`echo "$stats" | grep max= | cut -d= -f2`
   
-  # calculate the half of the overall max value
-  halfmax=`echo $overall_max_int / 2 | bc`
-  
+  # calculate the different values for the colors
+  overall_min_intplusone=`echo "scale=0; $overall_min_int + 1" | bc`
+  quartermax=`echo "scale=0; $overall_max_int / 4" | bc`
+  halfmax=`echo "scale=0; $overall_max_int / 2" | bc`
+  threequartersmax=`echo "scale=0; ($overall_max_int * 3 + 2) / 4" | bc`
+
   # if overall_min is less than zero, set it to zero
   if [ "$overall_min_int" -lt 0 ]; then
     overall_min_int=0
   fi
   
   # construct the color rule string
-  classic_color_string="$overall_min_int blue\n$halfmax green\n$overall_max_int red"
+  classic_color_string="$overall_min_int black\n$overall_min_intplusone blue\n$quartermax cyan\n$halfmax green\n$threequartersmax yellow\n$overall_max_int red"
+
+  echo "raster"
+  echo $raster
+  echo "overall_max_int: $overall_max_int"
+  echo "overall_min_int: $overall_min_int"
+  echo "quartermax: $quartermax"
+  echo "halfmax: $halfmax"
+  echo "threequartersmax: $threequartersmax"
+  echo "classic_color_string:"
+  echo -e "$classic_color_string"
   # apply the color rule to the raster
   printf "$classic_color_string" | r.colors $raster rules=-
 
