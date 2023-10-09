@@ -1,3 +1,26 @@
+"""
+
+This script does the following:
+
+Compare model results with historical results country-by-country and plot the results
+
+Compare model results with historical results grid-cell-by-grid-cell and plot the results
+
+Create statistical reporting of the comparison using a few different statistical measures in terms of how well 
+expected results compare to observed results, and print + save as csv, as well as show on the plots.
+
+Creates histograms of the common ranges of yield values for different yields.
+
+It also allows for comparison between other model results (specifically at this point AGMIP) and this model's results.
+
+Finally, it allows for comparison between SPAM and FAOSTAT yields (purely to show they line up properly, as SPAM is 
+made to agree with FAOSTAT).
+
+
+
+"""
+
+
 # Importing necessary libraries
 # from adjustText import adjust_text
 import re
@@ -21,7 +44,7 @@ from statsmodels.tools.eval_measures import rmse as statmodel_rmse
 config = {
     "plot_merged_gdf": False,
     "plot_hist_side_by_side": False,
-    "plot_by_country_scatter": True,
+    "plot_by_country_scatter": False,
     "plot_cell_by_cell_scatter": False,
 }
 
@@ -53,7 +76,7 @@ def main():
             "AGMIP_code": "ric",
             "SNX_description": "rice__Sep29_genSNX",
         },
-        # hmm I don't have the AGMIP comparison here...
+        # # hmm I don't have the AGMIP comparison here...
         "RAPE": {
             "crop_nice_name": "rapeseed",
             "AGMIP_code": "SKIP_ME",
@@ -91,20 +114,21 @@ def main():
             )
 
     df = pd.DataFrame(table_data)
-    print(df)
-    df.to_csv("output_table.csv", index=False)
+    if table_data not in [None, {}]:
+        print(df)
+        df.to_csv("output_table.csv", index=False)
 
-    # Set 'Crop Name' as the index for more meaningful output
-    df.set_index("Crop Name", inplace=True)
+        # Set 'Crop Name' as the index for more meaningful output
+        df.set_index("Crop Name", inplace=True)
 
-    # Loop through each column, create a new DataFrame, and print
-    for column in df.columns:
-        new_df = pd.DataFrame(df[column])
-        print("")
-        print("")
-        print(f"Data for column '{column}':")
-        print(new_df)
-        print("-" * 40)  # prints a separator line for clarity
+        # Loop through each column, create a new DataFrame, and print
+        for column in df.columns:
+            new_df = pd.DataFrame(df[column])
+            print("")
+            print("")
+            print(f"Data for column '{column}':")
+            print(new_df)
+            print("-" * 40)  # prints a separator line for clarity
 
     # merged_gdf.to_csv(
     #     "Model_vs_spam_data.csv",
@@ -182,16 +206,29 @@ def display_for_crops_and_irrigation_level(
         )
 
         if config.get("plot_merged_gdf"):
-            plot_gdf_properties(world, "SPAM", ["average_yield", "production"], "SPAM")
-            plot_gdf_properties(world, "model", ["average_yield", "production"], "SPAM")
+            plot_gdf_properties(
+                world,
+                "SPAM",
+                ["average_yield", "production"],
+                "SPAM",
+                crop_nice_name + ": ",
+            )
+            plot_gdf_properties(
+                world,
+                "model",
+                ["average_yield", "production"],
+                "SPAM",
+                crop_nice_name + ": ",
+            )
             # plot_gdf_properties(world, "FAOSTAT", ["average_yield"])
 
         if config.get("plot_hist_side_by_side", True):
             plot_hist_side_by_side(
-                "Wheat",
+                crop_nice_name,
                 world,
                 ["SPAM_average_yield", "model_average_yield", "FAOSTAT_average_yield"],
             )
+
     elif not agmip_code == "SKIP_ME":
         # AGMIP is only for RF or IR (also does not include rapeseed or potatoes)
         world = load_grass_csv(
@@ -316,7 +353,7 @@ def add_row_to_table(world, crop_value, observed_col, expected_col):
 
 
 # Function to get average variable by country
-def plot_gdf_properties(world, prefix, properties, max_col):
+def plot_gdf_properties(world, prefix, properties, max_col, crop_nice_name):
     for plot_property in properties:
         fig, ax = plt.subplots(1, 1)
 
@@ -338,7 +375,7 @@ def plot_gdf_properties(world, prefix, properties, max_col):
             ].max(),  # Set the maximum color limit
         )
 
-        plt.title(prefix + "_" + plot_property, fontsize=20)
+        plt.title(crop_nice_name + prefix + "_" + plot_property, fontsize=20)
         plt.show(block=False)
 
 
@@ -390,7 +427,6 @@ def plot_hist_side_by_side(crop, world, column_list):
     for col in column_list:
         if col not in world.columns:
             raise ValueError(f"Column '{col}' not found in DataFrame")
-
     # Define colors (you may add more if you have more than two columns)
     colors = sns.color_palette("tab10", len(column_list))
 
