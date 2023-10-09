@@ -200,5 +200,7 @@ rm cropland_sum.csv
 mv "by_country_${yield_raster}.csv" "$git_root/$save_folder"
 
 echo ""
-echo "successfully exported to a csv"
+echo "Successfully exported to a csv."
+echo "Location: $save_folder"
+echo "Filename: by_country_${yield_raster}.csv"
 echo ""

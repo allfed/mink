@@ -89,7 +89,8 @@ public class ScenariosProcessor {
           scenarios.nsres[scenario_and_pm.scenarioNumber],
           scenarios.ewres[scenario_and_pm.scenarioNumber]);
 
-      String[] non_yield_parameters_to_save = new String[] {"n_bad_things", "real_maturity_mean"};
+      String[] non_yield_parameters_to_save = new String[] {"n_bad_things",
+    "real_maturity_mean"};
 
       String[] outputs_to_save =
           generateColumnsToMakeRastersFromDataFiles(
@@ -100,6 +101,7 @@ public class ScenariosProcessor {
           scenarios
               .output_stats_basenames[scenario_and_pm.scenarioNumber][
               scenario_and_pm.plantingMonth],
+          scenarios.years.length,
           outputs_to_save);
 
       for (int year_index = 0; year_index < scenarios.years.length; year_index++) {
@@ -295,7 +297,7 @@ public class ScenariosProcessor {
   }
 
   public static void readDSSAToutputs(
-      String script_folder, String fileToProcess, String[] column_titles)
+      String script_folder, String fileToProcess, int nyears, String[] column_titles)
       throws InterruptedException, IOException, IllegalArgumentException {
 
     // Read the required files
@@ -426,10 +428,8 @@ public class ScenariosProcessor {
         int emergence_errors = 0;
         int other_errors = 0;
         for (int i = 0; i < latLonData.size(); i++) {
-          // System.out.println(singleColumnOfData[i]);
           String formatted_bad_things =
               ("000000000000" + singleColumnOfData[i]).substring(singleColumnOfData[i].length());
-
           int[] numbers = new int[4];
 
           for (int j = 0; j < 4; j++) {
@@ -452,20 +452,38 @@ public class ScenariosProcessor {
             }
           }
         }
-        if (maturity_errors > 0 || flowering_errors > 0 || emergence_errors > 0) {
+        if (maturity_errors > 0
+            || flowering_errors > 0
+            || emergence_errors > 0
+            || other_errors > 0) {
+          double percentageErrorMaturity =
+              ((double) (maturity_errors) / (latLonData.size() * (nyears + 1))) * 100;
+          double percentageErrorFlowering =
+              ((double) (flowering_errors) / (latLonData.size() * (nyears + 1))) * 100;
+          double percentageErrorEmergence =
+              ((double) (emergence_errors) / (latLonData.size() * (nyears + 1))) * 100;
+          double percentageErrorOther =
+              ((double) (other_errors) / (latLonData.size() * (nyears + 1))) * 100;
+
           System.out.println(fileToProcess + ": ");
           System.out.println(
               "  Bad things (out of "
-                  + latLonData.size()
-                  + " total cells real for each year ran (each year and pixel can add one"
-                  + " error)):\n"
+                  + latLonData.size() * (nyears + 1)
+                  + " total cells real for each (year+1) ran real (each year and pixel can"
+                  + " add one error, and the warmup year counts too)):\n"
                   + "      Maturity: "
                   + maturity_errors
-                  + "\n      Flowering: "
+                  + " ("
+                  + String.format("%.1f", percentageErrorMaturity)
+                  + "%)\n      Flowering: "
                   + flowering_errors
-                  + "\n      Emergence: "
+                  + " ("
+                  + String.format("%.1f", percentageErrorFlowering)
+                  + "%)\n      Emergence: "
                   + emergence_errors
-                  + "\n      Other (\"extras\"): "
+                  + " ("
+                  + String.format("%.1f", percentageErrorEmergence)
+                  + "%)\n      Other (\"extras\"): "
                   + other_errors);
         }
       }
