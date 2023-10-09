@@ -1,9 +1,13 @@
 # Importing necessary libraries
+# from adjustText import adjust_text
+import re
 import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import rasterio
 from rasterio.features import shapes
+from shapely.geometry import Point
+
 import os
 import seaborn as sns
 import numpy as np
@@ -17,29 +21,49 @@ from statsmodels.tools.eval_measures import rmse as statmodel_rmse
 config = {
     "plot_merged_gdf": False,
     "plot_hist_side_by_side": False,
-    "plot_scatter": True,
+    "plot_by_country_scatter": True,
+    "plot_cell_by_cell_scatter": False,
 }
 
 git_root = "../"
 
 
+table_data = {}
+
+
 def main():
     crop_codes = {
-        # "WHEA": {
-        #     "crop_nice_name": "Wheat",
-        #     "AGMIP_code": "whe",
-        #     "SNX_description": "wheat__Aug04_genSNX",
-        # },
+        "WHEA": {
+            "crop_nice_name": "Wheat",
+            "AGMIP_code": "whe",
+            "SNX_description": "wheat__Aug04_genSNX",
+        },
         "MAIZ": {
             "crop_nice_name": "Maize",
             "AGMIP_code": "mai",
             "SNX_description": "maize__Sep26_genSNX",
         },
-        # "SOYB": {
-        #     "crop_nice_name": "Soybean",
-        #     "AGMIP_code": "soy",
-        #     "SNX_description": "soybeans__Sep27_genSNX",
-        # },
+        "SOYB": {
+            "crop_nice_name": "Soybean",
+            "AGMIP_code": "soy",
+            "SNX_description": "soybeans__Sep27_genSNX",
+        },
+        "RICE": {
+            "crop_nice_name": "Rice",
+            "AGMIP_code": "ric",
+            "SNX_description": "rice__Sep29_genSNX",
+        },
+        # hmm I don't have the AGMIP comparison here...
+        "RAPE": {
+            "crop_nice_name": "rapeseed",
+            "AGMIP_code": "SKIP_ME",
+            "SNX_description": "rapeseed__Sep28_genSNX",
+        },
+        "POTA": {
+            "crop_nice_name": "potatoes",
+            "AGMIP_code": "SKIP_ME",
+            "SNX_description": "potatoes__Oct01_genSNX",
+        },
     }
 
     rf_and_ir = {
@@ -66,6 +90,22 @@ def main():
                 crop_key, crop_value, water_key, water_values
             )
 
+    df = pd.DataFrame(table_data)
+    print(df)
+    df.to_csv("output_table.csv", index=False)
+
+    # Set 'Crop Name' as the index for more meaningful output
+    df.set_index("Crop Name", inplace=True)
+
+    # Loop through each column, create a new DataFrame, and print
+    for column in df.columns:
+        new_df = pd.DataFrame(df[column])
+        print("")
+        print("")
+        print(f"Data for column '{column}':")
+        print(new_df)
+        print("-" * 40)  # prints a separator line for clarity
+
     # merged_gdf.to_csv(
     #     "Model_vs_spam_data.csv",
     #     columns=["ISO3_Model", "average_yield_SPAM", "average_yield_Model"],
@@ -84,6 +124,8 @@ def display_for_crops_and_irrigation_level(
     rf_or_ir = water_values["rf_or_ir"]
     snx_ending = water_values["snx_ending"]
     title = water_values["title"]
+    if crop_key == "RICE" and rf_or_ir == "_RF":
+        return
 
     if water_key == "overall":
         world = load_faostat_data(
@@ -102,10 +144,29 @@ def display_for_crops_and_irrigation_level(
         world = load_grass_csv(
             world,
             os.path.join(
-                "/home/dmrivers/Code/mink/wth_historical", "by_country_WHEA_yield.csv"
+                "/home/dmrivers/Code/mink/wth_historical",
+                f"by_country_{crop_key}_yield.csv",
             ),
             "SPAM",
         )
+
+        # this might be useful to plot spam vs old spam....
+        # world = load_grass_csv(
+        #     world,
+        #     os.path.join(
+        #         "/home/dmrivers/Code/mink/grassdata/world/spam",
+        #         f"by_country_{crop_key}_yield.csv",
+        #     ),
+        #     "SPAM",
+        # )
+
+        # world = scatter_country_averages(
+        #     world,
+        #     "SPAM",
+        #     "SPAM_old",
+        #     f"{crop_nice_name} SPAM old vs SPAM based on Countries",
+        # )
+        # breakpoint
 
         world = remove_row_if_any_column_is_nan(
             world,
@@ -131,8 +192,8 @@ def display_for_crops_and_irrigation_level(
                 world,
                 ["SPAM_average_yield", "model_average_yield", "FAOSTAT_average_yield"],
             )
-    else:
-        # AGMIP is only for RF or IR
+    elif not agmip_code == "SKIP_ME":
+        # AGMIP is only for RF or IR (also does not include rapeseed or potatoes)
         world = load_grass_csv(
             world,
             os.path.join(
@@ -145,33 +206,63 @@ def display_for_crops_and_irrigation_level(
             world,
             [
                 f"model{rf_or_ir}_average_yield",
-                f"AGMIP{rf_or_ir}_average_yield",
+                # f"AGMIP{rf_or_ir}_average_yield",
                 f"model{rf_or_ir}_production",
-                f"AGMIP{rf_or_ir}_production",
+                # f"AGMIP{rf_or_ir}_production",
                 f"model{rf_or_ir}_area",
             ],
         )
+    else:
+        return
 
-    if config.get("plot_scatter", True):
+    if config.get("plot_cell_by_cell_scatter", True) and water_key == "overall":
+        SPAM_yields_ascii_file = os.path.join(
+            f"{git_root}wth_historical", f"{crop_key}_yield.asc"
+        )
+        modelled_yields_ascii_file = os.path.join(
+            f"{git_root}wth_control",
+            f"379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_{snx_description}_{snx_ending}.asc",
+        )
+        SPAM_area_ascii_file = os.path.join(
+            f"{git_root}wth_historical", f"{crop_key}_cropland.asc"
+        )
+
+        compare_yields_with_model_by_cell(
+            "SPAM",
+            SPAM_yields_ascii_file,
+            modelled_yields_ascii_file,
+            SPAM_area_ascii_file,
+            "SPAM",
+            "SPAM Yields",
+            "Mink model yields",
+            f"{crop_nice_name} SPAM vs model yields per grid cell",
+        )
+
+    if config.get("plot_by_country_scatter", True):
         if water_key == "overall":
+            observed_col = "model"
+            expected_col = "SPAM"
             world = scatter_country_averages(
                 world,
-                "model",
-                "SPAM",
-                f"{crop_nice_name} SPAM vs Model based on Countries",
+                observed_col,
+                expected_col,
+                f"{crop_nice_name} {expected_col} vs {observed_col} based on Countries",
             )
-        else:
-            world = scatter_country_averages(
-                world,
-                f"model{rf_or_ir}",
-                f"AGMIP{rf_or_ir}",
-                f"{title}: {crop_nice_name} AGMIP vs Model based on Countries",
-            )
+            add_row_to_table(world, crop_value, observed_col, expected_col)
+
+            # world = scatter_country_averages(
+            #     world, "FAOSTAT", "SPAM", "Wheat SPAM vs FAOSTAT based on Countries"
+            # )
+        # else:
+        #     world = scatter_country_averages(
+        #         world,
+        #         f"model{rf_or_ir}",
+        #         f"AGMIP{rf_or_ir}",
+        #         f"{title}: {crop_nice_name} AGMIP vs Model based on Countries",
+        #     )
+
         # world = scatter_country_averages(
         #     world, "model", "AGMIP", "Wheat SPAM vs Model based on Countries"
-        # )
-        # world = scatter_country_averages(
-        #     world, "FAOSTAT", "SPAM", "Wheat SPAM vs FAOSTAT based on Countries"
         # )
         # world = scatter_country_production(
         #     world,
@@ -180,25 +271,48 @@ def display_for_crops_and_irrigation_level(
         #     "Wheat SPAM vs FAOSTAT Production Based on Countries",
         # )
 
-    if water_key == "overall":
-        print("crop_key")
-        print(crop_key)
-        print("SPAM_production sum")
-        print(str(world[f"SPAM_production"].sum() / 1e9) + " million tonnes wet")
 
-        print("model_production sum")
-        print(str(world[f"model_production"].sum() / 1e9) + " million tonnes wet")
-    else:
-        print(f"model{rf_or_ir}_production sum")
-        print(
-            str(world[f"model{rf_or_ir}_production"].sum() / 1e9)
-            + " million tonnes wet"
+def add_row_to_table(world, crop_value, observed_col, expected_col):
+    weights, filtered_world = get_weights_and_filtered_world(
+        world, observed_col, expected_col
+    )
+
+    (
+        r_squared,
+        weighted_r2,
+        _,
+        relative_rmse,
+        _,
+        rmse,
+    ) = get_stats(
+        filtered_world,
+        observed_col + "_average_yield",
+        expected_col + "_average_yield",
+        weights,
+    )
+
+    if "Crop Name" not in table_data:
+        table_data["Crop Name"] = []
+        table_data[f"R^2 with {expected_col}"] = []
+        table_data[f"Weighted R^2 with {expected_col}"] = []
+        table_data[f"RMSE (kg/ha) with {expected_col}"] = []
+        table_data[f"RRMSE (%) with {expected_col}"] = []
+        table_data[f"Ratio {observed_col} to {expected_col} production"] = []
+
+    table_data["Crop Name"].append(crop_value["crop_nice_name"])
+    table_data[f"R^2 with {expected_col}"].append(round(r_squared, 2))
+    table_data[f"Weighted R^2 with {expected_col}"].append(round(weighted_r2, 2))
+    table_data[f"RMSE (kg/ha) with {expected_col}"].append(round(rmse, 2))
+    table_data[f"RRMSE (%) with {expected_col}"].append(
+        round(relative_rmse * 100, 2)
+    )  # Convert to percentage
+    table_data[f"Ratio {observed_col} to {expected_col} production"].append(
+        round(
+            world[f"{observed_col}_production"].sum()
+            / world[f"{expected_col}_production"].sum(),
+            2,
         )
-        print(f"AGMIP{rf_or_ir}_production sum")
-        print(
-            str(world[f"AGMIP{rf_or_ir}_production"].sum() / 1e9)
-            + " million tonnes wet"
-        )
+    )
 
 
 # Function to get average variable by country
@@ -341,7 +455,6 @@ def d_statistic(expected, observed):
         raise ValueError("P and O must be the same length")
 
     mean_O = sum(O) / N
-    print(P)
     for i in range(N):
         P_prime = P[i] - mean_O
         O_prime = O[i] - mean_O
@@ -382,13 +495,11 @@ def get_stats(filtered_world, observed_col, expected_col, weights):
     y = filtered_world[observed_col]
 
     model = sm.WLS(y, X, weights=weights).fit()
-    print(f"Weighted R-squared: {model.rsquared}")
 
     # Calculate r-squared
     slope, intercept, r_value, p_value, std_err = linregress(
         filtered_world[expected_col], filtered_world[observed_col]
     )
-    print(f"R-squared: {r_value**2}")
 
     # Assumingexpected_colis the expected values
     expected_values = filtered_world[expected_col]
@@ -396,33 +507,33 @@ def get_stats(filtered_world, observed_col, expected_col, weights):
     observed_results = filtered_world[observed_col]
 
     rmse = RMSE(expected_values, expected_values)
-    print(f"RMSE data: {rmse}")
 
     weighted_rmse = weighted_RMSE(expected_values, observed_results, weights)
-    print(f"weighted RMSE data: {weighted_rmse}")
     d_stat = d_statistic(expected_values, observed_results)
     assert statmodel_rmse(expected_values, expected_values) == 0
     linear_rmse = statmodel_rmse(expected_values, observed_results)
-    print("rmse_test")
-    print(rmse_test(expected_values, observed_results))
-    print("rmse_official")
-    print(linear_rmse)
     assert round(rmse_test(expected_values, observed_results), 10) == round(
         linear_rmse, 10
     )
-    relative_rmse = fraction_rmse(expected_values, observed_results)
+    relative_rmse = linear_rmse / np.mean(expected_values)
 
     return r_value**2, model.rsquared, rmse, relative_rmse, d_stat, linear_rmse
 
 
-def scatter_country_averages(world, observed_col, expected_col, title):
+def get_weights_and_filtered_world(world, observed_col, expected_col):
     filtered_world = world.dropna(
         subset=[expected_col + "_average_yield", observed_col + "_average_yield"]
     )
     weights = filtered_world[expected_col + "_production"] / np.average(
         filtered_world[expected_col + "_production"]
     )
+    return weights, filtered_world
 
+
+def scatter_country_averages(world, observed_col, expected_col, title):
+    weights, filtered_world = get_weights_and_filtered_world(
+        world, observed_col, expected_col
+    )
     # filter dataframes to include only non-zero values
     # filtered_world.to_csv("Model_vs_spam_data.csv")
 
@@ -463,23 +574,36 @@ def scatter_country_averages(world, observed_col, expected_col, title):
         color="gray",
     )
 
+    texts = []
     for index, row in filtered_world.iterrows():
-        plt.text(
-            row[expected_col + "_average_yield"],
-            row[observed_col + "_average_yield"],
-            row["iso_a3"],
-            fontsize=9,
+        texts.append(
+            plt.text(
+                row[expected_col + "_average_yield"],
+                row[observed_col + "_average_yield"],
+                row["name"],
+                fontsize=9,
+            )
         )
 
+    # adjust_text(
+    #     texts,
+    #     # arrowprops=dict(arrowstyle="->", color="black"),
+    #     # only_move="overlap",
+    # )
+
+    # for index, row in filtered_world.iterrows():
+    #     plt.text(
+    #         row[expected_col + "_average_yield"],
+    #         row[observed_col + "_average_yield"],
+    #         row["name"],
+    #         fontsize=9,
+    #     )
     r_squared, WLS, rmse, fractional_rmse, d_stat, linear_RMSE = get_stats(
         filtered_world,
         observed_col + "_average_yield",
         expected_col + "_average_yield",
         weights,
     )
-
-    # result = custom_metric(np.zeros(len(expected_values)), expected_values, weights)
-    # print(f"Result: {result}")
 
     # Define a suitable x and y coordinate for the R-squared label
     x_pos = plt.xlim()[0] + (plt.xlim()[1] - plt.xlim()[0]) * 0.05  # 5% from the left
@@ -509,17 +633,17 @@ def scatter_country_averages(world, observed_col, expected_col, title):
         x_pos, y_pos2, f"WLS Weighted R^2 = {WLS:.2f}", fontsize=12
     )  # Display weighted R-squared on the plot
 
+    # plt.text(
+    #     x_pos, y_pos3, f"log RMSE  = {rmse:.2f}", fontsize=12
+    # )  # Display weighted R-squared on the plot
     plt.text(
-        x_pos, y_pos3, f"log RMSE  = {rmse:.2f}", fontsize=12
+        x_pos, y_pos3, f"Fractional RMSE = {fractional_rmse:.2f}", fontsize=12
     )  # Display weighted R-squared on the plot
     plt.text(
-        x_pos, y_pos4, f"Fractional RMSE = {fractional_rmse:.2f}", fontsize=12
+        x_pos, y_pos4, f"d_stat = {d_stat:.2f}", fontsize=12
     )  # Display weighted R-squared on the plot
     plt.text(
-        x_pos, y_pos5, f"d_stat = {d_stat:.2f}", fontsize=12
-    )  # Display weighted R-squared on the plot
-    plt.text(
-        x_pos, y_pos6, f"linear RMSE = {linear_RMSE:.2f} kg/ha", fontsize=12
+        x_pos, y_pos5, f"linear RMSE = {linear_RMSE:.2f} kg/ha", fontsize=12
     )  # Display weighted R-squared on the plot
     plt.title(title)
     plt.xlabel(expected_col + " Average Yield (kg/ha)")
@@ -572,12 +696,7 @@ def scatter_country_production(world, observed_col, expected_col, title):
 
 
 def load_grass_csv(world, production_area_by_country, data_category):
-    print("data_category")
-    print(data_category)
     production_data = pd.read_csv(production_area_by_country)
-    print("production_data")
-    print(production_data)
-    print(production_data.columns)
     assert "Production_Sum" in production_data.columns
     assert "Crop_Area_Sum" in production_data.columns
     assert "Planting_Month_Mode" in production_data.columns
@@ -603,21 +722,205 @@ def load_grass_csv(world, production_area_by_country, data_category):
     world[data_category + "_average_yield"] = (
         world[data_category + "_production"] / world[data_category + "_area"]
     )
-    print(data_category + "_average_yield")
-    print(world[data_category + "_average_yield"])
     return world
 
 
 def remove_row_if_any_column_is_nan(world, columns):
-    # Mask for rows where any of the specified columns are missing or zero
-    # mask = world[columns].isna() | (world[columns] < 1000)
-    mask = world[columns].isna() | (world[columns] < 50)
+    # Mask for rows where any of the specified columns are missing
+    mask = world[columns].isna()
     rows_to_update = mask.any(axis=1)
 
     # Set the values in the specified columns to NaN for those rows
     world.loc[rows_to_update, columns] = np.nan
 
     return world
+
+
+# FUNCTIONS FOR by-CELL BELOW
+
+
+def compare_yields_with_model_by_cell(
+    source_name,
+    yields_ascii_file,
+    modelled_yields_ascii_file,
+    area_ascii_file,
+    suffix,
+    x_label,
+    y_label,
+    title,
+):
+    source_data = import_ascii(yields_ascii_file, "yields")
+    model_data = import_ascii(modelled_yields_ascii_file, "yields")
+    crop_area_data = import_ascii(area_ascii_file, "area")
+
+    # remove any nan rows for any relevant dataset
+    combined_intersection = (
+        source_data.merge(
+            model_data,
+            on=["lat", "lon"],
+            how="inner",
+            suffixes=(f"_{suffix}", "_model"),
+        )
+        .merge(crop_area_data, on=["lat", "lon"], how="inner")
+        .dropna(subset=[f"yields_{suffix}", "yields_model", "area"])
+    )
+
+    combined_intersection = combined_intersection[combined_intersection["area"] > 10]
+
+    scatter_points_with_weights(
+        dataframe=combined_intersection,
+        expected_data_column_name=f"yields_{suffix}",
+        observed_data_column_name="yields_model",
+        weights=combined_intersection,
+        weights_column_name="area",
+        x_axis_label=x_label,
+        y_axis_label=y_label,
+        title=title,
+    )
+
+
+def scatter_points_with_weights(
+    dataframe,
+    expected_data_column_name,
+    observed_data_column_name,
+    weights,
+    weights_column_name,
+    x_axis_label,
+    y_axis_label,
+    title,
+):
+    weights_values = weights[weights_column_name]
+    weights_normalized = weights_values / np.average(weights_values)
+
+    plt.figure()
+
+    # Normalize the values for color mapping
+    norm = mcolors.Normalize(
+        vmin=weights_values.min(),
+        vmax=weights_values.max(),
+    )
+    cmap = plt.cm.viridis
+
+    # Scale the weights for size mapping
+    sizes = weights_values / weights_values.max() * 100
+
+    plt.scatter(
+        dataframe[expected_data_column_name],
+        dataframe[observed_data_column_name],
+        c=weights_values,
+        cmap=cmap,
+        norm=norm,
+        s=sizes,
+    )
+
+    plt.colorbar(label="crop area of cell")
+
+    # Add a dotted line where x=y
+    x = np.linspace(*plt.xlim())
+    plt.plot(x, x, "--", color="k")
+
+    r_squared, WLS, rmse, fractional_rmse, d_stat, linear_RMSE = get_stats(
+        dataframe,
+        observed_data_column_name,
+        expected_data_column_name,
+        weights_normalized,
+    )
+
+    # Define a suitable x and y coordinate for the R-squared label
+    x_pos = plt.xlim()[0] + (plt.xlim()[1] - plt.xlim()[0]) * 0.05  # 5% from the left
+    y_pos1 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+        0.9 + 0.4
+    )  # 90% from the bottom
+    y_pos2 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+        0.85 + 0.4
+    )  # 90% from the bottom
+    y_pos3 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+        0.8 + 0.4
+    )  # 90% from the bottom
+    y_pos4 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+        0.75 + 0.4
+    )  # 90% from the bottom
+    y_pos5 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+        0.7 + 0.4
+    )  # 90% from the bottom
+    y_pos6 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+        0.65 + 0.4
+    )  # 90% from the bottom
+
+    plt.text(
+        x_pos, y_pos1, f"R^2 = {r_squared:.2f}", fontsize=12
+    )  # Display weighted R-squared on the plot
+    plt.text(
+        x_pos, y_pos2, f"WLS Weighted R^2 = {WLS:.2f}", fontsize=12
+    )  # Display weighted R-squared on the plot
+
+    # plt.text(
+    #     x_pos, y_pos3, f"log RMSE  = {rmse:.2f}", fontsize=12
+    # )  # Display weighted R-squared on the plot
+    plt.text(
+        x_pos, y_pos3, f"Fractional RMSE = {fractional_rmse:.2f}", fontsize=12
+    )  # Display weighted R-squared on the plot
+    plt.text(
+        x_pos, y_pos4, f"d_stat = {d_stat:.2f}", fontsize=12
+    )  # Display weighted R-squared on the plot
+    plt.text(
+        x_pos, y_pos5, f"linear RMSE = {linear_RMSE:.2f} kg/ha", fontsize=12
+    )  # Display weighted R-squared on the plot
+    plt.title(title)
+    plt.xlabel(x_axis_label)
+    plt.ylabel(y_axis_label)
+    plt.title(title)
+    plt.tight_layout()
+    plt.show(block=False)
+
+
+def import_ascii(filename, save_column):
+    # Load the data into a numpy array
+
+    with open(filename) as f:
+        lines = f.readlines()
+    # Get the header information from the .asc file
+
+    assert lines[0][-2] == "N" or lines[0][-2] == "S"
+    assert lines[1][-2] == "N" or lines[1][-2] == "S"
+    assert lines[2][-2] == "E" or lines[2][-2] == "W"
+    assert lines[3][-2] == "E" or lines[3][-2] == "W"
+
+    north = extract_coordinate(lines[0])
+    south = extract_coordinate(lines[1])
+    east = extract_coordinate(lines[2])
+    west = extract_coordinate(lines[3])
+
+    rows = int(lines[4].split(":")[1].strip())
+    cols = int(lines[5].split(":")[1].strip())
+
+    # Create a numpy array with the data
+    data = []
+    for line in lines[6:]:
+        data.extend([float(x) if x != "*" else np.nan for x in line.strip().split()])
+    data = np.array(data).reshape((rows, cols))
+
+    # Create a DataFrame with the latitude and longitude information
+    lats = np.linspace(south, north, rows)
+    lons = np.linspace(west, east, cols)
+    lat_lon = np.array(np.meshgrid(lats, lons)).T.reshape(-1, 2)
+    df = pd.DataFrame(lat_lon, columns=["lat", "lon"])
+
+    # Flatten the data array and add it to the DataFrame
+    df[save_column] = data.flatten()
+
+    # Create a Geopandas DataFrame with the Point geometry
+    df["geometry"] = df.apply(lambda x: Point(x["lon"], x["lat"]), axis=1)
+    gdf = gpd.GeoDataFrame(df, geometry="geometry")
+
+    return gdf
+
+
+def extract_coordinate(line):
+    # Remove all non-numeric, non-dot, non-minus characters
+    cleaned_line = re.sub(r"[^0-9.-]", "", line.split(":")[1])
+    multiplier = 1 if "N" in line or "E" in line else -1
+    return multiplier * float(cleaned_line)
 
 
 if __name__ == "__main__":

@@ -11,3 +11,5 @@ Other useful things:
 
  - get_all_contents.py can be used to print out the differences between a set of SNX files (can be useful if you have a bunch of data to add in and consistently formatted SNX files, or just to see if the generation of a bunch of SNX files seems to have worked). 
  - you will almost certainly never need this, but if you wish to just copy over the SNX files associated with megaenvironments, copy_snx_files_megaenvironment.py is a useful script
+
+ - you will see some information in the m_group_info column. This is matched up with relevant .CUL files located in basics_15jun22/sge_Mink3daily/actual_program_4.7.5.11 folder

@@ -34,15 +34,17 @@ fi
 ### read in the arguments...
 
    data_file_base_name=$1
-          daily_to_use=$2
-            X_template=`basename $3`
-       crop_nitro_name=$4
-             co2_level=$5
-        crop_irri_name=$6
-       chunks_per_case=$7
-days_to_shift_planting=$8
-   latitude_resolution=$9
-  longitude_resolution=${10}
+ nameOfDSSATExecutable=$2
+          dssat_folder=$3
+          daily_to_use=$4
+            X_template=`basename $5`
+       crop_nitro_name=$6
+             co2_level=$7
+        crop_irri_name=$8
+       chunks_per_case=$9
+days_to_shift_planting=${10}
+   latitude_resolution=${11}
+  longitude_resolution=${12}
 
   # this is likely have a full path on it, so we need to strip the path
   # in order to refer to it in its new location on the compute node
@@ -81,7 +83,7 @@ chunk_file=${chunked_input_data_dir}
 # the data files
 input_file=${input_data_dir}${data_file_short_name}_data
 
-# echo "$java_to_use \"$memory_string\" -cp $classpath $classname ${input_file} $chunk_file $chunks_per_case"
+echo "$java_to_use \"$memory_string\" -cp $classpath $classname ${input_file} $chunk_file $chunks_per_case"
 nice $java_to_use "$memory_string" -cp $classpath $classname ${input_file} $chunk_file $chunks_per_case
 
 if [ $? -ne 0 ]; then
@@ -165,10 +167,10 @@ do
   if [[ "$crop_nitro_name" =~ "wheat" ]]; then
 
     ran_suspected_wheat=true
-    ./mink3daily_run_DSSAT_tile.sh  $script_path $new_chunk_here $daily_to_use $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter $latitude_resolution $longitude_resolution USE_CIMMYT_BETA
+    ./mink3daily_run_DSSAT_tile.sh  $script_path $new_chunk_here $daily_to_use $nameOfDSSATExecutable $dssat_folder $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter $latitude_resolution $longitude_resolution USE_CIMMYT_BETA
   else
     # create all bash scripts that will be run in parallel
-    ./mink3daily_run_DSSAT_tile.sh $script_path $new_chunk_here $daily_to_use $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter $latitude_resolution $longitude_resolution
+    ./mink3daily_run_DSSAT_tile.sh $script_path $new_chunk_here $daily_to_use $nameOfDSSATExecutable $dssat_folder $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter $latitude_resolution $longitude_resolution
   fi
   counter=$((counter + 1))
 done
@@ -194,7 +196,45 @@ script_path="${entry#*:}" # Everything after the first ':'
 echo ""
 echo "running the script_to_run_in_job scripts (which run DSSAT in parallel, so you see progress for all of them asynchronously)"
 echo ""
-printf "%s\n" $scripts_list | cut -d':' -f2- | xargs -I {} -P $chunks_per_case bash {}
+ 
+# NOTE: why do we make a temp file? because i wasn't sure how else to capture the exit status of xargs.
+# If you care to remove this extra step while capturing stdout feel free
+
+# 1. Print the scripts_list.
+scripts_output=$(printf "%s\n" $scripts_list)
+
+# 2. Cut based on ':' and fetch from the second field onward.
+cut_output=$(echo "$scripts_output" | cut -d':' -f2-)
+
+# 3. Execute the resulting scripts using xargs in parallel.
+# Save the content of the variable to a temporary file
+temp_file=$(mktemp)
+echo "$cut_output" > "$temp_file"
+
+# temporarily don't exit on non-zero return values
+# counter-intuitively, to keep running even if one of the DSSAT fails, you would remove 
+# the set +e and set -e lines below.
+set +e
+
+# Use xargs to read arguments from the temporary file and execute the command in parallel threaded chunks
+xargs -a "$temp_file" -I {} -P $chunks_per_case bash {}
+
+# Check the status of the xargs command.
+if [ $? -ne 0 ]; then
+    source some_settings_46.sh
+    echo "An error occurred in the DSSAT tile run. Exiting."
+    echo "To run the DSSAT that failed, navigate to one of the on_node_home directories"
+    echo "and execute"
+    echo "./run_dssat.sh $nameOfDSSATExecutable"
+    exit 1
+fi
+
+# back to exiting on non-zero return values
+set -e
+
+# Clean up by removing the temporary file
+rm "$temp_file"
+
 echo ""
 echo "done running the script_to_run_in_job scripts"
 echo ""

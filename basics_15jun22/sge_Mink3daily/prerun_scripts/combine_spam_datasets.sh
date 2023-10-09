@@ -76,7 +76,12 @@ cd ${export_scripts}
 ./save_tif.sh $historical_results_directory "${crop_caps}_cropland"
 ./save_ascii.sh $historical_results_directory "${crop_caps}_production"
 ./save_tif.sh $historical_results_directory "${crop_caps}_production"
+
+./export_by_country_data.sh ${crop_caps} "${crop_caps}_yield" skip_me skip_me wth_historical 
+
 cd -
+
+
 
 echo ""
 echo "All rasters created for $crop_caps and historical rasters exported"

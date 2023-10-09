@@ -10,25 +10,18 @@ crop_caps=$1
 overall_yield_raster=$2
 
 . ../default_paths_etc.sh # import catastrophe_results_directory, control_results_directory, historical_results_directory
-echo "0"
 substring="control"
 if [[ $overall_yield_raster =~ *"$substring"* ]]; then
     # export overall yield to control results
-    echo "0.1"
     ./save_tif.sh $catastrophe_results_directory $overall_yield_raster
-    echo "0.15"
     ./save_asc.sh $catastrophe_results_directory $overall_yield_raster
-    echo "0.2"
 fi
-echo "1"
 substring="catastrophe"
 if [[ $overall_yield_raster =~ *"$substring"* ]]; then
     # export overall yield to catastrophe results
-    echo "1.5"
     ./save_tif.sh $catastrophe_results_directory $overall_yield_raster
     ./save_asc.sh $catastrophe_results_directory $overall_yield_raster
 fi
-echo "2"
 
 
 

@@ -1,7 +1,5 @@
 # exclude built singularity image
 *.sif
-*.~lock
-
 basics_15jun22/sge_Mink3daily/interrupted_run_locations/
 reports/
 wth_historical/

@@ -1,0 +1,97 @@
+model_configuration:
+
+  # These are currently not used! In the case we don't want command line interface to specify (and we change the way Scenarios.java is called), then DSSAT passed in is the same as (run_crop_model variable true), process is the same ass (process_results true) or both is the same as (both true).
+  run_crop_model: false
+  process_results: false
+
+  # number of parallel chunks to run DSSAT at once with (multithreaded handled through linux bash script)
+  n_chunks: 6
+
+  # which folder and DSSAT exectutable to run, located in basics_15jun22/sge_Mink3daily folder
+  dssat_folder: actual_program_4.7.5.11
+  dssat_executable: dscsm047_debug
+
+
+  # THE FOLLOWING MODEL CONFIGURATION VARIABLES ARE ONLY APPLICABLE
+  # TO THE PROCESS_RESULTS SCENARIOS
+
+  # dry calculate yields as dry weight or wet weight? SPAM is typically wet weight
+  calculate_as_wet_weight: true
+
+  # Average the yields across the years being simulated
+  average_yields: true
+
+  # Calculate best planting month for each grid cell for each year (rather than for the average of all years)
+  calculate_each_year_best_month: true
+
+  find_best_yields: true
+
+  #specific to the rainfed or irrigated, calculate average yields (must be true for any of below to be true!)
+  calculate_rf_or_ir_specific_average_yield: true
+  
+  #specific to the rainfed or irrigated, calculate production (doesn't affect other function operation)
+  calculate_rf_or_ir_specific_production: true
+  
+  #calculate total production (doesn't affect other operation)
+  calculate_rf_plus_ir_production: true
+  
+  #calculate average rainfed and irrigated yield 
+  calculate_average_yield_rf_and_ir: true
+  
+  #the below is actually used to create by-country CSV files at the end of the process
+  make_rasters_comparing_overall_to_historical: true
+
+  # PNG Generation options (ONLY APPLIES TO PROCESS SCENARIO CONDITION)
+
+  # create a png for each year in the region (lots of png's!)
+  create_each_year_png: false
+
+  #  Make sure "average_yields" is true if create_average_png is true.
+  create_average_png: false
+
+  # Make sure "make_rasters_comparing_overall_to_historical" is true if create_overall_png is true.
+  create_overall_png: true
+
+  # countries where we enforce max yields rather than average for wheat specifically
+  # this allows us to allow winter wheat to be dominant in those countries
+  winter_wheat_countries_csv: Luxembourg,Belgium,Denmark,France,Germany,Ireland,Netherlands,United Kingdom
+
+physical_parameters:
+  region_to_use_n: 65
+  region_to_use_s: -65
+  region_to_use_e: 170
+  region_to_use_w: -170
+  nsres: 1.875
+  ewres: 1.25
+  co2_level: 379
+
+  # minimum area cropland in a pixel to consider, in hectares. Any smaller pixel is ignored.
+  minimum_physical_area: 0
+
+  # minimum yield to average in kg/ha
+  minimum_yield: -3
+
+
+  
+  # add in nitrogen and water stress for 'real', ignore them for 'happy'
+  real_or_happy: real
+
+  # plant only in crop areas specific to that crop, or plant everywhere there are currently crops? 'specific' for crop areas specific to that crop that are currently planted, 'all' for planting in all currently planted crop areas
+  all_or_crop_specific: specific
+
+
+  run_descriptor: Sep28_catastrophe_genSNX
+  irrigation_to_try: [RF, IR]
+  weather_prefix: Outdoor_crops_catastrophe
+  weather_folder: catastrophe_mink
+  results_folder: wth_catastrophe
+  planting_months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+  years: [1, 2, 3, 4, 5, 6, 7]
+
+    
+crops:
+- name: rapeseed
+  fertilizer_scheme: winterwheat
+  snx_names: [cnINVIGOR5440]
+  nitrogen_irrigated: N_for_wheat_IR_12aug13
+  nitrogen_rainfed: N_for_wheat_RF_12aug13

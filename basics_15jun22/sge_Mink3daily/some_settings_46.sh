@@ -4,10 +4,9 @@
 ### control settings ###
 ########################
 
-      nameOfDSSATExecutable=dscsm047_debug # actual_program_4.7.5.11
 
 
-      nameOfWeatherExecutable=weather_generator_standalone
+      # nameOfWeatherExecutable=weather_generator_standalone
 
                              # multiplier to convert from shortwave units in the GIS to the units needed by DSSAT [MJ/m^2/day]
                              # the stuff from GLDAS is in W/m^2; so we have to multiply by the number of seconds in a day

@@ -264,6 +264,8 @@ public class BashScripts {
   public static void runScenario(
       String script_folder,
       String snx_name,
+      String dssat_executable,
+      String dssat_folder,
       String co2_level,
       String crop_name,
       String weather_prefix,
@@ -271,33 +273,23 @@ public class BashScripts {
       String output_stats_basename,
       String fertilizer_scheme,
       String chunks_per_case,
-      String run_descriptor,
       String lat_res,
       String lon_res)
       throws InterruptedException, IOException {
 
-    ProcessBuilder pb =
-        new ProcessBuilder(
-            "bash",
-            "./mink3daily_wrapper.sh",
-            "run",
-            output_stats_basename,
-            weather_folder + "/" + weather_prefix,
-            snx_name + ".SNX",
-            fertilizer_scheme,
-            co2_level,
-            crop_name,
-            chunks_per_case,
-            run_descriptor,
-            lat_res,
-            lon_res);
     // System.out.println("");
     // System.out.println("");
     // System.out.println(
     //     "bash"
-    //         + " ./mink3daily_run_DSSAT_tile.sh"
-    //         + " /mnt/data/basics_15jun22/sge_Mink3daily/to_DSSAT/ "
-    //         + yield_result_name
+    //         + "./mink3daily_wrapper.sh"
+    //         + " "
+    //         + "run"
+    //         + " "
+    //         + output_stats_basename
+    //         + " "
+    //         + dssat_executable
+    //         + " "
+    //         + dssat_folder
     //         + " "
     //         + weather_folder
     //         + "/"
@@ -311,8 +303,31 @@ public class BashScripts {
     //         + co2_level
     //         + " "
     //         + crop_name
-    //         + " 1"
-    //         + " 0");
+    //         + " "
+    //         + chunks_per_case
+    //         + " "
+    //         + lat_res
+    //         + " "
+    //         + lon_res);
+
+    ProcessBuilder pb =
+        new ProcessBuilder(
+            "bash",
+            "./mink3daily_wrapper.sh",
+            "run",
+            output_stats_basename,
+            dssat_executable,
+            dssat_folder,
+            weather_folder + "/" + weather_prefix,
+            snx_name + ".SNX",
+            fertilizer_scheme,
+            co2_level,
+            crop_name,
+            chunks_per_case,
+            "RUN_DESCRIPTOR_NOT_USED_FOR_RUN_DSSAT", // run descriptor is not used, trying to make
+            // it obvious if someone tries
+            lat_res,
+            lon_res);
     callProcess(pb, script_folder);
   } // end runScenario
 
@@ -344,6 +359,8 @@ public class BashScripts {
   public static void assembleResults(
       String script_folder,
       String snx_name,
+      String dssat_executable,
+      String dssat_folder,
       String co2_level,
       String crop_name,
       String weather_prefix,
@@ -356,20 +373,14 @@ public class BashScripts {
       String lon_res)
       throws InterruptedException, IOException {
 
-    // System.out.println("");
-    // System.out.println("");
-    // System.out.println("processResults creates raster with name:");
-    // System.out.println(output_stats_filename);
-    // System.out.println("");
-    // System.out.println("filetoprocess");
-    // System.out.println(filetoprocess);
-    // System.out.println("");
     ProcessBuilder pb =
         new ProcessBuilder(
             "bash",
             "./mink3daily_wrapper.sh",
             "assemble",
             output_stats_basename + "_STATS.txt",
+            dssat_executable,
+            dssat_folder,
             weather_folder + "/" + weather_prefix,
             snx_name + ".SNX",
             fertilizer_scheme,

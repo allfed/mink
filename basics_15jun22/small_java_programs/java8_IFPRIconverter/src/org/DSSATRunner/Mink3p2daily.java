@@ -2089,11 +2089,14 @@ public class Mink3p2daily {
       // check for error file
       if (errorAsFileObject.exists()) {
         System.out.println("HAPPYbyname: file not found... [" + errorAsFileObject + "] exists...");
+        System.out.println(
+            "This means that DSSAT likely failed to run. Check by running run_DSSAT.sh in the"
+                + " on_node_home directory to see if DSSAT issues any relevant error messages.");
         throw fnfe;
       }
-      System.out.println("HAPPYbyname: file not found...  (no error file)");
-      // System.out.println("continuing...");
-      // return new int[] {-1};
+      System.out.println(
+          "The 'happy' run with no stress failed, but DSSAT seems to be running properly (no error"
+              + " file generated). Zero yield assumed, continuing.");
     }
 
     // parse the output file for the necessary goodies...
@@ -2331,6 +2334,10 @@ public class Mink3p2daily {
         throw fnfe;
       }
       System.out.println("REAL: file not found...  (no error file)");
+      // MAYBE it makes sense to just exit here to prevent errors from getting through.. but I think
+      // it's rare and maybe not that important.
+      // Sometimes this is what happened when DSSAT failed due to divide by zero errors
+      // throw fnfe;
 
     } catch (IOException ioe) {
       System.out.println("REAL: i/o exception...  ");
@@ -3402,7 +3409,7 @@ public class Mink3p2daily {
           // ExecutorService executorService = Executors.newFixedThreadPool(X);
           // First chunk of code
           time10 = System.currentTimeMillis();
-          ProcessBuilder pb = new ProcessBuilder("bash", "./run_dssat.sh");
+          ProcessBuilder pb = new ProcessBuilder("bash", "./run_dssat.sh", nameOfDSSATExecutable);
           // pb.inheritIO();
           pb.directory(pathToDSSATDirectoryAsFile);
           pb.redirectErrorStream(true); // combine stdout and stderr

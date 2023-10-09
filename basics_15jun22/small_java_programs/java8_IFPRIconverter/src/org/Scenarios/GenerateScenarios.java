@@ -90,7 +90,8 @@ public class GenerateScenarios {
     crop_name_to_short_code_dictionary.put("soybean", "sb");
     crop_name_to_short_code_dictionary.put("rapeseed", "cn");
     crop_name_to_short_code_dictionary.put("wheat", "wh");
-    crop_name_to_short_code_dictionary.put("potato", "pt");
+    crop_name_to_short_code_dictionary.put("potatoes", "pt");
+    crop_name_to_short_code_dictionary.put("rice", "ri");
     return crop_name_to_short_code_dictionary;
   }
 

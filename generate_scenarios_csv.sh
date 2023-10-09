@@ -30,7 +30,7 @@ cd /mnt/data/basics_15jun22/sge_Mink3daily/
 
 # Only compile if the flag is present
 if [ $COMPILE_FLAG -eq 1 ]; then
-  ./compile_java.sh Config.java GenerateScenarios.java BashScripts.java
+  ./compile_java.sh Config.java GenerateScenarios.java BashScripts.java Config.java
 fi
 
 cd /mnt/data/basics_15jun22/small_java_programs/java8_IFPRIconverter/src

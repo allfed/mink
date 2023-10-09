@@ -29,6 +29,8 @@ public class Scenarios {
   public String minimum_physical_area;
   public String minimum_yield;
   public String n_chunks;
+  public String dssat_executable;
+  public String dssat_folder;
   public String[] crop_name;
   public Config config;
 
@@ -149,9 +151,9 @@ public class Scenarios {
     this.minimum_physical_area = config.physical_parameters.minimum_physical_area;
     this.minimum_yield = config.physical_parameters.minimum_yield;
     this.n_chunks = config.model_configuration.n_chunks;
-
+    this.dssat_executable = config.model_configuration.dssat_executable;
+    this.dssat_folder = config.model_configuration.dssat_folder;
     this.real_or_happy = config.physical_parameters.real_or_happy;
-
     this.planting_months = config.physical_parameters.planting_months.toArray(new String[0]);
     this.years = config.physical_parameters.years.toArray(new String[0]);
 

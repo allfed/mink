@@ -97,12 +97,7 @@ export_scripts="${BASE}export_scripts/"
 
 
 
-# let's try the new DSSAT 4.7.5.11-develop as instigated by diego
-# this does not seem to exist or else i just over-wrote it on 12oct21
-#      original_DSSAT_dir=${BASE}/actual_program_4.7.5.11
-
 # latest and greatest as of 12oct21 (checked correct by IJ)
-# (WARNING: actual program folder removed by DMR to save space on the repo, may need to be reinstated at some point)
       original_DSSAT_dir=${BASE}actual_program_4.7.5.11
 
 
@@ -143,7 +138,7 @@ export_scripts="${BASE}export_scripts/"
      on_node_weather_dir=${on_node_home}dailyweather/
   on_node_input_data_dir=${on_node_home}chunks_from_GRASS/
 
-      on_node_output_dir=${on_node_home}chinks_to_GRASS/
+      on_node_output_dir=${on_node_home}chunks_to_GRASS/
 
                    X_dir=${on_node_DSSAT_dir}X_files/
 

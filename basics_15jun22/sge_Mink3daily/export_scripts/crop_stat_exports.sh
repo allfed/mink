@@ -6,9 +6,6 @@
 # and run associated scripts to reformat and export
 
 # Declare arrays for crops, their corresponding descriptions, and crop_caps
-# declare -a crops=("maize" "rice" "soybeans" "potato" "rapeseed")
-# declare -a descriptions=("Sep26_genSNX" "SepX_genSNX" "Sep27_genSNX" "Sep27_genSNX" "Sep27_genSNX")
-# declare -a crop_caps=("MAIZ" "RICE" "SOYB" "POTA" "RAPE")
 declare -a crops=("maize" "soybeans")
 declare -a crops_agmip=("mai" "soy")
 declare -a descriptions=("Sep26_genSNX" "Sep27_genSNX")
@@ -30,7 +27,14 @@ for index in "${!crops[@]}"; do
 
     # Render rasters (if not done already..)
     ./render_all_rasters_same_scale.sh . ${current_crop_caps}_yield 379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_${crop}__${description}_wet_overall_yield 
-    
+done
+
+for index in "${!crops[@]}"; do
+    crop=${crops[$index]}
+    crop_agmip=${crops_agmip[$index]}
+    description=${descriptions[$index]}
+    current_crop_caps=${crop_caps[$index]}
+
     # View the AGMIP vs model rasters
     echo ""
     echo "run the command outside singularity to view:"

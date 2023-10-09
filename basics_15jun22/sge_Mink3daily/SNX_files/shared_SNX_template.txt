@@ -91,7 +91,7 @@ ___place fertilizers here___
 
 
 NEW BLOCK harvest_details_line
- 1{harvest_date_if_potatoes_otherwise_n99: >5}   -99   -99   -99 100.0   0.0
+ 1{harvest_date_if_potatoes_otherwise_n99: >6}   -99   -99   -99 100.0   0.0
 
 
 NEW BLOCK simulation_controls

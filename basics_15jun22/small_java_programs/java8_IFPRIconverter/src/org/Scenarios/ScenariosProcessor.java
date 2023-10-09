@@ -72,6 +72,8 @@ public class ScenariosProcessor {
       BashScripts.assembleResults(
           script_folder,
           scenarios.snx_name[scenario_and_pm.scenarioNumber],
+          scenarios.dssat_executable,
+          scenarios.dssat_folder,
           scenarios.co2_level[scenario_and_pm.scenarioNumber],
           scenarios.crop_name[scenario_and_pm.scenarioNumber],
           scenarios.weather_prefix[scenario_and_pm.scenarioNumber],

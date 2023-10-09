@@ -187,6 +187,92 @@ Raster yields generated from `READ_DSSAT_outputs_from_cols_FEW.sh` (ending in `_
 - Averaging all the crop cultivars produces a raster ending with "averaged_[RF or IR]".
 - Production is calculated using the SPAM 2010 imported maps, resulting in rasters ending with "_production_[RF or IR]", "_production", and "_overall".
 
+## Taking a look at simulation results
+Generally you will want to look at heatmaps of yields, selected planting months, and days to maturity where applicable.
+
+### by country results
+These data are already exported as a csv aggregated by country. To take a look at the 
+To do so, you will have to ensure the proper flags have been set in your configuration yaml file:
+
+```
+make_rasters_comparing_overall_to_historical: true
+calculate_as_wet_weight: true
+average_yields: true
+calculate_each_year_best_month: true
+find_best_yields: true
+calculate_rf_or_ir_specific_average_yield: true
+calculate_rf_or_ir_specific_production: true
+calculate_rf_plus_ir_production: true
+calculate_average_yield_rf_and_ir: true
+make_rasters_comparing_overall_to_historical: true
+```
+
+and that you have run:
+
+```
+./run_from_csv.sh [config_file_name] process 
+```
+
+At that point, you can use some convenient scripts to visualize the by-country csv's in python.
+
+
+## Adding a Crop
+As long as a crop is supported in DSSAT, then it should be straightforward to add it.
+You will need to find an SNX file corresponding to the cultivars you would like to run in the archive, or import them yourself. You can also place your own SNX files in the generated_SNX_files folder, but it's recommended to modify the template, to make it clear how the SNX file you are using differs from all the other SNX files.
+You can see what SNX files exist in basics_15jun22/sge_Mink3daily/SNX_files/data_to_generate_SNX_files.csv and the shared_SNX_template.txt in that folder. Examples of what this generates are in generated_SNX_files.
+
+Make sure you have both rainfed and irrigated versions. Right now, mink requires both rainfed and irrigated versions to run.
+
+Once you've either generated or placed your SNX file in genrated_SNX_files, you can either just run the cultivar for the whole region, or create maps that run for a certain region. You would need to create a GRASS gis raster that covered the region and export it as a .pack file to grassdata/world/megaenvironments_packed. You can also just specify the maps according to the megaenvironments -- you can always take a look at the rasters, they should be loaded in whenever scenarios are generated. (hint: to display a raster, use the basics_15jun22/sge_Mink3daily/export_scripts/quick_display.sh script. You can also render multiple rasters with the same scale in a heat map with ./render_all_rasters_same_scale.sh in the same folder). 
+
+To specify which cultivars are run for which megaenvironment maps dfined in the previous step, go to default_cultivar_mappings.csv. Also add in the wet weight moisture content in moisture_contents.csv in the same folder if it's not there.
+
+To run for the whole region, you need to create the scenario file. The scenario file should be placed in scenarios/ folder. 
+
+Be sure to add in a map of elemental nitrogen application in the /home/dmrivers/Code/mink/grassdata/world/nitrogen_maps/ folder. Once you've loaded it into grass, use the r.pack `input=$raster output=$raster.pack` command where $raster is a bash variable assigned the name of the nitrogen map. Several crops already have these maps defined. However, they are not all up to date -- I have used the N_for_rice_IR_12aug13.pack to match published work.
+
+An example with just SNX files (one is specified, but you can specify more):
+crops:
+- name: rapeseed
+  fertilizer_scheme: winterwheat
+  snx_names: [cnINVIGOR5440]
+  nitrogen_irrigated: N_for_wheat_IR_12aug13
+  nitrogen_rainfed: N_for_wheat_RF_12aug13
+
+The crop name:
+    basics_15jun22/small_java_programs/java8_IFPRIconverter/src/org/DSSATRunner
+
+
+If you don't list SNX names, then the megaenvironemnts will be used. If you list them, it is assumed there is no mapping available in default_cultivar_mappings.csv.
+
+crops:
+- name: maize
+  fertilizer_scheme: threeSplitWithFlowering
+  nitrogen_irrigated: N_for_maize_IR_12aug13
+  nitrogen_rainfed: N_for_maize_RF_12aug13
+
+
+Finally be sure to modify other relevant variables -- they are described in existing config files, but most of them can probably stay the same, except the n_chunks variable may need modification based on the hardware you're using to run the simulation.
+
+Once this is all set up, and you have your config file, you should run the java compile in basics_15jun22/sge_Minkdaily/compile.sh, and then:
+
+./generate_scenarios_csv.sh [config_file_name] 
+./run_from_csv.sh [config_file_name] DSSAT 
+
+that will take some time, then run
+
+./run_from_csv.sh [config_file_name] process 
+
+where the config file is the location of the yaml file you modified in earlier steps.
+
+You can also add the --compile (or -c) flag right after the ./generate_scenarios_csv.sh or ./run_from_csv.sh commands to compile certain relevant java programs. Going in the scripts will allow you to modify what these compiled java programs are (to be sure your saved changes are captured in the program).
+
+You may also need to add your crop at the beginning of the basics_15jun22/small_java_programs/java8_IFPRIconverter/src/org/Scenarios/Config.java file in java to match its name in SPAM. And in basics_15jun22/small_java_programs/java8_IFPRIconverter/src/org/Scenarios/GenerateScenarios.java getCropCodeMap() function.
+
+SPAM is necessary as it loads in our crops. You can go to grassdata/world/spam/  to see what the crop 4 letter code would be.
+
+
+
 ## Development
 
 ## Reference

@@ -19,7 +19,8 @@ public class Config {
     this.crop_lower_to_caps_dictionary.put("soybeans", "SOYB");
     this.crop_lower_to_caps_dictionary.put("rapeseed", "RAPE");
     this.crop_lower_to_caps_dictionary.put("wheat", "WHEA");
-    this.crop_lower_to_caps_dictionary.put("potato", "POTA");
+    this.crop_lower_to_caps_dictionary.put("potatoes", "POTA");
+    this.crop_lower_to_caps_dictionary.put("rice", "RICE");
   }
 
   public String getCropNameCaps(String cropName) {
@@ -64,6 +65,8 @@ public class Config {
     public boolean create_overall_png;
     public String winter_wheat_countries_csv;
     public String n_chunks;
+    public String dssat_folder;
+    public String dssat_executable;
 
     @Override
     public String toString() {
@@ -103,6 +106,10 @@ public class Config {
           + winter_wheat_countries_csv
           + ", n_chunks="
           + n_chunks
+          + ", dssat_folder="
+          + dssat_folder
+          + ", dssat_executable="
+          + dssat_executable
           + '}';
     }
   }
@@ -225,6 +232,7 @@ public class Config {
     String all_properties =
         "region_to_use_n region_to_use_s region_to_use_e region_to_use_w nsres ewres co2_level"
             + " run_descriptor minimum_physical_area minimum_yield n_chunks"
+            + " dssat_executable dssat_folder"
             + " winter_wheat_countries_csv irrigation_to_try weather_prefix weather_folder"
             + " results_folder planting_months years real_or_happy all_or_crop_specific"
             + " run_crop_model process_results calculate_as_wet_weight average_yields"
@@ -272,6 +280,12 @@ public class Config {
       } else if (line.startsWith("n_chunks: ")) {
         all_properties = all_properties.replace("n_chunks ", "");
         config.model_configuration.n_chunks = line.split(": ")[1].trim();
+      } else if (line.startsWith("dssat_executable: ")) {
+        all_properties = all_properties.replace("dssat_executable ", "");
+        config.model_configuration.dssat_executable = line.split(": ")[1].trim();
+      } else if (line.startsWith("dssat_folder: ")) {
+        all_properties = all_properties.replace("dssat_folder ", "");
+        config.model_configuration.dssat_folder = line.split(": ")[1].trim();
       } else if (line.startsWith("winter_wheat_countries_csv: ")) {
         all_properties = all_properties.replace("winter_wheat_countries_csv ", "");
         config.model_configuration.winter_wheat_countries_csv = line.split(": ")[1].trim();
@@ -313,7 +327,6 @@ public class Config {
         all_properties = all_properties.replace("planting_months ", "");
         String[] array = line.split(": ")[1].replace("[", "").replace("]", "").split(", ");
         config.physical_parameters.planting_months = Arrays.asList(array);
-
       } else if (line.startsWith("years: ")) {
         all_properties = all_properties.replace("years ", "");
         String[] array = line.split(": ")[1].replace("[", "").replace("]", "").split(", ");

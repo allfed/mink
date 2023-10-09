@@ -7,6 +7,11 @@ model_configuration:
   # number of parallel chunks to run DSSAT at once with (multithreaded handled through linux bash script)
   n_chunks: 6
 
+  # which folder and DSSAT exectutable to run, located in basics_15jun22/sge_Mink3daily folder
+  dssat_folder: actual_program_4.7.5.11
+  dssat_executable: dscsm047_debug
+
+
 
   # THE FOLLOWING MODEL CONFIGURATION VARIABLES ARE ONLY APPLICABLE
   # TO THE PROCESS_RESULTS SCENARIOS

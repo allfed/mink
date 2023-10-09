@@ -17,6 +17,8 @@ def main():
     # Process each nc4 file
     filenames = [convert_nc4_to_tif(file, relative_folder_path) for file in nc4_files]
 
+    print("\ndone converting comparison nc4 files to tif\n")
+
     # Perform operations on processed files
     for file in filenames:
         print(f"./import_tif.sh {grass_location} {file}")
@@ -39,8 +41,7 @@ def main():
 
     print("cd ../basics_15jun22/sge_Mink3daily/export_scripts")
 
-    # crop_codes = {"WHEA": "whe", "MAIZ": "mai", "SOYB":"soy", "RICE":"ric"}
-    crop_codes = {"WHEA": "whe", "MAIZ": "mai", "SOYB": "soy"}
+    crop_codes = {"WHEA": "whe", "MAIZ": "mai", "SOYB": "soy", "RICE": "ric"}
     rf_and_ir = ["RF", "IR"]
     for crop_code in crop_codes.keys():
         for rf_or_ir in rf_and_ir:
@@ -52,7 +53,7 @@ def main():
 
     print("\nyou should run the above in a grass session")
     print(
-        "\ndone converting comparison nc4 files to tif, importing as rasters, and exporting as asc\n"
+        "\nyou need to run it at the basics_15jun22/more_grass_scripts/universal/ folder"
     )
 
 

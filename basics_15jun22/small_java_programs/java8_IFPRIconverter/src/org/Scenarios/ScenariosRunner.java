@@ -64,7 +64,7 @@ public class ScenariosRunner {
               + scenario_and_pm.plantingMonth
               + 1;
       int totalRuns = scenarios.planting_months.length * scenarios.snx_name.length;
-      double percentageComplete = ((double) (currentRun-1) / totalRuns) * 100;
+      double percentageComplete = ((double) (currentRun - 1) / totalRuns) * 100;
 
       System.out.println(
           "run: "
@@ -95,6 +95,8 @@ public class ScenariosRunner {
       BashScripts.runScenario(
           script_folder,
           scenarios.snx_name[scenario_and_pm.scenarioNumber],
+          scenarios.dssat_executable,
+          scenarios.dssat_folder,
           scenarios.co2_level[scenario_and_pm.scenarioNumber],
           scenarios.crop_name[scenario_and_pm.scenarioNumber],
           scenarios.weather_prefix[scenario_and_pm.scenarioNumber],
@@ -104,7 +106,6 @@ public class ScenariosRunner {
               scenario_and_pm.plantingMonth],
           scenarios.fertilizer_scheme[scenario_and_pm.scenarioNumber],
           scenarios.n_chunks,
-          scenarios.run_descriptor[scenario_and_pm.scenarioNumber],
           scenarios.nsres[scenario_and_pm.scenarioNumber],
           scenarios.ewres[scenario_and_pm.scenarioNumber]);
 

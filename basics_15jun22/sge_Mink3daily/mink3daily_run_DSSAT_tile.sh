@@ -1,7 +1,4 @@
 #!/bin/bash
-# (DMR) DELETE ME AFTER YOU FIGURE OUT HOW TO RUN IN WRAPPER >>>>>
-# export  latitude_resolution=1.875  # these need to match the daily weather files
-# export longitude_resolution=1.25  # these need to match the daily weather files
 
 # echo ""
 # echo "running mink3daily_run_DSSAT_tile.sh"
@@ -40,14 +37,16 @@ fi
   script_to_run_in_job=$1
   data_file_base_name=$2
          daily_to_use=$3
-           X_template=`basename $4`
-      crop_nitro_name=$5
-            co2_level=$6
-       crop_irri_name=$7
-    plantingDateInMonthShiftInDays=$8
-          n_before_me=$9
-  latitude_resolution=${10}
- longitude_resolution=${11}
+nameOfDSSATExecutable=$4
+         dssat_folder=$5
+           X_template=`basename $6`
+      crop_nitro_name=$7
+            co2_level=$8
+       crop_irri_name=${9}
+    plantingDateInMonthShiftInDays=${10}
+          n_before_me=${11}
+  latitude_resolution=${12}
+ longitude_resolution=${13}
 
   # this is likely have a full path on it, so we need to strip the path
   # in order to refer to it in its new location on the compute node
@@ -58,8 +57,9 @@ fi
 
 
 # ADDED this so that we have a clean run each time and can repeat this script (DMR)
-# rm -rf $on_node_home
-
+# what it does is take a look at the previous on_node_home directory it created last time to run DSSAT and delete it
+# this leaves behind the latest one created.
+rm -rf $on_node_home
 
 ########################
 ### control settings ###
@@ -155,7 +155,6 @@ number_of_pixels=`echo "$copy_block" | grep '^cp' | wc -l`
 # echo $script_to_run_in_job
 # write out the job script....
 echo "#!/bin/bash
-
   set -e # exit on error
   
   # write out the runner init file
@@ -229,7 +228,7 @@ time_start=\$(date +%s%3N)
   set +e  # Disable exit on error
   cp -a $original_runner_dir*   ${on_node_runner_dir} 2>/dev/null
   # the rest do not want the subdirectories
-  cp $original_DSSAT_dir/*    ${on_node_DSSAT_dir} 2>/dev/null
+  cp ${BASE}$dssat_folder/*    ${on_node_DSSAT_dir} 2>/dev/null
   cp ${data_file_base_name}_*  ${on_node_input_data_dir} 2>/dev/null
   cp ${original_X_files_dir}${X_template} ${X_dir} 2>/dev/null
   cp $runner_init_file         ${on_node_runner_init_file} 2>/dev/null
