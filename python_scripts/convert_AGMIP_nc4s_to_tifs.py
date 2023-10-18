@@ -106,7 +106,8 @@ def convert_nc4_to_tif(file, folder_path):
 
     tif_name = f"AGMIP_princeton_{rf_or_ir}_{data_key}_lowres_cleaned_2005.tif"
     output_tif_name = os.path.join(folder_path, tif_name)
-
+    print("output_tif_name")
+    print(output_tif_name)
     # Write data to a GeoTIFF file
     with rasterio.open(
         output_tif_name,

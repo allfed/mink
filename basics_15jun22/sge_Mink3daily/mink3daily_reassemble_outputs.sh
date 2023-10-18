@@ -35,7 +35,7 @@ fi
            X_template=$4
            magic_code=$5
 
-  # this is likely have a full path on it, so we need to strip the path
+  # this is likely to have a full path on it, so we need to strip the path
   # in order to refer to it in its new location on the compute node
   data_file_short_name=`basename $data_file_base_name`
 
@@ -65,30 +65,32 @@ memory_string="-mx1400M"
 
 # which directory to dump them into
 chunk_file=${output_data_dir}
+set +e  # Disable the "exit on error" option temporarily
 
 # the data files # (DMR) modified this to simplify, needs a different first argument now
 input_file=${chunked_output_data_dir}${data_file_short_name}
 
 base_input=`basename $input_file`
 
-# echo -e "\n\ncodd=[$chunked_output_data_dir]; xt=[${X_template%%.*X}]\nCF = [$chunk_file] ; IF = [$input_file] ; NT = [$n_threads_total] \n\n\n"
+
+
+set +e
 
 # echo "$java_to_use \"$memory_string\" -cp $classpath $classname ${input_file} $chunk_file $n_threads_total"
 $java_to_use "$memory_string" -cp $classpath $classname ${input_file} $chunk_file $n_threads_total
 
-# nice $java_to_use "$memory_string" -cp $classpath $classname ${input_file} $chunk_file $chunks_per_case
-
-
 test_exit_code=$?
-# echo "exit code was [$test_exit_code]"
 
 # if we were able to reassemble things, then we'll go ahead and move them
 if [ $test_exit_code -eq 0 ]; then
 
   # (DMR) removed all instances of magic code here... they are already data_file_short_name
 
-  # copy over the provenance files
-  zip -jq ${output_data_dir}${data_file_short_name%%_STATS}_provenance.zip ${chunked_output_data_dir}${data_file_short_name%%_STATS}*provenance.txt
+
+  # copy over the provenance files (I will never use these... commenting out this zipping step. it had a wierd error.)
+  # zip -jq ${output_data_dir}${data_file_short_name%%_STATS}_provenance.zip ${chunked_output_data_dir}${data_file_short_name%%_STATS}*provenance.txt
+
+  set -e
 
   # copy over the cols file
   cp ${chunked_output_data_dir}${data_file_short_name%%_STATS}_0_STATS.cols.txt ${output_data_dir}${data_file_short_name}.cols.txt
@@ -97,6 +99,10 @@ else
   echo ""
   echo ""
   echo "FAILURE TO REASSEMBLE: $base_input"
+  echo ""
+  echo "ERROR: Couldn't find the chunks to reassemble!"
+  echo "Most likely, this is because you forgot to run DSSAT before you ran process for a scenario yaml configuration"
+  echo "located in the scenarios/ folder."
   echo ""
   echo ""
   exit 1

@@ -201,6 +201,8 @@ mv "by_country_${yield_raster}.csv" "$git_root/$save_folder"
 
 echo ""
 echo "Successfully exported to a csv."
+echo ""
 echo "Location: $save_folder"
 echo "Filename: by_country_${yield_raster}.csv"
+echo ""
 echo ""

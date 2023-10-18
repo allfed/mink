@@ -48,89 +48,89 @@ public class ScenariosProcessor {
     // (if you've changed something near the end of the processing code it will save you
     // time)
 
-    for (PlantingScenario scenario_and_pm : scenariosAndPMList) {
-      // loop for each scenario, then each planting month
+    // for (PlantingScenario scenario_and_pm : scenariosAndPMList) {
+    //   // loop for each scenario, then each planting month
 
-      String[][] raster_names_all_years_dry_allmonths =
-          scenarios.raster_names_all_years_dry[scenario_and_pm.scenarioNumber];
+    //   String[][] raster_names_all_years_dry_allmonths =
+    //       scenarios.raster_names_all_years_dry[scenario_and_pm.scenarioNumber];
 
-      String[] raster_name_all_years_this_month_dry =
-          raster_names_all_years_dry_allmonths[scenario_and_pm.plantingMonth];
+    //   String[] raster_name_all_years_this_month_dry =
+    //       raster_names_all_years_dry_allmonths[scenario_and_pm.plantingMonth];
 
-      // String[][] raster_names_all_years_maturity_allmonths =
-      //     scenarios.raster_names_all_years_maturity[scenario_and_pm.scenarioNumber];
+    //   // String[][] raster_names_all_years_maturity_allmonths =
+    //   //     scenarios.raster_names_all_years_maturity[scenario_and_pm.scenarioNumber];
 
-      // String[] raster_name_all_years_this_month_maturity =
-      //     raster_names_all_years_maturity_allmonths[scenario_and_pm.plantingMonth];
+    //   // String[] raster_name_all_years_this_month_maturity =
+    //   //     raster_names_all_years_maturity_allmonths[scenario_and_pm.plantingMonth];
 
-      String[][] raster_names_all_years_wet_or_dry_allmonths =
-          scenarios.raster_names_all_years_wet_or_dry[scenario_and_pm.scenarioNumber];
+    //   String[][] raster_names_all_years_wet_or_dry_allmonths =
+    //       scenarios.raster_names_all_years_wet_or_dry[scenario_and_pm.scenarioNumber];
 
-      String[] raster_name_all_years_this_month_wet_or_dry =
-          raster_names_all_years_wet_or_dry_allmonths[scenario_and_pm.plantingMonth];
+    //   String[] raster_name_all_years_this_month_wet_or_dry =
+    //       raster_names_all_years_wet_or_dry_allmonths[scenario_and_pm.plantingMonth];
 
-      BashScripts.assembleResults(
-          script_folder,
-          scenarios.snx_name[scenario_and_pm.scenarioNumber],
-          scenarios.dssat_executable,
-          scenarios.dssat_folder,
-          scenarios.co2_level[scenario_and_pm.scenarioNumber],
-          scenarios.crop_name[scenario_and_pm.scenarioNumber],
-          scenarios.weather_prefix[scenario_and_pm.scenarioNumber],
-          scenarios.weather_folder[scenario_and_pm.scenarioNumber],
-          scenarios
-              .output_stats_basenames[scenario_and_pm.scenarioNumber][
-              scenario_and_pm.plantingMonth],
-          // scenarios
-          // .yield_names[scenario_and_pm.scenarioNumber][scenario_and_pm.plantingMonth],
-          scenarios.fertilizer_scheme[scenario_and_pm.scenarioNumber],
-          scenarios.n_chunks,
-          scenarios.run_descriptor[scenario_and_pm.scenarioNumber],
-          scenarios.nsres[scenario_and_pm.scenarioNumber],
-          scenarios.ewres[scenario_and_pm.scenarioNumber]);
+    //   BashScripts.assembleResults(
+    //       script_folder,
+    //       scenarios.snx_name[scenario_and_pm.scenarioNumber],
+    //       scenarios.dssat_executable,
+    //       scenarios.dssat_folder,
+    //       scenarios.co2_level[scenario_and_pm.scenarioNumber],
+    //       scenarios.crop_name[scenario_and_pm.scenarioNumber],
+    //       scenarios.weather_prefix[scenario_and_pm.scenarioNumber],
+    //       scenarios.weather_folder[scenario_and_pm.scenarioNumber],
+    //       scenarios
+    //           .output_stats_basenames[scenario_and_pm.scenarioNumber][
+    //           scenario_and_pm.plantingMonth],
+    //       // scenarios
+    //       // .yield_names[scenario_and_pm.scenarioNumber][scenario_and_pm.plantingMonth],
+    //       scenarios.fertilizer_scheme[scenario_and_pm.scenarioNumber],
+    //       scenarios.n_chunks,
+    //       scenarios.run_descriptor[scenario_and_pm.scenarioNumber],
+    //       scenarios.nsres[scenario_and_pm.scenarioNumber],
+    //       scenarios.ewres[scenario_and_pm.scenarioNumber]);
 
-      String[] non_yield_parameters_to_save = new String[] {"n_bad_things",
-    "real_maturity_mean"};
+    //   String[] non_yield_parameters_to_save = new String[] {"n_bad_things",
+    // "real_maturity_mean"};
 
-      String[] outputs_to_save =
-          generateColumnsToMakeRastersFromDataFiles(
-              scenarios.years, scenarios.real_or_happy, non_yield_parameters_to_save);
+    //   String[] outputs_to_save =
+    //       generateColumnsToMakeRastersFromDataFiles(
+    //           scenarios.years, scenarios.real_or_happy, non_yield_parameters_to_save);
 
-      readDSSAToutputs(
-          script_folder,
-          scenarios
-              .output_stats_basenames[scenario_and_pm.scenarioNumber][
-              scenario_and_pm.plantingMonth],
-          scenarios.years.length,
-          outputs_to_save);
+    //   readDSSAToutputs(
+    //       script_folder,
+    //       scenarios
+    //           .output_stats_basenames[scenario_and_pm.scenarioNumber][
+    //           scenario_and_pm.plantingMonth],
+    //       scenarios.years.length,
+    //       outputs_to_save);
 
-      for (int year_index = 0; year_index < scenarios.years.length; year_index++) {
-        convertToWetWeightIfNeeded(
-            scenarios.calculate_as_wet_weight,
-            script_folder,
-            scenarios.crop_name[scenario_and_pm.scenarioNumber], // input variable
-            raster_name_all_years_this_month_dry[year_index], // input raster
-            raster_name_all_years_this_month_wet_or_dry[year_index], // output raster
-            coefficients_to_get_wetweight_from_dryweight);
-      }
+    //   for (int year_index = 0; year_index < scenarios.years.length; year_index++) {
+    //     convertToWetWeightIfNeeded(
+    //         scenarios.calculate_as_wet_weight,
+    //         script_folder,
+    //         scenarios.crop_name[scenario_and_pm.scenarioNumber], // input variable
+    //         raster_name_all_years_this_month_dry[year_index], // input raster
+    //         raster_name_all_years_this_month_wet_or_dry[year_index], // output raster
+    //         coefficients_to_get_wetweight_from_dryweight);
+    //   }
 
-      // if we are averaging yields, average the yields across the years being simulated
-      // such that each month has an average yield over the years stored in
-      // raster_names_average_year
-      if (scenarios.average_yields) {
-        averageAcrossYears(
-            script_folder,
-            scenarios.years,
-            scenarios.minimum_yield, // minimum allowed yield to average
-            raster_name_all_years_this_month_wet_or_dry,
-            scenarios
-                .raster_names_average_year[scenario_and_pm.scenarioNumber][
-                scenario_and_pm.plantingMonth],
-            scenarios.results_folder[scenario_and_pm.scenarioNumber]);
-      } // END average_yields
-    } // end looping through each planting month and each scenario
+    //   // if we are averaging yields, average the yields across the years being simulated
+    //   // such that each month has an average yield over the years stored in
+    //   // raster_names_average_year
+    //   if (scenarios.average_yields) {
+    //     averageAcrossYears(
+    //         script_folder,
+    //         scenarios.years,
+    //         scenarios.minimum_yield, // minimum allowed yield to average
+    //         raster_name_all_years_this_month_wet_or_dry,
+    //         scenarios
+    //             .raster_names_average_year[scenario_and_pm.scenarioNumber][
+    //             scenario_and_pm.plantingMonth],
+    //         scenarios.results_folder[scenario_and_pm.scenarioNumber]);
+    //   } // END average_yields
+    // } // end looping through each planting month and each scenario
 
-    // NOTE: END OF THE PART YOU COULD COMMENT OUT TO SPEED UP RE-PROCESSING
+    // // NOTE: END OF THE PART YOU COULD COMMENT OUT TO SPEED UP RE-PROCESSING
 
     // just loop through the scenarios, because we have stored all the lists of planting month
     // rasters as a function of scenario number in the 2d array rasters

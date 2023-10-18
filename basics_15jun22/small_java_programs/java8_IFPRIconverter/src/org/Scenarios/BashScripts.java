@@ -558,6 +558,27 @@ public class BashScripts {
     callProcess(pb, grass_script_folder);
   } // end getBestOrAverageBasedOnCountryMasks
 
+  // export raster as ascii file
+  public static void saveAscii(
+      String run_script_folder, String to_save_raster, String results_folder)
+      throws InterruptedException, IOException {
+    // System.out.println("");
+
+    // System.out.println("");
+    // System.out.println("");
+    // System.out.println("copy results to "+results_folder);
+    // System.out.println(overall_yield_raster+".asc");
+    // System.out.println(crop_caps_name+"_yield.asc");
+    // System.out.println("");
+    // System.out.println("");
+
+    ProcessBuilder pb =
+        new ProcessBuilder("bash", "./save_ascii.sh", results_folder, to_save_raster);
+
+    String export_script_folder = run_script_folder + "export_scripts/";
+    callProcess(pb, export_script_folder);
+  } // end saveAscii
+
   // copy ascii for model result and historical and move to results folder
   public static void exportToCountries(
       String run_script_folder,

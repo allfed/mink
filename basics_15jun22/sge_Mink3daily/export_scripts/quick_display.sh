@@ -35,8 +35,6 @@ check_raster_exists() {
   mapset_only=`echo "$raster" | cut -d"@" -f2`
   mapset_test=`echo "$raster" | grep "@"`
 
-  g.gisenv get=MAPSET
-
   if [ -z "$mapset_test" ]; then
     mapset_only=`g.gisenv get=MAPSET`
   fi
@@ -72,12 +70,12 @@ apply_color_value() {
   # corresponds to -1 which means magicValueToUseWithNegativeYields in Mink3p2daily.java
   # probably having to do with -99 yields, meaning "bad weather"
   local lighter_grey="50:50:50" 
-  
   # construct the color rule string
   local classic_color_string="-2 $dark_grey\n-1 $lighter_grey\n0 black\n1 blue\n$quartermax cyan\n$halfmax green\n$threequartersmax yellow\n$overall_max_int red"
-
   # apply the color rule to the raster
-  printf -- "$classic_color_string" | r.colors --quiet $raster rules=-
+  # remove a useless warning message
+  printf -- "$classic_color_string" | r.colors --quiet $raster rules=- 2>&1 | grep -v "Color table of raster map"
+  
 }
 
 
@@ -114,7 +112,7 @@ generate_legend_image() {
       eval d.legend --quiet map=$raster range=$min,$max at=1,80,2,10 2>&1 | grep -v "Color range exceeds"
     fi
   else
-    eval d.legend --quiet map=$raster range=$min,$max at=1,50,2,5 --quiet 2>&1 | grep -v "Color range exceeds"
+    eval d.legend --quiet map=$raster range=$min,$max at=1,50,2,5 2>&1 | grep -v "Color range exceeds"
   fi
   
   cp $GRASS_PNGFILE $tmp_dir/legend.png
@@ -175,7 +173,6 @@ merge_images() {
 }
 
 generate_images() {
-
     # Determine min and max values
     if [ -z $max_value ]; then
       max=`r.univar -g map=$raster | grep max | awk -F "=" '{print $2}'`
@@ -194,7 +191,7 @@ generate_images() {
       echo "Min or max value is empty. Exiting..."
       exit 0
     fi
-    
+
     # Generate various images
     apply_color_value $max $raster
     generate_raster_image $raster $min $max

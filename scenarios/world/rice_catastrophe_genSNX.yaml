@@ -80,7 +80,7 @@ physical_parameters:
   all_or_crop_specific: specific
 
 
-  run_descriptor: Sep29_catastrophe_genSNX
+  run_descriptor: Oct09_catastrophe_genSNX
   irrigation_to_try: [RF, IR]
   weather_prefix: Outdoor_crops_catastrophe
   weather_folder: catastrophe_mink

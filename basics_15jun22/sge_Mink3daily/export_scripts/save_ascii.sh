@@ -2,6 +2,8 @@
 # for the purpose of exporting GRASS masked raster data (tif is useful for python import)
 # usage: ./export_masked_tifs.sh raster_to_export
 
+set -e
+
 if [ $# -lt 2 ]; then
   echo "Usage: $0 folder_to_save raster_to_save "
   echo " folder_to_save is relative to the git_root folder (the mink/ directory)"
@@ -21,9 +23,6 @@ raster=$2
 
 #  save the result as ascii
 r.out.ascii input=$raster output=- > $raster.asc
-
-# # remove any tailing "/"
-# location="${location%/}"
 
 if [[ $folder == /* ]]; then
   location="${folder}"

@@ -88,7 +88,7 @@ public class CalculateProduction {
             new String[] {""}, // no days to maturity data on a yearly basis is available.
             combined_yield_name_this_year,
             combined_production_name_this_year,
-            false);
+            false); // calculate_maturity set to false
 
         loopOverRainfedAndIrrigated(
             script_folder,
@@ -99,7 +99,8 @@ public class CalculateProduction {
             combined_yield_name_rf_or_ir_this_year,
             combined_planting_month_name_rf_or_ir_this_year,
             new String[] {""}, // no days to maturity data on a yearly basis is available.
-            false);
+            false); // export_to_countries set to false... refers to exporting irrigation and
+        // rainfed separately
       }
     }
   } // end CalculateProduction function
@@ -559,6 +560,8 @@ public class CalculateProduction {
         crop_area_to_sum = crop_area_to_sum + crop_area_raster;
 
         if (export_to_countries && scenarios.make_rasters_comparing_overall_to_historical) {
+
+          // either rainfed or irrigated yield exported by country
           String crop_caps = scenarios.config.getCropNameCaps(scenarios.crop_name[i]);
           BashScripts.exportToCountries(
               script_folder,
@@ -585,6 +588,11 @@ public class CalculateProduction {
             raster_names_to_sum, // input rasters
             combined_production_name[last_index_of_crop], // output raster
             scenarios.results_folder[last_index_of_crop]);
+
+        BashScripts.saveAscii(
+            script_folder,
+            combined_production_name[last_index_of_crop],
+            scenarios.results_folder[last_index_of_crop]);
       }
 
       if (scenarios.calculate_average_yield_rf_and_ir) {
@@ -597,7 +605,13 @@ public class CalculateProduction {
             crop_area_to_sum // input rasters
             );
       }
-      if (export_to_countries && scenarios.make_rasters_comparing_overall_to_historical) {
+      BashScripts.saveAscii(
+          script_folder,
+          combined_yield_name[last_index_of_crop],
+          scenarios.results_folder[last_index_of_crop]);
+
+      if (scenarios.make_rasters_comparing_overall_to_historical) {
+        // overall yield results export by country
         String crop_caps =
             scenarios.config.getCropNameCaps(scenarios.crop_name[last_index_of_crop]);
 
