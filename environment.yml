@@ -1,4 +1,4 @@
-name: mink2
+name: mink
 channels:
   - defaults
   - conda-forge
