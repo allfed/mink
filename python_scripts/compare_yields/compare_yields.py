@@ -50,8 +50,7 @@ from plotter import (
 from stats_functions import get_stats, get_weights
 
 
-git_root = "../../"
-
+git_root = os.path.join("..", "..", "")
 
 table_data = {}
 

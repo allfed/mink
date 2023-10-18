@@ -126,7 +126,7 @@ def load_data(
             world = load_by_country_csv(
                 world,
                 git_root,
-                "grassdata/world/AGMIP",
+                os.path.join("grassdata", "world", "AGMIP"),
                 f"by_country_AGMIP_princeton{rf_or_ir}_yield_{agmip_code}_lowres_cleaned_2005.csv",
                 f"AGMIP{rf_or_ir}",
             )
@@ -335,6 +335,12 @@ def get_average_of_rasters_over_time(
 def get_crop_variables(yaml_file):
     with open(yaml_file, "r") as file:
         data = yaml.load(file, Loader=yaml.FullLoader)
+        # Normalize the paths for cross-platform compatibility
+    # Normalize the paths for cross-platform compatibility
+    if "faostat_data_location" in data["settings"]:
+        data["settings"]["faostat_data_location"] = os.path.normpath(
+            data["settings"]["faostat_data_location"]
+        )
     return data
 
 
@@ -402,7 +408,7 @@ def remove_rows_with_nan(world, columns):
 
 
 def load_faostat_data(world, git_root, faostat_code, FAOSTAT_data_loc):
-    csv_loc = f"{git_root}/{FAOSTAT_data_loc}"
+    csv_loc = os.path.join("git_root", "FAOSTAT_data_loc", "")
     try:
         df = pd.read_csv(csv_loc)
     except FileNotFoundError:
