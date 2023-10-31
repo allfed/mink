@@ -16,111 +16,112 @@ from statsmodels.tools.eval_measures import rmse as statmodel_rmse
 from scipy.stats import linregress
 
 
-def RMSE(expected, observed):
-    log_ratios = np.log(observed / expected)
-    squared_diffs = log_ratios**2
-    mean_of_differences = np.mean(squared_diffs)
-    result = np.sqrt(mean_of_differences)
-    return result / np.log(2)
+class StatsFunctions:
+    @staticmethod
+    def RMSE(expected, observed):
+        log_ratios = np.log(observed / expected)
+        squared_diffs = log_ratios**2
+        mean_of_differences = np.mean(squared_diffs)
+        result = np.sqrt(mean_of_differences)
+        return result / np.log(2)
 
+    @staticmethod
+    def weighted_RMSE(expected, observed, weights):
+        log_ratios = np.log(observed / expected)
+        weighted_squared_diffs = log_ratios**2
+        avg_squared_diffs = np.average(weighted_squared_diffs, weights=weights)
+        result = np.sqrt(avg_squared_diffs)
+        return result / np.log(2)
 
-def weighted_RMSE(expected, observed, weights):
-    log_ratios = np.log(observed / expected)
-    weighted_squared_diffs = log_ratios**2
-    avg_squared_diffs = np.average(weighted_squared_diffs, weights=weights)
-    result = np.sqrt(avg_squared_diffs)
-    return result / np.log(2)
+    @staticmethod
+    def d_statistic(expected, observed):
+        O = list(expected)
+        P = list(observed)
 
+        numerator = 0
+        denominator = 0
 
-def d_statistic(expected, observed):
-    O = list(expected)
-    P = list(observed)
+        N = len(P)
+        if N != len(O):
+            raise ValueError("P and O must be the same length")
 
-    numerator = 0
-    denominator = 0
+        mean_O = sum(O) / N
+        for i in range(N):
+            P_prime = P[i] - mean_O
+            O_prime = O[i] - mean_O
 
-    N = len(P)
-    if N != len(O):
-        raise ValueError("P and O must be the same length")
+            numerator += (P[i] - O[i]) ** 2
+            denominator += (abs(P_prime) + abs(O_prime)) ** 2
 
-    mean_O = sum(O) / N
-    for i in range(N):
-        P_prime = P[i] - mean_O
-        O_prime = O[i] - mean_O
+        if denominator == 0:
+            raise ValueError("Denominator is zero")
 
-        numerator += (P[i] - O[i]) ** 2
-        denominator += (abs(P_prime) + abs(O_prime)) ** 2
+        result = 1 - (numerator / denominator)
 
-    if denominator == 0:
-        raise ValueError("Denominator is zero")
+        return result
 
-    result = 1 - (numerator / denominator)
+    @staticmethod
+    def fraction_rmse(expected, observed):
+        errors = expected - observed
+        normalized_errors = errors / observed
 
-    return result
+        # RMSE of the normalized errors
+        rmse = np.sqrt(np.mean(normalized_errors**2))
 
+        return rmse
 
-def fraction_rmse(expected, observed):
-    errors = expected - observed
-    normalized_errors = errors / observed
+    @staticmethod
+    def rmse_test(expected, observed):
+        errors = expected - observed
 
-    # RMSE of the normalized errors
-    rmse = np.sqrt(np.mean(normalized_errors**2))
+        # RMSE of the normalized errors
+        rmse = np.sqrt(np.mean(errors**2))
 
-    return rmse
+        return rmse
 
+    @staticmethod
+    def get_stats(world, observed_col, expected_col, weights):
+        # Weighted least squares regression
+        X = sm.add_constant(world[expected_col])
+        y = world[observed_col]
 
-def rmse_test(expected, observed):
-    errors = expected - observed
+        model = sm.WLS(y, X, weights=weights).fit()
+        # Calculate r-squared
+        slope, intercept, r_value, p_value, std_err = linregress(world[expected_col], world[observed_col])
 
-    # RMSE of the normalized errors
-    rmse = np.sqrt(np.mean(errors**2))
+        # Assumingexpected_colis the expected values
+        expected_values = world[expected_col]
+        # Assumingobserved_colis the observed results
+        observed_results = world[observed_col]
 
-    return rmse
+        rmse = StatsFunctions.RMSE(expected_values, expected_values)
 
+        # weighted_rmse = weighted_RMSE(expected_values, observed_results, weights)
+        d_stat = StatsFunctions.d_statistic(expected_values, observed_results)
+        assert statmodel_rmse(expected_values, expected_values) == 0
+        linear_rmse = statmodel_rmse(expected_values, observed_results)
+        # print("rmse vs test")
+        # print(round(linear_rmse, 4))
+        # print(round(rmse_test(expected_values, observed_results), 4))
+        # assert round(rmse_test(expected_values, observed_results), 4) == round(
+        #     linear_rmse, 4
+        # ), "ERROR: looks like your data may not exist, OR, my algorithm is wrong :)\
+        # Make sure you've processed all the crops you're analyzing..."
+        relative_rmse = linear_rmse / np.mean(expected_values)
 
-def get_stats(world, observed_col, expected_col, weights):
-    # Weighted least squares regression
-    X = sm.add_constant(world[expected_col])
-    y = world[observed_col]
+        return r_value**2, model.rsquared, rmse, relative_rmse, d_stat, linear_rmse
 
-    model = sm.WLS(y, X, weights=weights).fit()
-    # Calculate r-squared
-    slope, intercept, r_value, p_value, std_err = linregress(
-        world[expected_col], world[observed_col]
-    )
+    @staticmethod
+    def get_weights(world, observed_col, expected_col):
+        print("world4")
+        print(world)
+        print(world.columns)
+        weights = world[expected_col + "_production"] / np.average(world[expected_col + "_production"])
 
-    # Assumingexpected_colis the expected values
-    expected_values = world[expected_col]
-    # Assumingobserved_colis the observed results
-    observed_results = world[observed_col]
+        # Show rows where 'expected_col_production' has NaN values
+        # rows_with_nan = world[world[expected_col + "_production"].isna()]
 
-    rmse = RMSE(expected_values, expected_values)
+        # print("\nRows where 'expected_col_production' is NaN:")
+        # print(rows_with_nan)
 
-    # weighted_rmse = weighted_RMSE(expected_values, observed_results, weights)
-    d_stat = d_statistic(expected_values, observed_results)
-    assert statmodel_rmse(expected_values, expected_values) == 0
-    linear_rmse = statmodel_rmse(expected_values, observed_results)
-    # print("rmse vs test")
-    # print(round(linear_rmse, 4))
-    # print(round(rmse_test(expected_values, observed_results), 4))
-    # assert round(rmse_test(expected_values, observed_results), 4) == round(
-    #     linear_rmse, 4
-    # ), "ERROR: looks like your data may not exist, OR, my algorithm is wrong :)\
-    # Make sure you've processed all the crops you're analyzing..."
-    relative_rmse = linear_rmse / np.mean(expected_values)
-
-    return r_value**2, model.rsquared, rmse, relative_rmse, d_stat, linear_rmse
-
-
-def get_weights(world, observed_col, expected_col):
-    weights = world[expected_col + "_production"] / np.average(
-        world[expected_col + "_production"]
-    )
-
-    # Show rows where 'expected_col_production' has NaN values
-    # rows_with_nan = world[world[expected_col + "_production"].isna()]
-
-    # print("\nRows where 'expected_col_production' is NaN:")
-    # print(rows_with_nan)
-
-    return weights
+        return weights

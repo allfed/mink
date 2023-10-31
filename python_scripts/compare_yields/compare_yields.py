@@ -34,20 +34,9 @@ Author:
 import os
 import pandas as pd
 
-from data_loader import (
-    load_data,
-    import_ascii,
-    get_crop_variables,
-)
-from plotter import (
-    scatter_points_with_weights,
-    plot_hist_side_by_side,
-    plot_gdf_properties,
-    scatter_country_averages,
-    scatter_country_production,
-    plot_average_of_rasters_over_time,
-)
-from stats_functions import get_stats, get_weights
+from data_loader import DataLoader
+from plotter import Plotter
+from stats_functions import StatsFunctions
 
 
 git_root = os.path.join("..", "..", "")
@@ -74,7 +63,7 @@ rf_and_ir = {
 
 
 def main():
-    yield_comparison_config = get_crop_variables("yield_comparison_config.yaml")
+    yield_comparison_config = DataLoader.get_crop_variables("yield_comparison_config.yaml")
 
     all_yearly_averages = {}
     for crop_key, crop_value in yield_comparison_config["crop_codes"].items():
@@ -87,9 +76,7 @@ def main():
                 yield_comparison_config["settings"],
             )
 
-    if yield_comparison_config["settings"]["comparisons_to_run"][
-        "plot_yield_over_time"
-    ]:
+    if yield_comparison_config["settings"]["comparisons_to_run"]["plot_yield_over_time"]:
         plot_yield_over_time_map(all_yearly_averages)
 
     process_table(table_data)
@@ -106,6 +93,7 @@ def display_results(crop_key, crop_value, water_key, water_values, settings):
     cat_and_or_cntrl = settings["catastrophe_and_or_control"]
     check_catastrophe_and_or_control(cat_and_or_cntrl)
     snx_description = crop_value["snx_description_control"]
+    agmip_code = crop_value["AGMIP_code"]
     snx_description_catastrophe = crop_value["snx_description_catastrophe"]
     snx_ending = water_values["snx_ending"]
 
@@ -113,7 +101,7 @@ def display_results(crop_key, crop_value, water_key, water_values, settings):
     first_overall_loop = True
     for cat_or_cntrl in cat_and_or_cntrl:
         print("Loading data...\n\n")
-        world, yearly_averages = load_data(
+        world, yearly_averages = DataLoader.load_data(
             git_root,
             crop_key,
             crop_value,
@@ -148,8 +136,12 @@ def display_results(crop_key, crop_value, water_key, water_values, settings):
         else:
             rf_or_ir = water_values["rf_or_ir"]
             title = water_values["title"]
-            if comparisons_to_run["plot_model_vs_AGMIP"]:
-                world = scatter_country_averages(
+            if comparisons_to_run["plot_model_vs_AGMIP"] and not world.empty and (not agmip_code == "SKIP_ME"):
+                print("world3.5")
+                print(world)
+                print(world.columns)
+
+                world = Plotter.scatter_country_averages(
                     world,
                     f"model{rf_or_ir}",
                     f"AGMIP{rf_or_ir}",
@@ -180,7 +172,7 @@ def show_comparisons_overall(
         return
 
     if comparisons_to_run["plot_SPAM_vs_FAOSTAT"] and first_overall_loop:
-        world = scatter_country_averages(
+        world = Plotter.scatter_country_averages(
             world,
             "FAOSTAT",
             "SPAM",
@@ -199,6 +191,9 @@ def show_comparisons_overall(
     observed_col = "model"
     expected_col = "SPAM"
     if comparisons_to_run["plot_by_country_scatter"]:
+        print("world3")
+        print(world.columns)
+
         handle_country_scatter_plots(
             world,
             crop_key,
@@ -228,17 +223,14 @@ def show_comparisons_overall(
             crop_nice_name,
         )
 
-    if (
-        comparisons_to_run["plot_by_country_scatter"]
-        or comparisons_to_run["plot_cell_by_cell_scatter"]
-    ):
+    if comparisons_to_run["plot_by_country_scatter"] or comparisons_to_run["plot_cell_by_cell_scatter"]:
         add_row_to_table(world, crop_value, observed_col, expected_col, cat_or_cntrl)
 
 
 def plot_SPAM_country_map(world, first_overall_loop, crop_nice_name):
     if first_overall_loop:
         print("Plotting historical raster yield values...\n\n")
-        plot_gdf_properties(
+        Plotter.plot_gdf_properties(
             world,
             "SPAM",
             ["average_yield", "production"],
@@ -249,12 +241,12 @@ def plot_SPAM_country_map(world, first_overall_loop, crop_nice_name):
 
 def plot_yield_over_time_map(yearly_averages):
     print("Plotting average of rasters over time...\n\n")
-    plot_average_of_rasters_over_time(yearly_averages)
+    Plotter.plot_average_of_rasters_over_time(yearly_averages)
 
 
 def plot_model_country_map_func(world, cat_or_cntrl, crop_nice_name):
     print("Plotting model yield values by country...\n\n")
-    plot_gdf_properties(
+    Plotter.plot_gdf_properties(
         world,
         f"model",
         ["average_yield", "production"],
@@ -265,7 +257,7 @@ def plot_model_country_map_func(world, cat_or_cntrl, crop_nice_name):
 
 def plot_histograms(world, cat_or_cntrl, crop_nice_name):
     print("Plotting histogram...\n\n")
-    plot_hist_side_by_side(
+    Plotter.plot_hist_side_by_side(
         cat_or_cntrl,
         crop_nice_name,
         world,
@@ -290,23 +282,30 @@ def handle_country_scatter_plots(
 ):
     # Plot scatter plots
     print(f"Plotting country average yields {expected_col} vs {observed_col} ...\n\n")
-    world = scatter_country_averages(
+    world = Plotter.scatter_country_averages(
         world,
         observed_col,
         expected_col,
         f"{crop_nice_name} {expected_col} vs {observed_col} based on Countries",
     )
 
-    if (
-        first_overall_loop
-        and "catastrophe" in cat_and_or_cntrl
-        and "control" in cat_and_or_cntrl
-    ):
+    if first_overall_loop and "catastrophe" in cat_and_or_cntrl and "control" in cat_and_or_cntrl:
         # plot catastrophe and control against each other
-
+        print("git_root")
+        print(git_root)
+        print("crop_key")
+        print(crop_key)
+        print("crop_value")
+        print(crop_value)
+        print("water_key")
+        print(water_key)
+        print("water_values")
+        print(water_values)
+        print("settings")
+        print(settings)
         # load both so they can be plotted against each other
         if cat_or_cntrl == "catastrophe":
-            world_control, _ = load_data(
+            world_control, _ = DataLoader.load_data(
                 git_root,
                 crop_key,
                 crop_value,
@@ -318,7 +317,7 @@ def handle_country_scatter_plots(
             )
             world_catastrophe = world
         else:
-            world_catastrophe, _ = load_data(
+            world_catastrophe, _ = DataLoader.load_data(
                 git_root,
                 crop_key,
                 crop_value,
@@ -330,20 +329,25 @@ def handle_country_scatter_plots(
             )
             world_control = world
 
-        world["model_catastrophe_average_yield"] = world_catastrophe[
-            "model_average_yield"
-        ]
-        world["model_catastrophe_production"] = world_catastrophe["model_production"]
-        world["model_control_average_yield"] = world_control["model_average_yield"]
-        world["model_control_production"] = world_control["model_production"]
+        print("world_control")
+        print(world_control)
+        print(world_control.columns)
+        print("world_catastrophe")
+        print(world_catastrophe)
+        print(world_catastrophe.columns)
+        if not world_catastrophe.empty and not world_control.empty:
+            world["model_catastrophe_average_yield"] = world_catastrophe["model_average_yield"]
+            world["model_catastrophe_production"] = world_catastrophe["model_production"]
+            world["model_control_average_yield"] = world_control["model_average_yield"]
+            world["model_control_production"] = world_control["model_production"]
 
-        print(f"Plotting country average yields catastrophe vs control ...\n\n")
-        world = scatter_country_averages(
-            world,
-            "model_catastrophe",
-            "model_control",
-            f"{crop_nice_name} {expected_col} vs {observed_col} based on Countries",
-        )
+            print(f"Plotting country average yields catastrophe vs control ...\n\n")
+            world = Plotter.scatter_country_averages(
+                world,
+                "model_catastrophe",
+                "model_control",
+                f"{crop_nice_name} {expected_col} vs {observed_col} based on Countries",
+            )
 
 
 def handle_cell_by_cell_scatter_plots(
@@ -362,17 +366,20 @@ def handle_cell_by_cell_scatter_plots(
     else:
         description_tag = snx_description
 
-    SPAM_yields_ascii_file = os.path.join(
-        f"{git_root}wth_historical", f"{crop_key}_yield.asc"
-    )
+    print("description_tag")
+    print(description_tag)
+    print("crop_key")
+    print(crop_key)
+    if description_tag == "SKIP_ME":
+        return
+
+    SPAM_yields_ascii_file = os.path.join(f"{git_root}wth_historical", f"{crop_key}_yield.asc")
 
     modelled_yields_ascii_file = os.path.join(
         f"{git_root}wth_{cat_or_cntrl}",
         f"379_Outdoor_crops_{cat_or_cntrl}_BestYield_noGCMcalendar_p0_{description_tag}_{snx_ending}.asc",
     )
-    SPAM_area_ascii_file = os.path.join(
-        f"{git_root}wth_historical", f"{crop_key}_cropland.asc"
-    )
+    SPAM_area_ascii_file = os.path.join(f"{git_root}wth_historical", f"{crop_key}_cropland.asc")
 
     print("Plotting grid cell yields...\n\n")
     compare_yields_with_model_by_cell(
@@ -385,12 +392,11 @@ def handle_cell_by_cell_scatter_plots(
         f"{cat_or_cntrl} {crop_nice_name} SPAM vs model yields per grid cell",
     )
 
-    if (
-        first_overall_loop
-        and "catastrophe" in cat_and_or_cntrl
-        and "control" in cat_and_or_cntrl
-    ):
+    if first_overall_loop and "catastrophe" in cat_and_or_cntrl and "control" in cat_and_or_cntrl:
         # plot catastrophe and control against each other
+
+        if snx_description == "SKIP_ME" or snx_description_catastrophe == "SKIP_ME":
+            return
 
         # load both so they can be plotted against each other
         control_yields_ascii_file = os.path.join(
@@ -404,9 +410,7 @@ def handle_cell_by_cell_scatter_plots(
             + f"{snx_description_catastrophe}_{snx_ending}.asc",
         )
 
-        SPAM_area_ascii_file = os.path.join(
-            f"{git_root}wth_historical", f"{crop_key}_cropland.asc"
-        )
+        SPAM_area_ascii_file = os.path.join(f"{git_root}wth_historical", f"{crop_key}_cropland.asc")
 
         print("Plotting grid cell yields...\n\n")
         compare_yields_with_model_by_cell(
@@ -429,10 +433,9 @@ def compare_yields_with_model_by_cell(
     y_label,
     title,
 ):
-    source_data = import_ascii(yields_ascii_file, "yields")
-    model_data = import_ascii(modelled_yields_ascii_file, "yields")
-    crop_area_data = import_ascii(area_ascii_file, "area")
-
+    source_data = DataLoader.import_ascii(yields_ascii_file, "yields")
+    model_data = DataLoader.import_ascii(modelled_yields_ascii_file, "yields")
+    crop_area_data = DataLoader.import_ascii(area_ascii_file, "area")
     # remove any nan rows for any relevant dataset
     combined_intersection = (
         source_data.merge(
@@ -447,7 +450,7 @@ def compare_yields_with_model_by_cell(
 
     combined_intersection = combined_intersection[combined_intersection["area"] > 10]
 
-    scatter_points_with_weights(
+    Plotter.scatter_points_with_weights(
         dataframe=combined_intersection,
         expected_data_column_name=f"yields_{baseline_tag}",
         observed_data_column_name="yields_model",
@@ -472,10 +475,8 @@ def check_catastrophe_and_or_control(cat_and_or_cntrl):
     )
 
 
-def add_row_to_table(
-    world, crop_value, observed_col, expected_col, control_or_catastrophe
-):
-    weights = get_weights(world, observed_col, expected_col)
+def add_row_to_table(world, crop_value, observed_col, expected_col, control_or_catastrophe):
+    weights = StatsFunctions.get_weights(world, observed_col, expected_col)
 
     (
         r_squared,
@@ -484,7 +485,7 @@ def add_row_to_table(
         relative_rmse,
         _,
         rmse,
-    ) = get_stats(
+    ) = StatsFunctions.get_stats(
         world,
         observed_col + "_average_yield",
         expected_col + "_average_yield",
@@ -505,13 +506,10 @@ def add_row_to_table(
     table_data[f"R^2 with {expected_col}"].append(round(r_squared, 2))
     table_data[f"Weighted R^2 with {expected_col}"].append(round(weighted_r2, 2))
     table_data[f"RMSE (kg/ha) with {expected_col}"].append(round(rmse, 2))
-    table_data[f"RRMSE (%) with {expected_col}"].append(
-        round(relative_rmse * 100, 2)
-    )  # Convert to percentage
+    table_data[f"RRMSE (%) with {expected_col}"].append(round(relative_rmse * 100, 2))  # Convert to percentage
     table_data[f"Ratio {observed_col} to {expected_col} production"].append(
         round(
-            world[f"{observed_col}_production"].sum()
-            / world[f"{expected_col}_production"].sum(),
+            world[f"{observed_col}_production"].sum() / world[f"{expected_col}_production"].sum(),
             2,
         )
     )
@@ -537,11 +535,7 @@ def process_table(table_data):
                 for column in sub_df.columns:
                     if column != "Control or Catastrophe":
                         new_df = pd.DataFrame(sub_df[column])
-                        print(
-                            "\n\nData for column '{}' under {}:".format(
-                                column, condition
-                            )
-                        )
+                        print("\n\nData for column '{}' under {}:".format(column, condition))
                         print(new_df)
                         print("-" * 40)  # prints a separator line for clarity
 
