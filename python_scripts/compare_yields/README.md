@@ -1,4 +1,6 @@
 
+Take a look at the function_calls_within_files.svg diagram to see which files call one another (created in pyan3). Unfortunately, it does not include function calls between different files.
+
 # `compare_yields` - Yield Comparison Toolkit
 
 This toolkit provides a set of utilities to compare model-based crop yield predictions against historical data. It incorporates various functionalities from scatter plot visualizations to statistical measures.
@@ -30,3 +32,4 @@ This toolkit provides a set of utilities to compare model-based crop yield predi
 - `yield_comparison_config.yaml`: Configuration file that contains settings or parameters required for yield comparisons.
 
 - `output_table.csv`: A potential output file storing comparison results in a tabulated format.
+
