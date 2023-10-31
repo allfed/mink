@@ -1,0 +1,29 @@
+---------------
+completed 12 out of 12 planting months
+---------------
+
+
+
+Region: 
+n=65
+s=-65
+w=-170
+e=170
+nsres=1.88405797101449
+ewres=1.25
+rows=69
+cols=272
+cells=18768
+
+Raster map <379_Outdoor_crops_catastrophe_BestYield_noGCMcalendar_p0_maize__Oct08_catastrophe_genSNX_wet_overall_yield> not found
+Error occurred in bash script: ./save_ascii.sh
+Error occurred in bash command initiated from: BashScripts.java: line 579
+The calling method was invoked from: CalculateProduction.java: line 605
+ERROR: process exited with value 1 (Error)
+
+
+I think this might be an issue with save ascii in the run dssat process
+but not sure
+so if there's another time this happens, I'll have this recorded
+
+

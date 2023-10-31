@@ -1,0 +1,5 @@
+git rev-list --all | GIT_PAGER=cat xargs git grep '\.save_ascii'
+
+
+that example searches for .save_ascii in the text of commits
+useful for finding deleted code that is useful later
