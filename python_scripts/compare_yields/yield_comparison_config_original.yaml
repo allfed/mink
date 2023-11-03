@@ -50,3 +50,32 @@ crop_codes:
     snx_description_catastrophe: maize__Oct08_catastrophe_genSNX
     # snx_description_catastrophe: SKIP_ME
 
+  SOYB:
+    crop_nice_name: Soybean
+    AGMIP_code: soy
+    FAOSTAT_code: Soya beans
+    snx_description_control: soybeans__Sep27_genSNX
+    snx_description_catastrophe: SKIP_ME
+
+  RICE:
+    crop_nice_name: Rice
+    AGMIP_code: ric
+    FAOSTAT_code: Rice
+    snx_description_control: rice__Sep29_genSNX
+    snx_description_catastrophe: rice__Oct09_catastrophe_genSNX
+
+  RAPE:
+    crop_nice_name: Canola
+    AGMIP_code: SKIP_ME
+    FAOSTAT_code: Rape or colza seed
+    snx_description_control: rapeseed__Sep28_genSNX
+    snx_description_catastrophe: rapeseed__Oct10_catastrophe_genSNX
+
+  POTA:
+    crop_nice_name: Potatoes
+    AGMIP_code: SKIP_ME
+    FAOSTAT_code: Potatoes
+    # snx_description_control: potatoes__Oct01_genSNX
+    snx_description_control: SKIP_ME
+    snx_description_catastrophe: SKIP_ME
+

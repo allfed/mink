@@ -56,16 +56,16 @@ git_root = "../../"
 table_data = {}
 
 rf_and_ir = {
-    "RF": {
-        "rf_or_ir": "_RF",
-        "snx_ending": "wet_averaged_RF",
-        "title": "Rainfed",
-    },
-    "IR": {
-        "rf_or_ir": "_IR",
-        "snx_ending": "wet_averaged_IR",
-        "title": "Irrigated",
-    },
+    # "RF": {
+    #     "rf_or_ir": "_RF",
+    #     "snx_ending": "wet_averaged_RF",
+    #     "title": "Rainfed",
+    # },
+    # "IR": {
+    #     "rf_or_ir": "_IR",
+    #     "snx_ending": "wet_averaged_IR",
+    #     "title": "Irrigated",
+    # },
     "overall": {
         "rf_or_ir": "",
         "snx_ending": "wet_overall_yield",
@@ -88,12 +88,17 @@ def main():
                 yield_comparison_config["settings"],
             )
 
-    if yield_comparison_config["settings"]["comparisons_to_run"][
-        "plot_yield_over_time"
-    ]:
-        plot_yield_over_time_map(all_yearly_averages)
+    # Filter out only the percent reduction yields and export them to a .csv file.
+    export_percent_yields_to_csv(all_yearly_averages, 'by_country_by_year_percent_yields.csv')
 
-    process_table(table_data)
+    # plot_sum = yield_comparison_config["settings"]["plot_sum"]
+    
+    # if yield_comparison_config["settings"]["comparisons_to_run"][
+    #     "plot_yield_over_time"
+    # ]:
+    #     plot_yield_over_time_map(all_yearly_averages, plot_sum)
+
+    # process_table(table_data)
 
     print("\nHit Enter to close plots and exit")
     input()
@@ -110,6 +115,9 @@ def display_results(crop_key, crop_value, water_key, water_values, settings):
     snx_description_catastrophe = crop_value["snx_description_catastrophe"]
     snx_ending = water_values["snx_ending"]
 
+    if settings['by_country']:
+        all_yearly_averages = pd.DataFrame()
+
     # for plotting maps independent of catastrophe_or_control value for a given crop
     first_overall_loop = True
     for cat_or_cntrl in cat_and_or_cntrl:
@@ -124,6 +132,17 @@ def display_results(crop_key, crop_value, water_key, water_values, settings):
             cat_or_cntrl,
             comparisons_to_run,
         )
+         ##
+         # Place holder for appending control and catastrophe data 
+         ##
+        if settings['by_country']:
+            if all_yearly_averages.empty:
+                all_yearly_averages = yearly_averages.copy()
+            else:
+                all_yearly_averages = pd.merge(all_yearly_averages, yearly_averages, on='iso_a3', how='outer')
+                all_yearly_averages.drop(columns=['Country_y'], inplace=True)
+                all_yearly_averages.rename(columns={'Country_x': 'Country'}, inplace=True)
+
 
         if water_key == "overall":
             show_comparisons_overall(
@@ -156,6 +175,18 @@ def display_results(crop_key, crop_value, water_key, water_values, settings):
                     f"AGMIP{rf_or_ir}",
                     f"{cat_or_cntrl} {title}: {crop_nice_name} AGMIP vs Model based on Countries",
                 )
+    if settings['by_country']:
+            yearly_averages = all_yearly_averages
+    
+    # Calling function toe calculate the percent yield reduction by country.
+    # Percent reduction values are appended to yearly_averages and held separate
+    # in percent_yields dataframe.
+
+    yearly_averages = percent_yield(
+        yearly_averages,
+        crop_key    
+    )
+
     return yearly_averages
 
 
@@ -248,9 +279,9 @@ def plot_SPAM_country_map(world, first_overall_loop, crop_nice_name):
         )
 
 
-def plot_yield_over_time_map(yearly_averages):
+def plot_yield_over_time_map(yearly_averages, plot_sum):
     print("Plotting average of rasters over time...\n\n")
-    plot_average_of_rasters_over_time(yearly_averages)
+    plot_average_of_rasters_over_time(yearly_averages, plot_sum = plot_sum)
 
 
 def plot_model_country_map_func(world, cat_or_cntrl, crop_nice_name):
@@ -500,6 +531,7 @@ def add_row_to_table(
         table_data[f"RMSE (kg/ha) with {expected_col}"] = []
         table_data[f"RRMSE (%) with {expected_col}"] = []
         table_data[f"Ratio {observed_col} to {expected_col} production"] = []
+        table_data[f"{observed_col} production"] = []
 
     table_data["Crop Name"].append(crop_value["crop_nice_name"])
     table_data["Control or Catastrophe"].append(control_or_catastrophe)
@@ -515,6 +547,9 @@ def add_row_to_table(
             / world[f"{expected_col}_production"].sum(),
             2,
         )
+    )
+    table_data[f"{observed_col} production"].append(
+        round(world[f"{observed_col}_production"].sum(),2)
     )
 
 
@@ -546,6 +581,42 @@ def process_table(table_data):
                         print(new_df)
                         print("-" * 40)  # prints a separator line for clarity
 
+def percent_yield(
+        df, crop_key
+):
+    # Identify columns containing "catastrophe" and "yield" for the model. 
+    # SPAM is historical data, not utilised but present in the dataframe incase its needed 
+    catastrophe_cols = [col for col in df.columns if 'catastrophe' in col and 'yield' in col and 'SPAM' not in col]
+    control_cols = [col for col in df.columns if 'control' in col and 'yield' in col and 'SPAM' not in col]
+
+    # Assuming catastrophe and control columns are in the same order for each year.
+    for cat_col, control_col in zip(catastrophe_cols, control_cols):
+        percent_reduction = (df[cat_col] - df[control_col]) / df[control_col] * 100
+        df[f'{crop_key}_percent_reduction_{cat_col.split("_")[-1]}'] = percent_reduction
+
+    return df
+
+def export_percent_yields_to_csv(data_dict, filename):
+
+    df_to_export = None
+    
+    for key, df in data_dict.items():
+        # Extract columns containing 'percent_reduction', 'iso_a3', and 'Country' and rename columns
+        percent_yields = df.loc[:, ['iso_a3', 'Country'] + [col for col in df.columns if 'percent_reduction' in col]]
+        percent_yields.rename(columns=lambda x: x.replace('_percent_reduction', ''), inplace=True)
+        
+        # Merge DataFrames based on 'iso_a3'
+        if df_to_export is None:
+            df_to_export = percent_yields
+        else:
+            df_to_export = pd.merge(df_to_export, percent_yields, on=['iso_a3', 'Country'], how='outer', suffixes=('', '_drop'))
+
+    # Remove duplicate columns and NaN values
+    df_to_export = merged_df[[col for col in df_to_export.columns if not col.endswith('_drop')]]
+    df_to_export.dropna(inplace=True)
+
+    # Export combined DataFrame to csv
+    df_to_export.to_csv(filename, index=False)
 
 if __name__ == "__main__":
     main()

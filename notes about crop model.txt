@@ -1,0 +1,4 @@
+- no yearly soybean csv files for model production
+- no yearly potato csv files for model production
+- no yearly rice csv files for model production
+- yearly control production annoyingly has different column names to catastrophe and time-averaged production EXCEPT FOR RAPESEED.. WHY?

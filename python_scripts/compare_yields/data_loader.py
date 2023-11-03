@@ -43,20 +43,6 @@ def load_data(
     # reset the world to contain country boundaries and names and iso3 codes, but no other columns
     world = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
 
-    # load average of grid cells over time if relevant comparisons are enabled
-    if water_key == "overall" and (comparisons_to_run["plot_yield_over_time"]):
-        cat_and_or_cntrl = settings["catastrophe_and_or_control"]
-
-        # this operates on a by-grid-cell basis, not by-country
-        yearly_averages = get_average_of_rasters_over_time(
-            settings["years"],
-            git_root,
-            crop_key,
-            cat_and_or_cntrl,
-            snx_description,
-            snx_description_catastrophe,
-        )
-
     # conditionally load by-country model data based on comparisons
     if cat_or_cntrl == "catastrophe":
         description_tag = snx_description_catastrophe
@@ -66,12 +52,80 @@ def load_data(
     if description_tag == "SKIP_ME":
         return pd.DataFrame({}), yearly_averages
 
+    # load average of grid cells over time if relevant comparisons are enabled
+    if water_key == "overall" and (comparisons_to_run["plot_yield_over_time"]):
+        cat_and_or_cntrl = settings["catastrophe_and_or_control"]
+
+         # load world data by-country, by-year, then calcualte yearly by-country averages
+        if settings["by_country"]:
+
+            #Initialize an empty dataframe
+            yearly_averages = pd.DataFrame()
+            yearly_averages['iso_a3'] = world['iso_a3']
+            yearly_averages['Country'] = world['name']
+
+            for year in settings['years']:
+
+                country_csv_filename = (
+                    f"by_country_379_Outdoor_crops_{cat_or_cntrl}_BestYield_noGCMcalendar_p0"
+                    + f"_{description_tag}_{snx_ending}_y{year}.csv"
+                )
+                # reset the world to contain country boundaries and names and iso3 codes, but no other columns
+                world = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
+
+                world = load_by_country_csv(
+                world,
+                git_root,
+                f"wth_{cat_or_cntrl}",
+                country_csv_filename,
+                f"model{rf_or_ir}",
+                )
+                
+                # Load historical data and merge with world dataframe containting catastrophe or control data
+                world = load_by_country_csv(
+                world,
+                git_root,
+                "wth_historical",
+                f"by_country_{crop_key}_yield.csv",
+                "SPAM",
+                )
+
+                # area is the sname no matter what year. no sense appending the area n_year times.
+                if not any('area' in col for col in yearly_averages.columns):
+                    column_keys = ['production', 'yield', 'area']
+                else:
+                    column_keys = ['production', 'yield']
+                
+                selected_column_keys = [col for col in world.columns if any(keyword in col for keyword in column_keys)]
+
+                # Append data for each year to "yearly_averages"
+                for key in selected_column_keys:
+                    new_column_name = f"{crop_key}_{cat_or_cntrl}_{key}_y{year}"
+                    yearly_averages[new_column_name] = world[key]
+
+            yearly_averages = yearly_averages.dropna(
+                subset=[new_column_name]
+            )
+            # Only necessary to reset index after the loop.
+            yearly_averages.reset_index(drop=True, inplace=True)
+        
+        # this operates on a by-grid-cell basis, not by-country
+        else :
+
+            yearly_averages = get_average_of_rasters_over_time(
+                settings["years"],
+                git_root,
+                crop_key,
+                cat_and_or_cntrl,
+                snx_description,
+                snx_description_catastrophe,
+            )
+
+    # below are all the data loaded on a by-country basis (time-averaged)
     country_csv_filename = (
         f"by_country_379_Outdoor_crops_{cat_or_cntrl}_BestYield_noGCMcalendar_p0"
         + f"_{description_tag}_{snx_ending}.csv"
     )
-
-    # below are all the data loaded on a by-country basis
 
     rows_to_filter_nans_from = []
     if (
@@ -251,9 +305,10 @@ def get_average_of_rasters_over_time(
             if year_entry:
                 # If year entry already exists, update the mean for the current cat_or_cntrl
                 year_entry[f"ratio_{cat_or_cntrl}"] = sum_ratio
+                year_entry[f"sum_{cat_or_cntrl}"] = model_sum
             else:
                 # If year entry does not exist, append a new one
-                data_list.append({"year": year, f"ratio_{cat_or_cntrl}": sum_ratio})
+                data_list.append({"year": year, f"ratio_{cat_or_cntrl}": sum_ratio, f"sum_{cat_or_cntrl}": model_sum})
 
     # Convert the list to a dataframe
     yearly_averages = pd.DataFrame(data_list)
@@ -448,26 +503,43 @@ def load_by_country_csv(
         traceback.print_exc()  # This prints the detailed error message with line numbers.
         sys.exit(1)
 
-    assert "Production_Sum" in production_data.columns
-    assert "Crop_Area_Sum" in production_data.columns
-    assert "Planting_Month_Mode" in production_data.columns
-    assert "Days_to_Maturity_Mean" in production_data.columns
-    production_data.rename(
-        columns={"Production_Sum": data_category + "_production"}, inplace=True
-    )
-    production_data.rename(
-        columns={"Crop_Area_Sum": data_category + "_area"}, inplace=True
-    )
-    production_data.rename(
-        columns={"Planting_Month_Mode": data_category + "_planting_month"}, inplace=True
-    )
-    production_data.rename(
-        columns={"Days_to_Maturity_Mean": data_category + "_maturity"}, inplace=True
-    )
-    production_data.rename(columns={"ISO_3DIGIT": "iso_a3"}, inplace=True)
+    # Since the csv files have different column names this code ensures there are no errors by 
+    # labeling correct column name. If the filename has "_y{number}.csv" ending, then assert different
+    # column names
+
+    if (re.search(r"_y\d+\.csv$", country_csv_filename) and 
+        re.search(r"control", country_csv_filename)):
+        assert "Production (kg wet)" in production_data.columns
+        assert "Area (hectares)" in production_data.columns
+
+        production_data.rename(
+            columns={"Production (kg wet)": data_category + "_production"}, inplace=True
+        )
+        production_data.rename(
+            columns={"Area (hectares)": data_category + "_area"}, inplace=True
+        )
+    else:
+
+        assert "Production_Sum" in production_data.columns
+        assert "Crop_Area_Sum" in production_data.columns
+        assert "Planting_Month_Mode" in production_data.columns
+        assert "Days_to_Maturity_Mean" in production_data.columns
+        production_data.rename(
+            columns={"Production_Sum": data_category + "_production"}, inplace=True
+        )
+        production_data.rename(
+            columns={"Crop_Area_Sum": data_category + "_area"}, inplace=True
+        )
+        production_data.rename(
+            columns={"Planting_Month_Mode": data_category + "_planting_month"}, inplace=True
+        )
+        production_data.rename(
+            columns={"Days_to_Maturity_Mean": data_category + "_maturity"}, inplace=True
+        )
+        production_data.rename(columns={"ISO_3DIGIT": "iso_a3"}, inplace=True)
 
     world = world.merge(
-        production_data, left_on="iso_a3", right_on="iso_a3", how="left"
+        production_data, left_on="iso_a3", right_on="iso_a3", how="outer"
     )
     # quit()
     world[data_category + "_average_yield"] = (

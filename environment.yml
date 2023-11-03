@@ -1,6 +1,7 @@
 name: mink
 channels:
   - defaults
+  - conda-forge
 dependencies:
   - glob2
   - pandas

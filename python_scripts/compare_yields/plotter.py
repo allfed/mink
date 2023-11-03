@@ -327,7 +327,7 @@ def scatter_country_area(world, observed_col, expected_col, title):
     import matplotlib.pyplot as plt
 
 
-def plot_average_of_rasters_over_time(data_dict, separate_figures=True):
+def plot_average_of_rasters_over_time(data_dict, plot_sum=False, separate_figures=True):
     # print("data_dict")
     # print(data_dict)
     # quit()
@@ -341,8 +341,13 @@ def plot_average_of_rasters_over_time(data_dict, separate_figures=True):
 
     # Line styles for distinguishing lines in the second plot.
     line_styles = ["-", "--", "-.", ":"]
+    
+    # Index either "observed yield sums" OR "ratio between observed and 
+    # historial yield sums"
+    column_type = "sum" if plot_sum else "ratio"
 
-    # Figure for absolute mean values
+    # Figure for either "observed yield sums" OR "ratio values between observed 
+    # and historical yield sums"
     if not separate_figures:
         plt.figure()
 
@@ -359,7 +364,7 @@ def plot_average_of_rasters_over_time(data_dict, separate_figures=True):
             plt.figure()
 
         # Check and plot available columns
-        for col in ["ratio_catastrophe", "ratio_control"]:
+        for col in [f"{column_type}_catastrophe", f"{column_type}_control"]:
             if col in df.columns:
                 plt.plot(
                     df["year"],
@@ -370,7 +375,10 @@ def plot_average_of_rasters_over_time(data_dict, separate_figures=True):
                     ],  # Choose marker based on crop index
                 )
 
-        plt.ylabel("Yields Ratio")
+        if plot_sum:
+            plt.ylabel("Total Observed Yields ([units])")
+        else:
+            plt.ylabel("Yields Ratio")
         plt.xlabel("Years")
         plt.title(f"Yields Over Time {crop if separate_figures else ''}")
         plt.legend()
@@ -392,8 +400,8 @@ def plot_average_of_rasters_over_time(data_dict, separate_figures=True):
     all_ratios = []  # A list to collect all y-values for determining the max
 
     for crop, df in data_dict.items():
-        if "ratio_catastrophe" in df.columns and "ratio_control" in df.columns:
-            ratio = df["ratio_catastrophe"] / df["ratio_control"].mean()
+        if f"{column_type}_catastrophe" in df.columns and f"{column_type}_control" in df.columns:
+            ratio = df[f"{column_type}_catastrophe"] / df[f"{column_type}_control"].mean()
             all_ratios.extend(ratio.tolist())
             plt.plot(
                 df["year"],
