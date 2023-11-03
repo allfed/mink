@@ -125,6 +125,143 @@ class Plotter:
         # filter dataframes to include only non-zero values
         # world.to_csv("Model_vs_spam_data.csv")
 
+<<<<<<< HEAD
+=======
+    plt.text(
+        x_pos, y_pos1, f"R^2 = {r_squared:.2f}", fontsize=12
+    )  # Display weighted R-squared on the plot
+    plt.text(
+        x_pos, y_pos2, f"WLS Weighted R^2 = {WLS:.2f}", fontsize=12
+    )  # Display weighted R-squared on the plot
+
+    # plt.text(
+    #     x_pos, y_pos3, f"log RMSE  = {rmse:.2f}", fontsize=12
+    # )  # Display weighted R-squared on the plot
+    plt.text(
+        x_pos, y_pos3, f"Fractional RMSE = {fractional_rmse:.2f}", fontsize=12
+    )  # Display weighted R-squared on the plot
+    plt.text(
+        x_pos, y_pos4, f"d_stat = {d_stat:.2f}", fontsize=12
+    )  # Display weighted R-squared on the plot
+    plt.text(
+        x_pos, y_pos5, f"linear RMSE = {linear_RMSE:.2f} kg/ha", fontsize=12
+    )  # Display weighted R-squared on the plot
+    plt.title(title)
+    plt.xlabel(expected_col + " Average Yield (kg/ha)")
+    plt.ylabel(observed_col + " Average Yield (kg/ha)")
+    plt.tight_layout()
+    plt.show(block=False)
+
+    return world
+
+
+def scatter_country_production(world, observed_col, expected_col, title):
+    # world = world.dropna(
+    #     subset=[expected_col + "_average_yield", observed_col + "_average_yield"]
+    # )
+
+    plt.figure()
+
+    plt.scatter(
+        world[expected_col + "_production"],
+        world[observed_col + "_production"],
+    )
+
+    # Add dotted line where x = y
+    plt.plot(
+        [
+            world[expected_col + "_production"].min(),
+            world[expected_col + "_production"].max(),
+        ],
+        [
+            world[expected_col + "_production"].min(),
+            world[expected_col + "_production"].max(),
+        ],
+        linestyle="dotted",
+        color="gray",
+    )
+
+    for index, row in world.iterrows():
+        plt.text(
+            row[expected_col + "_production"],
+            row[observed_col + "_production"],
+            row["iso_a3"],
+            fontsize=9,
+        )
+    plt.title(title)
+    plt.xlabel(expected_col + "Annual Production (kg)")
+    plt.ylabel(observed_col + "Annual Production (kg)")
+    plt.show(block=False)
+
+    return world
+
+
+def scatter_country_area(world, observed_col, expected_col, title):
+    # world = world.dropna(
+    #     subset=[expected_col + "_average_yield", observed_col + "_average_yield"]
+    # )
+
+    plt.figure()
+
+    plt.scatter(
+        world[expected_col + "_area"],
+        world[observed_col + "_area"],
+    )
+
+    # Add dotted line where x = y
+    plt.plot(
+        [
+            world[expected_col + "_area"].min(),
+            world[expected_col + "_area"].max(),
+        ],
+        [
+            world[expected_col + "_area"].min(),
+            world[expected_col + "_area"].max(),
+        ],
+        linestyle="dotted",
+        color="gray",
+    )
+
+    for index, row in world.iterrows():
+        plt.text(
+            row[expected_col + "_area"],
+            row[observed_col + "_area"],
+            row["iso_a3"],
+            fontsize=9,
+        )
+    plt.title(title)
+    plt.xlabel(expected_col + "Annual area (ha)")
+    plt.ylabel(observed_col + "Annual area (ha)")
+    plt.show(block=False)
+
+    return world
+
+    import matplotlib.pyplot as plt
+
+
+def plot_average_of_rasters_over_time(data_dict, plot_sum=False, separate_figures=True):
+    # print("data_dict")
+    # print(data_dict)
+    # quit()
+    # Ensure the input is a dictionary
+    if not isinstance(data_dict, dict):
+        print("\nInput is not a dictionary. Skipping plotting.\n")
+        return
+
+    # Markers for the plot. You can expand this list if you have more crops.
+    markers = ["o", "s", "^", "v", "D", "*", "p"]
+
+    # Line styles for distinguishing lines in the second plot.
+    line_styles = ["-", "--", "-.", ":"]
+    
+    # Index either "observed yield sums" OR "ratio between observed and 
+    # historial yield sums"
+    column_type = "sum" if plot_sum else "ratio"
+
+    # Figure for either "observed yield sums" OR "ratio values between observed 
+    # and historical yield sums"
+    if not separate_figures:
+>>>>>>> daniel
         plt.figure()
 
         # Normalize the SPAM_area values for color mapping
@@ -325,12 +462,35 @@ class Plotter:
         if not separate_figures:
             plt.figure()
 
+<<<<<<< HEAD
         all_values = []  # A list to collect all y-values for determining the max
 
         for idx, (crop, df) in enumerate(data_dict.items()):
             if df.empty:
                 print(f"\nDataFrame for {crop} is empty. Skipping plotting for this crop.\n")
                 continue
+=======
+        # Check and plot available columns
+        for col in [f"{column_type}_catastrophe", f"{column_type}_control"]:
+            if col in df.columns:
+                plt.plot(
+                    df["year"],
+                    df[col],
+                    label=f"{col.split('_')[1].capitalize()} {crop}",
+                    marker=markers[
+                        idx % len(markers)
+                    ],  # Choose marker based on crop index
+                )
+
+        if plot_sum:
+            plt.ylabel("Total Observed Yields ([units])")
+        else:
+            plt.ylabel("Yields Ratio")
+        plt.xlabel("Years")
+        plt.title(f"Yields Over Time {crop if separate_figures else ''}")
+        plt.legend()
+        plt.grid(True)
+>>>>>>> daniel
 
             if separate_figures:
                 plt.figure()
@@ -397,6 +557,7 @@ class Plotter:
     #     # Figure for absolute mean values
     #     plt.figure()
 
+<<<<<<< HEAD
     #     # Iterate over each crop in the dictionary
     #     for crop, df in data_dict.items():
     #         if df.empty:
@@ -404,6 +565,30 @@ class Plotter:
     #                 f"\nDataFrame for {crop} is empty. Skipping plotting for this crop.\n"
     #             )
     #             continue
+=======
+    for crop, df in data_dict.items():
+        if f"{column_type}_catastrophe" in df.columns and f"{column_type}_control" in df.columns:
+            ratio = df[f"{column_type}_catastrophe"] / df[f"{column_type}_control"].mean()
+            all_ratios.extend(ratio.tolist())
+            plt.plot(
+                df["year"],
+                ratio,
+                label=f"Catastrophe : mean(Control) Ratio {crop}",
+                linestyle=line_styles[
+                    idx % len(line_styles)
+                ],  # Line style for the second plot
+            )
+    plt.ylim(0, max(all_ratios))
+    plt.ylabel("Ratio Catastrophe to Control Production")
+    plt.xlabel("Years")
+    plt.title(
+        "Production Catastrophe Divided by mean Production Control, Over Catastrophe Duration\nThere has been no relocation, but the best crop month was selected."
+    )
+    plt.title("Production Catastrophe Divided by mean Production Control")
+    plt.grid(True)
+    plt.legend()
+    plt.show(block=False)
+>>>>>>> daniel
 
     #         # Check and plot available columns
     #         for col in ["ratio_catastrophe", "ratio_control"]:
