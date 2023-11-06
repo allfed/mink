@@ -76,13 +76,8 @@ def main():
                 yield_comparison_config["settings"],
             )
 
-<<<<<<< HEAD
-    if yield_comparison_config["settings"]["comparisons_to_run"]["plot_yield_over_time"]:
-        plot_yield_over_time_map(all_yearly_averages)
-=======
     # Filter out only the percent reduction yields and export them to a .csv file.
     export_percent_yields_to_csv(all_yearly_averages, 'by_country_by_year_percent_yields.csv')
->>>>>>> daniel
 
     # plot_sum = yield_comparison_config["settings"]["plot_sum"]
     
@@ -279,11 +274,7 @@ def plot_SPAM_country_map(world, first_overall_loop, crop_nice_name):
 
 def plot_yield_over_time_map(yearly_averages, plot_sum):
     print("Plotting average of rasters over time...\n\n")
-<<<<<<< HEAD
-    Plotter.plot_average_of_rasters_over_time(yearly_averages)
-=======
-    plot_average_of_rasters_over_time(yearly_averages, plot_sum = plot_sum)
->>>>>>> daniel
+    Plotter.plot_average_of_rasters_over_time(yearly_averages, plot_sum = plot_sum)
 
 
 def plot_model_country_map_func(world, cat_or_cntrl, crop_nice_name):
@@ -616,7 +607,7 @@ def export_percent_yields_to_csv(data_dict, filename):
             df_to_export = pd.merge(df_to_export, percent_yields, on=['iso_a3', 'Country'], how='outer', suffixes=('', '_drop'))
 
     # Remove duplicate columns and NaN values
-    df_to_export = merged_df[[col for col in df_to_export.columns if not col.endswith('_drop')]]
+    df_to_export = df_to_export[[col for col in df_to_export.columns if not col.endswith('_drop')]]
     df_to_export.dropna(inplace=True)
 
     # Export combined DataFrame to csv
