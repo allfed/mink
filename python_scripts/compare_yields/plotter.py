@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import numpy as np
 import pandas as pd
+import re
 
 from stats_functions import StatsFunctions
 
@@ -334,7 +335,7 @@ class Plotter:
             if df.empty:
                 print(f"\nDataFrame for {crop} is empty. Skipping plotting for this crop.\n")
                 continue
-            
+
             # Check and plot available columns
             for col in [f"{column_type}_catastrophe", f"{column_type}_control"]:
                 if col in df.columns:
@@ -597,3 +598,79 @@ class Plotter:
         plt.title(title)
         plt.tight_layout()
         plt.show(block=False)
+
+    @staticmethod
+    def plot_by_country_by_year(dfs_dict, crops):
+        
+        # First, determine the common countries
+        common_countries_df = pd.merge(dfs_dict['df1'], dfs_dict['df2'], on='iso_a3', how='inner')
+        
+         # Determine top populous countries from df1 for each crop
+        top_countries_dict = {}
+
+        # Filter out all rows with values above 1000 
+        for crop_key in crops.keys():
+            numeric_columns = [col for col in common_countries_df.columns 
+                            if common_countries_df[col].dtype in ['int64', 'float64']
+                            and col != 'pop_est']
+            common_countries_df = common_countries_df[(common_countries_df[numeric_columns] <= 1000).all(axis=1)]
+
+            # Get the top 5 countries based on population estimates
+            top_countries_dict[crop_key]  = common_countries_df.nlargest(5, 'pop_est')['iso_a3'].tolist()
+
+        # Now process and transpose data for each crop and DataFrame
+        transposed_data_dict = {}
+        for crop_key in crops.keys():
+            for df_name, df in dfs_dict.items():
+                # Use the top countries determined from df1
+                top_countries = top_countries_dict[crop_key]
+                pattern = re.compile(re.escape(crop_key), re.IGNORECASE)
+                
+                # Transpose data for top countries and each crop
+                transposed_data = pd.DataFrame()
+                for country in top_countries:
+                    country_data = df[df['iso_a3'] == country]
+                    # Extract columns that match the crop key pattern
+                    crop_columns = [col for col in df.columns if re.search(pattern, col)]
+                    # Ensure the columns are in the correct year order
+                    crop_columns_sorted = sorted(crop_columns, key=lambda x: int(re.search(r'\d+$', x).group()))
+                    transposed_data[country] = country_data[crop_columns_sorted].values.flatten()
+                
+                # The index of transposed_data will be the years, extracted from column names
+                transposed_data.index = [int(re.search(r'\d+$', col).group()) for col in crop_columns_sorted]
+                transposed_data_dict[(crop_key, df_name)] = transposed_data
+
+        # Create a color map for countries, ensuring each country has the same color
+        unique_countries = set([country for _, transposed_df in transposed_data_dict.items() for country in transposed_df.columns])
+        colors = plt.cm.rainbow(np.linspace(0, 1, len(unique_countries)))
+        color_map = dict(zip(unique_countries, colors))
+
+        # Plotting
+        for crop_key, crop_dict in crops.items():
+            plt.figure(figsize=(10, 6))  # Set the figure size or adjust as needed
+            handled_countries = set()  # To keep track of countries already in the legend
+            
+            # Define markers for each DataFrame to distinguish them in the plot
+            markers = {'df1': 'o', 'df2': 'x'}
+            
+            # Plot data for each DataFrame
+            for df_name in dfs_dict.keys():
+                transposed_df = transposed_data_dict.get((crop_key, df_name))
+                if transposed_df is not None:
+                    for country in transposed_df.columns:
+                        # Plot with the same color if the country is already plotted
+                        plt.plot(
+                            transposed_df.index,
+                            transposed_df[country],
+                            marker=markers[df_name],
+                            color=color_map[country],
+                            label=f"{country}" if country not in handled_countries else ""
+                        )
+                        handled_countries.add(country)  # Add country to the set once labeled
+                    
+            plt.title(crop_dict['crop_nice_name'] + ' Production Reduction Yields - Top 5 Countries')
+            plt.xlabel('Year')
+            plt.ylabel('Production Reduction Yields (%)')
+            plt.legend()
+            plt.grid(True)
+            plt.show()

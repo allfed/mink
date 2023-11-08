@@ -77,14 +77,25 @@ def main():
             )
 
     # Filter out only the percent reduction yields and export them to a .csv file.
-    export_percent_yields_to_csv(all_yearly_averages, 'by_country_by_year_percent_yields.csv')
+    all_yearly_averages = export_percent_yields_to_csv(all_yearly_averages, 'by_country_by_year_percent_yields.csv')
 
+    # Plot the production yields and ratios from gridded .asc data.
     # plot_sum = yield_comparison_config["settings"]["plot_sum"]
     
     # if yield_comparison_config["settings"]["comparisons_to_run"][
     #     "plot_yield_over_time"
     # ]:
     #     plot_yield_over_time_map(all_yearly_averages, plot_sum)
+
+
+    # Collect data from model and Xia et al. to plot
+    xia_data = pd.read_csv('rutgers_nw_production_raw.csv')
+    xia_data.rename(columns={col: col.replace('corn', 'maize') for col in xia_data.columns if 'corn' in col}, inplace=True)
+    xia_data.rename(columns={'ISO3 Country Code':'iso_a3'}, inplace=True)
+    dfs = {'df1' : all_yearly_averages, 'df2' : xia_data}
+
+    # Plot the percent reduction yields per country per year
+    Plotter.plot_by_country_by_year(dfs, yield_comparison_config["crop_codes"])
 
     # process_table(table_data)
 
@@ -121,16 +132,14 @@ def display_results(crop_key, crop_value, water_key, water_values, settings):
             cat_or_cntrl,
             comparisons_to_run,
         )
-         ##
-         # Place holder for appending control and catastrophe data 
-         ##
+
         if settings['by_country']:
             if all_yearly_averages.empty:
                 all_yearly_averages = yearly_averages.copy()
             else:
                 all_yearly_averages = pd.merge(all_yearly_averages, yearly_averages, on='iso_a3', how='outer')
-                all_yearly_averages.drop(columns=['Country_y'], inplace=True)
-                all_yearly_averages.rename(columns={'Country_x': 'Country'}, inplace=True)
+                all_yearly_averages.drop(columns=['Country_y', 'pop_est_y'], inplace=True)
+                all_yearly_averages.rename(columns={'Country_x': 'Country', 'pop_est_x':'pop_est'}, inplace=True)
 
 
         if water_key == "overall":
@@ -597,8 +606,9 @@ def export_percent_yields_to_csv(data_dict, filename):
     
     for key, df in data_dict.items():
         # Extract columns containing 'percent_reduction', 'iso_a3', and 'Country' and rename columns
-        percent_yields = df.loc[:, ['iso_a3', 'Country'] + [col for col in df.columns if 'percent_reduction' in col]]
+        percent_yields = df.loc[:, ['iso_a3', 'Country', 'pop_est'] + [col for col in df.columns if 'percent_reduction' in col]]
         percent_yields.rename(columns=lambda x: x.replace('_percent_reduction', ''), inplace=True)
+        percent_yields.dropna(inplace=True)
         
         # Merge DataFrames based on 'iso_a3'
         if df_to_export is None:
@@ -608,10 +618,11 @@ def export_percent_yields_to_csv(data_dict, filename):
 
     # Remove duplicate columns and NaN values
     df_to_export = df_to_export[[col for col in df_to_export.columns if not col.endswith('_drop')]]
-    df_to_export.dropna(inplace=True)
 
     # Export combined DataFrame to csv
     df_to_export.to_csv(filename, index=False)
+
+    return df_to_export
 
 if __name__ == "__main__":
     main()
