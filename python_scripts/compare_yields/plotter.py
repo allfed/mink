@@ -29,7 +29,9 @@ class Plotter:
             fig, ax = plt.subplots(1, 1)
 
             # Use GeoPandas plot() method to create a choropleth map
-            world.boundary.plot(ax=ax, linewidth=1, color="black")  # Plot country boundaries for better clarity
+            world.boundary.plot(
+                ax=ax, linewidth=1, color="black"
+            )  # Plot country boundaries for better clarity
 
             world.plot(
                 column=prefix + "_" + plot_property,
@@ -39,7 +41,9 @@ class Plotter:
                     "label": prefix + " " + plot_property,
                     "orientation": "horizontal",
                 },
-                vmax=world[max_col + "_" + plot_property].max(),  # Set the maximum color limit
+                vmax=world[
+                    max_col + "_" + plot_property
+                ].max(),  # Set the maximum color limit
             )
 
             plt.title(crop_nice_name + prefix + "_" + plot_property, fontsize=20)
@@ -53,7 +57,9 @@ class Plotter:
         # filter dataframe to include only non-zero values
         # df = df[df["Average Yield 2000-2005 (kg/ha)"] > 500]
 
-        ax.hist(df["Average Yield 2000-2005 (kg/ha)"], bins=20, edgecolor="black")  # Use ax to create histogram
+        ax.hist(
+            df["Average Yield 2000-2005 (kg/ha)"], bins=20, edgecolor="black"
+        )  # Use ax to create histogram
         ax.set_title("Histogram of Average Wheat Yield (2000-2005)")
         ax.set_xlabel("Yield (kg/ha)")
         ax.set_ylabel("Frequency")
@@ -113,7 +119,9 @@ class Plotter:
             rotation=45,
         )
 
-        ax.set_title(cat_or_cntrl + ": " + crop + " Comparison of " + " vs ".join(column_list))
+        ax.set_title(
+            cat_or_cntrl + ": " + crop + " Comparison of " + " vs ".join(column_list)
+        )
         ax.set_xlabel("Yield Range (kg/ha)")
         ax.set_ylabel("Frequency")
 
@@ -187,7 +195,14 @@ class Plotter:
         #         row["name"],
         #         fontsize=9,
         #     )
-        r_squared, WLS, rmse, fractional_rmse, d_stat, linear_RMSE = StatsFunctions.get_stats(
+        (
+            r_squared,
+            WLS,
+            rmse,
+            fractional_rmse,
+            d_stat,
+            linear_RMSE,
+        ) = StatsFunctions.get_stats(
             world,
             observed_col + "_average_yield",
             expected_col + "_average_yield",
@@ -195,16 +210,34 @@ class Plotter:
         )
 
         # Define a suitable x and y coordinate for the R-squared label
-        x_pos = plt.xlim()[0] + (plt.xlim()[1] - plt.xlim()[0]) * 0.05  # 5% from the left
-        y_pos1 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (0.9 + 0.4)  # 90% from the bottom
-        y_pos2 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (0.85 + 0.4)  # 90% from the bottom
-        y_pos3 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (0.8 + 0.4)  # 90% from the bottom
-        y_pos4 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (0.75 + 0.4)  # 90% from the bottom
-        y_pos5 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (0.7 + 0.4)  # 90% from the bottom
-        y_pos6 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (0.65 + 0.4)  # 90% from the bottom
+        x_pos = (
+            plt.xlim()[0] + (plt.xlim()[1] - plt.xlim()[0]) * 0.05
+        )  # 5% from the left
+        y_pos1 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+            0.9 + 0.4
+        )  # 90% from the bottom
+        y_pos2 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+            0.85 + 0.4
+        )  # 90% from the bottom
+        y_pos3 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+            0.8 + 0.4
+        )  # 90% from the bottom
+        y_pos4 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+            0.75 + 0.4
+        )  # 90% from the bottom
+        y_pos5 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+            0.7 + 0.4
+        )  # 90% from the bottom
+        y_pos6 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+            0.65 + 0.4
+        )  # 90% from the bottom
 
-        plt.text(x_pos, y_pos1, f"R^2 = {r_squared:.2f}", fontsize=12)  # Display weighted R-squared on the plot
-        plt.text(x_pos, y_pos2, f"WLS Weighted R^2 = {WLS:.2f}", fontsize=12)  # Display weighted R-squared on the plot
+        plt.text(
+            x_pos, y_pos1, f"R^2 = {r_squared:.2f}", fontsize=12
+        )  # Display weighted R-squared on the plot
+        plt.text(
+            x_pos, y_pos2, f"WLS Weighted R^2 = {WLS:.2f}", fontsize=12
+        )  # Display weighted R-squared on the plot
 
         # plt.text(
         #     x_pos, y_pos3, f"log RMSE  = {rmse:.2f}", fontsize=12
@@ -212,7 +245,9 @@ class Plotter:
         plt.text(
             x_pos, y_pos3, f"Fractional RMSE = {fractional_rmse:.2f}", fontsize=12
         )  # Display weighted R-squared on the plot
-        plt.text(x_pos, y_pos4, f"d_stat = {d_stat:.2f}", fontsize=12)  # Display weighted R-squared on the plot
+        plt.text(
+            x_pos, y_pos4, f"d_stat = {d_stat:.2f}", fontsize=12
+        )  # Display weighted R-squared on the plot
         plt.text(
             x_pos, y_pos5, f"linear RMSE = {linear_RMSE:.2f} kg/ha", fontsize=12
         )  # Display weighted R-squared on the plot
@@ -330,10 +365,13 @@ class Plotter:
             plt.figure()
 
         all_values = []  # A list to collect all y-values for determining the max
-
+        print("data_dict")
+        print(data_dict)
         for idx, (crop, df) in enumerate(data_dict.items()):
             if df.empty:
-                print(f"\nDataFrame for {crop} is empty. Skipping plotting for this crop.\n")
+                print(
+                    f"\nDataFrame for {crop} is empty. Skipping plotting for this crop.\n"
+                )
                 continue
 
             # Check and plot available columns
@@ -370,28 +408,31 @@ class Plotter:
         # Figure for ratio of catastrophe to control
         plt.figure()
 
-        all_ratios = []  # A list to collect all y-values for determining the max
-
-        for crop, df in data_dict.items():
-            if "ratio_catastrophe" in df.columns and "ratio_control" in df.columns:
+        if "ratio_catastrophe" in df.columns and "ratio_control" in df.columns:
+            all_ratios = []  # A list to collect all y-values for determining the max
+            for crop, df in data_dict.items():
                 ratio = df["ratio_catastrophe"] / df["ratio_control"].mean()
                 all_ratios.extend(ratio.tolist())
                 plt.plot(
                     df["year"],
                     ratio,
                     label=f"Catastrophe : mean(Control) Ratio {crop}",
-                    linestyle=line_styles[idx % len(line_styles)],  # Line style for the second plot
+                    linestyle=line_styles[
+                        idx % len(line_styles)
+                    ],  # Line style for the second plot
                 )
-        plt.ylim(0, max(all_ratios))
-        plt.ylabel("Ratio Catastrophe to Control Production")
-        plt.xlabel("Years")
-        plt.title(
-            "Production Catastrophe Divided by mean Production Control, Over Catastrophe Duration\nThere has been no relocation, but the best crop month was selected."
-        )
-        plt.title("Production Catastrophe Divided by mean Production Control")
-        plt.grid(True)
-        plt.legend()
-        plt.show(block=False)
+            print("all_ratios")
+            print(all_ratios)
+            plt.ylim(0, max(all_ratios))
+            plt.ylabel("Ratio Catastrophe to Control Production")
+            plt.xlabel("Years")
+            plt.title(
+                "Production Catastrophe Divided by mean Production Control, Over Catastrophe Duration\nThere has been no relocation, but the best crop month was selected."
+            )
+            plt.title("Production Catastrophe Divided by mean Production Control")
+            plt.grid(True)
+            plt.legend()
+            plt.show(block=False)
 
     # @staticmethod
     def plot_average_of_rasters_over_time(data_dict):
@@ -563,7 +604,14 @@ class Plotter:
         x = np.linspace(*plt.xlim())
         plt.plot(x, x, "--", color="k")
 
-        r_squared, WLS, rmse, fractional_rmse, d_stat, linear_RMSE = StatsFunctions.get_stats(
+        (
+            r_squared,
+            WLS,
+            rmse,
+            fractional_rmse,
+            d_stat,
+            linear_RMSE,
+        ) = StatsFunctions.get_stats(
             dataframe,
             observed_data_column_name,
             expected_data_column_name,
@@ -571,16 +619,34 @@ class Plotter:
         )
 
         # Define a suitable x and y coordinate for the R-squared label
-        x_pos = plt.xlim()[0] + (plt.xlim()[1] - plt.xlim()[0]) * 0.05  # 5% from the left
-        y_pos1 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (0.9 + 0.4)  # 90% from the bottom
-        y_pos2 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (0.85 + 0.4)  # 90% from the bottom
-        y_pos3 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (0.8 + 0.4)  # 90% from the bottom
-        y_pos4 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (0.75 + 0.4)  # 90% from the bottom
-        y_pos5 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (0.7 + 0.4)  # 90% from the bottom
-        y_pos6 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (0.65 + 0.4)  # 90% from the bottom
+        x_pos = (
+            plt.xlim()[0] + (plt.xlim()[1] - plt.xlim()[0]) * 0.05
+        )  # 5% from the left
+        y_pos1 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+            0.9 + 0.4
+        )  # 90% from the bottom
+        y_pos2 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+            0.85 + 0.4
+        )  # 90% from the bottom
+        y_pos3 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+            0.8 + 0.4
+        )  # 90% from the bottom
+        y_pos4 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+            0.75 + 0.4
+        )  # 90% from the bottom
+        y_pos5 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+            0.7 + 0.4
+        )  # 90% from the bottom
+        y_pos6 = plt.ylim()[0] + (plt.ylim()[1] - plt.ylim()[0]) * (
+            0.65 + 0.4
+        )  # 90% from the bottom
 
-        plt.text(x_pos, y_pos1, f"R^2 = {r_squared:.2f}", fontsize=12)  # Display weighted R-squared on the plot
-        plt.text(x_pos, y_pos2, f"WLS Weighted R^2 = {WLS:.2f}", fontsize=12)  # Display weighted R-squared on the plot
+        plt.text(
+            x_pos, y_pos1, f"R^2 = {r_squared:.2f}", fontsize=12
+        )  # Display weighted R-squared on the plot
+        plt.text(
+            x_pos, y_pos2, f"WLS Weighted R^2 = {WLS:.2f}", fontsize=12
+        )  # Display weighted R-squared on the plot
 
         # plt.text(
         #     x_pos, y_pos3, f"log RMSE  = {rmse:.2f}", fontsize=12
@@ -588,7 +654,9 @@ class Plotter:
         plt.text(
             x_pos, y_pos3, f"Fractional RMSE = {fractional_rmse:.2f}", fontsize=12
         )  # Display weighted R-squared on the plot
-        plt.text(x_pos, y_pos4, f"d_stat = {d_stat:.2f}", fontsize=12)  # Display weighted R-squared on the plot
+        plt.text(
+            x_pos, y_pos4, f"d_stat = {d_stat:.2f}", fontsize=12
+        )  # Display weighted R-squared on the plot
         plt.text(
             x_pos, y_pos5, f"linear RMSE = {linear_RMSE:.2f} kg/ha", fontsize=12
         )  # Display weighted R-squared on the plot

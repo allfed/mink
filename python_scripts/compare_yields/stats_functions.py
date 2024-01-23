@@ -84,10 +84,14 @@ class StatsFunctions:
         # Weighted least squares regression
         X = sm.add_constant(world[expected_col])
         y = world[observed_col]
-
+        # breakpoint()
+        # print("weights")
+        # print(weights)
         model = sm.WLS(y, X, weights=weights).fit()
         # Calculate r-squared
-        slope, intercept, r_value, p_value, std_err = linregress(world[expected_col], world[observed_col])
+        slope, intercept, r_value, p_value, std_err = linregress(
+            world[expected_col], world[observed_col]
+        )
 
         # Assumingexpected_colis the expected values
         expected_values = world[expected_col]
@@ -116,7 +120,9 @@ class StatsFunctions:
         print("world4")
         print(world)
         print(world.columns)
-        weights = world[expected_col + "_production"] / np.average(world[expected_col + "_production"])
+        weights = world[expected_col + "_production"] / np.average(
+            world[expected_col + "_production"]
+        )
 
         # Show rows where 'expected_col_production' has NaN values
         # rows_with_nan = world[world[expected_col + "_production"].isna()]

@@ -43,56 +43,92 @@ git_root = os.path.join("..", "..", "")
 
 table_data = {}
 
-rf_and_ir = {
-    # "RF": {
-    #     "rf_or_ir": "_RF",
-    #     "snx_ending": "wet_averaged_RF",
-    #     "title": "Rainfed",
-    # },
-    # "IR": {
-    #     "rf_or_ir": "_IR",
-    #     "snx_ending": "wet_averaged_IR",
-    #     "title": "Irrigated",
-    # },
-    "overall": {
+
+def get_water_items_to_process(rainfed_irrigated_settings):
+    """
+    Determines which water keys to process based on the YAML settings
+    """
+    water_items_to_process = {}
+    if "rainfed" in rainfed_irrigated_settings:
+        water_items_to_process["RF"] = {
+            "rf_or_ir": "_RF",
+            "snx_ending": "wet_averaged_RF",
+            "title": "Rainfed",
+        }
+    if "irrigated" in rainfed_irrigated_settings:
+        water_items_to_process["IR"] = {
+            "rf_or_ir": "_IR",
+            "snx_ending": "wet_averaged_IR",
+            "title": "Irrigated",
+        }
+    # if (
+    #     "rainfed" in rainfed_irrigated_settings
+    #     and "irrigated" in rainfed_irrigated_settings
+    # ):
+    water_items_to_process["overall"] = {
         "rf_or_ir": "",
         "snx_ending": "wet_overall_yield",
         "title": "Overall",
-    },
-}
+    }
+    return water_items_to_process
 
 
 def main():
-    yield_comparison_config = DataLoader.get_crop_variables("yield_comparison_config.yaml")
+    yield_comparison_config = DataLoader.get_crop_variables(
+        "yield_comparison_config.yaml"
+    )
+
+    rainfed_irrigated_settings = yield_comparison_config["settings"][
+        "rainfed_and_or_irrigated"
+    ]
 
     all_yearly_averages = {}
     for crop_key, crop_value in yield_comparison_config["crop_codes"].items():
-        for water_key, water_values in rf_and_ir.items():
+        # Determine which water_keys to process
+        water_items_to_process = get_water_items_to_process(rainfed_irrigated_settings)
+
+        for water_key, water_value in water_items_to_process.items():
+            print("water_key")
+            print(water_key)
+            print("water_value")
+            print(water_value)
             all_yearly_averages[crop_value["crop_nice_name"]] = display_results(
                 crop_key,
                 crop_value,
                 water_key,
-                water_values,
+                water_value,
                 yield_comparison_config["settings"],
             )
-
     # Filter out only the percent reduction yields and export them to a .csv file.
-    all_yearly_averages = export_percent_yields_to_csv(all_yearly_averages, 'by_country_by_year_percent_yields.csv')
+    all_yearly_averages = export_percent_yields_to_csv(
+        all_yearly_averages, "by_country_by_year_percent_yields.csv"
+    )
 
     # Plot the production yields and ratios from gridded .asc data.
     # plot_sum = yield_comparison_config["settings"]["plot_sum"]
-    
+
     # if yield_comparison_config["settings"]["comparisons_to_run"][
     #     "plot_yield_over_time"
     # ]:
     #     plot_yield_over_time_map(all_yearly_averages, plot_sum)
 
-
     # Collect data from model and Xia et al. to plot
-    xia_data = pd.read_csv('rutgers_nw_production_raw.csv')
-    xia_data.rename(columns={col: col.replace('corn', 'maize') for col in xia_data.columns if 'corn' in col}, inplace=True)
-    xia_data.rename(columns={'ISO3 Country Code':'iso_a3'}, inplace=True)
-    dfs = {'df1' : all_yearly_averages, 'df2' : xia_data}
+    xia_data = pd.read_csv("rutgers_nw_production_raw.csv")
+    xia_data.rename(
+        columns={
+            col: col.replace("corn", "maize")
+            for col in xia_data.columns
+            if "corn" in col
+        },
+        inplace=True,
+    )
+    xia_data.rename(columns={"ISO3 Country Code": "iso_a3"}, inplace=True)
+    dfs = {"df1": all_yearly_averages, "df2": xia_data}
+
+    if yield_comparison_config["settings"]["comparisons_to_run"][
+        "plot_yield_over_time"
+    ]:
+        plot_yield_over_time_map(all_yearly_averages, plot_sum=True)
 
     # Plot the percent reduction yields per country per year
     Plotter.plot_by_country_by_year(dfs, yield_comparison_config["crop_codes"])
@@ -113,9 +149,11 @@ def display_results(crop_key, crop_value, water_key, water_values, settings):
     snx_description = crop_value["snx_description_control"]
     agmip_code = crop_value["AGMIP_code"]
     snx_description_catastrophe = crop_value["snx_description_catastrophe"]
+    print("water_values")
+    print(water_values)
     snx_ending = water_values["snx_ending"]
 
-    if settings['by_country']:
+    if settings["by_country"]:
         all_yearly_averages = pd.DataFrame()
 
     # for plotting maps independent of catastrophe_or_control value for a given crop
@@ -133,14 +171,20 @@ def display_results(crop_key, crop_value, water_key, water_values, settings):
             comparisons_to_run,
         )
 
-        if settings['by_country']:
+        if settings["by_country"]:
             if all_yearly_averages.empty:
                 all_yearly_averages = yearly_averages.copy()
             else:
-                all_yearly_averages = pd.merge(all_yearly_averages, yearly_averages, on='iso_a3', how='outer')
-                all_yearly_averages.drop(columns=['Country_y', 'pop_est_y'], inplace=True)
-                all_yearly_averages.rename(columns={'Country_x': 'Country', 'pop_est_x':'pop_est'}, inplace=True)
-
+                all_yearly_averages = pd.merge(
+                    all_yearly_averages, yearly_averages, on="iso_a3", how="outer"
+                )
+                all_yearly_averages.drop(
+                    columns=["Country_y", "pop_est_y"], inplace=True
+                )
+                all_yearly_averages.rename(
+                    columns={"Country_x": "Country", "pop_est_x": "pop_est"},
+                    inplace=True,
+                )
 
         if water_key == "overall":
             show_comparisons_overall(
@@ -166,7 +210,11 @@ def display_results(crop_key, crop_value, water_key, water_values, settings):
         else:
             rf_or_ir = water_values["rf_or_ir"]
             title = water_values["title"]
-            if comparisons_to_run["plot_model_vs_AGMIP"] and not world.empty and (not agmip_code == "SKIP_ME"):
+            if (
+                comparisons_to_run["plot_model_vs_AGMIP"]
+                and not world.empty
+                and (not agmip_code == "SKIP_ME")
+            ):
                 print("world3.5")
                 print(world)
                 print(world.columns)
@@ -177,17 +225,14 @@ def display_results(crop_key, crop_value, water_key, water_values, settings):
                     f"AGMIP{rf_or_ir}",
                     f"{cat_or_cntrl} {title}: {crop_nice_name} AGMIP vs Model based on Countries",
                 )
-    if settings['by_country']:
-            yearly_averages = all_yearly_averages
-    
+    if settings["by_country"]:
+        yearly_averages = all_yearly_averages
+
     # Calling function toe calculate the percent yield reduction by country.
     # Percent reduction values are appended to yearly_averages and held separate
     # in percent_yields dataframe.
 
-    yearly_averages = percent_yield(
-        yearly_averages,
-        crop_key    
-    )
+    yearly_averages = percent_yield(yearly_averages, crop_key)
 
     return yearly_averages
 
@@ -265,7 +310,10 @@ def show_comparisons_overall(
             crop_nice_name,
         )
 
-    if comparisons_to_run["plot_by_country_scatter"] or comparisons_to_run["plot_cell_by_cell_scatter"]:
+    if (
+        comparisons_to_run["plot_by_country_scatter"]
+        or comparisons_to_run["plot_cell_by_cell_scatter"]
+    ):
         add_row_to_table(world, crop_value, observed_col, expected_col, cat_or_cntrl)
 
 
@@ -283,7 +331,7 @@ def plot_SPAM_country_map(world, first_overall_loop, crop_nice_name):
 
 def plot_yield_over_time_map(yearly_averages, plot_sum):
     print("Plotting average of rasters over time...\n\n")
-    Plotter.plot_average_of_rasters_over_time(yearly_averages, plot_sum = plot_sum)
+    Plotter.plot_average_of_rasters_over_time(yearly_averages, plot_sum=plot_sum)
 
 
 def plot_model_country_map_func(world, cat_or_cntrl, crop_nice_name):
@@ -331,7 +379,11 @@ def handle_country_scatter_plots(
         f"{crop_nice_name} {expected_col} vs {observed_col} based on Countries",
     )
 
-    if first_overall_loop and "catastrophe" in cat_and_or_cntrl and "control" in cat_and_or_cntrl:
+    if (
+        first_overall_loop
+        and "catastrophe" in cat_and_or_cntrl
+        and "control" in cat_and_or_cntrl
+    ):
         # plot catastrophe and control against each other
         print("git_root")
         print(git_root)
@@ -378,8 +430,12 @@ def handle_country_scatter_plots(
         print(world_catastrophe)
         print(world_catastrophe.columns)
         if not world_catastrophe.empty and not world_control.empty:
-            world["model_catastrophe_average_yield"] = world_catastrophe["model_average_yield"]
-            world["model_catastrophe_production"] = world_catastrophe["model_production"]
+            world["model_catastrophe_average_yield"] = world_catastrophe[
+                "model_average_yield"
+            ]
+            world["model_catastrophe_production"] = world_catastrophe[
+                "model_production"
+            ]
             world["model_control_average_yield"] = world_control["model_average_yield"]
             world["model_control_production"] = world_control["model_production"]
 
@@ -415,13 +471,17 @@ def handle_cell_by_cell_scatter_plots(
     if description_tag == "SKIP_ME":
         return
 
-    SPAM_yields_ascii_file = os.path.join(f"{git_root}wth_historical", f"{crop_key}_yield.asc")
+    SPAM_yields_ascii_file = os.path.join(
+        f"{git_root}wth_historical", f"{crop_key}_yield.asc"
+    )
 
     modelled_yields_ascii_file = os.path.join(
         f"{git_root}wth_{cat_or_cntrl}",
         f"379_Outdoor_crops_{cat_or_cntrl}_BestYield_noGCMcalendar_p0_{description_tag}_{snx_ending}.asc",
     )
-    SPAM_area_ascii_file = os.path.join(f"{git_root}wth_historical", f"{crop_key}_cropland.asc")
+    SPAM_area_ascii_file = os.path.join(
+        f"{git_root}wth_historical", f"{crop_key}_cropland.asc"
+    )
 
     print("Plotting grid cell yields...\n\n")
     compare_yields_with_model_by_cell(
@@ -434,7 +494,11 @@ def handle_cell_by_cell_scatter_plots(
         f"{cat_or_cntrl} {crop_nice_name} SPAM vs model yields per grid cell",
     )
 
-    if first_overall_loop and "catastrophe" in cat_and_or_cntrl and "control" in cat_and_or_cntrl:
+    if (
+        first_overall_loop
+        and "catastrophe" in cat_and_or_cntrl
+        and "control" in cat_and_or_cntrl
+    ):
         # plot catastrophe and control against each other
 
         if snx_description == "SKIP_ME" or snx_description_catastrophe == "SKIP_ME":
@@ -452,7 +516,9 @@ def handle_cell_by_cell_scatter_plots(
             + f"{snx_description_catastrophe}_{snx_ending}.asc",
         )
 
-        SPAM_area_ascii_file = os.path.join(f"{git_root}wth_historical", f"{crop_key}_cropland.asc")
+        SPAM_area_ascii_file = os.path.join(
+            f"{git_root}wth_historical", f"{crop_key}_cropland.asc"
+        )
 
         print("Plotting grid cell yields...\n\n")
         compare_yields_with_model_by_cell(
@@ -517,7 +583,9 @@ def check_catastrophe_and_or_control(cat_and_or_cntrl):
     )
 
 
-def add_row_to_table(world, crop_value, observed_col, expected_col, control_or_catastrophe):
+def add_row_to_table(
+    world, crop_value, observed_col, expected_col, control_or_catastrophe
+):
     weights = StatsFunctions.get_weights(world, observed_col, expected_col)
 
     (
@@ -549,15 +617,18 @@ def add_row_to_table(world, crop_value, observed_col, expected_col, control_or_c
     table_data[f"R^2 with {expected_col}"].append(round(r_squared, 2))
     table_data[f"Weighted R^2 with {expected_col}"].append(round(weighted_r2, 2))
     table_data[f"RMSE (kg/ha) with {expected_col}"].append(round(rmse, 2))
-    table_data[f"RRMSE (%) with {expected_col}"].append(round(relative_rmse * 100, 2))  # Convert to percentage
+    table_data[f"RRMSE (%) with {expected_col}"].append(
+        round(relative_rmse * 100, 2)
+    )  # Convert to percentage
     table_data[f"Ratio {observed_col} to {expected_col} production"].append(
         round(
-            world[f"{observed_col}_production"].sum() / world[f"{expected_col}_production"].sum(),
+            world[f"{observed_col}_production"].sum()
+            / world[f"{expected_col}_production"].sum(),
             2,
         )
     )
     table_data[f"{observed_col} production"].append(
-        round(world[f"{observed_col}_production"].sum(),2)
+        round(world[f"{observed_col}_production"].sum(), 2)
     )
 
 
@@ -581,17 +652,28 @@ def process_table(table_data):
                 for column in sub_df.columns:
                     if column != "Control or Catastrophe":
                         new_df = pd.DataFrame(sub_df[column])
-                        print("\n\nData for column '{}' under {}:".format(column, condition))
+                        print(
+                            "\n\nData for column '{}' under {}:".format(
+                                column, condition
+                            )
+                        )
                         print(new_df)
                         print("-" * 40)  # prints a separator line for clarity
 
-def percent_yield(
-        df, crop_key
-):
-    # Identify columns containing "catastrophe" and "yield" for the model. 
-    # SPAM is historical data, not utilised but present in the dataframe incase its needed 
-    catastrophe_cols = [col for col in df.columns if 'catastrophe' in col and 'yield' in col and 'SPAM' not in col]
-    control_cols = [col for col in df.columns if 'control' in col and 'yield' in col and 'SPAM' not in col]
+
+def percent_yield(df, crop_key):
+    # Identify columns containing "catastrophe" and "yield" for the model.
+    # SPAM is historical data, not utilised but present in the dataframe incase its needed
+    catastrophe_cols = [
+        col
+        for col in df.columns
+        if "catastrophe" in col and "yield" in col and "SPAM" not in col
+    ]
+    control_cols = [
+        col
+        for col in df.columns
+        if "control" in col and "yield" in col and "SPAM" not in col
+    ]
 
     # Assuming catastrophe and control columns are in the same order for each year.
     for cat_col, control_col in zip(catastrophe_cols, control_cols):
@@ -600,29 +682,44 @@ def percent_yield(
 
     return df
 
-def export_percent_yields_to_csv(data_dict, filename):
 
+def export_percent_yields_to_csv(data_dict, filename):
     df_to_export = None
-    
+
     for key, df in data_dict.items():
         # Extract columns containing 'percent_reduction', 'iso_a3', and 'Country' and rename columns
-        percent_yields = df.loc[:, ['iso_a3', 'Country', 'pop_est'] + [col for col in df.columns if 'percent_reduction' in col]]
-        percent_yields.rename(columns=lambda x: x.replace('_percent_reduction', ''), inplace=True)
+        percent_yields = df.loc[
+            :,
+            ["iso_a3", "Country", "pop_est"]
+            + [col for col in df.columns if "percent_reduction" in col],
+        ]
+        percent_yields.rename(
+            columns=lambda x: x.replace("_percent_reduction", ""), inplace=True
+        )
         percent_yields.dropna(inplace=True)
-        
+
         # Merge DataFrames based on 'iso_a3'
         if df_to_export is None:
             df_to_export = percent_yields
         else:
-            df_to_export = pd.merge(df_to_export, percent_yields, on=['iso_a3', 'Country'], how='outer', suffixes=('', '_drop'))
+            df_to_export = pd.merge(
+                df_to_export,
+                percent_yields,
+                on=["iso_a3", "Country"],
+                how="outer",
+                suffixes=("", "_drop"),
+            )
 
     # Remove duplicate columns and NaN values
-    df_to_export = df_to_export[[col for col in df_to_export.columns if not col.endswith('_drop')]]
+    df_to_export = df_to_export[
+        [col for col in df_to_export.columns if not col.endswith("_drop")]
+    ]
 
     # Export combined DataFrame to csv
     df_to_export.to_csv(filename, index=False)
 
     return df_to_export
+
 
 if __name__ == "__main__":
     main()

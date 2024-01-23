@@ -1,9 +1,19 @@
 
-Take a look at the function_calls_within_files.svg diagram to see which files call one another (created in pyan3). Unfortunately, it does not include function calls between different files.
-
 # `compare_yields` - Yield Comparison Toolkit
 
 This toolkit provides a set of utilities to compare model-based crop yield predictions against historical data. It incorporates various functionalities from scatter plot visualizations to statistical measures.
+
+## Running a comparison
+You should likely be outside of the singularity module and have a python environment including geopandas. I recommend installing environment.yml in the directory below (`cd ..`) to create a conda environment.
+
+Once you have your conda environment set up, and you want to visualize a completed run of the mink crop model, you should follow the steps below:
+
+1. Edit `yield_comparison_config.yaml`
+    - `comparisons_to_run` contains true/false values as to which comparisons which python will show
+    - `years` contains the years of the simulation you would like to see 
+    - `catastrophe_and_or_control` contains one or both of `catastrophe` and `control` simulations to visualize.
+    - `crop_codes` Which crops to analyze, and importantly the `snx_description_control` and `snx_description_catastrophe` which must be set to the `[crop_name]__[run_descriptor]` found in the yaml used for `scenarios` when creating the scenario.
+2.  now, run `python3 compare_yields.py` from the current directory. You will see various plots generated as you have specified in step 1. You may also have a newly generated comparison statistics csv for easier further data processing. 
 
 ## Features:
 
@@ -32,4 +42,9 @@ This toolkit provides a set of utilities to compare model-based crop yield predi
 - `yield_comparison_config.yaml`: Configuration file that contains settings or parameters required for yield comparisons.
 
 - `output_table.csv`: A potential output file storing comparison results in a tabulated format.
+
+
+## Diagram
+
+Take a look at the function_calls_within_files.svg diagram to see which files call one another (created in pyan3). Unfortunately, it does not include function calls between different files.
 
