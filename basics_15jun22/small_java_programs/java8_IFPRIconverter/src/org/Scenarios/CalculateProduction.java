@@ -161,8 +161,8 @@ public class CalculateProduction {
     List<List<String>> irrigation_groups = getCultivarGroups(scenarios, scenarios.rf_or_ir);
 
     for (int i = 0; i < cultivar_groups_rasters.size(); i++) {
-      assert (cultivar_groups_rasters.size() == 2)
-          : "ERROR: only one crop processed at a time, and you need both rainfed and irrigated.";
+      // assert (cultivar_groups_rasters.size() == 2)
+      //     : "ERROR: only one crop processed at a time, and you need both rainfed and irrigated.";
       // these are different within the same cultivar group.
       List<String> rasters = cultivar_groups_rasters.get(i);
       List<String> planting_months = cultivar_groups_planting_months.get(i);
@@ -206,6 +206,7 @@ public class CalculateProduction {
           scenarios.create_average_png,
           scenarios.calculate_rf_or_ir_specific_average_yield,
           scenarios.calculate_rf_or_ir_specific_production,
+          scenarios.config.physical_parameters.crop_area_type,
           script_folder,
           raster_names_to_combine,
           planting_months_to_combine,
@@ -338,6 +339,7 @@ public class CalculateProduction {
       boolean create_average_png,
       boolean calculate_rf_or_ir_specific_average_yield,
       boolean calculate_rf_or_ir_specific_production,
+      String crop_area_type,
       String script_folder,
       String raster_names_to_combine,
       String planting_months_to_combine,
@@ -357,7 +359,7 @@ public class CalculateProduction {
     // the country
     // (max is for winter wheat)
     if (calculate_rf_or_ir_specific_average_yield) {
-      if (crop.equals("soybeans")) {
+      if (crop.equals("soybeans") || crop_area_type.equals("no_crops")) {
 
         // gets the max of all available yields in each cell (all regions)
         BashScripts.compositeRaster(
@@ -466,12 +468,17 @@ public class CalculateProduction {
 
     String prefix = "";
 
-    if (scenarios.all_or_crop_specific.equals("all")) {
+    if (scenarios.crop_area_type.equals("all")) {
       prefix = "ALL_CROPS";
-    } else if (scenarios.all_or_crop_specific.equals("specific")) {
+    } else if (scenarios.crop_area_type.equals("food_crops")) {
+      prefix = "ALL_FOOD_CROPS";
+    } else if (scenarios.crop_area_type.equals("no_crops")) {
+      prefix = "LAND_AREA_NO_CROPS";
+    } else if (scenarios.crop_area_type.equals("specific")) {
       prefix = scenarios.config.getCropNameCaps(crop);
     } else {
-      System.out.println("Error: make sure all_or_crop_specific is all or specific");
+      System.out.println(
+          "Error: make sure crop_area_type is all, food_crops, no_crops, or specific");
       System.exit(1);
     }
     String crop_area_raster =
@@ -559,10 +566,21 @@ public class CalculateProduction {
 
         crop_area_to_sum = crop_area_to_sum + crop_area_raster;
 
+        BashScripts.saveAscii(
+            script_folder,
+            scenarios.combined_planting_month_name_rf_or_ir[i],
+            scenarios.results_folder[last_index_of_crop]);
+
+        BashScripts.saveAscii(
+            script_folder,
+            scenarios.combined_yield_name_rf_or_ir[i],
+            scenarios.results_folder[last_index_of_crop]);
+
         if (export_to_countries && scenarios.make_rasters_comparing_overall_to_historical) {
 
           // either rainfed or irrigated yield exported by country
           String crop_caps = scenarios.config.getCropNameCaps(scenarios.crop_name[i]);
+
           BashScripts.exportToCountries(
               script_folder,
               crop_caps,
@@ -576,7 +594,7 @@ public class CalculateProduction {
 
       // the above is just a (unfortunately messy) way to add irrigated and rainfed for a given crop
 
-      assert number_of_loops == 2;
+      // assert number_of_loops == 2;
 
       if (scenarios.calculate_rf_plus_ir_production) {
         // sum rainfed and irrigated yield rasters to the appropriate combined_production_name

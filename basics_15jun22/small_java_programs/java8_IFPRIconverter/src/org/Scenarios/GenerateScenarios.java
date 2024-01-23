@@ -50,11 +50,7 @@ public class GenerateScenarios {
     HashMap<String, String> crop_name_to_short_code_dictionary = getCropCodeMap();
 
     // Make all the rasters needed for crop models
-    System.out.println("run_script_folder");
-    System.out.println(run_script_folder);
     for (Config.Crop crop : config.crops) {
-      System.out.println("crop.name");
-      System.out.println(crop.name);
       // make by-crop crop area rasters and present-day yield rasters
       String crop_code_caps = config.getCropNameCaps(crop.name);
       BashScripts.initSPAM(run_script_folder, crop_code_caps);
@@ -62,13 +58,17 @@ public class GenerateScenarios {
       BashScripts.makeNitrogenRasters(run_script_folder, crop.name);
     }
 
-    // make masks for winter wheat dominant countries
-    BashScripts.makeCountryMask(
-        run_script_folder,
-        config.model_configuration.winter_wheat_countries_csv,
-        "ALL_CROPS_cropland",
-        "winter_wheat_countries_mask");
-
+    // we only need to make the mask for these countries when we are estimating baseline crop
+    // conditions
+    // to reflect current planting patterns
+    if (!config.physical_parameters.crop_area_type.equals("no_crops")) {
+      // make masks for winter wheat dominant countries
+      BashScripts.makeCountryMask(
+          run_script_folder,
+          config.model_configuration.winter_wheat_countries_csv,
+          "ALL_CROPS_cropland",
+          "winter_wheat_countries_mask");
+    }
     // make masks for megaenvironments (regions where certain megaenvironments are)
     BashScripts.makeMegaEnvironmentMasks(run_script_folder);
 
@@ -104,7 +104,9 @@ public class GenerateScenarios {
       throws InterruptedException, IOException {
     // create FileWriter instance with file at simulation_csv_location
     FileWriter csvWriter = new FileWriter(simulation_csv_location);
-
+    System.out.println("");
+    System.out.println("simulation_csv_location");
+    System.out.println(simulation_csv_location);
     // write header to the CSV file
     csvWriter.append(
         "snx_name,co2_level,crop_name,weather_prefix,weather_folder,results_folder,run_descriptor,nitrogen,region_to_use_n,region_to_use_s,region_to_use_e,region_to_use_w,nsres,ewres,mask_for_this_snx,fertilizer_scheme\n");
@@ -151,12 +153,18 @@ public class GenerateScenarios {
     String[] default_snx_names_prefix = getUniqueSNXnames(default_cultivar_mappings_location);
 
     String prefix = "";
-    if (config.physical_parameters.all_or_crop_specific.equals("all")) {
+
+    if (config.physical_parameters.crop_area_type.equals("all")) {
       prefix = "ALL_CROPS";
-    } else if (config.physical_parameters.all_or_crop_specific.equals("specific")) {
+    } else if (config.physical_parameters.crop_area_type.equals("food_crops")) {
+      prefix = "ALL_FOOD_CROPS";
+    } else if (config.physical_parameters.crop_area_type.equals("no_crops")) {
+      prefix = "LAND_AREA_NO_CROPS";
+    } else if (config.physical_parameters.crop_area_type.equals("specific")) {
       prefix = config.getCropNameCaps(crop.name);
     } else {
-      System.out.println("Error: make sure all_or_crop_specific is all or specific");
+      System.out.println(
+          "Error: make sure crop_area_type is all, food_crops, no_crops, or specific");
       System.exit(1);
     }
 
@@ -216,13 +224,17 @@ public class GenerateScenarios {
     // Only difference being you need to pass csvWriter as parameter and not create new
 
     String prefix = "";
-
-    if (config.physical_parameters.all_or_crop_specific.equals("all")) {
+    if (config.physical_parameters.crop_area_type.equals("all")) {
       prefix = "ALL_CROPS";
-    } else if (config.physical_parameters.all_or_crop_specific.equals("specific")) {
+    } else if (config.physical_parameters.crop_area_type.equals("food_crops")) {
+      prefix = "ALL_FOOD_CROPS";
+    } else if (config.physical_parameters.crop_area_type.equals("no_crops")) {
+      prefix = "LAND_AREA_NO_CROPS";
+    } else if (config.physical_parameters.crop_area_type.equals("specific")) {
       prefix = config.getCropNameCaps(crop.name);
     } else {
-      System.out.println("Error: make sure all_or_crop_specific is all or specific");
+      System.out.println(
+          "Error: make sure crop_area_type is all, food_crops, no_crops, or specific");
       System.exit(1);
     }
 

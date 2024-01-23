@@ -54,8 +54,17 @@ public class BashScripts {
   public static void initSPAM(String run_script_folder, String crop_code)
       throws InterruptedException, IOException {
     // create the main control list for each month
-    ProcessBuilder pb = new ProcessBuilder("bash", "./combine_spam_datasets.sh", crop_code);
+    ProcessBuilder pb = new ProcessBuilder("bash", "./process_crop_spam_datasets.sh", crop_code);
 
+    String prerun_script_folder = run_script_folder + "prerun_scripts/";
+    callProcess(pb, prerun_script_folder);
+  } // end initSPAM
+
+  // initialize spam for the appropriate region (croplands and historical yields)
+  public static void initSPAMallCrops(String run_script_folder)
+      throws InterruptedException, IOException {
+    // create the main control list for each month
+    ProcessBuilder pb = new ProcessBuilder("bash", "./process_allcrops_spam_datasets.sh");
     String prerun_script_folder = run_script_folder + "prerun_scripts/";
     callProcess(pb, prerun_script_folder);
   } // end initSPAM
@@ -396,26 +405,31 @@ public class BashScripts {
 
   // process the output from yields into a single text file in the to_DSSAT directory
   public static void generateRasterFromColumns(
-      String run_script_folder, String fullThingForImportTxtContents, String rasterName)
+      String run_script_folder, List<String> table_to_build_raster, String rasterName)
       throws InterruptedException, IOException {
 
-    // System.out.println("");
-    // System.out.println("");
-    // System.out.println("processResults creates raster with name:");
-    // System.out.println(rasterName);
-    // System.out.println("fullThingForImportTxtContents");
-    // System.out.println(fullThingForImportTxtContents);
-    // System.out.println("");
-    // System.out.println("");
-    // System.out.println("");
-    // create rasters from the yield per unit area
+    // Define the base directory and file name
+    String baseDir = "/tmp/";
+    String fileName = "raster_data_" + rasterName + ".txt";
+    String filePath = baseDir + fileName;
+
+    // Save the table_to_build_raster to a text file in /tmp directory
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+      for (String line : table_to_build_raster) {
+        writer.write(line);
+        writer.newLine();
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      // Handle exceptions or errors if needed
+    }
+
+    // Call the bash script with the file path
     ProcessBuilder pb =
-        new ProcessBuilder(
-            "bash", "./generateRasterFromColumns.sh", fullThingForImportTxtContents, rasterName);
+        new ProcessBuilder("bash", "./generateRasterFromColumns.sh", filePath, rasterName);
 
     callProcess(pb, run_script_folder);
-  } // end processResults
-
+  }
   // CALCULATING PRODUCTION
 
   // average the crop yield with a script

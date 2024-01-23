@@ -124,7 +124,7 @@ public class Config {
     public int co2_level;
     public int nitrogen = -1;
     public String real_or_happy;
-    public String all_or_crop_specific;
+    public String crop_area_type;
     public List<String> irrigation_to_try;
     public String weather_prefix;
     public String weather_folder;
@@ -156,8 +156,8 @@ public class Config {
           + ", real_or_happy='"
           + real_or_happy
           + '\''
-          + ", all_or_crop_specific='"
-          + all_or_crop_specific
+          + ", crop_area_type='"
+          + crop_area_type
           + '\''
           + ", irrigation_to_try="
           + irrigation_to_try
@@ -234,7 +234,7 @@ public class Config {
             + " run_descriptor minimum_physical_area minimum_yield n_chunks"
             + " dssat_executable dssat_folder"
             + " winter_wheat_countries_csv irrigation_to_try weather_prefix weather_folder"
-            + " results_folder planting_months years real_or_happy all_or_crop_specific"
+            + " results_folder planting_months years real_or_happy crop_area_type"
             + " run_crop_model process_results calculate_as_wet_weight average_yields"
             + " calculate_each_year_best_month find_best_yields"
             + " calculate_rf_or_ir_specific_average_yield calculate_rf_or_ir_specific_production"
@@ -334,9 +334,9 @@ public class Config {
       } else if (line.startsWith("real_or_happy: ")) {
         all_properties = all_properties.replace("real_or_happy ", "");
         config.physical_parameters.real_or_happy = line.split(": ")[1].trim();
-      } else if (line.startsWith("all_or_crop_specific: ")) {
-        all_properties = all_properties.replace("all_or_crop_specific ", "");
-        config.physical_parameters.all_or_crop_specific = line.split(": ")[1].trim();
+      } else if (line.startsWith("crop_area_type: ")) {
+        all_properties = all_properties.replace("crop_area_type ", "");
+        config.physical_parameters.crop_area_type = line.split(": ")[1].trim();
       } else if (line.startsWith("run_crop_model: ")) {
         all_properties = all_properties.replace("run_crop_model ", "");
         config.model_configuration.run_crop_model = Boolean.parseBoolean(line.split(": ")[1]);

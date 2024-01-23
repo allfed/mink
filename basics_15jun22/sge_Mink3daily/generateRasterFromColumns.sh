@@ -9,10 +9,15 @@
 # echo "running generateRasterFromColumns script"
 # echo ""
 
-data_with_columns=$1
+data_file=$1
 raster_name_to_save=$2
 
-echo -e "$data_with_columns" | r.in.xyz input=- output=$raster_name_to_save x=2 y=1 z=3 fs=tab --o --q
+# Use the file for input instead of echoing the argument
+r.in.xyz input=$data_file output=$raster_name_to_save x=2 y=1 z=3 fs=tab --o --q
+
+# data_with_columns=$1
+# raster_name_to_save=$2
+# echo -e "$data_with_columns" | r.in.xyz input=- output=$raster_name_to_save x=2 y=1 z=3 fs=tab --o --q
 
 # r.in.xyz input=$data_with_columns output=$raster_name_to_save x=2 y=1 z=3 fs=tab --o --q
 

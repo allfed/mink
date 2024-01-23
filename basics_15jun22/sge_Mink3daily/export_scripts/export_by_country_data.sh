@@ -104,11 +104,6 @@ else
   exit 1
 fi
 
-# set the north south and east west boundaries back to the original
-g.region n=$n
-g.region s=$s
-g.region w=$w
-g.region e=$e
 
 echo ""
 echo "resample low res yield data to match high resolution raster"

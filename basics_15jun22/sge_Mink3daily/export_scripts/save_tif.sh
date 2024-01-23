@@ -21,7 +21,7 @@ raster=$2
 
 # redirecting error out. It tends to complain about color tables, but that's unimportant. So I silenced it
 # If the output failed to be created, then the next check would catch it and throw a meaning ful error
-r.out.gdal input=$raster output=$raster.tif format=GTiff type=Float32 #--quiet --overwrite 2> /dev/null
+r.out.gdal -f input=$raster output=$raster.tif format=GTiff type=Float32 #--quiet --overwrite 2> /dev/null
 
 if [ ! -f $raster.tif ]; then
     echo "ERROR: r.out.gdal was unable to create the tif."

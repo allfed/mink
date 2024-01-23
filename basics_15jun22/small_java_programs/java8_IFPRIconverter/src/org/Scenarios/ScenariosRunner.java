@@ -128,6 +128,7 @@ public class ScenariosRunner {
           scenario_and_pm.plantingMonth,
           scenario_and_pm.scenarioNumber);
     }
+    System.out.println("done!");
   }
 
   public static void saveProgressToFile(

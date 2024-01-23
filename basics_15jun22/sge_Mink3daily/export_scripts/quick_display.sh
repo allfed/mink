@@ -179,12 +179,16 @@ generate_images() {
     else  
       max=$max_value
     fi
-
+    original_max=$max
+    max=$(echo "scale=5; $max + 0.01" | bc)
+    
     if [ -z $min_value ]; then
       min=$(r.univar -g map=$raster | grep min | awk -F "=" '{print $2}')
     else
       min=$min_value
     fi
+
+    echo "max_value $original_max, min_value $min"
 
     # Check if either min or max is empty
     if [ -z "$min" ] || [ -z "$max" ]; then
@@ -208,7 +212,7 @@ generate_images() {
     fi
 
 
-    generate_legend_image $raster $legend_min $max
+    generate_legend_image $raster $legend_min $original_max
     generate_text_image $raster $min "$extra_description"
     merge_images $min
 

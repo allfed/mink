@@ -54,6 +54,7 @@ BASE="$git_root/basics_15jun22/sge_Mink3daily/"
 
 grass_world_directory="$git_root/grassdata/world/" 
 spam_data_folder="$git_root/grassdata/world/spam/" 
+earthdata_data_folder="$git_root/grassdata/world/earthdata/" 
 megaenvironments_directory="$git_root/grassdata/world/megaenvironments_packed/" 
 nitrogen_directory="$git_root/grassdata/world/nitrogen_maps/" 
 
@@ -61,6 +62,7 @@ historical_results_directory="$git_root/wth_historical/"
 control_results_directory="$git_root/wth_control/" 
 catastrophe_results_directory="$git_root/wth_catastrophe/" 
 
+universal_scripts="${BASE}../more_GRASS_scripts/universal/" 
 prerun_scripts="${BASE}prerun_scripts/" 
 export_scripts="${BASE}export_scripts/" 
 

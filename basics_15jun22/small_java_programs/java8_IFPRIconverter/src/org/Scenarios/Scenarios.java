@@ -25,7 +25,7 @@ import org.R2Useful.*;
 
 public class Scenarios {
   public int n_scenarios;
-  public String all_or_crop_specific;
+  public String crop_area_type;
   public String minimum_physical_area;
   public String minimum_yield;
   public String n_chunks;
@@ -146,7 +146,7 @@ public class Scenarios {
     this.create_average_png = new Boolean(config.model_configuration.create_average_png);
     this.create_overall_png = new Boolean(config.model_configuration.create_overall_png);
 
-    this.all_or_crop_specific = config.physical_parameters.all_or_crop_specific;
+    this.crop_area_type = config.physical_parameters.crop_area_type;
 
     this.minimum_physical_area = config.physical_parameters.minimum_physical_area;
     this.minimum_yield = config.physical_parameters.minimum_yield;
@@ -546,6 +546,11 @@ public class Scenarios {
 
       ScenariosProcessor.processScenarios(
           script_folder, scenariosAndPMList, run_parameters_csv_folder, scenarios);
+      // run a full set of scenarios, but process everything this time and don't run the model
+
+      // calculate aggregate production for crops
+      // this involves calculating overall production, then calculating average yields
+      CalculateProduction calculator = new CalculateProduction(script_folder, scenarios);
 
     } else if (DSSAT_process_or_both.equals("continueDSSAT")) {
       // continue a previous run
@@ -590,12 +595,6 @@ public class Scenarios {
           "ERROR:DSSAT_process_or_both must be one of 'DSSAT', 'process', or 'continueDSSAT'");
       System.exit(1);
     }
-
-    // run a full set of scenarios, but process everything this time and don't run the model
-
-    // calculate aggregate production for crops
-    // this involves calculating overall production, then calculating average yields
-    CalculateProduction calculator = new CalculateProduction(script_folder, scenarios);
   }
 
   public static List<PlantingScenario> getScenarioAndPMList(

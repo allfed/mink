@@ -8,7 +8,6 @@ set -e
 # this delay of 0.1s might be helpful, but is probably unnecessary
 sleep 0.1
 
-
 #
 # This script is responsible for generating the following files in the output file (to_DSSAT) using r.out.new:
 # [month]_[more details]_[run_name]header.txt
@@ -31,7 +30,10 @@ sleep 0.1
 # echo ""
 
 output_file=to_DSSAT/
-weather_mask=$crop_area_raster
+r.mapcalc "crop_area_raster_zero_to_null = $crop_area_raster"
+r.null setnull=0 map="crop_area_raster_zero_to_null"  # remove any zero values (set them to null)
+
+weather_mask=crop_area_raster_zero_to_null
 #### we should only need the calendar_mapset now with pre-existing daily weather...
 
 calendar_mapset=deltaPIKnov_from_daily_c # which mapset contains the target planting month rasters
