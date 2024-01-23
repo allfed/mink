@@ -12,7 +12,6 @@ model_configuration:
   dssat_executable: dscsm047_debug
 
 
-
   # THE FOLLOWING MODEL CONFIGURATION VARIABLES ARE ONLY APPLICABLE
   # TO THE PROCESS_RESULTS SCENARIOS
 
@@ -60,7 +59,7 @@ model_configuration:
 physical_parameters:
   region_to_use_n: 65
   region_to_use_s: -65
-  region_to_use_e: 170
+  region_to_use_e: 176.25
   region_to_use_w: -170
   nsres: 1.875
   ewres: 1.25
@@ -78,19 +77,21 @@ physical_parameters:
   real_or_happy: real
 
   # plant only in crop areas specific to that crop, or plant everywhere there are currently crops? 'specific' for crop areas specific to that crop that are currently planted, 'all' for planting in all currently planted crop areas
-  all_or_crop_specific: specific
+  crop_area_type: specific
 
-  run_descriptor: Sep26_genSNX
+
+  run_descriptor: Oct10_catastrophe_lon176
   irrigation_to_try: [RF, IR]
-  weather_prefix: Outdoor_crops_control
-  weather_folder: control_mink
-  results_folder: wth_control
+  weather_prefix: Outdoor_crops_catastrophe
+  weather_folder: catastrophe_mink
+  results_folder: wth_catastrophe
   planting_months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
   years: [1, 2, 3, 4, 5, 6, 7]
 
     
 crops:
-- name: maize
-  fertilizer_scheme: threeSplitWithFlowering
-  nitrogen_irrigated: N_for_maize_IR_12aug13
-  nitrogen_rainfed: N_for_maize_RF_12aug13
+- name: rapeseed
+  fertilizer_scheme: winterwheat
+  snx_names: [cnINVIGOR5440]
+  nitrogen_irrigated: N_for_wheat_IR_12aug13
+  nitrogen_rainfed: N_for_wheat_RF_12aug13

@@ -38,6 +38,7 @@ model_configuration:
   #calculate average rainfed and irrigated yield 
   calculate_average_yield_rf_and_ir: true
   
+  #the below is actually used to create by-country CSV files at the end of the process
   make_rasters_comparing_overall_to_historical: true
 
   # PNG Generation options (ONLY APPLIES TO PROCESS SCENARIO CONDITION)
@@ -45,11 +46,11 @@ model_configuration:
   # create a png for each year in the region (lots of png's!)
   create_each_year_png: false
 
-  #  Make sure "average_yields" is true if cerate_average_png is true.
+  #  Make sure "average_yields" is true if create_average_png is true.
   create_average_png: false
 
   # Make sure "make_rasters_comparing_overall_to_historical" is true if create_overall_png is true.
-  create_overall_png: false
+  create_overall_png: true
 
   # countries where we enforce max yields rather than average for wheat specifically
   # this allows us to allow winter wheat to be dominant in those countries
@@ -58,14 +59,11 @@ model_configuration:
 physical_parameters:
   region_to_use_n: 65
   region_to_use_s: -65
-  region_to_use_e: 170
+  region_to_use_e: 176.25
   region_to_use_w: -170
   nsres: 1.875
   ewres: 1.25
   co2_level: 379
-
-  # add in nitrogen and water stress for 'real', ignore them for 'happy'
-  real_or_happy: real
 
   # minimum area cropland in a pixel to consider, in hectares. Any smaller pixel is ignored.
   minimum_physical_area: 0
@@ -74,22 +72,26 @@ physical_parameters:
   minimum_yield: -3
 
 
-  # plant only in crop areas specific to that crop, or plant everywhere there are currently crops? 'specific' for crop areas specific to that crop that are currently planted, 'all' for planting in all currently planted crop areas
-  all_or_crop_specific: specific
+  
+  # add in nitrogen and water stress for 'real', ignore them for 'happy'
+  real_or_happy: real
 
-  run_descriptor: Sep27_catastrophe_genSNX
+  # plant only in crop areas specific to that crop, or plant everywhere there are currently crops? 'specific' for crop areas specific to that crop that are currently planted, 'all' for planting in all currently planted crop areas
+  crop_area_type: specific
+
+
+  run_descriptor: Sep28_lon176
   irrigation_to_try: [RF, IR]
-  weather_prefix: Outdoor_crops_catastrophe
-  weather_folder: catastrophe_mink
-  results_folder: wth_catastrophe
-  #typically below is [1, 3, 5, 7, 9, 11]
+  weather_prefix: Outdoor_crops_control
+  weather_folder: control_mink
+  results_folder: wth_control
   planting_months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
   years: [1, 2, 3, 4, 5, 6, 7]
 
     
 crops:
-- name: soybeans
-  fertilizer_scheme: soybeans
-  snx_names: [sbMGROUP1, sbMGROUP3, sbMGROUP5, sbMGROUP7, sbMGROUP9, sbMGROUP11, sbMGROUP13, sbMGROUP15]
-  nitrogen_irrigated: N_for_soybean_irrigated_grown
-  nitrogen_rainfed: N_for_soybean_rainfed_grown
+- name: rapeseed
+  fertilizer_scheme: winterwheat
+  snx_names: [cnINVIGOR5440]
+  nitrogen_irrigated: N_for_wheat_IR_12aug13
+  nitrogen_rainfed: N_for_wheat_RF_12aug13

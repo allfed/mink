@@ -8,8 +8,13 @@ model_configuration:
   n_chunks: 6
 
   # which folder and DSSAT exectutable to run, located in basics_15jun22/sge_Mink3daily folder
-  dssat_folder: actual_program_4.7.5.11
-  dssat_executable: dscsm047_debug
+  dssat_folder: actual_program_4.6_whpt_08jul16
+  dssat_executable: dscsm046.exe
+
+  # countries where we enforce max yields rather than average for wheat specifically
+  # this allows us to allow winter wheat to be dominant in those countries
+  winter_wheat_countries_csv: Luxembourg,Belgium,Denmark,France,Germany,Ireland,Netherlands,United Kingdom
+  
 
 
   # THE FOLLOWING MODEL CONFIGURATION VARIABLES ARE ONLY APPLICABLE
@@ -50,16 +55,12 @@ model_configuration:
   create_average_png: false
 
   # Make sure "make_rasters_comparing_overall_to_historical" is true if create_overall_png is true.
-  create_overall_png: true
-
-  # countries where we enforce max yields rather than average for wheat specifically
-  # this allows us to allow winter wheat to be dominant in those countries
-  winter_wheat_countries_csv: Luxembourg,Belgium,Denmark,France,Germany,Ireland,Netherlands,United Kingdom
+  create_overall_png: false
 
 physical_parameters:
   region_to_use_n: 65
   region_to_use_s: -65
-  region_to_use_e: 170
+  region_to_use_e: 176.25
   region_to_use_w: -170
   nsres: 1.875
   ewres: 1.25
@@ -77,20 +78,20 @@ physical_parameters:
   real_or_happy: real
 
   # plant only in crop areas specific to that crop, or plant everywhere there are currently crops? 'specific' for crop areas specific to that crop that are currently planted, 'all' for planting in all currently planted crop areas
-  all_or_crop_specific: specific
+  crop_area_type: specific
 
-
-  run_descriptor: Oct09_catastrophe_genSNX
+  run_descriptor: Oct01_lon176
   irrigation_to_try: [RF, IR]
-  weather_prefix: Outdoor_crops_catastrophe
-  weather_folder: catastrophe_mink
-  results_folder: wth_catastrophe
+  weather_prefix: Outdoor_crops_control
+  weather_folder: control_mink
+  results_folder: wth_control
+  #typically below is [1, 3, 5, 7, 9, 11]
   planting_months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
   years: [1, 2, 3, 4, 5, 6, 7]
 
     
 crops:
-- name: rice
-  fertilizer_scheme: rice
-  nitrogen_irrigated: N_for_rice_IR_12aug13
-  nitrogen_rainfed: N_for_rice_RF_12aug13
+- name: potatoes
+  fertilizer_scheme: potatoes3
+  nitrogen_irrigated: N_for_potatoes_IR_12aug13
+  nitrogen_rainfed: N_for_potatoes_RF_12aug13

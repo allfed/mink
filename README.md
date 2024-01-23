@@ -221,9 +221,7 @@ As long as a crop is supported in DSSAT, then it should be straightforward to ad
 You will need to find an SNX file corresponding to the cultivars you would like to run in the archive, or import them yourself. You can also place your own SNX files in the generated_SNX_files folder, but it's recommended to modify the template, to make it clear how the SNX file you are using differs from all the other SNX files.
 You can see what SNX files exist in basics_15jun22/sge_Mink3daily/SNX_files/data_to_generate_SNX_files.csv and the shared_SNX_template.txt in that folder. Examples of what this generates are in generated_SNX_files.
 
-Make sure you have both rainfed and irrigated versions. Right now, mink requires both rainfed and irrigated versions to run.
-
-Once you've either generated or placed your SNX file in genrated_SNX_files, you can either just run the cultivar for the whole region, or create maps that run for a certain region. You would need to create a GRASS gis raster that covered the region and export it as a .pack file to grassdata/world/megaenvironments_packed. You can also just specify the maps according to the megaenvironments -- you can always take a look at the rasters, they should be loaded in whenever scenarios are generated. (hint: to display a raster, use the basics_15jun22/sge_Mink3daily/export_scripts/quick_display.sh script. You can also render multiple rasters with the same scale in a heat map with ./render_all_rasters_same_scale.sh in the same folder). 
+Once you've either generated or placed your SNX file in generated_SNX_files, you can either just run the cultivar for the whole region, or create maps that run for a certain region. You would need to create a GRASS gis raster that covered the region and export it as a .pack file to grassdata/world/megaenvironments_packed. You can also just specify the maps according to the megaenvironments -- you can always take a look at the rasters, they should be loaded in whenever scenarios are generated. (hint: to display a raster, use the basics_15jun22/sge_Mink3daily/export_scripts/quick_display.sh script. You can also render multiple rasters with the same scale in a heat map with ./render_all_rasters_same_scale.sh in the same folder). 
 
 To specify which cultivars are run for which megaenvironment maps dfined in the previous step, go to default_cultivar_mappings.csv. Also add in the wet weight moisture content in moisture_contents.csv in the same folder if it's not there.
 
@@ -236,6 +234,7 @@ crops:
 - name: rapeseed
   fertilizer_scheme: winterwheat
   snx_names: [cnINVIGOR5440]
+  irrigation_to_try: [RF, IR]
   nitrogen_irrigated: N_for_wheat_IR_12aug13
   nitrogen_rainfed: N_for_wheat_RF_12aug13
 
@@ -243,7 +242,7 @@ The crop name:
     basics_15jun22/small_java_programs/java8_IFPRIconverter/src/org/DSSATRunner
 
 
-If you don't list SNX names, then the megaenvironemnts will be used. If you list them, it is assumed there is no mapping available in default_cultivar_mappings.csv.
+If you don't list SNX names, then the megaenvironments will be used. If you list them, it is assumed there is no mapping available in default_cultivar_mappings.csv.
 
 crops:
 - name: maize
@@ -254,18 +253,24 @@ crops:
 
 Finally be sure to modify other relevant variables -- they are described in existing config files, but most of them can probably stay the same, except the n_chunks variable may need modification based on the hardware you're using to run the simulation.
 
-Once this is all set up, and you have your config file, you should run the java compile in basics_15jun22/sge_Minkdaily/compile.sh, and then:
+Once this is all set up, and you have your config file, you should run the commands:
 
-./generate_scenarios_csv.sh [config_file_name] 
+./generate_scenarios_csv.sh --compile --spam [config_file_name] 
 ./run_from_csv.sh [config_file_name] DSSAT 
 
 that will take some time, then run
 
-./run_from_csv.sh [config_file_name] process 
+./run_from_csv.sh --compile [config_file_name] process 
 
 where the config file is the location of the yaml file you modified in earlier steps.
 
-You can also add the --compile (or -c) flag right after the ./generate_scenarios_csv.sh or ./run_from_csv.sh commands to compile certain relevant java programs. Going in the scripts will allow you to modify what these compiled java programs are (to be sure your saved changes are captured in the program).
+Future runs should remove the --spam flags. It only needs to be run once. Future runs, if using the same java code, should remove the --compile flag.
+
+The --compile (or -c) flag right after the ./generate_scenarios_csv.sh or ./run_from_csv.sh commands to compile certain relevant java programs. Going in the scripts will allow you to modify what these compiled java programs are (to be sure your saved changes are captured in the program).
+
+The --spam (or -s) flag after the ./generate_scenarios_csv.sh loads all the spam area tiffs as rasters in the program for the current mapset. It should only be run once for a given mapset (usually you only set up the mapset once ever).
+
+The -s flag 
 
 You may also need to add your crop at the beginning of the basics_15jun22/small_java_programs/java8_IFPRIconverter/src/org/Scenarios/Config.java file in java to match its name in SPAM. And in basics_15jun22/small_java_programs/java8_IFPRIconverter/src/org/Scenarios/GenerateScenarios.java getCropCodeMap() function.
 

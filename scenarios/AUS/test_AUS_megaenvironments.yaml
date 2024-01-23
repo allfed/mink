@@ -65,7 +65,7 @@ physical_parameters:
   real_or_happy: real
 
   # plant only in crop areas specific to that crop, or plant everywhere there are currently crops? 'specific' for crop areas specific to that crop that are currently planted, 'all' for planting in all currently planted crop areas
-  all_or_crop_specific: all
+  crop_area_type: all
 
   run_descriptor: Jun15AUSmasktest
   irrigation_to_try: [RF, IR]
