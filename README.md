@@ -277,8 +277,6 @@ The --compile (or -c) flag right after the ./generate_scenarios_csv.sh or ./run_
 
 The --spam (or -s) flag after the ./generate_scenarios_csv.sh loads all the spam area tiffs as rasters in the program for the current mapset. It should only be run once for a given mapset (usually you only set up the mapset once ever).
 
-The -s flag 
-
 You may also need to add your crop at the beginning of the basics_15jun22/small_java_programs/java8_IFPRIconverter/src/org/Scenarios/Config.java file in java to match its name in SPAM. And in basics_15jun22/small_java_programs/java8_IFPRIconverter/src/org/Scenarios/GenerateScenarios.java getCropCodeMap() function.
 
 SPAM is necessary as it loads in our crops. You can go to grassdata/world/spam/  to see what the crop 4 letter code would be.
