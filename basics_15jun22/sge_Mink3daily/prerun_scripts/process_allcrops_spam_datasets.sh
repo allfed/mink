@@ -2,6 +2,8 @@
 
 # This script imports the area of all crops, sums them, and saves both ALL_FOOD_CROPS and ALL_CROPS for
 # all, irrigated only, and rainfed only area rasters from SPAM (mapspam.info).
+# The region is always at the crop model resolution in this script (with the exception of r.null call at the end). Called functions operate sometimes at different resolutions.
+# However, simply importing a script does not resample the rasters. So they are imported at high resolution even though the region this script operates in is low resolution (of the crop model).
 
 set -e # exit on error
 
@@ -72,17 +74,15 @@ nonfood_crops=(
 # remove any masks
 r.mask -r
 
-example_highres_raster="${food_crops[0]}_cropland_highres"
-
-# import a raster at high resolution of !!PHYSICAL AREA!!, used for resampling with sum later on
-r.in.gdal input=spam2010V2r0_global_A_${food_crops[0]}_A.tif output=$example_highres_raster --quiet --overwrite 2> /dev/null
-
 # save the current low resolution region
 g.region save=temp_lowres_region --overwrite
 
+# this function sums several rasters specified as a comma separated list with GRASS GIS and exports these rasters as both a tif and asc file. The raster of cropland will be used in the crop model to estimate production by multiplying by area. The high resolution cropland is used to split up the low resolution crop model results into by-country results. Low resolution crops are typically "{SPAM 4 letter code, such as WHEA}_cropland" and high resolution are "{SPAM 4 letter code, such as WHEA}_cropland_highres"
 sum_and_save_rasters() {
     local all_crops=$1
     local save_raster_name=$2
+
+    # set the region 
 
     # aggregate combined area of several crops by summing them
     r.series --overwrite --quiet input=$all_crops output=$save_raster_name method=sum 
@@ -115,25 +115,26 @@ import_and_resample_cropland() {
     echo "importing $crop_name$area_name ..."
 
     coarsened_raster_name="${crop_name}${area_name}_cropland"
+    highres_raster_name="${coarsened_raster_name}_highres"
+
     lowres_region_name="temp_lowres_region"
 
     #import !!PHYSICAL AREA!! for each crop, all, rainfed, or irrigated"
     highres_tif_name_to_import="spam2010V2r0_global_A_${crop_name}_${area_category}.tif"
 
-    highres_raster="${coarsened_raster_name}_highres"
 
     # Import the geotiff.
-    r.in.gdal input=$highres_tif_name_to_import output=$highres_raster --quiet --overwrite 2> /dev/null
+    r.in.gdal input=$highres_tif_name_to_import output=$highres_raster_name --quiet --overwrite 2> /dev/null
 
-    # echo "bash ${universal_scripts}resample_with_sum_highres_to_lowres.sh $highres_raster $lowres_region_name $coarsened_raster_name"
-    bash ${universal_scripts}resample_with_sum_highres_to_lowres.sh $highres_raster $lowres_region_name $coarsened_raster_name
+
+    # create all the individual crops with low resolution, for example, this creates WHEA_cropland
+    # echo "bash ${universal_scripts}resample_with_sum_highres_to_lowres.sh $highres_raster_name $lowres_region_name $coarsened_raster_name"
+    bash ${universal_scripts}resample_with_sum_highres_to_lowres.sh $highres_raster_name $lowres_region_name $coarsened_raster_name
 }
 
 # this is for reading in some MAPSPAM data acquired from https://www.mapspam.info/
 # and placed in /grassdata/world/spam
 
-
-# START COMMENT OUT BLOCK REGION IF YOU WANT TO NOT RERUN SUMMING ALL CROPS
 
 for area_category in "${area_categories[@]}"; do
     if [ $area_category == "A" ]; then
@@ -150,72 +151,74 @@ for area_category in "${area_categories[@]}"; do
 
     # reset the list of crops names for all, rainfed, or irrigated category
     all_crops=""
+    all_crops_highres=""
     # first import the food crops and sum them
     for food_crop in "${food_crops[@]}"; do
         raster_basename="${food_crop}${area_name}_cropland"
+        raster_basename_highres="${food_crop}${area_name}_cropland_highres"
+
+        # import the crop at highres, resample to low res. Imports both high res and low res rasters.
         import_and_resample_cropland $food_crop $area_category $area_name
         
-        # Construct a list of all crops. If the first crop, then don't add a comma.
+        # Construct a list of all cropland. If the first crop, then don't add a comma.
         if [ -z "$all_crops" ]; then
             all_crops="$raster_basename"
         else
             all_crops="$all_crops,$raster_basename"
         fi
 
+       # Construct a list of all cropland at high resolution. If the first crop, then don't add a comma.
+        if [ -z "$all_crops_highres" ]; then
+            all_crops_highres="$raster_basename_highres"
+        else
+            all_crops_highres="$all_crops_highres,$raster_basename_highres"
+        fi
+
     done
+    # low resolution summation 
     sum_and_save_rasters $all_crops "ALL_FOOD_CROPS${area_name}_cropland"
 
-    # second, import and save the remainder of the crops
+    # high resolution summation 
+    bash ${universal_scripts}sum_rasters_highres.sh $all_crops_highres $lowres_region_name "ALL_FOOD_CROPS${area_name}_cropland_highres"
+
+    # second, import and save the remainder of the crops (nonfood crops like alphalfa, cotton, tobacco, etc, but not grassland or pasture)
     for nonfood_crop in "${nonfood_crops[@]}"; do
         raster_basename="${nonfood_crop}${area_name}_cropland"
+        raster_basename_highres="${nonfood_crop}${area_name}_cropland_highres"
 
+        # import the crop at highres, resample to low res. Imports both high res and low res rasters.
         import_and_resample_cropland $nonfood_crop $area_category $area_name
         
-        # Construct a list of all crops. If the first crop, then don't add a comma.
+        # Construct a list of all croplands. If the first crop, then don't add a comma.
         if [ -z "$all_crops" ]; then
             all_crops="$raster_basename"
         else
             all_crops="$all_crops,$raster_basename"
         fi
+
+        # Construct a list of all cropland at high resolution. If the first crop, then don't add a comma.
+         if [ -z "$all_crops_highres" ]; then
+             all_crops_highres="$raster_basename_highres"
+         else
+             all_crops_highres="$all_crops_highres,$raster_basename_highres"
+         fi
     done
+    # low resolution summation 
     sum_and_save_rasters $all_crops "ALL_CROPS${area_name}_cropland"
+
+    # high resolution summation 
+    bash ${universal_scripts}sum_rasters_highres.sh $all_crops_highres $lowres_region_name "ALL_CROPS${area_name}_cropland_highres"
+
+    # set the region to high res, fill nulls with zero, then return back to low res
+    echo "setting null values to zero for ALL_CROPS${area_name}_cropland_highres..."
+    g.region save=temp_lowres_region --overwrite
+    g.region rast="ALL_CROPS${area_name}_cropland_highres"
+    # important to ensure subtraction occurs for near-zero values
+    r.null null=0 map="ALL_CROPS${area_name}_cropland_highres"
+    g.region region=temp_lowres_region
 
 done
 
 echo ""
 echo "All raster areas summed for all crops"
 echo ""
-
-# END COMMENT OUT BLOCK REGION IF YOU WANT TO NOT RERUN SUMMING ALL CROPS
-
-# import total land area (ignoring crops) to the proper units and resolution
-
-# import land area in units km^2
-r.in.gdal input="${earthdata_data_folder}landArea15min.tif" output="landArea15min_kmsquared" --quiet --overwrite 2> /dev/null
-r.null null=0 map="landArea15min_kmsquared"  # remove any null values (set them to zero)
-
-highres_raster="landArea15min_kmsquared"
-lowres_region_name="temp_lowres_region"
-coarsened_raster_name="landArea_kmsquared"
-bash ${universal_scripts}resample_with_sum_highres_to_lowres.sh $highres_raster $lowres_region_name $coarsened_raster_name
-
-# 1 square km is 100 hectares
-r.mapcalc "landArea = landArea_kmsquared * 100"
-
-# total land area per pixel, with no crops. Subtracting two low res rasters.
-r.mapcalc "LAND_AREA_NO_CROPS_cropland = landArea - ALL_CROPS_cropland"
-
-# sometimes multiple crops are planted in same area. So area can be greater than land area. Set these cases to zero.
-r.mapcalc "LAND_AREA_NO_CROPS_cropland = if(LAND_AREA_NO_CROPS_cropland < 0, 0, LAND_AREA_NO_CROPS_cropland)"
-
-# set zero irrigated cropland when we look outside of normal cropland
-r.mapcalc "LAND_AREA_NO_CROPS_irrigated_cropland = 0 * LAND_AREA_NO_CROPS"
-
-# all cropland outside of current cropland is assumed to be rainfed 
-r.mapcalc "LAND_AREA_NO_CROPS_rainfed_cropland = LAND_AREA_NO_CROPS_cropland"
-
-
-echo ""
-echo "no-crop land area loaded"
-echo ""
-

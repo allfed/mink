@@ -25,7 +25,6 @@ cd "$spam_data_folder"
 r.in.gdal input=spam2010V2r0_global_Y_${crop_caps}_A.tif output=${crop_caps}_yield --overwrite --quiet 2> /dev/null
 r.in.gdal input=spam2010V2r0_global_P_${crop_caps}_A.tif output=${crop_caps}_production_highres --overwrite  --quiet 2> /dev/null
 
-
 # save the current low resolution region
 g.region save=temp_lowres_region --overwrite
 
@@ -44,7 +43,7 @@ cd ${export_scripts}
 ./save_tif.sh $historical_results_directory "${crop_caps}_production"
 
 # All country's historical yields from SPAM are saved in wth_historical folder.
-./export_by_country_data.sh ${crop_caps} "${crop_caps}_yield" skip_me skip_me wth_historical 
+./export_by_country_data.sh ${crop_caps} "${crop_caps}_yield" "${crop_caps}_cropland_highres" skip_me skip_me wth_historical 
 
 cd -
 

@@ -1,7 +1,28 @@
 #!/bin/bash
 
-# Move raster from high to low resolution by summing
-# this function requires us to already be at the low resolution.
+# This script is designed for converting high-resolution raster data to low-resolution by summing up the pixel values.
+# It is particularly useful in geographic information systems (GIS) for downscaling high-resolution data into a coarser format
+# while preserving the total sum of the data values (e.g., for aggregating crop yields or land cover data).
+#
+# The script assumes that the user has already set the desired low-resolution region in the GIS environment.
+# It takes three arguments:
+# 1. The name of the high-resolution raster to be coarsened.
+# 2. The name of the low-resolution region to which the high-resolution raster will be matched.
+# 3. The name for the output coarsened raster.
+#
+# Key operations include:
+# - Ensuring the high-resolution raster is correctly aligned with the low-resolution boundaries.
+# - Converting coordinate units to decimal degrees for accurate resizing.
+# - Calculating the mean value of high-resolution pixels within each low-resolution pixel.
+# - Multiplying the mean value by the number of high-resolution cells to obtain the sum.
+#
+# The script employs a custom methodology instead of using standard GIS resampling tools (like r.stats.resamp),
+# as those tools were reported to have issues with accurate summation in some cases.
+#
+# Usage:
+# ./script_name.sh <highres_raster> <lowres_region_name> <coarsened_raster_name>
+# Example:
+# ./script_name.sh spam2010V2r0_global_H_WHEA_A.tif temp_lowres_region WHEA_cropland
 
 set -e # exit on error
 
@@ -18,6 +39,7 @@ fi
 highres_raster=$1
 lowres_region_name=$2
 coarsened_raster=$3
+
 
 
 # just in case we error out, don't want to have a wierd resolution after
@@ -71,8 +93,11 @@ g.region rast=$highres_raster
 # set the north, south, east, west boundaries back to the original low res boundaries
 g.region n=$n s=$s w=$w e=$e
 
-# get the high resolution raster pixel sizes
-read nsres_highres ewres_highres <<< $(r.info -gs $highres_raster | awk -F'=' '$1=="nsres" { print $2 } $1=="ewres" { print $2 }')
+
+stats=`r.univar $highres_raster -g`
+set +e # don't exit on error
+highres_raster_sum=`echo "$stats" | grep sum= | cut -d= -f2`
+set -e # exit on error
 
 
 # Get the high resolution raster pixel sizes
@@ -160,6 +185,7 @@ n_cells=$(echo "scale=12;($nsres/$nsdecimal_degrees) * ($ewres/$ewdecimal_degree
 r.mapcalc "${coarsened_raster}_highres_zeroed = ${highres_raster}"
 r.null null=0 map="${coarsened_raster}_highres_zeroed"
 
+
 # We've imported at high res. Now move to low res and resample with sum.
 
 # move back to low res
@@ -171,5 +197,31 @@ r.resamp.stats input="${coarsened_raster}_highres_zeroed" output="${coarsened_ra
 
 # multiply the mean of the small pixels by the number of cells, so low resolution pixels contain the sum of high resolution pixels
 r.mapcalc "${coarsened_raster} = ${coarsened_raster}_mean * $n_cells"
+stats=`r.univar $coarsened_raster -g`
+set +e # don't exit on error
+coarsened_raster_sum=`echo "$stats" | grep sum= | cut -d= -f2`
+set -e # exit on error
 
-echo "successfully coarsened raster"
+# Calculate the absolute difference
+difference=$(echo "$coarsened_raster_sum - $highres_raster_sum" | bc)
+# Calculate the absolute difference in percentage
+percent_diff=$(echo "scale=6; $difference / $highres_raster_sum * 100" | bc)
+printf "Sum of $highres_raster: %.2e" $highres_raster_sum
+echo ""
+printf "Sum of $coarsened_raster: %.2e" $coarsened_raster_sum
+echo ""
+echo "Number of highres cells per coarse cell:  $n_cells"
+percent_diff_format=$(printf "%.0f" "$percent_diff")
+percent_diff_printout=$(printf "%.3f" "$percent_diff")
+
+# Check if the difference is greater than 5%
+if [ "$percent_diff_format" -lt -5 ] || [ "$percent_diff_format" -gt 5 ]; then
+    echo "ERROR: Difference of ${percent_diff_printout}% is outside the acceptable range (-5% to 5%). Exiting."
+    exit 1
+else
+    echo "% Difference of ${percent_diff_printout}% is within acceptable range."
+fi
+
+echo ""
+echo "successfully coarsened raster via summing."
+echo ""

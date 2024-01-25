@@ -598,6 +598,7 @@ public class BashScripts {
       String run_script_folder,
       String crop_caps_name,
       String overall_yield_raster,
+      String highres_cropland_area,
       String planting_month_raster,
       String days_to_maturity_raster,
       String results_folder)
@@ -618,6 +619,7 @@ public class BashScripts {
             "./export_by_country_data.sh",
             crop_caps_name,
             overall_yield_raster,
+            highres_cropland_area,
             planting_month_raster,
             days_to_maturity_raster,
             results_folder);

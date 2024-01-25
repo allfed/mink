@@ -581,10 +581,24 @@ public class CalculateProduction {
           // either rainfed or irrigated yield exported by country
           String crop_caps = scenarios.config.getCropNameCaps(scenarios.crop_name[i]);
 
+          // String crop_area_raster =
+          //     "LAND_AREA_NO_CROPS"
+          //         + "_"
+          //         + (scenarios.rf_or_ir[i].equals("RF")
+          //             ? "rainfed_cropland"
+          //             : "irrigated_cropland");
+
+          // String highres_cropland = "";
+          String highres_cropland = scenarios.mask_for_this_snx[i] + "_highres";
+          System.out.println("Using as by-country high res cropland raster:");
+          System.out.println(highres_cropland);
+          // if scenarios.config.physical_parameters.crop_area_type.equals("no_crops") {
+
           BashScripts.exportToCountries(
               script_folder,
               crop_caps,
               scenarios.combined_yield_name_rf_or_ir[i],
+              highres_cropland,
               scenarios.combined_planting_month_name_rf_or_ir[i],
               scenarios.combined_days_to_maturity_name_rf_or_ir[i],
               scenarios.results_folder[i]);
@@ -633,10 +647,15 @@ public class CalculateProduction {
         String crop_caps =
             scenarios.config.getCropNameCaps(scenarios.crop_name[last_index_of_crop]);
 
+        String highres_cropland = scenarios.mask_for_this_snx[last_index_of_crop] + "_highres";
+        System.out.println("Using as by-country high res cropland raster:");
+        System.out.println(highres_cropland);
+
         BashScripts.exportToCountries(
             script_folder,
             crop_caps,
             combined_yield_name[last_index_of_crop],
+            highres_cropland,
             "skip_me", // not available summed over rainfed and irrigated
             "skip_me", // not available summed over rainfed and irrigated
             scenarios.results_folder[last_index_of_crop]);

@@ -15,9 +15,6 @@
 #     Reading Region Information: 
 #         - Saves the north, south, east, west boundaries and resolutions of the current region.
 
-#     Loading High-Resolution Cropland Data:
-#         - A high-resolution cropland raster is imported and named as "{crop name}_cropland_highres".
-
 #     Setting and Checking Region Resolution: 
 #         - Adjusts the region resolution to match the high-resolution cropland data.
 #         - Checks to ensure that the high-resolution cropland raster has a higher resolution than the original region. If not, the script aborts.
@@ -50,9 +47,9 @@ if [ $# -lt 5 ]; then
   echo " If you only have yield or are missing one of planting months or days to maturity, name the raster \"skip_me\" and it will be skipped!:"
   echo " the script requires spam, which is what the 4 letter crop code is from."
   echo " Example usages:"
-  echo " $0 WHEA WHEA_yield <planting_month_value> <days_to_maturity_value> wth_historical"
-  echo " $0 WHEA 379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_wheat__Aug04_genSNX_wet_overall_yield 379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_wheat__Aug04_genSNX_wet_planting_month_RF 379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_wheat__Aug04_genSNX_wet_maturity_RF wth_control"
-  echo " $0 WHEA ./export_by_country_data.sh WHEA AGMIP_princeton_RF_yield_whe_lowres_cleaned_2005 AGMIP_princeton_RF_planting_months_whe_lowres_cleaned_2005 AGMIP_princeton_RF_maty-day_whe_lowres_cleaned_2005 grassdata/world/AGMIP"
+  echo " $0 WHEA WHEA_yield <highres_cropland_area> <planting_month_value> <days_to_maturity_value> wth_historical"
+  echo " $0 WHEA 379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_wheat__Aug04_genSNX_wet_overall_yield WHEA_cropland_highres 379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_wheat__Aug04_genSNX_wet_planting_month_RF 379_Outdoor_crops_control_BestYield_noGCMcalendar_p0_wheat__Aug04_genSNX_wet_maturity_RF wth_control"
+  echo " $0 WHEA ./export_by_country_data.sh WHEA AGMIP_princeton_RF_yield_whe_lowres_cleaned_2005 WHEA_cropland_highres AGMIP_princeton_RF_planting_months_whe_lowres_cleaned_2005 AGMIP_princeton_RF_maty-day_whe_lowres_cleaned_2005 grassdata/world/AGMIP"
   exit 1
 fi
 
@@ -74,9 +71,10 @@ r.mask -r
 
 crop_caps=$1
 yield_raster=$2
-planting_month=$3
-days_to_maturity=$4
-save_folder=$5 # location past git_root to save to
+highres_cropland_area=$3
+planting_month=$4
+days_to_maturity=$5
+save_folder=$6 # location past git_root to save to
 
 
 . ../default_paths_etc.sh # import git_root and spam_data_folder variables
@@ -85,10 +83,11 @@ save_folder=$5 # location past git_root to save to
 read n s w e nsres ewres <<< $(g.region -g | awk -F'=' '$1=="n" { print $2 } $1=="s" { print $2 } $1=="w" { print $2 } $1=="e" { print $2 } $1=="nsres" { print $2 } $1=="ewres" { print $2 }')
 
 # load high resolution cropland
-r.in.gdal input="${spam_data_folder}spam2010V2r0_global_H_${crop_caps}_A.tif" output="${crop_caps}_cropland_highres" --overwrite
+# r.in.gdal input="${spam_data_folder}spam2010V2r0_global_H_${crop_caps}_A.tif" output="${crop_caps}_cropland_highres" --overwrite
+# r.in.gdal input="${spam_data_folder}spam2010V2r0_global_H_${crop_caps}_A.tif" output="${crop_caps}_cropland_highres" --overwrite
 
 # set region (including resolution and boundaries) to the high resolution cropland
-g.region rast="${crop_caps}_cropland_highres"
+g.region rast="$highres_cropland_area"
 
 # set the north, south, east, west boundaries back to the original
 g.region n=$n s=$s w=$w e=$e
@@ -100,6 +99,8 @@ read new_nsres new_ewres <<< $(g.region -g | awk -F'=' '$1=="nsres" { print $2 }
 if (( $(echo "$new_nsres < $nsres" | bc -l) )) && (( $(echo "$new_ewres < $ewres" | bc -l) )); then
   echo "High res cropland resolution is higher for both nsres and ewres. Continuing."
 else
+  echo "$new_nsres"
+  echo "$nsres"
   echo "ERROR: High res cropland resolution is NOT higher for both nsres and ewres! Aborting."
   exit 1
 fi
@@ -124,12 +125,12 @@ fi
 
 echo ""
 echo "calculate the high resolution production by multiplying area with yield per hectare"
-r.mapcalc "production_highres = ${yield_raster}_highres * ${crop_caps}_cropland_highres"
+r.mapcalc "production_highres = ${yield_raster}_highres * $highres_cropland_area"
 
 echo ""
 echo "removing zero values from area, production rasters"
 r.null setnull=0 map=production_highres
-r.null setnull=0 map="${crop_caps}_cropland_highres"
+r.null setnull=0 map="$highres_cropland_area"
 
 echo ""
 echo "create labels"
@@ -172,7 +173,7 @@ r.univar -t map=production_highres zones=country_cats fs=comma output=country_pr
 echo ""
 echo "export crop area"
 # use crop area and output a raster with all statistics (including the sum) for each country
-r.univar -t map=${crop_caps}_cropland_highres zones=country_cats fs=comma output=cropland_sum.csv
+r.univar -t map=$highres_cropland_area zones=country_cats fs=comma output=cropland_sum.csv
 
 # return to the original region
 g.region region=temp_lowres_region
