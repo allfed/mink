@@ -191,8 +191,9 @@ Raster yields generated from `READ_DSSAT_outputs_from_cols_FEW.sh` (ending in `_
 Generally you will want to look at heatmaps of yields, selected planting months, and days to maturity where applicable.
 
 ### by country results
-These data are already exported as a csv aggregated by country. To take a look at the 
-To do so, you will have to ensure the proper flags have been set in your configuration yaml file:
+These data are already exported as a csv aggregated by country.
+
+To export by country, you will have to ensure the proper flags have been set in your configuration yaml file:
 
 ```
 make_rasters_comparing_overall_to_historical: true
@@ -214,6 +215,12 @@ and that you have run:
 ```
 
 At that point, you can use some convenient scripts to visualize the by-country csv's in python.
+
+Please note the following caveat: the "overall" yield, as opposed to the yield for each year, is determined using an assumption that farmers choose the best month averaged over all years for the crop yield. 
+
+It's assumed in the model currently that farmers don't know in advance what the best month will be. They have to use the heuristic of what month has worked best in the past. So for example, years 1-7, what is the yield if we always plant in January? Or February? Do that for all 12 months and pick the best month, for each cell. Then the most realistic yield will be if the farmer plants in this highest yielding month (on average for all the years), each year. Each cell will have its own planting month that is used to get the overall mean yield.
+
+You can either choose to use this more pessimistic yield assumption, or average the yields (or production) for each country over the years to get the yield based on a more optimistic assumption that farmers are spot on, and choose the best month each year, every year for planting.
 
 
 ## Adding a Crop
