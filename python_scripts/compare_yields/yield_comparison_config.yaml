@@ -6,16 +6,13 @@ settings:
     plot_model_vs_AGMIP: false
     plot_SPAM_country_map: false
     plot_model_country_map: true
-    plot_hist_side_by_side: false
+    plot_hist_side_by_side: true
     plot_by_country_scatter: true
 
     # one or both of the following options must be true to get out a comparison statistics csv
     plot_cell_by_cell_scatter: true
     plot_yield_over_time: true
 
-  plot_sum: false
-
-  by_country: true
 
   years:
     - 1
@@ -44,15 +41,8 @@ crop_codes:
     crop_nice_name: Wheat
     AGMIP_code: whe
     FAOSTAT_code: Wheat
-    snx_description_control: wheat__Aug04_genSNX
-    snx_description_catastrophe: wheat__Oct09_catastrophe_genSNX
-
-  MAIZ:
-    crop_nice_name: Maize
-    AGMIP_code: mai
-    FAOSTAT_code: Maize (corn)
-    snx_description_control: maize__Sep26_genSNX
-    snx_description_catastrophe: maize__Oct08_catastrophe_genSNX
+    snx_description_control: wheat__Jan21_relocated_wh076
+    snx_description_catastrophe: wheat__Jan21_relocated_cat_wh076
 
   # MAIZ:
   #   crop_nice_name: Maize

@@ -99,41 +99,12 @@ def main():
                 water_value,
                 yield_comparison_config["settings"],
             )
-    # Filter out only the percent reduction yields and export them to a .csv file.
-    all_yearly_averages = export_percent_yields_to_csv(
-        all_yearly_averages, "by_country_by_year_percent_yields.csv"
-    )
-
-    # Plot the production yields and ratios from gridded .asc data.
-    # plot_sum = yield_comparison_config["settings"]["plot_sum"]
-
-    # if yield_comparison_config["settings"]["comparisons_to_run"][
-    #     "plot_yield_over_time"
-    # ]:
-    #     plot_yield_over_time_map(all_yearly_averages, plot_sum)
-
-    # Collect data from model and Xia et al. to plot
-    xia_data = pd.read_csv("rutgers_nw_production_raw.csv")
-    xia_data.rename(
-        columns={
-            col: col.replace("corn", "maize")
-            for col in xia_data.columns
-            if "corn" in col
-        },
-        inplace=True,
-    )
-    xia_data.rename(columns={"ISO3 Country Code": "iso_a3"}, inplace=True)
-    dfs = {"df1": all_yearly_averages, "df2": xia_data}
-
     if yield_comparison_config["settings"]["comparisons_to_run"][
         "plot_yield_over_time"
     ]:
-        plot_yield_over_time_map(all_yearly_averages, plot_sum=True)
+        plot_yield_over_time_map(all_yearly_averages)
 
-    # Plot the percent reduction yields per country per year
-    Plotter.plot_by_country_by_year(dfs, yield_comparison_config["crop_codes"])
-
-    # process_table(table_data)
+    process_table(table_data)
 
     print("\nHit Enter to close plots and exit")
     input()
@@ -149,13 +120,7 @@ def display_results(crop_key, crop_value, water_key, water_values, settings):
     snx_description = crop_value["snx_description_control"]
     agmip_code = crop_value["AGMIP_code"]
     snx_description_catastrophe = crop_value["snx_description_catastrophe"]
-    print("water_values")
-    print(water_values)
     snx_ending = water_values["snx_ending"]
-
-    if settings["by_country"]:
-        all_yearly_averages = pd.DataFrame()
-
     # for plotting maps independent of catastrophe_or_control value for a given crop
     first_overall_loop = True
     for cat_or_cntrl in cat_and_or_cntrl:
@@ -170,21 +135,6 @@ def display_results(crop_key, crop_value, water_key, water_values, settings):
             cat_or_cntrl,
             comparisons_to_run,
         )
-
-        if settings["by_country"]:
-            if all_yearly_averages.empty:
-                all_yearly_averages = yearly_averages.copy()
-            else:
-                all_yearly_averages = pd.merge(
-                    all_yearly_averages, yearly_averages, on="iso_a3", how="outer"
-                )
-                all_yearly_averages.drop(
-                    columns=["Country_y", "pop_est_y"], inplace=True
-                )
-                all_yearly_averages.rename(
-                    columns={"Country_x": "Country", "pop_est_x": "pop_est"},
-                    inplace=True,
-                )
 
         if water_key == "overall":
             show_comparisons_overall(
@@ -225,15 +175,6 @@ def display_results(crop_key, crop_value, water_key, water_values, settings):
                     f"AGMIP{rf_or_ir}",
                     f"{cat_or_cntrl} {title}: {crop_nice_name} AGMIP vs Model based on Countries",
                 )
-    if settings["by_country"]:
-        yearly_averages = all_yearly_averages
-
-    # Calling function toe calculate the percent yield reduction by country.
-    # Percent reduction values are appended to yearly_averages and held separate
-    # in percent_yields dataframe.
-
-    yearly_averages = percent_yield(yearly_averages, crop_key)
-
     return yearly_averages
 
 
@@ -329,9 +270,11 @@ def plot_SPAM_country_map(world, first_overall_loop, crop_nice_name):
         )
 
 
-def plot_yield_over_time_map(yearly_averages, plot_sum):
+def plot_yield_over_time_map(yearly_averages):
+    print("yearly_averages")
+    print(yearly_averages)
     print("Plotting average of rasters over time...\n\n")
-    Plotter.plot_average_of_rasters_over_time(yearly_averages, plot_sum=plot_sum)
+    Plotter.plot_average_of_rasters_over_time(yearly_averages)
 
 
 def plot_model_country_map_func(world, cat_or_cntrl, crop_nice_name):
@@ -385,18 +328,6 @@ def handle_country_scatter_plots(
         and "control" in cat_and_or_cntrl
     ):
         # plot catastrophe and control against each other
-        print("git_root")
-        print(git_root)
-        print("crop_key")
-        print(crop_key)
-        print("crop_value")
-        print(crop_value)
-        print("water_key")
-        print(water_key)
-        print("water_values")
-        print(water_values)
-        print("settings")
-        print(settings)
         # load both so they can be plotted against each other
         if cat_or_cntrl == "catastrophe":
             world_control, _ = DataLoader.load_data(
@@ -464,10 +395,6 @@ def handle_cell_by_cell_scatter_plots(
     else:
         description_tag = snx_description
 
-    print("description_tag")
-    print(description_tag)
-    print("crop_key")
-    print(crop_key)
     if description_tag == "SKIP_ME":
         return
 
@@ -541,9 +468,68 @@ def compare_yields_with_model_by_cell(
     y_label,
     title,
 ):
+    # This commented code block was useful for saving a csv of all data points for relocated crops catastrophe and
+    # control
+    #
+    # if baseline_tag == "Control" and (y_label == "Mink yields catastrophe"):
+    #     print("yields_ascii_file")
+    #     print(yields_ascii_file)
+    #     print("modelled_yields_ascii_file")
+    #     print(modelled_yields_ascii_file)
+    #     strings = ["", "_y1", "_y2", "_y3", "_y4", "_y5", "_y6", "_y7"]
+    #     for string in strings:
+    #         source_data = DataLoader.import_ascii(
+    #             yields_ascii_file[:-4] + string + ".asc", "yields"
+    #         )
+    #         model_data = DataLoader.import_ascii(
+    #             modelled_yields_ascii_file[:-4] + string + ".asc", "yields"
+    #         )
+    #         # crop_area_data = DataLoader.import_ascii(area_ascii_file, "area")
+    #         crop_area_data = DataLoader.import_ascii(
+    #             "LAND_AREA_NO_CROPS_rainfed_cropland.asc", "area"
+    #         )
+    #         # remove any nan rows for any relevant dataset
+    #         combined_intersection = (
+    #             source_data.merge(
+    #                 model_data,
+    #                 on=["lat", "lon"],
+    #                 how="inner",
+    #                 suffixes=(f"_{baseline_tag}", "_model"),
+    #             )
+    #             .merge(crop_area_data, on=["lat", "lon"], how="inner")
+    #             .dropna(subset=[f"yields_{baseline_tag}", "yields_model", "area"])
+    #         )
+    #         combined_intersection.rename(
+    #             columns={"yields_model": "yields_catastrophe"}, inplace=True
+    #         )
+    #         combined_intersection.to_csv(
+    #             f"catastrophe_and_control_relocated{string}.csv"
+    #         )
+    #     combined_intersection = combined_intersection[
+    #         combined_intersection["area"] > 10
+    #     ]
+
+    #     Plotter.scatter_points_with_weights(
+    #         dataframe=combined_intersection,
+    #         expected_data_column_name=f"yields_{baseline_tag}",
+    #         observed_data_column_name="yields_model",
+    #         weights=combined_intersection,
+    #         weights_column_name="area",
+    #         x_axis_label=x_label,
+    #         y_axis_label=y_label,
+    #         title=title,
+    #     )
     source_data = DataLoader.import_ascii(yields_ascii_file, "yields")
     model_data = DataLoader.import_ascii(modelled_yields_ascii_file, "yields")
+
     crop_area_data = DataLoader.import_ascii(area_ascii_file, "area")
+
+    # This commented code block was useful for saving a csv of all data points for relocated crops catastrophe and
+    # control
+    #
+    # crop_area_data = DataLoader.import_ascii(
+    #     "LAND_AREA_NO_CROPS_rainfed_cropland.asc", "area"
+    # )
     # remove any nan rows for any relevant dataset
     combined_intersection = (
         source_data.merge(
@@ -555,7 +541,6 @@ def compare_yields_with_model_by_cell(
         .merge(crop_area_data, on=["lat", "lon"], how="inner")
         .dropna(subset=[f"yields_{baseline_tag}", "yields_model", "area"])
     )
-
     combined_intersection = combined_intersection[combined_intersection["area"] > 10]
 
     Plotter.scatter_points_with_weights(
@@ -610,7 +595,6 @@ def add_row_to_table(
         table_data[f"RMSE (kg/ha) with {expected_col}"] = []
         table_data[f"RRMSE (%) with {expected_col}"] = []
         table_data[f"Ratio {observed_col} to {expected_col} production"] = []
-        table_data[f"{observed_col} production"] = []
 
     table_data["Crop Name"].append(crop_value["crop_nice_name"])
     table_data["Control or Catastrophe"].append(control_or_catastrophe)
@@ -626,9 +610,6 @@ def add_row_to_table(
             / world[f"{expected_col}_production"].sum(),
             2,
         )
-    )
-    table_data[f"{observed_col} production"].append(
-        round(world[f"{observed_col}_production"].sum(), 2)
     )
 
 
@@ -659,66 +640,6 @@ def process_table(table_data):
                         )
                         print(new_df)
                         print("-" * 40)  # prints a separator line for clarity
-
-
-def percent_yield(df, crop_key):
-    # Identify columns containing "catastrophe" and "yield" for the model.
-    # SPAM is historical data, not utilised but present in the dataframe incase its needed
-    catastrophe_cols = [
-        col
-        for col in df.columns
-        if "catastrophe" in col and "yield" in col and "SPAM" not in col
-    ]
-    control_cols = [
-        col
-        for col in df.columns
-        if "control" in col and "yield" in col and "SPAM" not in col
-    ]
-
-    # Assuming catastrophe and control columns are in the same order for each year.
-    for cat_col, control_col in zip(catastrophe_cols, control_cols):
-        percent_reduction = (df[cat_col] - df[control_col]) / df[control_col] * 100
-        df[f'{crop_key}_percent_reduction_{cat_col.split("_")[-1]}'] = percent_reduction
-
-    return df
-
-
-def export_percent_yields_to_csv(data_dict, filename):
-    df_to_export = None
-
-    for key, df in data_dict.items():
-        # Extract columns containing 'percent_reduction', 'iso_a3', and 'Country' and rename columns
-        percent_yields = df.loc[
-            :,
-            ["iso_a3", "Country", "pop_est"]
-            + [col for col in df.columns if "percent_reduction" in col],
-        ]
-        percent_yields.rename(
-            columns=lambda x: x.replace("_percent_reduction", ""), inplace=True
-        )
-        percent_yields.dropna(inplace=True)
-
-        # Merge DataFrames based on 'iso_a3'
-        if df_to_export is None:
-            df_to_export = percent_yields
-        else:
-            df_to_export = pd.merge(
-                df_to_export,
-                percent_yields,
-                on=["iso_a3", "Country"],
-                how="outer",
-                suffixes=("", "_drop"),
-            )
-
-    # Remove duplicate columns and NaN values
-    df_to_export = df_to_export[
-        [col for col in df_to_export.columns if not col.endswith("_drop")]
-    ]
-
-    # Export combined DataFrame to csv
-    df_to_export.to_csv(filename, index=False)
-
-    return df_to_export
 
 
 if __name__ == "__main__":
