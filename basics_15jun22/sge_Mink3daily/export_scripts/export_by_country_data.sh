@@ -76,6 +76,30 @@ planting_month=$4
 days_to_maturity=$5
 save_folder=$6 # location past git_root to save to
 
+# echo "crop_caps" 
+# echo $crop_caps
+# echo "yield_raster" 
+# echo $yield_raster
+# echo "highres_cropland_area" 
+# echo $highres_cropland_area
+# echo "planting_month" 
+# echo $planting_month
+# echo "days_to_maturity" 
+# echo $days_to_maturity
+# echo "save_folder" 
+# echo $save_folder
+
+echo ""
+echo ""
+echo ""
+echo ""
+echo ""
+echo "running country export. highres_cropland_area"
+echo $highres_cropland_area
+echo ""
+echo ""
+echo ""
+echo ""
 
 . ../default_paths_etc.sh # import git_root and spam_data_folder variables
 
@@ -105,73 +129,68 @@ else
   exit 1
 fi
 
-
-echo ""
-echo "resample low res yield data to match high resolution raster"
+# echo ""
+# echo "resampling low res yield data to match high resolution raster"
 r.resample input=$yield_raster output="${yield_raster}_highres" --overwrite
 
 
 if [ "$planting_month" != "skip_me" ]; then
-  echo ""
-  echo "resample planting months based on most common chosen planting month"
+  
+  #resample planting months based on most common chosen planting month
   r.resample input=$planting_month output="${planting_month}_highres" --overwrite
 fi
 
 if [ "$days_to_maturity" != "skip_me" ]; then
-  echo ""
-  echo "resample days to maturity"
+  #resample days to maturity
   r.resample input=$days_to_maturity output="${days_to_maturity}_highres" --overwrite
 fi
 
-echo ""
-echo "calculate the high resolution production by multiplying area with yield per hectare"
+
+#echo "calculate the high resolution production by multiplying area with yield per hectare"
 r.mapcalc "production_highres = ${yield_raster}_highres * $highres_cropland_area"
 
-echo ""
-echo "removing zero values from area, production rasters"
+#echo "removing zero values from area, production rasters"
 r.null setnull=0 map=production_highres
 r.null setnull=0 map="$highres_cropland_area"
 
-echo ""
-echo "create labels"
+#echo "create labels"
 # use the vector database cntry05 to output a raster with categorical values, where the value is  country category as an integer, and the raster also stores country category labels with the iso3 country code from ISO_3DIGIT
 v.to.rast --overwrite input=cntry05 output=country_cats use=cat labelcolumn=ISO_3DIGIT
 
 # useful command:
 # v.info -c cntry05 --quiet
 
-echo ""
-echo "export labels"
+#echo "export labels"
 # export the country names for each category, which will be used for later unification with the country production, crop area, and days to maturity
 r.stats -A -l input=country_cats output=country_names_for_each_category.csv -N
 
 if [ "$planting_month" != "skip_me" ]; then
-  echo ""
-  echo "create planting months"
+  # echo ""
+  # echo "creating planting months"
   # Create a raster where the statistical mode (most common number in the category, in this case most common planting month in the country) in the cover map ( ${planting_month}_highres), is exported to the category labels in the deleteme_pm_in_labels raster.
   r.statistics --overwrite base=country_cats cover=${planting_month}_highres method=mode output=deleteme_pm_in_labels
 
-  echo ""
-  echo "export planting months"
+  # echo ""
+  # echo "exporting planting months"
   # export the labels in the deleteme_pm_in_labels raster, along with the category value. 
   r.stats -A -l input=deleteme_pm_in_labels output=country_pm_stats.csv -N
 fi
 
 if [ "$days_to_maturity" != "skip_me" ]; then
 
-  echo ""
-  echo "export days to maturity"
+  # echo ""
+  # echo "exporting days to maturity"
   # use days to maturity calculated previously and output a raster with all statistics (including the mean) for each country
   r.univar -t map=${days_to_maturity}_highres zones=country_cats fs=comma output=country_days_to_maturity_mean.csv
 fi
 
-echo ""
-echo "export production"
+# echo ""
+# echo "exporting production"
 # use production and output a raster with all statistics (including the sum) for each country
 r.univar -t map=production_highres zones=country_cats fs=comma output=country_production_sum.csv
 
-echo ""
-echo "export crop area"
+# echo ""
+# echo "exporting crop area"
 # use crop area and output a raster with all statistics (including the sum) for each country
 r.univar -t map=$highres_cropland_area zones=country_cats fs=comma output=cropland_sum.csv
 
@@ -182,8 +201,8 @@ if [ "$planting_month" != "skip_me" ]; then
   g.remove rast=deleteme_pm_in_labels
 fi
 
-echo ""
-echo "merge exports and move to save folder $git_root/$save_folder"
+# echo ""
+# echo "merging exports and move to save folder $git_root/$save_folder"
 python3 merge_all_those_pesky_by_country_csvs.py "by_country_${yield_raster}.csv"
 
 rm -f country_pm_stats.csv

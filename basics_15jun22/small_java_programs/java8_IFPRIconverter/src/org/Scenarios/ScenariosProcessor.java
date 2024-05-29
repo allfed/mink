@@ -111,6 +111,8 @@ public class ScenariosProcessor {
             raster_name_all_years_this_month_dry[year_index], // input raster
             raster_name_all_years_this_month_wet_or_dry[year_index], // output raster
             coefficients_to_get_wetweight_from_dryweight);
+        setNegativeValuesToZero(
+            script_folder, raster_name_all_years_this_month_wet_or_dry[year_index]);
       }
 
       // if we are averaging yields, average the yields across the years being simulated
@@ -583,6 +585,16 @@ public class ScenariosProcessor {
     }
   }
 
+  public static void setNegativeValuesToZero(
+      String script_folder,
+      String raster_name_this_year_this_month_wet_or_dry // the input raster to be modified
+      ) throws InterruptedException, IOException {
+    // sets any negative values to zero. Negative values occur when there are no planting dates
+    BashScripts.setNegativeValuesToZero(
+        script_folder, raster_name_this_year_this_month_wet_or_dry // input raster to be modified
+        );
+  }
+
   public static void convertToWetWeightIfNeeded(
       boolean calculate_as_wet_weight,
       String script_folder,
@@ -654,8 +666,7 @@ public class ScenariosProcessor {
         raster_names_to_average,
         raster_name_this_month,
         minimum_value_to_average,
-        "average",
-        results_folder);
+        "average");
   } // end averageYieldsAcrossYears
 
   public static void findBestYieldsAndBestMaturity(
@@ -669,10 +680,10 @@ public class ScenariosProcessor {
       // maturity
       String results_folder)
       throws InterruptedException, IOException {
+
     // raster name at first planting month
     String combined_yields_results = raster_names_to_combine[0];
     String combined_maturity_means = output_maturity_mean[0];
-
     for (int planting_month_index = 1;
         planting_month_index < planting_months.length;
         planting_month_index++) {
@@ -684,7 +695,6 @@ public class ScenariosProcessor {
       combined_maturity_means =
           combined_maturity_means + "," + output_maturity_mean[planting_month_index];
     }
-
     BashScripts.compositeRaster(
         script_folder,
         combined_yields_results, // input rasters to find max among

@@ -172,29 +172,42 @@ merge_images() {
   convert $tmp_dir/resulttmp3.png -background white -flatten $location/$raster.png | grep -v "PNG"
 }
 
+throw_all_null_error() {
+  echo "Display Error: Raster $raster_name is composed entirely of NULL values in current region."
+  echo "Or, there is only one raster cell to take statistics on."
+  echo "Region:"
+  g.region -p
+  exit 0
+}
+
 generate_images() {
     # Determine min and max values
     if [ -z $max_value ]; then
+      output_lines=$(r.univar -g map=${raster_name} | wc -l)
+      if [ "$output_lines" -eq 0 ]; then
+        throw_all_null_error
+      fi
       max=`r.univar -g map=$raster | grep max | awk -F "=" '{print $2}'`
     else  
       max=$max_value
     fi
     original_max=$max
     max=$(echo "scale=5; $max + 0.01" | bc)
-    
     if [ -z $min_value ]; then
       min=$(r.univar -g map=$raster | grep min | awk -F "=" '{print $2}')
+      if [ "$output_lines" -eq 0 ]; then
+        throw_all_null_error
+      fi
     else
       min=$min_value
     fi
-
     echo "max_value $original_max, min_value $min"
-
     # Check if either min or max is empty
     if [ -z "$min" ] || [ -z "$max" ]; then
-      echo "Min or max value is empty. Exiting..."
+      echo "Display Error: Min or max value is empty. Exiting..."
       exit 0
     fi
+
 
     # Generate various images
     apply_color_value $max $raster

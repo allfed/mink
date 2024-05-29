@@ -95,6 +95,56 @@ public class GenerateScenarios {
     return crop_name_to_short_code_dictionary;
   }
 
+  /**
+   * Validates that the difference between N-S bounds and E-W bounds are integer multiples of nsres
+   * and ewres respectively within a tolerance.
+   *
+   * @param regionToUseN northern boundary
+   * @param regionToUseS southern boundary
+   * @param regionToUseE eastern boundary
+   * @param regionToUseW western boundary
+   * @param nsres north-south resolution
+   * @param ewres east-west resolution
+   * @throws IllegalArgumentException if the bounds are not valid multiples of the resolutions
+   *     within the tolerance
+   */
+  public static void validateBounds(
+      double regionToUseN,
+      double regionToUseS,
+      double regionToUseE,
+      double regionToUseW,
+      double nsres,
+      double ewres)
+      throws IllegalArgumentException {
+    double nsDiff = regionToUseN - regionToUseS;
+    double ewDiff = regionToUseE - regionToUseW;
+    double tolerance = 0.001;
+
+    if (Math.abs(nsDiff % nsres) > tolerance) {
+      throw new IllegalArgumentException(
+          "The difference between north and south bounds must be an integer multiple of nsres"
+              + " within 3 decimal places. Given N: "
+              + regionToUseN
+              + ", S: "
+              + regionToUseS
+              + ", nsres: "
+              + nsres
+              + ".");
+    }
+
+    if (Math.abs(ewDiff % ewres) > tolerance) {
+      throw new IllegalArgumentException(
+          "The difference between east and west bounds must be an integer multiple of ewres within"
+              + " 3 decimal places. Given E: "
+              + regionToUseE
+              + ", W: "
+              + regionToUseW
+              + ", ewres: "
+              + ewres
+              + ".");
+    }
+  }
+
   public static void generateScenariosCSV(
       String run_script_folder,
       Config config,
@@ -110,6 +160,15 @@ public class GenerateScenarios {
     // write header to the CSV file
     csvWriter.append(
         "snx_name,co2_level,crop_name,weather_prefix,weather_folder,results_folder,run_descriptor,nitrogen,region_to_use_n,region_to_use_s,region_to_use_e,region_to_use_w,nsres,ewres,mask_for_this_snx,fertilizer_scheme\n");
+
+    // Validate the bounds
+    validateBounds(
+        config.physical_parameters.region_to_use_n,
+        config.physical_parameters.region_to_use_s,
+        config.physical_parameters.region_to_use_e,
+        config.physical_parameters.region_to_use_w,
+        config.physical_parameters.nsres,
+        config.physical_parameters.ewres);
 
     // iterate over all crops
     for (Config.Crop crop : config.crops) {

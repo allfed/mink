@@ -3,8 +3,7 @@
 ******************************************************************************
 
  IPEXP   YEAR DOY =    0   0
- File not found.  Please check file name or create file.                       
- File: EXP.LST                                                                 
-    Line:     0                                                                
-    Error key: IPEXP                                                           
+ Could not locate error file:                        ./fast_potatoes_MODEL.ERR 
+ File not found. Please check file name or create file. Error number:    29    
+ File:      EXP.LST   Line:     0 Error key: IPEXP                             
  Simulations terminated.                                                       

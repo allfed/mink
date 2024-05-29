@@ -1,2 +1,2 @@
 snx_name,co2_level,crop_name,weather_prefix,weather_folder,results_folder,run_descriptor,nitrogen,region_to_use_n,region_to_use_s,region_to_use_e,region_to_use_w,nsres,ewres,mask_for_this_snx,fertilizer_scheme
-whK076RF,379,wheat,Outdoor_crops_catastrophe,catastrophe_mink,wth_catastrophe,Jan21_relocated_cat_wh076,N_for_wheat_RF_12aug13,65.0,-65.0,176.25,-170.0,1.875,1.25,LAND_AREA_NO_CROPS_rainfed_cropland,winterwheat
+whK076RF,421,wheat,NASA_baseline,control_mink,singlepoint_AUS_results_control,Jan21_relocated_cat_wh076,N_for_wheat_RF_12aug13,-22.5,-24.375,133.75,132.5,1.875,1.25,LAND_AREA_NO_CROPS_rainfed_cropland,winterwheat

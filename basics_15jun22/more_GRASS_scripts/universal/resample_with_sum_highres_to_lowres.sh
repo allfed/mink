@@ -95,6 +95,16 @@ g.region n=$n s=$s w=$w e=$e
 
 
 stats=`r.univar $highres_raster -g`
+output_lines=$(r.univar -g $highres_raster | wc -l)
+if [ "$output_lines " -eq 0 ]; then
+  echo "Error: Raster $raster_name is composed entirely of NULL values in current region."
+  echo "Or, there is only one raster cell to take statistics on."
+  echo "The problem is, we can't get statistics so we can't continue processing."
+  echo "Region:"
+  g.region -p
+  exit 1
+fi
+
 set +e # don't exit on error
 highres_raster_sum=`echo "$stats" | grep sum= | cut -d= -f2`
 set -e # exit on error
@@ -198,14 +208,31 @@ r.resamp.stats input="${coarsened_raster}_highres_zeroed" output="${coarsened_ra
 # multiply the mean of the small pixels by the number of cells, so low resolution pixels contain the sum of high resolution pixels
 r.mapcalc "${coarsened_raster} = ${coarsened_raster}_mean * $n_cells"
 stats=`r.univar $coarsened_raster -g`
+output_lines=$(r.univar -g $coarsened_raster | wc -l)
+if [ "$output_lines " -eq 0 ]; then
+  echo "Error: Raster $raster_name is composed entirely of NULL values in current region."
+  echo "Or, there is only one raster cell to take statistics on."
+  echo "The problem is, we can't get statistics so we can't continue processing."
+  echo "Region:"
+  g.region -p
+  exit 1
+fi
+
 set +e # don't exit on error
 coarsened_raster_sum=`echo "$stats" | grep sum= | cut -d= -f2`
 set -e # exit on error
 
 # Calculate the absolute difference
 difference=$(echo "$coarsened_raster_sum - $highres_raster_sum" | bc)
-# Calculate the absolute difference in percentage
-percent_diff=$(echo "scale=6; $difference / $highres_raster_sum * 100" | bc)
+
+# Check if the denominator is zero
+if [ "$highres_raster_sum" == "0" ]; then
+  percent_diff="nan"
+else
+  # Calculate the absolute difference in percentage
+  percent_diff=$(echo "scale=6; $difference / $highres_raster_sum * 100" | bc)
+fi
+
 printf "Sum of $highres_raster: %.2e" $highres_raster_sum
 echo ""
 printf "Sum of $coarsened_raster: %.2e" $coarsened_raster_sum
@@ -213,9 +240,10 @@ echo ""
 echo "Number of highres cells per coarse cell:  $n_cells"
 percent_diff_format=$(printf "%.0f" "$percent_diff")
 percent_diff_printout=$(printf "%.3f" "$percent_diff")
-
+if [ "$percent_diff" == "nan" ]; then
+  echo "Highres raster sum is zero, resulting in undefined percentage difference. Continuing."
 # Check if the difference is greater than 5%
-if [ "$percent_diff_format" -lt -5 ] || [ "$percent_diff_format" -gt 5 ]; then
+elif [ "$percent_diff_format" -lt -5 ] || [ "$percent_diff_format" -gt 5 ]; then
     echo "ERROR: Difference of ${percent_diff_printout}% is outside the acceptable range (-5% to 5%). Exiting."
     exit 1
 else

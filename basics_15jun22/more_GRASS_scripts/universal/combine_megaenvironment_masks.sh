@@ -34,15 +34,40 @@ r.series input=$list_of_megaenvironment_masks method="maximum" output=unioned_me
 export GRASS_VERBOSE=0
 
 # # now, we want to multiply the initial mask (the weather file) by unioned_megaenvironment_masks so as to exclude any regions that are not in unioned_megaenvironment_masks
-r.mapcalc "$final_mask = $initial_mask * unioned_megaenvironment_masks"
-
-# echo "" >> log.txt
-# echo "the raster for the weather" >> log.txt
-# r.out.ascii input=$initial_mask output=- > $initial_mask.asc
-# cat "$initial_mask.asc" >> log.txt
+# also ensure the value remains 1 or null always
+r.mapcalc "$final_mask = if(isnull($initial_mask * unioned_megaenvironment_masks), null(),1)"
 
 
-# echo "" >> log.txt
-# echo "the final combined mask which has extra nans" >> log.txt
-# r.out.ascii input=$final_mask output=- > $final_mask.asc
-# cat "$final_mask.asc" >> log.txt
+
+# Below, we make the cultivar's megaenvironmnet high resolution
+
+
+# save the current low resolution (crop model resolution) region
+g.region save=temp_lowres_region --overwrite
+
+# just in case we error out, don't want to have a wierd resolution after
+cleanup() {
+    g.region region=temp_lowres_region
+    echo "reset to original region"
+}
+
+# on exit or error, cleanup back to original low res region
+trap cleanup EXIT ERR
+
+# Save the north, south, east, west boundaries and resolutions for very lowres (the crop model grid resolution)
+read n s w e nsres ewres <<< $(g.region -g | awk -F'=' '$1=="n" { print $2 } $1=="s" { print $2 } $1=="w" { print $2 } $1=="e" { print $2 } $1=="nsres" { print $2 } $1=="ewres" { print $2 }')
+
+g.region rast="${initial_mask}_highres"
+
+# set the north, south, east, west boundaries back to the original low res boundaries
+g.region n=$n s=$s w=$w e=$e
+
+r.mapcalc "${final_mask}_highres = $final_mask * ${initial_mask}_highres"
+
+# echo "final_mask}_highres"
+# echo "${final_mask}_highres"
+# r.info "${final_mask}_highres"
+
+# return to crop model resolution
+g.region region=temp_lowres_region
+

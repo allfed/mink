@@ -7,12 +7,26 @@
 
 # argument $2 is the raster name to save the result with the maximum of all cells
 # argument $3 is the raster name to save the result with the maximum index of all cells
-
-r.series --overwrite input=$1 output=$2 method=maximum
-r.series --overwrite input=$1 output=deleteme_$3 method=max_raster
+# echo ""
+# echo ""
+# echo ""
+# echo "max yields was run"
+# echo "line_list_to_find_max_for"
+# echo "$line_list_to_find_max_for"
+# echo "save_raster_max"
+# echo "$save_raster_max"
+# echo "save_raster_max_key"
+# echo "$save_raster_max_key"
+# echo ""
+# echo ""
+line_list_to_find_max_for=$1
+save_raster_max=$2
+save_raster_max_key=$3
+r.series --overwrite input=$line_list_to_find_max_for output=$save_raster_max method=maximum
+r.series --overwrite input=$line_list_to_find_max_for output=deleteme_${save_raster_max_key} method=max_raster
 
 # Ensure the key of the max raster result is a CELL type (categorical integer raster) rather than double (DCELL)
 # (because it is a raster representing the index of the raster which was chosen for the maximum)
-r.mapcalc "$3 = round(deleteme_$3)"  
+r.mapcalc "${save_raster_max_key} = round(deleteme_${save_raster_max_key})"  
 
-g.remove rast=deleteme_$3
+g.remove rast=deleteme_${save_raster_max_key}

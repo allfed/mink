@@ -13,7 +13,17 @@ mask=$2                           # mask, null if average, defined where want to
 method=$3                         # method to average with
 findmax_rasters=$4                # rasters used to look for max locations (typically yields)
 output_raster=$5                  # output raster name
-
+echo "running the max or average command"
+echo $to_combine_int_rasters
+echo "to_combine_int_rasters"
+echo $mask
+echo "mask"
+echo $method
+echo "method"
+echo $findmax_rasters
+echo "findmax_rasters"
+echo $output_raster
+echo "output_raster"
 
 # Calculate average of the rasters, but round the result to the nearest integer 
 r.series --overwrite input=$to_combine_int_rasters output="deleteme_avg_combined" method=average --quiet
@@ -95,13 +105,15 @@ done
 # )
 #
 # The above can be seen with the command (not shortened and in terrible formatting though!):
-#    echo "$output_raster = if(isnull($mask), deleteme_avg_combined_integer, $max_combined_raster_mapcalc)"
+echo ""
+   echo "$output_raster = if(isnull($mask), deleteme_avg_combined_integer, $max_combined_raster_mapcalc)"
+echo ""
 
 r.mapcalc "$output_raster = if(isnull($mask), deleteme_avg_combined_integer, $max_combined_raster_mapcalc)"
 
 
 
 # remove temporary rasters
-g.remove -f rast=deleteme_avg_combined,deleteme_avg_combined_integer,deleteme_max_key_for_combining_rasters
+# g.remove -f rast=deleteme_avg_combined,deleteme_avg_combined_integer,deleteme_max_key_for_combining_rasters
 
 echo "Processing completed and output raster generated: $output_raster"

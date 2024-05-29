@@ -83,7 +83,7 @@ chunk_file=${chunked_input_data_dir}
 # the data files
 input_file=${input_data_dir}${data_file_short_name}_data
 
-echo "$java_to_use \"$memory_string\" -cp $classpath $classname ${input_file} $chunk_file $chunks_per_case"
+# echo "$java_to_use \"$memory_string\" -cp $classpath $classname ${input_file} $chunk_file $chunks_per_case"
 nice $java_to_use "$memory_string" -cp $classpath $classname ${input_file} $chunk_file $chunks_per_case
 
 if [ $? -ne 0 ]; then
@@ -134,7 +134,6 @@ do
   # Append the script path to the scripts_list variable, combined with chunk_index
   scripts_list+="${chunk_index}:${script_to_run_in_job}"$'\n'
 done
-
 
 IFS=$'\n'  # Change the Internal Field Separator to newline for the loop
 counter=0

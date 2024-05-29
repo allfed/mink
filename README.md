@@ -3,6 +3,11 @@
 
 ## Quick Start
 
+NOTE: when running single grid point regions, GRASS struggles a little bit.
+The way to do it is a larger region (with at least one standard cell for crop growth to be safe) using the -s flag in generate_scenarios_csv.sh, and then run the generate_scenarios_csv.sh with the single cell region.
+
+In general, it's safest to run ./generate_scenarios_csv.sh with the entire world once, to be safe, and never run the generate_scenarios_csv.sh with the -s flag again. But you can also do what was just described above.
+
 You can access the pre-built Singularity container here ...
 TODO: add details of where to get the complied container, if it's made available publically
 ... otherwise, you can build the container yourself using the documentation below.

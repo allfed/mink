@@ -45,7 +45,7 @@
 
 #       # for the first catastrophe daily weather (4nov21)
        fakePlantingYear=2 # 1 is the first year, so to allow for spinup, we need to start in #2
-             nFakeYears=8 # 99 #100 # 
+             nFakeYears=10 # 99 #100 # 
 
             magicSoilPrefix=HN_GEN00 # new "normal" soil with SLPF set to 0.something
 

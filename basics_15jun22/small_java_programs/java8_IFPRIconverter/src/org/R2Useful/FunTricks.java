@@ -291,6 +291,8 @@ public class FunTricks {
   public static void splitMatrixTextFileByLinesInfixBeforeUnderscore(
       String inputFilename, String outputPrefix, int nChunks) throws Exception {
     Object[] rowsColsFormatDelimiter = MatrixOperations.readInfoFile(inputFilename);
+    System.out.println("inputfilename");
+    System.out.println(inputFilename);
     long nRows = (Long) rowsColsFormatDelimiter[0];
     long nCols = (Long) rowsColsFormatDelimiter[1];
     int formatIndex = (Integer) rowsColsFormatDelimiter[2];

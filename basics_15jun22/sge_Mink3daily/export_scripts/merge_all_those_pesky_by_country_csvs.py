@@ -25,16 +25,16 @@ def load_data(filename, key_column, fieldnames=None, delimiter=","):
     data = {}
     with open(filename, "r") as f:
         reader = csv.DictReader(f, fieldnames=fieldnames, delimiter=delimiter)
-        if fieldnames:  # Skip the first row if fieldnames are manually provided
-            next(reader)
         for row in reader:
+            if fieldnames and row[key_column] == fieldnames[0]:
+                continue  # Skip the header row if fieldnames are provided
             key = row[key_column]
             data[key] = row
     return data
 
 
 def main(input_filename):
-    """
+    """input_filename
     Load data from multiple CSVs, unify the data, and save to a new CSV.
     """
     # Load data
@@ -59,6 +59,14 @@ def main(input_filename):
 
     # Start with the keys from the first dictionary, then get the intersection with the keys from the others
     common_categories = set(country_cat.keys()) if country_cat else set()
+    # print("pm_stats.keys()")
+    # print(pm_stats.keys())
+    # print("days_to_maturity.keys()")
+    # print(days_to_maturity.keys())
+    # print("production_sum.keys()")
+    # print(production_sum.keys())
+    # print("crop_area_sum.keys()")
+    # print(crop_area_sum.keys())
     if pm_stats:
         common_categories &= set(pm_stats.keys())
     if days_to_maturity:
@@ -70,7 +78,7 @@ def main(input_filename):
 
     # If there are no common categories across the files, terminate the operation
     if not common_categories:
-        print("No common categories found across the CSV files.")
+        print("Error: No common categories found across the CSV files.")
         return
 
     # Build the unified dictionary using only the common categories

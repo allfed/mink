@@ -426,8 +426,8 @@ public class CalculateProduction {
             raster_names_to_combine, // input list to average
             combined_yield_name_rf_or_ir, // output averaged list
             "0", // minimum yields
-            "average", // method of average
-            results_folder);
+            "average" // method of average
+            );
 
         // gets the average of planting months in each cell
         BashScripts.averageRasters(
@@ -435,8 +435,8 @@ public class CalculateProduction {
             planting_months_to_combine, // input list to average
             combined_planting_month_name_rf_or_ir, // output averaged list
             "0", // minimum planting month to consider
-            "mode", // method of average
-            results_folder);
+            "mode" // method of average
+            );
 
         // gets the average of days to maturity in each cell
         if (calculate_maturity) {
@@ -445,8 +445,8 @@ public class CalculateProduction {
               days_to_maturity_to_combine, // input raster
               combined_days_to_maturity_name_rf_or_ir, // output raster
               "0", // minimum days to maturity to consider
-              "median", // method of average
-              results_folder);
+              "median" // method of average
+              );
         }
       }
     }
@@ -569,6 +569,11 @@ public class CalculateProduction {
         BashScripts.saveAscii(
             script_folder,
             scenarios.combined_planting_month_name_rf_or_ir[i],
+            scenarios.results_folder[last_index_of_crop]);
+
+        BashScripts.saveAscii(
+            script_folder,
+            scenarios.combined_days_to_maturity_name_rf_or_ir[i],
             scenarios.results_folder[last_index_of_crop]);
 
         BashScripts.saveAscii(

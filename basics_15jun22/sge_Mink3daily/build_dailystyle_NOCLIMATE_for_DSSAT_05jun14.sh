@@ -166,7 +166,8 @@ do
 
   # define the appropriate mask
   r.mapcalc "deleteme_raster_representing_region=1" 
-
+  echo spam_raster_to_use_for_mask
+  echo $spam_raster_to_use_for_mask
   # run the masking bash script to only generate data for regions where this crop variety grows
   ./prerun_scripts/mask_unwanted_pixels.sh $spam_raster_to_use_for_mask deleteme_raster_representing_region $minimum_physical_area $growing_radius
 
@@ -225,6 +226,7 @@ do
   echo "$nonclimate_list" | tr "," "\n" | cat -n > ${real_output_file}.cols.txt
 
   # exporting $planting_month_raster $crop_name $description 
+
 
   # Beware the MAGIC PATH!!! this is a non-standard grass program. so you need to know the actual path
   # this is what actually makes the giant text tables

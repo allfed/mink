@@ -22,6 +22,16 @@ shift
 
 # loop over all input rasters
 for raster in "$@"; do
+  output_lines=$(r.univar -g $raster | wc -l)
+  if [ "$output_lines " -eq 0 ]; then
+    echo "Display Error: the raster $raster is composed entirely of NULL values in current region."
+    echo "Or, there is only one raster cell to take statistics on."
+    echo "The problem is, we can't get statistics so we can't generate the combined raster."
+    echo "Region:"
+    g.region -p
+    exit 0
+  fi
+
   # get the max and min float values for the current raster
   maxfloat[$raster]=`r.univar -g map=$raster | grep max | awk -F "=" '{print $2}'`
   minfloat[$raster]=`r.univar -g map=$raster | grep min | awk -F "=" '{print $2}'`
@@ -43,6 +53,17 @@ for raster in "$@"; do
   
   # get the min and max values of the updated raster
   stats=`r.univar $raster -g`
+  output_lines=$(r.univar -g $raster | wc -l)
+  if [ "$output_lines " -eq 0 ]; then
+    echo "Display Error: the raster $raster is composed entirely of NULL values in current region."
+    echo "Or, there is only one raster cell to take statistics on."
+    echo "The problem is, we can't get statistics so we can't generate the combined raster."
+    echo "Region:"
+    g.region -p
+    exit 0
+  fi
+
+
   min=`echo "$stats" | grep min= | cut -d= -f2`
   max=`echo "$stats" | grep max= | cut -d= -f2`
   

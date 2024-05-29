@@ -201,7 +201,6 @@ public class BashScripts {
             + nsres
             + " ewres="
             + ewres;
-
     ProcessBuilder pb =
         new ProcessBuilder(
             "bash",
@@ -438,8 +437,7 @@ public class BashScripts {
       String raster_names_to_average,
       String scenario_tag,
       String minimum_value_to_average,
-      String method,
-      String results_folder)
+      String method)
       throws InterruptedException, IOException {
     // System.out.println("");
 
@@ -659,6 +657,17 @@ public class BashScripts {
             scenario_tag_for_averaging,
             crop_area_raster,
             scenario_tag_for_production);
+
+    String grass_script_folder = run_script_folder + "../more_GRASS_scripts/universal/";
+    callProcess(pb, grass_script_folder);
+  } // end calculateProduction
+
+  // the raster is multiplied by the coefficient (a constant float)
+  public static void setNegativeValuesToZero(String run_script_folder, String raster_name_to_cap)
+      throws InterruptedException, IOException {
+
+    ProcessBuilder pb =
+        new ProcessBuilder("bash", "./set_negative_values_to_zero.sh", raster_name_to_cap);
 
     String grass_script_folder = run_script_folder + "../more_GRASS_scripts/universal/";
     callProcess(pb, grass_script_folder);
