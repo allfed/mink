@@ -166,8 +166,8 @@ do
 
   # define the appropriate mask
   r.mapcalc "deleteme_raster_representing_region=1" 
-  echo spam_raster_to_use_for_mask
-  echo $spam_raster_to_use_for_mask
+  # echo spam_raster_to_use_for_mask
+  # echo $spam_raster_to_use_for_mask
   # run the masking bash script to only generate data for regions where this crop variety grows
   ./prerun_scripts/mask_unwanted_pixels.sh $spam_raster_to_use_for_mask deleteme_raster_representing_region $minimum_physical_area $growing_radius
 

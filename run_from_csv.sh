@@ -36,7 +36,7 @@ cd /mnt/data/basics_15jun22/sge_Mink3daily/
 # Only compile if the flag is present
 if [ $COMPILE_FLAG -eq 1 ]; then
   cd /mnt/data/basics_15jun22/sge_Mink3daily/
-  ./compile_java.sh Scenarios.java CalculateProduction.java BashScripts.java Mink3p2daily.java ScenariosProcessor.java ScenariosRunner.java PlantingScenario.java FunTricks.java
+  ./compile_java.sh Scenarios.java CalculateProduction.java BashScripts.java Mink3p2daily.java ScenariosProcessor.java ScenariosRunner.java PlantingScenario.java CalculateProduction.java
   # Other useful ones below
   # ./compile_java.sh Config.java GenerateScenarios.java Scenarios.java CalculateProduction.java WriteCopyBlockForDailyWeather.java Mink3p2daily.java SplitTextMatrices.java
   # ./compile_java.sh Config.java GenerateScenarios.java BashScripts.java Scenarios.java Mink3p2daily.java SplitTextMatrices.java

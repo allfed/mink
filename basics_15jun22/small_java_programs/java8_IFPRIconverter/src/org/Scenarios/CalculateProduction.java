@@ -361,27 +361,45 @@ public class CalculateProduction {
     if (calculate_rf_or_ir_specific_average_yield) {
       if (crop.equals("soybeans") || crop_area_type.equals("no_crops")) {
 
+        System.out.println("average rasters USING max value");
+        System.out.println();
+        System.out.println("raster_names_to_combine");
+        System.out.println(raster_names_to_combine);
+        System.out.println("combined_yield_name_rf_or_ir");
+        System.out.println(combined_yield_name_rf_or_ir);
+
+        System.out.println("combined_planting_month_name_rf_or_ir");
+        System.out.println(combined_planting_month_name_rf_or_ir);
+        System.out.println("(Not used for pm) planting_months_to_combine");
+        System.out.println(planting_months_to_combine);
+        System.out.println();
+
         // gets the max of all available yields in each cell (all regions)
         BashScripts.compositeRaster(
             script_folder,
             raster_names_to_combine, // input rasters to average
             combined_yield_name_rf_or_ir, // output best raster yield value
-            combined_planting_month_name_rf_or_ir, // output a grass gis raster of the name from
-            // which the maximum yielding maturity group was
-            // chosen
+            "deleteme_best_cultivar", // output a grass gis raster of the name from
+            // which the maximum yielding cultivar was chosen
             results_folder);
+
+        BashScripts.useKeyRasterToMapToValueRaster(
+            script_folder,
+            "deleteme_best_cultivar", // input key raster for which cultivar to get
+            // value from
+            planting_months_to_combine, // input rasters to get the values from
+            combined_planting_month_name_rf_or_ir); // output raster with planting months
 
         if (calculate_maturity) {
           // use the best_maturity_group_soybean_key to choose the planting month of interest
           // planting_months_to_combine
           BashScripts.useKeyRasterToMapToValueRaster(
               script_folder,
-              combined_planting_month_name_rf_or_ir, // input key raster for which cultivar to get
+              "deleteme_best_cultivar", // input key raster for which cultivar to get
               // value from
-              planting_months_to_combine, // input rasters to get the values from
+              days_to_maturity_to_combine, // input rasters to get the values from
               combined_days_to_maturity_name_rf_or_ir); // output raster with days to maturity of
-          // best
-          // cultivar in each cell
+          // best cultivar in each cell
         }
 
       } else if (crop.equals("wheat")) {

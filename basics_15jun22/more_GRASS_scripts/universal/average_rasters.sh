@@ -11,8 +11,8 @@ minimum=$2
 method=$3
 average=$4
 
-echo ""
-echo "running the average..."
+# echo ""
+# echo "running the average..."
 
 
 # r.series: 
@@ -21,15 +21,15 @@ echo "running the average..."
 #    https://grass.osgeo.org/grass82/manuals/r.series.html
 #    Without -n flag, the complete list of inputs for each cell (including NULLs) is passed to the aggregate function. Individual aggregates can handle data as they choose. Mostly, they just compute the aggregate over the non-NULL values, producing a NULL result only if all inputs are NULL. 
 
-echo "rasters_to_average"
-echo "$rasters_to_average"
-echo "minimum"
-echo "$minimum"
-echo "method"
-echo "$method"
-echo "average"
-echo "$average"
-echo ""
+# echo "rasters_to_average"
+# echo "$rasters_to_average"
+# echo "minimum"
+# echo "$minimum"
+# echo "method"
+# echo "$method"
+# echo "average"
+# echo "$average"
+# echo ""
 if [ "$method" == "mode" ]; then
     # two step process if we're getting the mode (most common) of a categorical raster: 
     #    have to convert from the DCELL to CELL

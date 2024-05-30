@@ -184,6 +184,9 @@ Raster yields generated from `READ_DSSAT_outputs_from_cols_FEW.sh` (ending in `_
 
 `snx_name: [crop 2 letter code]_[cultivar]_[RF (rainfed) or (IR) irrigated]_[snx_name]_[co2_level]_[weather_prefix]_D_[planting_month]_noGCMcalendar_p0_[crop_name]__real_[year_number]`
 
+Note on naming:
+each java raster variable usually has a "_name_" in it. The variable is a name of a raster (a string). But the raster itself is what contains the data referred to in the name of the variable! Rasters are stored as files on the hard drive. So when you alter a raster in one part of the program, it will be changed elsewhere.
+
 ### Additional Processing
 
 - A few year's yields are averaged in the `averageYieldsAcrossYears` function.
@@ -195,6 +198,11 @@ Raster yields generated from `READ_DSSAT_outputs_from_cols_FEW.sh` (ending in `_
 ## Taking a look at simulation results
 Generally you will want to look at heatmaps of yields, selected planting months, and days to maturity where applicable.
 
+### Generated scenarios
+The generated scenarios (from generate_scenarios_csv.sh) are located at scenarios_csv_location="/mnt/data/basics_15jun22/sge_Mink3daily/scenarios/generated_scenarios.csv".
+
+A scenario is defined as one row of  generated_scenarios.csv.
+There is one scenario for each crop (although crops are typically run one at a time), cultivar (specified by a specific SNX name) and irrigation type (rainfed or irrigated).
 ### by country results
 These data are already exported as a csv aggregated by country.
 
