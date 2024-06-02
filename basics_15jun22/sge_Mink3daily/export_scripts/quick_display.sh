@@ -173,7 +173,8 @@ merge_images() {
 }
 
 throw_all_null_error() {
-  echo "Display Error: Raster $raster_name is composed entirely of NULL values in current region."
+  local raster="$1"
+  echo "Display Error: Raster $raster is composed entirely of NULL values in current region."
   echo "Or, there is only one raster cell to take statistics on."
   echo "Region:"
   g.region -p
@@ -181,11 +182,14 @@ throw_all_null_error() {
 }
 
 generate_images() {
+
     # Determine min and max values
     if [ -z $max_value ]; then
-      output_lines=$(r.univar -g map=${raster_name} | wc -l)
+      echo $raster
+      
+      output_lines=$(r.univar -g map=${raster} | wc -l)
       if [ "$output_lines" -eq 0 ]; then
-        throw_all_null_error
+        throw_all_null_error $raster
       fi
       max=`r.univar -g map=$raster | grep max | awk -F "=" '{print $2}'`
     else  
