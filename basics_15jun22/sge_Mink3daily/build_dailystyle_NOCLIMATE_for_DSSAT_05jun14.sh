@@ -263,7 +263,7 @@ do
   echo "main_control_list=" >> ${real_output_file}.provenance.txt
   echo "$main_control_list" >> ${real_output_file}.provenance.txt
 
-  echo "more info at ${real_output_file}.provenance.txt"
+  # echo "more info at ${real_output_file}.provenance.txt"
 
 done # spam_line
 

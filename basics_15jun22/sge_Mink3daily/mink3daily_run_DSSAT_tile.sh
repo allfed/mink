@@ -236,8 +236,8 @@ time_start=\$(date +%s%3N)
   # copy the daily weather
 
 $copy_block
-echo \"number_of_pixels\"
-echo \"$number_of_pixels\"
+# echo \"number_of_pixels\"
+# echo \"$number_of_pixels\"
 
 # i think what i really care about is if any things got copied at all..
 # however, if there are actually no valid cells, we don't want to error out

@@ -34,12 +34,6 @@ public class ScenariosRunner {
         System.out.println("");
         System.out.println(
             "==== Initializing geographic and other input data and rasters needed for grass ===");
-        // System.out.println(
-        //     "     (cannot happen in parallel because it sets GRASS gis shell variables)");
-        System.out.println("");
-        System.out.println("scenarios.mask_for_this_snx[scenario_and_pm.scenarioNumber]");
-        System.out.println(
-            scenarios.mask_for_this_snx[scenario_and_pm.scenarioNumber] + "_wth_masked");
 
         BashScripts.applyWeatherFileMask(
             script_folder,
