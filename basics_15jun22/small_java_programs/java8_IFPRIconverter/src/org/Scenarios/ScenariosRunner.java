@@ -23,6 +23,7 @@ public class ScenariosRunner {
     Set<Integer> initializedScenarios = new HashSet<>();
 
     for (PlantingScenario scenario_and_pm : scenariosAndPMList) {
+
       if (!initializedScenarios.contains(scenario_and_pm.scenarioNumber)) {
         // Perform initialization for this scenario here
 
@@ -36,6 +37,15 @@ public class ScenariosRunner {
         // System.out.println(
         //     "     (cannot happen in parallel because it sets GRASS gis shell variables)");
         System.out.println("");
+        System.out.println("scenarios.mask_for_this_snx[scenario_and_pm.scenarioNumber]");
+        System.out.println(
+            scenarios.mask_for_this_snx[scenario_and_pm.scenarioNumber] + "_wth_masked");
+
+        BashScripts.applyWeatherFileMask(
+            script_folder,
+            scenarios.mask_for_this_snx[scenario_and_pm.scenarioNumber],
+            scenarios.mask_for_this_snx[scenario_and_pm.scenarioNumber] + "_wth_masked");
+
         BashScripts.initGRASS(
             script_folder,
             scenarios.region_to_use_n[scenario_and_pm.scenarioNumber],
@@ -45,7 +55,7 @@ public class ScenariosRunner {
             scenarios.nsres[scenario_and_pm.scenarioNumber],
             scenarios.ewres[scenario_and_pm.scenarioNumber],
             scenarios.planting_months,
-            scenarios.mask_for_this_snx[scenario_and_pm.scenarioNumber],
+            scenarios.mask_for_this_snx[scenario_and_pm.scenarioNumber] + "_wth_masked",
             scenarios.crop_name[scenario_and_pm.scenarioNumber],
             scenarios.output_stats_basenames[scenario_and_pm.scenarioNumber],
             scenarios.minimum_physical_area,

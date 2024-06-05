@@ -158,7 +158,6 @@ do
   mv ${old_chunk_here}_geog.txt      ${new_chunk_here}_geog.txt
   mv ${old_chunk_here}_geog.info.txt ${new_chunk_here}_geog.info.txt
 
-
   # do a very simple wheat checking thing
   # wheat_test=$(echo "$crop_nitro_name" | grep wheat || true)
   # wheat_test=`echo "$crop_nitro_name" | grep wheat`
@@ -217,7 +216,6 @@ set +e
 
 # Use xargs to read arguments from the temporary file and execute the command in parallel threaded chunks
 xargs -a "$temp_file" -I {} -P $chunks_per_case bash {}
-
 # Check the status of the xargs command.
 if [ $? -ne 0 ]; then
     source some_settings_46.sh
@@ -227,7 +225,6 @@ if [ $? -ne 0 ]; then
     echo "./run_dssat.sh $nameOfDSSATExecutable"
     exit 1
 fi
-
 # back to exiting on non-zero return values
 set -e
 

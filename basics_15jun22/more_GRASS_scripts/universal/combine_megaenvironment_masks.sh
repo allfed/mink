@@ -33,10 +33,9 @@ r.series input=$list_of_megaenvironment_masks method="maximum" output=unioned_me
 #don't print any progress bar
 export GRASS_VERBOSE=0
 
-# # now, we want to multiply the initial mask (the weather file) by unioned_megaenvironment_masks so as to exclude any regions that are not in unioned_megaenvironment_masks
+# now, we want to multiply the initial mask (the weather file) by unioned_megaenvironment_masks so as to exclude any regions that are not in unioned_megaenvironment_masks
 # also ensure the value remains 1 or null always
-r.mapcalc "$final_mask = if(isnull($initial_mask * unioned_megaenvironment_masks), null(),1)"
-
+r.mapcalc "${final_mask} = if(isnull($initial_mask * unioned_megaenvironment_masks), null(),1)"
 
 
 # Below, we make the cultivar's megaenvironmnet high resolution
@@ -64,9 +63,11 @@ g.region n=$n s=$s w=$w e=$e
 
 r.mapcalc "${final_mask}_highres = $final_mask * ${initial_mask}_highres"
 
-# echo "final_mask}_highres"
-# echo "${final_mask}_highres"
-# r.info "${final_mask}_highres"
+echo "final_mask"
+echo "${final_mask}"
+echo "final_mask}_highres"
+echo "${final_mask}_highres"
+r.info "${final_mask}_highres"
 
 # return to crop model resolution
 g.region region=temp_lowres_region

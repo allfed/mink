@@ -1,0 +1,28 @@
+The purpose is to fix a bug where mask_for_pt0002RF_highres doesn't exist, but mask_for_pt0002RF does exist, and we need to export by country.
+
+OKAY
+
+When i switched to export by country with high resolution rasters, I got used to generating my mask_for....highres with just land area.
+but now that I'm doing cultivar based stuff, I can't just use the SPAM area (or whatever, the opposite of the SPAM area)
+I need to actually use the crop area at high resolution
+
+So when generating the mask_for_pt0002RF, we should also generate the mask_for_pt0002RF_highres.
+
+
+In the case of megaenvironmnets, universal/combine_megaenvironment_masks.sh has:
+
+# # now, we want to multiply the initial mask (the weather file) by unioned_megaenvironment_masks so as to exclude any regions that are not in unioned_megaenvironment_masks
+# also ensure the value remains 1 or null always
+r.mapcalc "$final_mask = if(isnull($initial_mask * unioned_megaenvironment_masks), null(),1)"
+
+
+
+so then, the analogous thing going on with land area. so thats how i implemented it.
+
+BUG FIX NOTE: mask_for..,.. blablabla was seeming 11, not 1. 
+BUG FIX NOTE: mask_for..,.. blablabla was seeming 11, not 1. 
+BUG FIX NOTE: mask_for..,.. blablabla was seeming 11, not 1. 
+BUG FIX NOTE: mask_for..,.. blablabla was seeming 11, not 1. 
+BUG FIX NOTE: mask_for..,.. blablabla was seeming 11, not 1. 
+so that might have been an issue...
+maybe the areas are 10x for mask_for rasters?

@@ -71,6 +71,15 @@ public class GenerateScenarios {
     }
     // make masks for megaenvironments (regions where certain megaenvironments are)
     BashScripts.makeMegaEnvironmentMasks(run_script_folder);
+    BashScripts.makeWeatherFileMask(
+        run_script_folder,
+        config.physical_parameters.weather_folder,
+        config.physical_parameters.region_to_use_n,
+        config.physical_parameters.region_to_use_s,
+        config.physical_parameters.region_to_use_e,
+        config.physical_parameters.region_to_use_w,
+        config.physical_parameters.nsres,
+        config.physical_parameters.ewres);
 
     generateScenariosCSV(
         run_script_folder,
@@ -248,9 +257,10 @@ public class GenerateScenarios {
             prefix + "_" + (irrigation.equals("RF") ? "rainfed_cropland" : "irrigated_cropland");
 
         // loop over the default_snx_names and get the intersection
-        BashScripts.setIntersectionWithMegaenvironmentMasks(
+        BashScripts.setIntersectionWithMegaenvironment(
             run_script_folder, crop_area_raster, megaEnvMasks, mask_for_this_snx);
         String snx_name = snx_name_prefix + irrigation;
+
         // write a new line to the CSV file
         csvWriter.append(
             String.join(

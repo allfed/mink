@@ -87,6 +87,15 @@ public class WriteCopyBlockForDailyWeather {
       //          originalWeatherFileLocation = baseNameOfDailyWeather + "_"  + latitudeToUse + "_"
       // + longitudeToUse + weatherDataSuffix;
 
+      // System.out.println(
+      //     "cp "
+      //         + fullSourceName
+      //         + " "
+      //         + destinationPath
+      //         + " 2>/dev/null || { echo \"Warning: "
+      //         + fullSourceName
+      //         + " does not exist\"; true; }");
+
       System.out.println("cp " + fullSourceName + " " + destinationPath);
     } // for lineIndex
 

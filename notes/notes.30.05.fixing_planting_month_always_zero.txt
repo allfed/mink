@@ -1,0 +1,378 @@
+1. why did i use the max value planting month for no_crops?
+2. how do multiple year planting months get combined? Is it still using the Mode?
+
+I see that this seems to be the problem
+
+if (calculate_rf_or_ir_specific_average_yield) {
+  if (crop.equals("soybeans") || crop_area_type.equals("no_crops")) {
+
+    System.out.println("average rasters USING max value");
+    System.out.println();
+    System.out.println("raster_names_to_combine");
+    System.out.println(raster_names_to_combine);
+    System.out.println("combined_yield_name_rf_or_ir");
+    System.out.println(combined_yield_name_rf_or_ir);
+
+    System.out.println("combined_planting_month_name_rf_or_ir");
+    System.out.println(combined_planting_month_name_rf_or_ir);
+    System.out.println("(Not used for pm) planting_months_to_combine");
+    System.out.println(planting_months_to_combine);
+    System.out.println();
+
+    // gets the max of all available yields in each cell (all regions)
+    BashScripts.compositeRaster(
+        script_folder,
+        raster_names_to_combine, // input rasters to average
+        combined_yield_name_rf_or_ir, // output best raster yield value
+        combined_planting_month_name_rf_or_ir, // output a grass gis raster of the name from
+        // which the maximum yielding planting month was chosen
+        results_folder);
+
+    if (calculate_maturity) {
+      // use the best_maturity_group_soybean_key to choose the planting month of interest
+      // planting_months_to_combine
+      BashScripts.useKeyRasterToMapToValueRaster(
+          script_folder,
+          combined_planting_month_name_rf_or_ir, // input key raster for which cultivar to get
+          // value from
+          planting_months_to_combine, // input rasters to get the values from
+          combined_days_to_maturity_name_rf_or_ir); // output raster with days to maturity of
+      // best
+      // cultivar in each cell
+    }
+
+
+results: example for year 7
+
+combined_planting_month_name_rf_or_ir
+421_NASA_baseline_BestYield_noGCMcalendar_p0_wheat__Jan21_relocated_cat_wh076_wet_planting_month_RF_y7
+(Not used for pm) planting_months_to_combine
+BestMonth_noGCMcalendar_p0_whK076RF__Jan21_relocated_cat_wh076_wet_RF_y7
+
+
+but then the r.info shows  421_NASA_baseline_BestYield_noGCMcalendar_p0_wheat__Jan21_relocated_cat_wh076_wet_planting_month_RF_y 3 through 8 are all zero
+and r.info for BestMonth_noGCMcalendar_p0_whK076RF__Jan21_relocated_cat_wh076_wet_RF_y 3 through 8 are varying, with a mode of 1
+so BestMonth_noGCMcalendar_p0_whK076RF__Jan21_relocated_cat_wh076_wet_RF_y contain the actual good pm data we care about.
+
+
+so with multiple cultivars, planting_months_to_combine to combine would normally give a list
+right now, it's just one of them cause there's one cultivar only.
+
+
+
+
+
+SO HOW DOES PLANTING_MONTHS_TO_COMBINE GET ESTABLISHED?
+
+
+
+List<List<String>> cultivar_groups_planting_months =
+    getCultivarGroups(scenarios, best_planting_month_name);
+... in for loop, i believe over the different cultivars and RF/IR ...
+List<String> planting_months = cultivar_groups_planting_months.get(i);
+String planting_months_to_combine = getCommaSeparatedString(planting_months);
+
+
+now this is called both for the overall, and the yearly:
+
+
+calculateRFandIRProductionGivenHarvestYields(
+    script_folder,
+    scenarios,
+    scenarios.best_planting_month_yield_name,
+    scenarios.best_planting_month_name,
+    scenarios.best_planting_month_maturity_name,
+    scenarios.combined_yield_name_rf_or_ir,
+    scenarios.combined_production_name_rf_or_ir,
+    scenarios.combined_planting_month_name_rf_or_ir,
+    scenarios.combined_days_to_maturity_name_rf_or_ir,
+    scenarios.combined_yield_name,
+    scenarios.combined_production_name,
+    true);
+
+... for loop over years ...
+    calculateRFandIRProductionGivenHarvestYields(
+        script_folder,
+        scenarios,
+        best_planting_month_yield_name_this_year,
+        best_planting_month_name_this_year,
+        new String[] {""}, // no days to maturity data on a yearly basis is available.
+        combined_yield_name_rf_or_ir_this_year,
+        combined_production_name_rf_or_ir_this_year,
+        combined_planting_month_name_rf_or_ir_this_year,
+        new String[] {""}, // no days to maturity data on a yearly basis is available.
+        combined_yield_name_this_year,
+        combined_production_name_this_year,
+        false); // calculate_maturity set to false
+
+
+calling this
+
+public static void calculateRFandIRProductionGivenHarvestYields(
+    String script_folder,
+    Scenarios scenarios,
+    String[] best_planting_month_yield_name,
+    String[] best_planting_month_name,
+    String[] best_planting_month_maturity_name,
+    String[] combined_yield_name_rf_or_ir,
+    String[] combined_production_name_rf_or_ir,
+    String[] combined_planting_month_name_rf_or_ir,
+    String[] combined_days_to_maturity_name_rf_or_ir,
+    String[] combined_yield_name,
+    String[] combined_production_name,
+    boolean calculate_maturity)
+    throws InterruptedException, IOException {
+
+
+so best_planting_month_yield_name is the one we want.
+
+That would be either best_planting_month_yield_name_this_year or scenarios.best_planting_month_yield_name
+
+for yearly,
+
+for (int i = 0; i < scenarios.n_scenarios; i++) {
+  best_planting_month_yield_name_this_year[i] =
+      scenarios.best_planting_month_yield_name_all_years[i][year_index];
+  ....
+
+
+that was all in CalculateProduction.java.
+Now we move to scenariosprocessor.java
+
+
+public static void calculateBestYieldAllYears(
+    String script_folder,
+    String[] years, // input variable
+    String[] planting_months, // input variable
+    String[][] raster_names_all_years_wet_or_dry, // the input rasters
+    String[] best_planting_month_yield_name_all_years, // the output rasters
+    String[] best_planting_month_name_all_years, // the output rasters
+    // String[] best_month_maturity_result_name_all_years, // (maybe implement in the future)
+    String results_folder // the output rasters
+    ) throws InterruptedException, IOException {
+  // calculate the average of the raster yield over time for a given scenario
+  for (int year_index = 0; year_index < years.length; year_index++) {
+    String[] raster_names_all_months_this_year = new String[planting_months.length];
+
+    String best_planting_month_yield_name = best_planting_month_yield_name_all_years[year_index];
+    String best_planting_month_name_this_year = best_planting_month_name_all_years[year_index];
+    // String best_month_maturity_result_name_this_year =
+    // best_month_maturity_result_name_all_years[year_index];
+
+    for (int planting_month_index = 0;
+        planting_month_index < planting_months.length;
+        planting_month_index++) {
+      raster_names_all_months_this_year[planting_month_index] =
+          raster_names_all_years_wet_or_dry[planting_month_index][year_index];
+    }
+
+    findBestYields(
+        script_folder,
+        planting_months,
+        raster_names_all_months_this_year, // input rasters
+        best_planting_month_yield_name, // the output raster
+        best_planting_month_name_this_year, // the output raster for best month
+        // best_month_maturity_result_name_this_year, // the output raster for best days to
+        // maturity (skipping)
+        results_folder);
+  }
+}
+
+
+
+called from 
+
+// just loop through the scenarios, because we have stored all the lists of planting month
+// rasters as a function of scenario number in the 2d array rasters
+for (int i = 0; i < scenarios.n_scenarios; i++) {
+
+  // 1. [This step is optional and does not play a part in overall yield calculations, but can
+  // be helpful for later analysis] First, if calculate_each_year_best_month is true, we loop
+  // through the yield for all years, and find the yield from the best planting month for each
+  // grid cell, saving this to
+  // best_planting_month_yield_name_all_years. This occurs for each year, not just the average
+  // of years,
+  // producing many more rasters than the next usage of findBestYields.averageAcrossYears
+
+  // if we choose to find the best yields, find best yields for each scenario (choosing best
+  // planting month)
+  // ToDoubleFunction: add scenarios.raster_names_best_month_all_years[i] as the best planting
+  // month for all years
+
+  if (scenarios.calculate_each_year_best_month) {
+    calculateBestYieldAllYears(
+        script_folder,
+        scenarios.years,
+        scenarios.planting_months,
+        scenarios.raster_names_all_years_wet_or_dry[i],
+        scenarios.best_planting_month_yield_name_all_years[i],
+        scenarios.best_planting_month_name_all_years[i],
+        // scenarios.best_month_maturity_result_name_all_years[i], // (can maybe be a future
+        // feature)
+        scenarios.results_folder[i]);
+  }
+
+
+so we see  best_planting_month_name_this_year above is assigned the best month. That all works fine.
+
+
+
+SO HOW DOES combined_planting_month_name_rf_or_ir GET ESTABLISHED?
+
+We already see that:
+
+// gets the max of all available yields in each cell (all regions)
+BashScripts.compositeRaster(
+    script_folder,
+    raster_names_to_combine, // input rasters to average
+    combined_yield_name_rf_or_ir, // output best raster yield value
+    combined_planting_month_name_rf_or_ir, // output a grass gis raster of the name from
+    // which the maximum yielding planting month was chosen
+    results_folder);
+
+so that's where it's written to.
+So it's not working! It's supposed to take raster_names_to_combine and return the most common of those.
+But that's wrong. The combined_planting_month_name_rf_or_ir is supposed to get the *planting month* which is the index of the list of rasters. We always have to input a list of rasters of length 12, or it will always be the index of the best cultivar, which is clearly not what we care about.
+
+
+So I think we need the best planting month within a cultivar as the resulting best planting month.
+We take the best cultivar, look at all the months it yielded, then choose the best month.
+Equivalently, we go through all cultivars and find the best months they yield.
+Once we choose the best cultivar, we also choose the best month associated with that cultivar.
+
+
+
+PLAN:
+    expand to 2 cultivars. That way, we can see if it's the cultivar that's the problem.
+
+
+
+
+
+
+here's a start:
+public static void combineAndCalculateProductionRForIR(
+    String crop,
+    String crop_area_raster,
+    boolean create_average_png,
+    boolean calculate_rf_or_ir_specific_average_yield,
+    boolean calculate_rf_or_ir_specific_production,
+    String crop_area_type,
+    String script_folder,
+    String raster_names_to_combine,
+    String planting_months_to_combine,
+    String days_to_maturity_to_combine,
+    String combined_yield_name_rf_or_ir,
+    String combined_production_name_rf_or_ir,
+    String combined_planting_month_name_rf_or_ir,
+    String combined_days_to_maturity_name_rf_or_ir,
+    boolean calculate_maturity,
+    String results_folder)
+    throws InterruptedException, IOException {
+
+    ...
+    // gets the max of all available yields in each cell (all regions)
+    BashScripts.compositeRaster(
+        script_folder,
+        raster_names_to_combine, // input rasters to average
+        combined_yield_name_rf_or_ir, // output best raster yield value
+        combined_cultivar_name_rf_or_ir, // output a grass gis raster of the name from
+        // which the maximum yielding cultivar was chosen
+        results_folder);
+
+    // gets the average of planting months in each cell
+    BashScripts.averageRasters(
+        script_folder,
+        planting_months_to_combine, // input list to average
+        combined_planting_month_name_rf_or_ir, // output averaged list
+        "0", // minimum planting month to consider
+        "mode" // method of average
+        );
+
+    if (calculate_maturity) {
+      // use the best_maturity_group_soybean_key to choose the planting month of interest
+      // planting_months_to_combine
+      BashScripts.useKeyRasterToMapToValueRaster(
+          script_folder,
+          combined_cultivar_name_rf_or_ir, // input key raster for which cultivar to get
+          // value from
+          planting_months_to_combine, // input rasters to get the values from
+          combined_days_to_maturity_name_rf_or_ir); // output raster with days to maturity of
+      // best
+      // cultivar in each cell
+    }
+
+
+
+this effectively uses planting_months_to_combine (which we know is the correct raster to use for single cultivar situations) to get the combined_planting_month_name_rf_or_ir, and has combined_cultivar_name_rf_or_ir variable assigned.
+There are two issues:
+1. planting_months_to_combine may not be defined properly for this situation, where we only want to consider the best cultivar's planting month? Is that true?
+2. combined_cultivar_name_rf_or_ir is not defined! need to make a new variable for this, I think
+
+Starting with 1.
+Considering the more typcial situation:
+} else {
+  // gets the average of all available yields in each cell
+  BashScripts.averageRasters(
+      script_folder,
+      raster_names_to_combine, // input list to average
+      combined_yield_name_rf_or_ir, // output averaged list
+      "0", // minimum yields
+      "average" // method of average
+      );
+
+  // gets the average of planting months in each cell
+  BashScripts.averageRasters(
+      script_folder,
+      planting_months_to_combine, // input list to average
+      combined_planting_month_name_rf_or_ir, // output averaged list
+      "0", // minimum planting month to consider
+      "mode" // method of average
+      );
+
+  // gets the average of days to maturity in each cell
+  if (calculate_maturity) {
+    BashScripts.averageRasters(
+        script_folder,
+        days_to_maturity_to_combine, // input raster
+        combined_days_to_maturity_name_rf_or_ir, // output raster
+        "0", // minimum days to maturity to consider
+        "median" // method of average
+        );
+  }
+The planting_months_to_combine is indeed used and a mode is taken amongst all 
+
+
+if (scenarios.calculate_each_year_best_month) {
+  calculateBestYieldAllYears(
+      script_folder,
+      scenarios.years,
+      scenarios.planting_months,
+      scenarios.raster_names_all_years_wet_or_dry[i],
+      scenarios.best_planting_month_yield_name_all_years[i],
+      scenarios.best_planting_month_name_all_years[i],
+      // scenarios.best_month_maturity_result_name_all_years[i], // (can maybe be a future
+      // feature)
+      scenarios.results_folder[i]);
+}
+
+// 2. If find_best_yields is true, raster_names_average_year has been calculated as the
+// yield of the best planting month ( determined after averaging all years)
+
+if (scenarios.find_best_yields) {
+  findBestYieldsAndBestMaturity(
+      script_folder,
+      scenarios.planting_months,
+      scenarios.raster_names_average_year[i],
+      scenarios.best_planting_month_yield_name[i],
+      scenarios.best_planting_month_name[i],
+      scenarios.output_maturity_mean[i],
+      scenarios.best_planting_month_maturity_name[i],
+      scenarios.results_folder[i]);
+}
+
+we see the planting month is calculated for each "scenario" (cultivar and irrigation type combination), and the yield is averaged accross all the years before the planting month is chosen, and also for each year, the best plantinf month is chosen.
+
+
+There is one scenario for each crop (although crops are typically run one at a time), cultivar (specified by a specific SNX name) and irrigation type (rainfed or irrigated).
+

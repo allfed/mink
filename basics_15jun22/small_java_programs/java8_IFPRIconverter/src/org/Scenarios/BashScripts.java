@@ -703,8 +703,61 @@ public class BashScripts {
     callProcess(pb, grass_script_folder);
   } // end calculateProduction
 
-  public static void setIntersectionWithMegaenvironmentMasks(
+  public static void setIntersectionWithMegaenvironment(
       String run_script_folder, String initial_mask, String megaEnvMasks, String mask_for_this_snx)
+      throws IOException, InterruptedException {
+    // Takes a subset of the initial mask which contains nonnull megaenvironments,
+    // and returns the resulting mask.
+
+    System.out.println("");
+    System.out.println("");
+    System.out.println("getIntersectionWithMegaenvironmentMasks creates raster with name:");
+    System.out.println(mask_for_this_snx);
+    System.out.println("");
+    System.out.println("");
+    System.out.println("initial_mask");
+    System.out.println(initial_mask);
+    System.out.println("list_of_megaenvironment_masks");
+    System.out.println(megaEnvMasks);
+    System.out.println("final_mask");
+    System.out.println(mask_for_this_snx);
+
+    ProcessBuilder pb =
+        new ProcessBuilder(
+            "bash",
+            "./combine_megaenvironment_masks.sh",
+            initial_mask,
+            megaEnvMasks,
+            mask_for_this_snx);
+    String grass_script_folder = run_script_folder + "../more_GRASS_scripts/universal/";
+    callProcess(pb, grass_script_folder);
+  }
+
+  public static void applyWeatherFileMask(
+      String run_script_folder,
+      String original_mask,
+      String raster_masked_by_available_weather_files)
+      throws IOException, InterruptedException {
+    ProcessBuilder pb =
+        new ProcessBuilder(
+            "bash",
+            "apply_weather_file_mask.sh",
+            original_mask,
+            raster_masked_by_available_weather_files);
+
+    String grass_script_folder = run_script_folder + "../more_GRASS_scripts/universal/";
+    callProcess(pb, grass_script_folder);
+  }
+
+  public static void makeWeatherFileMask(
+      String run_script_folder,
+      String weather_folder,
+      double n,
+      double s,
+      double e,
+      double w,
+      double nsres,
+      double ewres)
       throws IOException, InterruptedException {
     // Takes a subset of the initial mask which contains nonnull megaenvironments,
     // and returns the resulting mask.
@@ -721,14 +774,36 @@ public class BashScripts {
     // System.out.println(megaEnvMasks);
     // System.out.println("final_mask");
     // System.out.println(mask_for_this_snx);
+    // System.out.println(
+    //     "python3"
+    //         + " "
+    //         + "make_weather_file_mask.py"
+    //         + " "
+    //         + weather_folder
+    //         + " "
+    //         + String.valueOf(n)
+    //         + " "
+    //         + String.valueOf(s)
+    //         + " "
+    //         + String.valueOf(e)
+    //         + " "
+    //         + String.valueOf(w)
+    //         + " "
+    //         + String.valueOf(nsres)
+    //         + " "
+    //         + String.valueOf(ewres));
 
     ProcessBuilder pb =
         new ProcessBuilder(
-            "bash",
-            "./combine_megaenvironment_masks.sh",
-            initial_mask,
-            megaEnvMasks,
-            mask_for_this_snx);
+            "python3",
+            "make_weather_file_mask.py",
+            "/mnt/data/" + weather_folder,
+            String.valueOf(n),
+            String.valueOf(s),
+            String.valueOf(e),
+            String.valueOf(w),
+            String.valueOf(nsres),
+            String.valueOf(ewres));
     String grass_script_folder = run_script_folder + "../more_GRASS_scripts/universal/";
     callProcess(pb, grass_script_folder);
   }

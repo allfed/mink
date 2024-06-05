@@ -112,7 +112,9 @@ def main(input_filename):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python3 script_name.py <input_filename>")
+        print(
+            "Usage: python3 merge_all_those_pesky_by_country_csvs.py <input_filename>"
+        )
         sys.exit(1)
 
     input_filename = sys.argv[1]
