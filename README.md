@@ -199,9 +199,9 @@ mkdir example_results_control
 
 Congratulations, you made it quite a long way from cloning the repo!
 
-Now let's take a look at example_results_control to see what our hard work to get this crop model working has earned us:
+Now let's take a look at `example_results` to see what our hard work to get this crop model working has earned us:
 ```bash
-cd example_results_control
+cd example_results
 ls -ltr
 ```
 
