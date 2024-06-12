@@ -5,9 +5,9 @@ Ricky Robertson has been working on a crop model based on DSSAT for over a decad
 This repository, developed at [ALLFED](allfed.info), is an attempt to make his hard work open to the public, accessible, better validated, and easier to run, as well as more reliable, faster, and more flexible in application. Rather than focusing on the effects of co2 induced climate change, this code was developed to assess the effects of ASRS (Abrupt Sunlight Reduction Scenario) using climate models that were developed at the University of Colorado Boulder from the Toon group. More specifically, this codebase has been used to assess the effects of 150 tg soot scenarios on global crop production, at the relatively low resolution of ~1.5 by ~2 degrees, and to assess the crop yield potential for relocated crops, more suitable for the new colder climate. It has also been used to assess the expansion of cropland area to increase production where it is still possible to grow crops. 
 
 This additionally codebase features portability speed readability and accuracy.
- - it has been developed to run in parallel on multiple core machines)
- - it has been validated against SPAM and FAOSTAT crop yields in climate conditions of circa 2005)
- - it has been majorly refactored and minimized from its original code footprint)
+ - it has been developed to run in parallel on multiple core machines
+ - it has been validated against SPAM and FAOSTAT crop yields in climate conditions of circa 2005
+ - it has been majorly refactored and minimized from its original code footprint
  - you can run it on any linux machine, and it will work without error, using the singularity virtual machine
 
 This crop model is designed to work with daily weather data produced from the CLM5 climate model, but historical climate conditions can also be assessed, as long as they are in the WTH format (see example_weather folder for an example of such a format).
