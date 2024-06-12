@@ -708,9 +708,11 @@ public class ScenariosProcessor {
         best_planting_month_name, // input key raster to choose which maturity raster to select
         combined_maturity_means, // input raster to get the values to choose from
         best_planting_month_maturity_name); // output raster with days to maturity of best planting
-    // month in each cell
-
-    // BashScripts.createPNG(script_folder, best_planting_month_yield_name, results_folder);
+    // month in each cell png
+    BashScripts.createPNG(script_folder, new String[] {best_planting_month_name}, results_folder);
+    // maturity days png
+    BashScripts.createPNG(
+        script_folder, new String[] {best_planting_month_maturity_name}, results_folder);
   }
 
   // Determine the best yield and best planting month for each grid cell, given a raster for each

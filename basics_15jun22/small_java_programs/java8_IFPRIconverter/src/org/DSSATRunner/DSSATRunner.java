@@ -71,12 +71,12 @@ public class DSSATRunner {
   private static final String groundnutsString = "groundnuts";
   private static final String cottonString = "cotton";
 
-  //	private static final int maizeInt      = 1;
-  //	private static final int riceInt       = 2;
-  //	private static final int wheatInt      = 3;
-  //	private static final int soybeansInt   = 4;
-  //	private static final int groundnutsInt = 5;
-  //	private static final int cottonInt     = 6;
+  //  private static final int maizeInt      = 1;
+  //  private static final int riceInt       = 2;
+  //  private static final int wheatInt      = 3;
+  //  private static final int soybeansInt   = 4;
+  //  private static final int groundnutsInt = 5;
+  //  private static final int cottonInt     = 6;
 
   /////////////////////////////////////////////////////
   // other variables which are good to have sharable //
@@ -115,7 +115,7 @@ public class DSSATRunner {
   private File errorAsFileObject = null;
   private String magicInitializationFilePath = null;
 
-  //	private int cropToUseInt = -3;
+  //  private int cropToUseInt = -3;
 
   private NitrogenOnlyFertilizerScheme nitrogenFertilizerScheme = null;
 
@@ -138,13 +138,13 @@ public class DSSATRunner {
 
   private DescriptiveStatisticsUtility[] extraSummaryAccumulators = null;
 
-  //	private long totalYield = -5;
-  //	private long totalYieldSquared = -6;
-  //	private int maxYield = Integer.MIN_VALUE;
-  //	private int minYield = Integer.MAX_VALUE;
+  //  private long totalYield = -5;
+  //  private long totalYieldSquared = -6;
+  //  private int maxYield = Integer.MIN_VALUE;
+  //  private int minYield = Integer.MAX_VALUE;
 
-  //	private int[][] thisPixelYields = null;
-  //	private int[][] thisPixelMaturities = null;
+  //  private int[][] thisPixelYields = null;
+  //  private int[][] thisPixelMaturities = null;
 
   private int nTimesSuccessfullyReadFirstTime = 0;
   private int nTimesSuccessfullyReadFirstTimeHappy = 0;
@@ -156,8 +156,8 @@ public class DSSATRunner {
   private DescriptiveStatisticsUtility readingTimesHappy = null;
 
   private boolean badThingsHappened = false;
-  //	private int badThingsHappenedIndex = -1;
-  //	private int badPlantingWindow = 9;
+  //  private int badThingsHappenedIndex = -1;
+  //  private int badPlantingWindow = 9;
 
   public DSSATRunner() {
 
@@ -183,7 +183,7 @@ public class DSSATRunner {
     initFileContents += "nPlantingWindowsPerMonth" + "\n";
     initFileContents += "plantingWindowLengthDays" + "\n";
     initFileContents += "sleeptimeWaitForFileMillis" + "\n";
-    //		initFileContents += "sleeptimeExtraMillis" + "\n";
+    //    initFileContents += "sleeptimeExtraMillis" + "\n";
     initFileContents += "maxParsingTries" + "\n";
 
     initFileContents += "co2ppm" + "\n";
@@ -332,9 +332,9 @@ public class DSSATRunner {
 
     String[] initFileContents = FunTricks.readTextFileToArray(filename);
 
-    //		for (int index = 0; index < initFileContents.length; index++) {
-    //		System.out.println(index + " -> [" + initFileContents[index] + "]");
-    //		}
+    //    for (int index = 0; index < initFileContents.length; index++) {
+    //    System.out.println(index + " -> [" + initFileContents[index] + "]");
+    //    }
 
     int storageIndex = 0;
     gisTableBaseName = initFileContents[storageIndex++];
@@ -364,7 +364,7 @@ public class DSSATRunner {
     phenologyBufferInDays = Integer.parseInt(initFileContents[storageIndex++]);
     happyMaturityThresholdToDoRealRuns = Integer.parseInt(initFileContents[storageIndex++]);
 
-    //		now prepare the dependent magic numbers...
+    //    now prepare the dependent magic numbers...
     pathToDSSATDirectoryAsFile = new File(pathToDSSATDirectory);
 
     dssatExecutionCommand[0] = pathToDSSATDirectory + nameOfDSSATExecutable;
@@ -373,6 +373,8 @@ public class DSSATRunner {
 
     magicWeatherStationNameToUsePath = pathToDSSATDirectory + magicWeatherStationNameToUse + ".CLI";
     magicDSSATSummaryToReadPath = pathToDSSATDirectory + magicDSSATSummaryToRead;
+    System.out.println("pathToDSSATDirectory + magicDSSATSummaryToRead");
+    System.out.println(pathToDSSATDirectory + magicDSSATSummaryToRead);
     summaryDSSATOutputAsFileObject = new File(magicDSSATSummaryToReadPath);
     errorAsFileObject = new File(pathToDSSATDirectory + magicErrorFile);
     magicInitializationFilePath = pathToDSSATDirectory + magicInitializationFile;
@@ -381,36 +383,36 @@ public class DSSATRunner {
     // i'm sure there's a better way, but i'm lame, so i'm gonna brute force it...
 
     if (cropFertilizerSchemeToUse.equalsIgnoreCase(this.maizeString)) {
-      //			cropToUseInt = this.maizeInt;
+      //      cropToUseInt = this.maizeInt;
 
       nitrogenFertilizerScheme = new FSMaize();
 
     } else if (cropFertilizerSchemeToUse.equalsIgnoreCase(this.riceString)) {
-      //			cropToUseInt = this.riceInt;
+      //      cropToUseInt = this.riceInt;
 
       nitrogenFertilizerScheme = new FSRice();
 
     } else if (cropFertilizerSchemeToUse.equalsIgnoreCase(this.wheatString)) {
-      //			cropToUseInt = this.wheatInt;
+      //      cropToUseInt = this.wheatInt;
 
       nitrogenFertilizerScheme = new FSWheat();
 
     } else if (cropFertilizerSchemeToUse.equalsIgnoreCase(this.soybeansString)) {
-      //			cropToUseInt = this.soybeansInt;
+      //      cropToUseInt = this.soybeansInt;
 
       nitrogenFertilizerScheme = new FSLegume();
 
     } else if (cropFertilizerSchemeToUse.equalsIgnoreCase(this.groundnutsString)) {
-      //			cropToUseInt = this.groundnutsInt;
+      //      cropToUseInt = this.groundnutsInt;
 
       nitrogenFertilizerScheme = new FSLegume();
 
     } else if (cropFertilizerSchemeToUse.equalsIgnoreCase(this.cottonString)) {
-      //			cropToUseInt = this.cottonInt;
+      //      cropToUseInt = this.cottonInt;
       System.out.println("Need to define the fertilizer scheme for " + cropFertilizerSchemeToUse);
       throw new Exception();
 
-      //			nitrogenFertilizerScheme = new FSMaize();
+      //      nitrogenFertilizerScheme = new FSMaize();
 
     } else {
       System.out.println(
@@ -426,10 +428,10 @@ public class DSSATRunner {
       extraSummaryAccumulators[extraIndex] = new DescriptiveStatisticsUtility(false);
     }
 
-    //		thisPixelYields = new int[nPlantingWindowsPerMonth][nRandomSeedsToUse];
-    //		thisPixelMaturities = new int[nPlantingWindowsPerMonth][nRandomSeedsToUse];
+    //    thisPixelYields = new int[nPlantingWindowsPerMonth][nRandomSeedsToUse];
+    //    thisPixelMaturities = new int[nPlantingWindowsPerMonth][nRandomSeedsToUse];
 
-    //		mark that we're good to go...
+    //    mark that we're good to go...
     readyToRun = true;
   }
 
@@ -442,8 +444,8 @@ public class DSSATRunner {
       throws IOException, FileNotFoundException, Exception {
 
     File provenanceFileObject = new File(filename);
-    //		File provenanceFileObject = new File(yieldOutputBaseName  + "_provenance.txt");
-    //		outputStream = new FileWriter(weatherStationFileObject);
+    //    File provenanceFileObject = new File(yieldOutputBaseName  + "_provenance.txt");
+    //    outputStream = new FileWriter(weatherStationFileObject);
     PrintWriter provenanceOut = new PrintWriter(provenanceFileObject);
 
     provenanceOut.print("--- Provenance for run starting at " + new Date() + "\n");
@@ -648,7 +650,7 @@ public class DSSATRunner {
         newValuesLine += tempValue;
       } else {
         // check if we want to set this to yes or no
-        //				System.out.println("considering: [" + tempName.trim() + "]");
+        //        System.out.println("considering: [" + tempName.trim() + "]");
         if (tempName.trim().equalsIgnoreCase(optionToSetAsNo)) {
           // replace any semblance of yes with no
           newValuesLine += tempValue.replaceAll("Y", "N").replaceAll("y", "N");
@@ -784,7 +786,7 @@ public class DSSATRunner {
         newValuesLine += tempValue;
       } else {
         // check if we want to set this to yes or no
-        //				System.out.println("considering: [" + tempName.trim() + "]");
+        //        System.out.println("considering: [" + tempName.trim() + "]");
         if (tempName.trim().equalsIgnoreCase(optionToKeepAsYes)) {
           // replace any semblance of no with yes
           newValuesLine += tempValue.replaceAll("N", "Y").replaceAll("n", "Y");
@@ -870,13 +872,16 @@ public class DSSATRunner {
               "HAPPY: file not found... try #" + nTries + " [" + errorAsFileObject + "] exists...");
           throw fnfe;
         }
-        //				System.out.println("HAPPY: file not found... try #" + nTries + " (no error file)");
+        //        System.out.println("HAPPY: file not found... try #" + nTries + " (no error
+        // file)");
 
-        //				candidateSummaryContents = new String[] {}; // make it an empty array so the checking
+        //        candidateSummaryContents = new String[] {}; // make it an empty array so the
+        // checking
         // below will poop out
       } catch (IOException ioe) {
         System.out.println("HAPPY: i/o exception...  try #" + nTries);
-        //				candidateSummaryContents = new String[] {}; // make it an empty array so the checking
+        //        candidateSummaryContents = new String[] {}; // make it an empty array so the
+        // checking
         // below will poop out
         throw ioe;
       } catch (ArrayIndexOutOfBoundsException aioobe) {
@@ -886,7 +891,7 @@ public class DSSATRunner {
 
       // check if the file has the right number of lines. if so, check that the last line is
       // completely there...
-      //			System.out.println("HAPPY: try #" + nTries + " length = " +
+      //      System.out.println("HAPPY: try #" + nTries + " length = " +
       // candidateSummaryContents.length);
       if (candidateSummaryContents[nLinesToRead - 1] != null
           && candidateSummaryContents[nLinesToRead - 1].length() == magicDSSATSummaryLineLength) {
@@ -911,6 +916,7 @@ public class DSSATRunner {
     DescriptiveStatisticsUtility happyMaturityDates = new DescriptiveStatisticsUtility(false);
 
     for (int fakeYearIndex = 0; fakeYearIndex < nYears; fakeYearIndex++) {
+      // System.out.println(candidateSummaryContents);
       if (candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead] == null) {
         System.out.println("H: funny business");
         for (int fYI = 0; fYI < nYears; fYI++) {
@@ -924,6 +930,12 @@ public class DSSATRunner {
       }
       everythingIsValid = true;
       try {
+        System.out.println("fakeYearIndex");
+        System.out.println(String.valueOf(fakeYearIndex));
+        System.out.println(
+            "candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead]");
+        System.out.println(
+            candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead]);
         // yield
         yieldToUse =
             Integer.parseInt(
@@ -1030,12 +1042,12 @@ public class DSSATRunner {
     // declarations
     TimerUtility readingTimer = new TimerUtility();
     int plantingDate = -1;
-    //		int eventDate = -2;
+    //    int eventDate = -2;
     int daysSincePlantingForEvent = -3;
-    //		int valueExtracted = -4;
+    //    int valueExtracted = -4;
 
     int yieldToUse = -4;
-    //		int anthesisToUse = -3;
+    //    int anthesisToUse = -3;
     int maturityToUse = -3;
     int[] extractedValues = new int[extraStartIndices.length];
     boolean everythingIsValid = true;
@@ -1084,11 +1096,13 @@ public class DSSATRunner {
         }
         System.out.println("REAL: file not found... try #" + nTries + " (no error file)");
 
-        //				candidateSummaryContents = new String[] {}; // make it an empty array so the checking
+        //        candidateSummaryContents = new String[] {}; // make it an empty array so the
+        // checking
         // below will poop out
       } catch (IOException ioe) {
         System.out.println("REAL: i/o exception...  try #" + nTries);
-        //				candidateSummaryContents = new String[] {}; // make it an empty array so the checking
+        //        candidateSummaryContents = new String[] {}; // make it an empty array so the
+        // checking
         // below will poop out
         throw ioe;
       } catch (ArrayIndexOutOfBoundsException aioobe) {
@@ -1098,7 +1112,7 @@ public class DSSATRunner {
 
       // check if the file has the right number of lines. if so, check that the last line is
       // completely there...
-      //			System.out.println("REAL: try #" + nTries + " length = " +
+      //      System.out.println("REAL: try #" + nTries + " length = " +
       // candidateSummaryContents.length);
       if (candidateSummaryContents[nLinesToRead - 1] != null
           && candidateSummaryContents[nLinesToRead - 1].length() == magicDSSATSummaryLineLength) {
@@ -1137,12 +1151,12 @@ public class DSSATRunner {
                 candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead]
                     .substring(magicPlantingDateStartIndex, magicPlantingDateEndIndex)
                     .trim());
-        //				anthesisToUse = Integer.parseInt(candidateSummaryContents[fakeYearIndex +
+        //        anthesisToUse = Integer.parseInt(candidateSummaryContents[fakeYearIndex +
         // magicDSSATSummaryLineIndexToRead]
         //
         // .substring(magicAnthesisDateStartIndex,
         //
-        //	magicAnthesisDateEndIndex).trim());;
+        //  magicAnthesisDateEndIndex).trim());;
         maturityToUse =
             Integer.parseInt(
                 candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead]
@@ -1175,10 +1189,10 @@ public class DSSATRunner {
                     .substring(magicPlantingDateStartIndex, magicPlantingDateEndIndex)
                     .trim()
                 + "]");
-        //				System.out.println("anthesis  [" +
-        //						candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead]
+        //        System.out.println("anthesis  [" +
+        //            candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead]
         //                                     .substring(magicAnthesisDateStartIndex,
-        //                                     		magicAnthesisDateEndIndex).trim()
+        //                                        magicAnthesisDateEndIndex).trim()
         //            + "]");
         System.out.println(
             "maturity  ["
@@ -1223,30 +1237,30 @@ public class DSSATRunner {
       // OLD WAY without checking for validity of numbers...
       // yield
       realYieldsEntirePixel.useLongValue(
-      		Integer.parseInt(candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead]
-      		                                          .substring(magicHarvestedWeightAtHarvestStartIndex,
-      		                                          		magicHarvestedWeightAtHarvestEndIndex).trim()) );
+          Integer.parseInt(candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead]
+                                                    .substring(magicHarvestedWeightAtHarvestStartIndex,
+                                                        magicHarvestedWeightAtHarvestEndIndex).trim()) );
 
       // planting date
       plantingDate = Integer.parseInt(candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead]
                                                                .substring(magicPlantingDateStartIndex,
-                                                              		 magicPlantingDateEndIndex).trim());
+                                                                   magicPlantingDateEndIndex).trim());
 
       // pull out the bits we want
       // maturity
       eventDate = Integer.parseInt(candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead]
                                                             .substring(magicMaturityDateStartIndex,
-                                                            		magicMaturityDateEndIndex).trim());
+                                                                magicMaturityDateEndIndex).trim());
 
       daysSincePlantingForEvent = DSSATHelperMethods.yyyyDDDdifferencerIgnoreLeap(plantingDate, eventDate);
       realMaturityEntirePixel.useLongValue(daysSincePlantingForEvent);
 
       // all the other goodies...
       for (int extraIndex = 0; extraIndex < extraStartIndices.length; extraIndex++) {
-      	valueExtracted = Integer.parseInt(candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead]
-      	                                                      .substring(extraStartIndices[extraIndex],
-      	                                                      		extraEndIndices[extraIndex]).trim());
-      	extraSummaryAccumulators[extraIndex].useLongValue(valueExtracted);
+        valueExtracted = Integer.parseInt(candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead]
+                                                              .substring(extraStartIndices[extraIndex],
+                                                                  extraEndIndices[extraIndex]).trim());
+        extraSummaryAccumulators[extraIndex].useLongValue(valueExtracted);
       }
       */
     }
@@ -1314,11 +1328,13 @@ public class DSSATRunner {
         }
         System.out.println("REAL: file not found... try #" + nTries + " (no error file)");
 
-        //				candidateSummaryContents = new String[] {}; // make it an empty array so the checking
+        //        candidateSummaryContents = new String[] {}; // make it an empty array so the
+        // checking
         // below will poop out
       } catch (IOException ioe) {
         System.out.println("REAL: i/o exception...  try #" + nTries);
-        //				candidateSummaryContents = new String[] {}; // make it an empty array so the checking
+        //        candidateSummaryContents = new String[] {}; // make it an empty array so the
+        // checking
         // below will poop out
         throw ioe;
       } catch (ArrayIndexOutOfBoundsException aioobe) {
@@ -1328,7 +1344,7 @@ public class DSSATRunner {
 
       // check if the file has the right number of lines. if so, check that the last line is
       // completely there...
-      //			System.out.println("REAL: try #" + nTries + " length = " +
+      //      System.out.println("REAL: try #" + nTries + " length = " +
       // candidateSummaryContents.length);
       if (candidateSummaryContents[nLinesToRead - 1] != null
           && candidateSummaryContents[nLinesToRead - 1].length() == magicDSSATSummaryLineLength) {
@@ -1389,791 +1405,791 @@ public class DSSATRunner {
     return null;
     /*
 
-    		DescriptiveStatisticsUtility happyYields = new DescriptiveStatisticsUtility(false);
-    		DescriptiveStatisticsUtility happyAnthesisDates = new DescriptiveStatisticsUtility(false);
-    		DescriptiveStatisticsUtility happyMaturityDates = new DescriptiveStatisticsUtility(false);
+        DescriptiveStatisticsUtility happyYields = new DescriptiveStatisticsUtility(false);
+        DescriptiveStatisticsUtility happyAnthesisDates = new DescriptiveStatisticsUtility(false);
+        DescriptiveStatisticsUtility happyMaturityDates = new DescriptiveStatisticsUtility(false);
 
 
-    		//////////////////////////////////////////
-    		// extract the results & store to array //
-    		//////////////////////////////////////////
+        //////////////////////////////////////////
+        // extract the results & store to array //
+        //////////////////////////////////////////
 
-    		double singleReadTime = -7.8;
-    		boolean readSuccessfully = false;
-    		int nParsingTries = 0;
-    		int nParsingTotalThisRun = 0;
-    		int nReadingErrors = 0;
+        double singleReadTime = -7.8;
+        boolean readSuccessfully = false;
+        int nParsingTries = 0;
+        int nParsingTotalThisRun = 0;
+        int nReadingErrors = 0;
 
-    		TimerUtility extraTimer = new TimerUtility();
+        TimerUtility extraTimer = new TimerUtility();
 
-    		long retrySleepTimeToUse = 2; // Beware the MAGIC NUMBER!!!
+        long retrySleepTimeToUse = 2; // Beware the MAGIC NUMBER!!!
 
-    		int timeCheckNumber = 2;
-
-
-    		FileReader     DSSATSummaryStream = null;
-    		BufferedReader DSSATSummaryReader = null;
-
-    		String goodSummaryLine = null;
-
-    		int plantingDate = -1;
-    		int eventDate = -2;
-    		int daysSincePlantingForEvent = -3;
-
-    		extraTimer.tic();
-    		while (!readSuccessfully) {
-
-    			// determine whether we want to increase the initial wait time:
-    			if (nTimesSuccessfullyReadFirstTimeHappy == 0 && nParsingTries == 1) {
-    				initialSleepTimeToUseHappy = Math.min(initialSleepTimeToUseHappy + 1, readingTimesHappy.getMinAsLong());
-    			} else if (nTimesSuccessfullyReadFirstTimeHappy > 0 && nTimesSuccessfullyReadFirstTimeHappy % timeCheckNumber == 0 && nParsingTries == 0) {
-    				initialSleepTimeToUseHappy--;
-    			}
-
-    			if (nParsingTries == 0) {
-    				Thread.sleep(initialSleepTimeToUseHappy);
-    			} else {
-    				Thread.sleep(retrySleepTimeToUse);
-    			}
-
-    			nParsingTries++;
-
-    			try {
-    				nParsingTotalThisRun++;
-    				if (nParsingTotalThisRun > this.hardLimitOnReReads) {
-
-    					// wait a second and look for the error file
-    					Thread.sleep(initialSleepTimeToUseHappy);
-    					if (errorAsFileObject.exists()) {
-    						System.out.println("happy plant: \t-- bad things [excessive reading] --");
-    						throw new Exception();
-    					}
-    				}
-
-    				DSSATSummaryStream = new FileReader(magicDSSATSummaryToReadPath);
-    				DSSATSummaryReader = new BufferedReader(DSSATSummaryStream);
-
-    				// read through the stuff we don't care about
-    				for (int junkLineIndex = 0; junkLineIndex < magicDSSATSummaryLineIndexToRead ; junkLineIndex++) {
-    					DSSATSummaryReader.readLine();
-    				}
-
-    				///////////////////////////////
-    				// begin reading output file //
-    				///////////////////////////////
-
-    				for (int fakeYearIndex = 0; fakeYearIndex < nHappyYears; fakeYearIndex++) {
-    					badThingsHappenedIndex = fakeYearIndex;
-    					// grab the line with actual information
-    					goodSummaryLine = DSSATSummaryReader.readLine();
-
-    					// yield
-    					happyYields.useLongValue(
-    							Integer.parseInt(goodSummaryLine.substring(magicHarvestedWeightAtHarvestStartIndex,
-    									magicHarvestedWeightAtHarvestEndIndex).trim())
-    					);
-
-    					// planting date
-    					plantingDate = Integer.parseInt(goodSummaryLine.substring(magicPlantingDateStartIndex,
-    							magicPlantingDateEndIndex).trim());
-
-    					// anthesis
-    					eventDate = Integer.parseInt(goodSummaryLine.substring(magicAnthesisDateStartIndex,
-    							magicAnthesisDateEndIndex).trim());
-    					daysSincePlantingForEvent = eventDate - plantingDate;
-    					happyAnthesisDates.useLongValue(daysSincePlantingForEvent);
-
-    					// pull out the bits we want
-    					// anthesis
-    					eventDate = Integer.parseInt(goodSummaryLine.substring(magicMaturityDateStartIndex,
-    							magicMaturityDateEndIndex).trim());
-    					daysSincePlantingForEvent = eventDate - plantingDate;
-    					happyMaturityDates.useLongValue(daysSincePlantingForEvent);
+        int timeCheckNumber = 2;
 
 
-    //					thisPixelYields[plantingWindowIndex][fakeYearIndex] =
-    //						Integer.parseInt(goodSummaryLine.substring(magicHarvestedWeightAtHarvestStartIndex,
-    //								magicHarvestedWeightAtHarvestEndIndex).trim());
-    				}
+        FileReader     DSSATSummaryStream = null;
+        BufferedReader DSSATSummaryReader = null;
 
-    				// now accumulate various statistics
-    				// we will do this in a separate loop to make sure everything has been read in before doing
-    				// the accumulation. otherwise, we get non-deterministic computing due to partial file reads...
+        String goodSummaryLine = null;
 
+        int plantingDate = -1;
+        int eventDate = -2;
+        int daysSincePlantingForEvent = -3;
 
-    				///////////////////////////////
-    				// end reading output file //
-    				///////////////////////////////
+        extraTimer.tic();
+        while (!readSuccessfully) {
 
-    				// we have successfully read it, so flip the flag
-    				// delete it so that we don't accidentally find it next time...
-    				readSuccessfully = true;
-    				nTimesSuccessfullyReadFirstTimeHappy++;
+          // determine whether we want to increase the initial wait time:
+          if (nTimesSuccessfullyReadFirstTimeHappy == 0 && nParsingTries == 1) {
+            initialSleepTimeToUseHappy = Math.min(initialSleepTimeToUseHappy + 1, readingTimesHappy.getMinAsLong());
+          } else if (nTimesSuccessfullyReadFirstTimeHappy > 0 && nTimesSuccessfullyReadFirstTimeHappy % timeCheckNumber == 0 && nParsingTries == 0) {
+            initialSleepTimeToUseHappy--;
+          }
 
-    				DSSATSummaryReader.close();
-    				DSSATSummaryStream.close();
+          if (nParsingTries == 0) {
+            Thread.sleep(initialSleepTimeToUseHappy);
+          } else {
+            Thread.sleep(retrySleepTimeToUse);
+          }
 
-    				summaryDSSATOutputAsFileObject.delete();
+          nParsingTries++;
 
-    			} catch (NumberFormatException nfe) {
-    				// do nothing so that it will return and try again
-    				System.out.println("happy plant: Failed to read summary properly on try #" + nParsingTries + ", trying again [number format exception]");
-    				DSSATSummaryReader.close();
-    				nTimesSuccessfullyReadFirstTimeHappy = 0;
-    			} catch (NullPointerException npe) {
-    				// do nothing so that it will return and try again
-    				DSSATSummaryReader.close();
-    				DSSATSummaryStream.close();
+          try {
+            nParsingTotalThisRun++;
+            if (nParsingTotalThisRun > this.hardLimitOnReReads) {
 
-    				// bump up a counter on these
-    				nReadingErrors++;
+              // wait a second and look for the error file
+              Thread.sleep(initialSleepTimeToUseHappy);
+              if (errorAsFileObject.exists()) {
+                System.out.println("happy plant: \t-- bad things [excessive reading] --");
+                throw new Exception();
+              }
+            }
 
-    				// sleep a moment
-    				Thread.sleep(retrySleepTimeToUse);
+            DSSATSummaryStream = new FileReader(magicDSSATSummaryToReadPath);
+            DSSATSummaryReader = new BufferedReader(DSSATSummaryStream);
 
-    				// we are going to allow a few of these before throwing the real exception...
-    				if (nReadingErrors < hardLimitOnHappyReadingErrors) {
-    					// check for error file.
-    					if (errorAsFileObject.exists()) {
-    						// something bad happened
-    						errorAsFileObject.delete();
-    						DSSATSummaryReader.close();
-    						DSSATSummaryStream.close();
-    						System.out.println("happy plant: \t-- bad things [null pointer] retrying after NRE #" + nReadingErrors + " --");
-    						// just ignore it for the moment and hope it goes away...
-    					}
+            // read through the stuff we don't care about
+            for (int junkLineIndex = 0; junkLineIndex < magicDSSATSummaryLineIndexToRead ; junkLineIndex++) {
+              DSSATSummaryReader.readLine();
+            }
 
-    				} else {
-    					// check for error file.
-    					if (errorAsFileObject.exists()) {
-    						System.out.println("happy plant: \t-- bad things [null pointer] NRE#" + nReadingErrors + " --");
-    						throw new Exception();
-    					}
+            ///////////////////////////////
+            // begin reading output file //
+            ///////////////////////////////
 
-    				}
+            for (int fakeYearIndex = 0; fakeYearIndex < nHappyYears; fakeYearIndex++) {
+              badThingsHappenedIndex = fakeYearIndex;
+              // grab the line with actual information
+              goodSummaryLine = DSSATSummaryReader.readLine();
 
-    				nTimesSuccessfullyReadFirstTimeHappy = 0;
-    				// otherwise, we just wait for the rest of the file to be written out...
-    			} catch (java.io.FileNotFoundException fnfe) {
-    //				System.out.println("happy plant: Failed to read summary properly on try #" + nParsingTries + ", trying again [file not found exception]");
-    				nReadingErrors++;
-    				// wait another moment and then check for the error file...
-    				Thread.sleep(retrySleepTimeToUse);
+              // yield
+              happyYields.useLongValue(
+                  Integer.parseInt(goodSummaryLine.substring(magicHarvestedWeightAtHarvestStartIndex,
+                      magicHarvestedWeightAtHarvestEndIndex).trim())
+              );
 
-    				if (nReadingErrors < hardLimitOnHappyReadingErrors) {
-    					// something bad happened
-    					errorAsFileObject.delete();
-    					if (DSSATSummaryReader != null) {
-    						DSSATSummaryReader.close();
-    						DSSATSummaryStream.close();
-    					}
-    					System.out.println("happy plant: \t-- bad things [file not found] retrying after NRE #" + nReadingErrors + " --");
-    					// just ignore it for the moment and hope it goes away...
-    				} else {
-    					// check for error file
-    					if (errorAsFileObject.exists()) {
-    						System.out.println("happy plant: \t-- bad things [file not found] --");
-    						throw new Exception();
-    					}
+              // planting date
+              plantingDate = Integer.parseInt(goodSummaryLine.substring(magicPlantingDateStartIndex,
+                  magicPlantingDateEndIndex).trim());
 
-    				}
+              // anthesis
+              eventDate = Integer.parseInt(goodSummaryLine.substring(magicAnthesisDateStartIndex,
+                  magicAnthesisDateEndIndex).trim());
+              daysSincePlantingForEvent = eventDate - plantingDate;
+              happyAnthesisDates.useLongValue(daysSincePlantingForEvent);
 
-    				if (nParsingTries > maxParsingTries) {
-    					System.out.println("happy plant: re-running DSSAT after " + nParsingTries);
-    					DSSATSummaryReader.close();
-    					DSSATSummaryStream.close();
-    					Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
-    					nParsingTries = 0;
-    				}
-    				nTimesSuccessfullyReadFirstTimeHappy = 0;
-    			} catch (StringIndexOutOfBoundsException sioobe) {
-    				System.out.println("happy plant: Failed to read summary properly on try #" + nParsingTries + ", trying again [string index out of bounds exception]");
-    				DSSATSummaryReader.close();
-    				DSSATSummaryStream.close();
-    				nTimesSuccessfullyReadFirstTimeHappy = 0;
-    			}
-    		} // end while(!readSuccessfully)
-    		singleReadTime = extraTimer.tocMillis();
-    		readingTimesHappy.useDoubleValue(singleReadTime);
-    //		System.out.println("\t\t\t\t\t\thr:" + nTimesSuccessfullyReadFirstTimeHappy + ";" + singleReadTime
-    //				+ "/" + countStuffHappy.getMinAsDouble() + "/" + initialSleepTimeToUseHappy);
+              // pull out the bits we want
+              // anthesis
+              eventDate = Integer.parseInt(goodSummaryLine.substring(magicMaturityDateStartIndex,
+                  magicMaturityDateEndIndex).trim());
+              daysSincePlantingForEvent = eventDate - plantingDate;
+              happyMaturityDates.useLongValue(daysSincePlantingForEvent);
 
 
+    //          thisPixelYields[plantingWindowIndex][fakeYearIndex] =
+    //            Integer.parseInt(goodSummaryLine.substring(magicHarvestedWeightAtHarvestStartIndex,
+    //                magicHarvestedWeightAtHarvestEndIndex).trim());
+            }
 
-    		return new int[] {(int)Math.floor(happyYields.getMean()),
-    				(int)Math.floor(happyAnthesisDates.getMean()),
-    				(int)Math.floor(happyMaturityDates.getMean())};
+            // now accumulate various statistics
+            // we will do this in a separate loop to make sure everything has been read in before doing
+            // the accumulation. otherwise, we get non-deterministic computing due to partial file reads...
+
+
+            ///////////////////////////////
+            // end reading output file //
+            ///////////////////////////////
+
+            // we have successfully read it, so flip the flag
+            // delete it so that we don't accidentally find it next time...
+            readSuccessfully = true;
+            nTimesSuccessfullyReadFirstTimeHappy++;
+
+            DSSATSummaryReader.close();
+            DSSATSummaryStream.close();
+
+            summaryDSSATOutputAsFileObject.delete();
+
+          } catch (NumberFormatException nfe) {
+            // do nothing so that it will return and try again
+            System.out.println("happy plant: Failed to read summary properly on try #" + nParsingTries + ", trying again [number format exception]");
+            DSSATSummaryReader.close();
+            nTimesSuccessfullyReadFirstTimeHappy = 0;
+          } catch (NullPointerException npe) {
+            // do nothing so that it will return and try again
+            DSSATSummaryReader.close();
+            DSSATSummaryStream.close();
+
+            // bump up a counter on these
+            nReadingErrors++;
+
+            // sleep a moment
+            Thread.sleep(retrySleepTimeToUse);
+
+            // we are going to allow a few of these before throwing the real exception...
+            if (nReadingErrors < hardLimitOnHappyReadingErrors) {
+              // check for error file.
+              if (errorAsFileObject.exists()) {
+                // something bad happened
+                errorAsFileObject.delete();
+                DSSATSummaryReader.close();
+                DSSATSummaryStream.close();
+                System.out.println("happy plant: \t-- bad things [null pointer] retrying after NRE #" + nReadingErrors + " --");
+                // just ignore it for the moment and hope it goes away...
+              }
+
+            } else {
+              // check for error file.
+              if (errorAsFileObject.exists()) {
+                System.out.println("happy plant: \t-- bad things [null pointer] NRE#" + nReadingErrors + " --");
+                throw new Exception();
+              }
+
+            }
+
+            nTimesSuccessfullyReadFirstTimeHappy = 0;
+            // otherwise, we just wait for the rest of the file to be written out...
+          } catch (java.io.FileNotFoundException fnfe) {
+    //        System.out.println("happy plant: Failed to read summary properly on try #" + nParsingTries + ", trying again [file not found exception]");
+            nReadingErrors++;
+            // wait another moment and then check for the error file...
+            Thread.sleep(retrySleepTimeToUse);
+
+            if (nReadingErrors < hardLimitOnHappyReadingErrors) {
+              // something bad happened
+              errorAsFileObject.delete();
+              if (DSSATSummaryReader != null) {
+                DSSATSummaryReader.close();
+                DSSATSummaryStream.close();
+              }
+              System.out.println("happy plant: \t-- bad things [file not found] retrying after NRE #" + nReadingErrors + " --");
+              // just ignore it for the moment and hope it goes away...
+            } else {
+              // check for error file
+              if (errorAsFileObject.exists()) {
+                System.out.println("happy plant: \t-- bad things [file not found] --");
+                throw new Exception();
+              }
+
+            }
+
+            if (nParsingTries > maxParsingTries) {
+              System.out.println("happy plant: re-running DSSAT after " + nParsingTries);
+              DSSATSummaryReader.close();
+              DSSATSummaryStream.close();
+              Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
+              nParsingTries = 0;
+            }
+            nTimesSuccessfullyReadFirstTimeHappy = 0;
+          } catch (StringIndexOutOfBoundsException sioobe) {
+            System.out.println("happy plant: Failed to read summary properly on try #" + nParsingTries + ", trying again [string index out of bounds exception]");
+            DSSATSummaryReader.close();
+            DSSATSummaryStream.close();
+            nTimesSuccessfullyReadFirstTimeHappy = 0;
+          }
+        } // end while(!readSuccessfully)
+        singleReadTime = extraTimer.tocMillis();
+        readingTimesHappy.useDoubleValue(singleReadTime);
+    //    System.out.println("\t\t\t\t\t\thr:" + nTimesSuccessfullyReadFirstTimeHappy + ";" + singleReadTime
+    //        + "/" + countStuffHappy.getMinAsDouble() + "/" + initialSleepTimeToUseHappy);
 
 
 
-    	*/ }
+        return new int[] {(int)Math.floor(happyYields.getMean()),
+            (int)Math.floor(happyAnthesisDates.getMean()),
+            (int)Math.floor(happyMaturityDates.getMean())};
+
+
+
+      */ }
 
   private void grabRealResults(int lineIndex, int plantingWindowIndex)
       throws InterruptedException, IOException, Exception {
 
     /*
 
-    		//////////////////////////////////////////
-    		// extract the results & store to array //
-    		//////////////////////////////////////////
+        //////////////////////////////////////////
+        // extract the results & store to array //
+        //////////////////////////////////////////
 
-    		double singleReadTime = -7.8;
-    		boolean readSuccessfully = false;
-    		int nParsingTries = 0;
-    		int nParsingTotalThisRun = 0;
-    //		int nTimesSuccessfullyReadFirstTimeq = 0;
+        double singleReadTime = -7.8;
+        boolean readSuccessfully = false;
+        int nParsingTries = 0;
+        int nParsingTotalThisRun = 0;
+    //    int nTimesSuccessfullyReadFirstTimeq = 0;
 
-    		int plantingDate = -1;
-    		int eventDate = -2;
-
-
-    		TimerUtility extraTimer = new TimerUtility();
-
-    		long retrySleepTimeToUse = 2; // Beware the MAGIC NUMBER!!!
-
-    		int timeCheckNumber = 2;
+        int plantingDate = -1;
+        int eventDate = -2;
 
 
-    		FileReader     DSSATSummaryStream = null;
-    		BufferedReader DSSATSummaryReader = null;
+        TimerUtility extraTimer = new TimerUtility();
 
-    		String goodSummaryLine = null;
+        long retrySleepTimeToUse = 2; // Beware the MAGIC NUMBER!!!
 
-
-    		badThingsHappened = false;
-    		badThingsHappenedIndex = 0;
+        int timeCheckNumber = 2;
 
 
+        FileReader     DSSATSummaryStream = null;
+        BufferedReader DSSATSummaryReader = null;
 
-    		extraTimer.tic();
-    		while (!readSuccessfully) {
-
-    			// determine whether we want to increase the initial wait time:
-    			if (nTimesSuccessfullyReadFirstTime == 0 && nParsingTries == 1) {
-    				initialSleepTimeToUse = Math.min(initialSleepTimeToUse + 1, readingTimesReal.getMinAsLong());
-    			} else if (nTimesSuccessfullyReadFirstTime > 0 && nTimesSuccessfullyReadFirstTime % timeCheckNumber == 0 && nParsingTries == 0) {
-    				initialSleepTimeToUse--;
-    			}
-
-    			if (nParsingTries == 0) {
-    				Thread.sleep(initialSleepTimeToUse);
-    			} else {
-    				Thread.sleep(retrySleepTimeToUse);
-    			}
-
-    			nParsingTries++;
-
-    			try {
-    				nParsingTotalThisRun++;
-    				if (nParsingTotalThisRun > this.hardLimitOnReReads) {
-
-    //					System.out.println("breaking due to excessive read attempts; seed = " + badThingsHappenedIndex + "; window = " + plantingWindowIndex);
-
-    					// wait a second and look for the error file
-    					Thread.sleep(initialSleepTimeToUse);
-    					if (errorAsFileObject.exists()) {
-    						badThingsHappened = true;
-    						badPlantingWindow = plantingWindowIndex;
-    						System.out.println("\t-- bad things [excessive reading] --");
-    						break;
-    					}
-    //					System.out.println("no error yet...");
-    				}
-
-    				DSSATSummaryStream = new FileReader(magicDSSATSummaryToReadPath);
-    				DSSATSummaryReader = new BufferedReader(DSSATSummaryStream);
-
-    				// read through the stuff we don't care about
-    				for (int junkLineIndex = 0; junkLineIndex < magicDSSATSummaryLineIndexToRead ; junkLineIndex++) {
-    					DSSATSummaryReader.readLine();
-    				}
-
-    				///////////////////////////////
-    				// begin reading output file //
-    				///////////////////////////////
-
-    				for (int fakeYearIndex = 0; fakeYearIndex < nRandomSeedsToUse; fakeYearIndex++) {
-    					badThingsHappenedIndex = fakeYearIndex;
-    					// grab the line with actual information
-    					goodSummaryLine = DSSATSummaryReader.readLine();
-    					// pull out the harvest yield at harvest
-    					thisPixelYields[plantingWindowIndex][fakeYearIndex] =
-    						Integer.parseInt(goodSummaryLine.substring(magicHarvestedWeightAtHarvestStartIndex,
-    								magicHarvestedWeightAtHarvestEndIndex).trim());
-
-    					// planting date
-    					plantingDate = Integer.parseInt(goodSummaryLine.substring(magicPlantingDateStartIndex,
-    							magicPlantingDateEndIndex).trim());
-
-    					// pull out the bits we want
-    					// maturity
-    					eventDate = Integer.parseInt(goodSummaryLine.substring(magicMaturityDateStartIndex,
-    							magicMaturityDateEndIndex).trim());
-    					thisPixelMaturities[plantingWindowIndex][fakeYearIndex] = eventDate - plantingDate;
+        String goodSummaryLine = null;
 
 
-    				}
-
-    				// now accumulate various statistics
-    				// we will do this in a separate loop to make sure everything has been read in before doing
-    				// the accumulation. otherwise, we get non-deterministic computing due to partial file reads...
-
-    				// the DescriptiveStatisticsUtility is assumed to be properly set *prior* to entering this method
-    				for (int fakeYearIndex = 0; fakeYearIndex < nRandomSeedsToUse; fakeYearIndex++) {
-    					realYieldsEntirePixel.useLongValue(thisPixelYields[plantingWindowIndex][fakeYearIndex]);
-
-    					realMaturityEntirePixel.useLongValue(thisPixelMaturities[plantingWindowIndex][fakeYearIndex]);
-
-    				}
-
-    				///////////////////////////////
-    				// end reading output file //
-    				///////////////////////////////
-
-    				// we have successfully read it, so flip the flag
-    				// delete it so that we don't accidentally find it next time...
-    				readSuccessfully = true;
-    				nTimesSuccessfullyReadFirstTime++;
-
-    				DSSATSummaryReader.close();
-    				DSSATSummaryStream.close();
-
-    				summaryDSSATOutputAsFileObject.delete();
-
-    			} catch (NumberFormatException nfe) {
-    				// do nothing so that it will return and try again
-    				System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [number format exception]; line index " + lineIndex + ", window = " + plantingWindowIndex);
-    				DSSATSummaryReader.close();
-    				DSSATSummaryStream.close();
-    				nTimesSuccessfullyReadFirstTime = 0;
-    			} catch (NullPointerException npe) {
-    				// do nothing so that it will return and try again
-    				DSSATSummaryReader.close();
-    				DSSATSummaryStream.close();
-    				nTimesSuccessfullyReadFirstTime = 0;
-
-    				// check for error file.
-    				Thread.sleep(initialSleepTimeToUse);
-    				if (errorAsFileObject.exists()) {
-    					// something bad happened
-    					badThingsHappened = true;
-
-    					badPlantingWindow = plantingWindowIndex;
-
-    					errorAsFileObject.delete();
-    					DSSATSummaryReader.close();
-    					DSSATSummaryStream.close();
-    					System.out.println("\t-- bad things [null pointer] --");
-    					break;
-    				}
-    				// otherwise, we just wait for the rest of the file to be written out...
-    			} catch (java.io.FileNotFoundException fnfe) {
-    //				System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [file not found exception] + (line " + lineIndex + ", window = " + plantingWindowIndex + ")");
-
-    				// wait another moment and then check for the error file...
-    				Thread.sleep(initialSleepTimeToUse);
-    				// check for error file
-    				if (errorAsFileObject.exists()) {
-    					badThingsHappened = true;
-
-    					badPlantingWindow = plantingWindowIndex;
-
-    					errorAsFileObject.delete();
-    					if (DSSATSummaryReader != null) {
-    						DSSATSummaryReader.close();
-    						DSSATSummaryStream.close();
-    					}
-    					System.out.println("\t-- bad things [file not found] --");
-    					break;
-    				}
-
-    				if (nParsingTries > maxParsingTries) {
-    					System.out.println("re-running DSSAT after " + nParsingTries + "; line index " + lineIndex + ", window = " + plantingWindowIndex);
-    					DSSATSummaryReader.close();
-    					DSSATSummaryStream.close();
-    					Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
-    					nParsingTries = 0;
-    				}
-    				nTimesSuccessfullyReadFirstTime = 0;
-    			} catch (StringIndexOutOfBoundsException sioobe) {
-    				System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [string index out of bounds exception]; line index " + lineIndex + ", window = " + plantingWindowIndex);
-    				DSSATSummaryReader.close();
-    				DSSATSummaryStream.close();
-    				nTimesSuccessfullyReadFirstTime = 0;
-    			}
-    		} // end while(!readSuccessfully)
-    		singleReadTime = extraTimer.tocMillis();
-    		// only consider the reading time if everything was read properly...
-    		if (!badThingsHappened) {
-    			readingTimesReal.useDoubleValue(singleReadTime);
-    		}
-    //		System.out.println("\t\t" + lineIndex + "/" + plantingWindowIndex + "; " + singleReadTime + "/" + countStuff.getMinAsDouble() + "/" + initialSleepTimeToUse);
+        badThingsHappened = false;
+        badThingsHappenedIndex = 0;
 
 
 
-    	*/ }
+        extraTimer.tic();
+        while (!readSuccessfully) {
+
+          // determine whether we want to increase the initial wait time:
+          if (nTimesSuccessfullyReadFirstTime == 0 && nParsingTries == 1) {
+            initialSleepTimeToUse = Math.min(initialSleepTimeToUse + 1, readingTimesReal.getMinAsLong());
+          } else if (nTimesSuccessfullyReadFirstTime > 0 && nTimesSuccessfullyReadFirstTime % timeCheckNumber == 0 && nParsingTries == 0) {
+            initialSleepTimeToUse--;
+          }
+
+          if (nParsingTries == 0) {
+            Thread.sleep(initialSleepTimeToUse);
+          } else {
+            Thread.sleep(retrySleepTimeToUse);
+          }
+
+          nParsingTries++;
+
+          try {
+            nParsingTotalThisRun++;
+            if (nParsingTotalThisRun > this.hardLimitOnReReads) {
+
+    //          System.out.println("breaking due to excessive read attempts; seed = " + badThingsHappenedIndex + "; window = " + plantingWindowIndex);
+
+              // wait a second and look for the error file
+              Thread.sleep(initialSleepTimeToUse);
+              if (errorAsFileObject.exists()) {
+                badThingsHappened = true;
+                badPlantingWindow = plantingWindowIndex;
+                System.out.println("\t-- bad things [excessive reading] --");
+                break;
+              }
+    //          System.out.println("no error yet...");
+            }
+
+            DSSATSummaryStream = new FileReader(magicDSSATSummaryToReadPath);
+            DSSATSummaryReader = new BufferedReader(DSSATSummaryStream);
+
+            // read through the stuff we don't care about
+            for (int junkLineIndex = 0; junkLineIndex < magicDSSATSummaryLineIndexToRead ; junkLineIndex++) {
+              DSSATSummaryReader.readLine();
+            }
+
+            ///////////////////////////////
+            // begin reading output file //
+            ///////////////////////////////
+
+            for (int fakeYearIndex = 0; fakeYearIndex < nRandomSeedsToUse; fakeYearIndex++) {
+              badThingsHappenedIndex = fakeYearIndex;
+              // grab the line with actual information
+              goodSummaryLine = DSSATSummaryReader.readLine();
+              // pull out the harvest yield at harvest
+              thisPixelYields[plantingWindowIndex][fakeYearIndex] =
+                Integer.parseInt(goodSummaryLine.substring(magicHarvestedWeightAtHarvestStartIndex,
+                    magicHarvestedWeightAtHarvestEndIndex).trim());
+
+              // planting date
+              plantingDate = Integer.parseInt(goodSummaryLine.substring(magicPlantingDateStartIndex,
+                  magicPlantingDateEndIndex).trim());
+
+              // pull out the bits we want
+              // maturity
+              eventDate = Integer.parseInt(goodSummaryLine.substring(magicMaturityDateStartIndex,
+                  magicMaturityDateEndIndex).trim());
+              thisPixelMaturities[plantingWindowIndex][fakeYearIndex] = eventDate - plantingDate;
+
+
+            }
+
+            // now accumulate various statistics
+            // we will do this in a separate loop to make sure everything has been read in before doing
+            // the accumulation. otherwise, we get non-deterministic computing due to partial file reads...
+
+            // the DescriptiveStatisticsUtility is assumed to be properly set *prior* to entering this method
+            for (int fakeYearIndex = 0; fakeYearIndex < nRandomSeedsToUse; fakeYearIndex++) {
+              realYieldsEntirePixel.useLongValue(thisPixelYields[plantingWindowIndex][fakeYearIndex]);
+
+              realMaturityEntirePixel.useLongValue(thisPixelMaturities[plantingWindowIndex][fakeYearIndex]);
+
+            }
+
+            ///////////////////////////////
+            // end reading output file //
+            ///////////////////////////////
+
+            // we have successfully read it, so flip the flag
+            // delete it so that we don't accidentally find it next time...
+            readSuccessfully = true;
+            nTimesSuccessfullyReadFirstTime++;
+
+            DSSATSummaryReader.close();
+            DSSATSummaryStream.close();
+
+            summaryDSSATOutputAsFileObject.delete();
+
+          } catch (NumberFormatException nfe) {
+            // do nothing so that it will return and try again
+            System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [number format exception]; line index " + lineIndex + ", window = " + plantingWindowIndex);
+            DSSATSummaryReader.close();
+            DSSATSummaryStream.close();
+            nTimesSuccessfullyReadFirstTime = 0;
+          } catch (NullPointerException npe) {
+            // do nothing so that it will return and try again
+            DSSATSummaryReader.close();
+            DSSATSummaryStream.close();
+            nTimesSuccessfullyReadFirstTime = 0;
+
+            // check for error file.
+            Thread.sleep(initialSleepTimeToUse);
+            if (errorAsFileObject.exists()) {
+              // something bad happened
+              badThingsHappened = true;
+
+              badPlantingWindow = plantingWindowIndex;
+
+              errorAsFileObject.delete();
+              DSSATSummaryReader.close();
+              DSSATSummaryStream.close();
+              System.out.println("\t-- bad things [null pointer] --");
+              break;
+            }
+            // otherwise, we just wait for the rest of the file to be written out...
+          } catch (java.io.FileNotFoundException fnfe) {
+    //        System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [file not found exception] + (line " + lineIndex + ", window = " + plantingWindowIndex + ")");
+
+            // wait another moment and then check for the error file...
+            Thread.sleep(initialSleepTimeToUse);
+            // check for error file
+            if (errorAsFileObject.exists()) {
+              badThingsHappened = true;
+
+              badPlantingWindow = plantingWindowIndex;
+
+              errorAsFileObject.delete();
+              if (DSSATSummaryReader != null) {
+                DSSATSummaryReader.close();
+                DSSATSummaryStream.close();
+              }
+              System.out.println("\t-- bad things [file not found] --");
+              break;
+            }
+
+            if (nParsingTries > maxParsingTries) {
+              System.out.println("re-running DSSAT after " + nParsingTries + "; line index " + lineIndex + ", window = " + plantingWindowIndex);
+              DSSATSummaryReader.close();
+              DSSATSummaryStream.close();
+              Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
+              nParsingTries = 0;
+            }
+            nTimesSuccessfullyReadFirstTime = 0;
+          } catch (StringIndexOutOfBoundsException sioobe) {
+            System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [string index out of bounds exception]; line index " + lineIndex + ", window = " + plantingWindowIndex);
+            DSSATSummaryReader.close();
+            DSSATSummaryStream.close();
+            nTimesSuccessfullyReadFirstTime = 0;
+          }
+        } // end while(!readSuccessfully)
+        singleReadTime = extraTimer.tocMillis();
+        // only consider the reading time if everything was read properly...
+        if (!badThingsHappened) {
+          readingTimesReal.useDoubleValue(singleReadTime);
+        }
+    //    System.out.println("\t\t" + lineIndex + "/" + plantingWindowIndex + "; " + singleReadTime + "/" + countStuff.getMinAsDouble() + "/" + initialSleepTimeToUse);
+
+
+
+      */ }
 
   public void doSimulationsUniqueRandomSeeds() throws Exception {
     /*
 
-    		//////////////////////////////////////////////////
-    		// check if everything has been set up properly //
-    		//////////////////////////////////////////////////
-    		if (!this.readyToRun) {
-    			System.out.println("DSSATRunner not ready to run... exiting...");
-    			return;
-    		}
-
-    		// set up a timer for the fun of it...
-    		TimerUtility thisTimer = new TimerUtility();
-
-    		///////////////////////////////////
-    		// write out the provenance file //
-    		///////////////////////////////////
-    		System.out.println("-- starting to write provenance file --");
-    		this.writeProvenance();
-    		System.out.println("== done writing provenance file ==");
-
-    		///////////////////////////////////////
-    		// read in the whole template X file //
-    		///////////////////////////////////////
-    		String templateXFileContents = FunTricks.readTextFileToString(templateXFile);
-
-    		System.out.println("== done reading in template X file ==");
-
-    		///////////////////////////
-    		// variable declarations //
-    		///////////////////////////
-
-    		FileReader DSSATSummaryStream = null;
-    		BufferedReader DSSATSummaryReader = null;
-    		int[] nonClimateInfo = null; // {(int)soilType, (int)elevation, (int)plantingMonth, firstPlantingDay};
-    		int soilType = -1, firstPlantingDay = -4;
-    		int startingDayToPlantForThisWindow = -1;
-    		int endingDayToPlantForThisWindow = -99;
-    		int fakePlantingYearEnd = -101;
-    		int initializationDayForThisWindow = -4;
-    		int fakeInitializationYear = -5;
-    		int randomSeedToUse = -13;
-
-    		int[][] thisPixelYields = null;
-    		long totalYield = -5;
-    		long totalYieldSquared = -6;
-    		int maxYield = -1;
-    		int minYield = 100000001;
-    		double meanYield = Double.NaN;
-    		double stdYield = Double.NaN;
-
-    		String goodSummaryLine = null;
-
-    		String codeName = null;
-    		String allOutputLine = null;
-    		String allCodesLine = null;
-
-    		String sDTP = null;
-
-    		String startingDayToPlantCode = null;
-    		String endingDayToPlantCode   = null;
-    		String initializationDayCode  = null;
-
-    		String randomSeedCode = null;
-
-    		boolean readSuccessfully = false;
-    		int nParsingTries = 0;
-    		int nParsingTotalThisRun = 0;
-
-    		String soilTypeString = null;
-
-    		////////////////////////////////////////
-    		// set up stuff that we actually know //
-    		////////////////////////////////////////
-    		String fullTempXFileName = pathToDSSATDirectory + tempXFileName;
-
-    		// open up a writer for the statistics output file
-    		File statisticsFileObject = new File(yieldOutputBaseName  + "_STATS.txt");
-    		PrintWriter statisticsOut = new PrintWriter(statisticsFileObject);
-
-    		// declare a writer for the ALL file and open up if necessary
-    		File allFileObject = new File(yieldOutputBaseName  + "_ALL.txt");
-    		PrintWriter allOut = null;
-    		File allCodesFileObject = new File(yieldOutputBaseName  + "_ALL.codes.txt");
-    		PrintWriter allCodesOut = null;
-    		if (allFlag) {
-    			allOut     = new PrintWriter(allFileObject);
-    			allCodesOut = new PrintWriter(allCodesFileObject);
-    		}
-
-
-
-    		///////////////////////////////
-    		// start doing the real work //
-    		///////////////////////////////
-
-
-    		int plantingWindowSpacing = nDaysInMonth / nPlantingWindowsPerMonth;
-    		if (plantingWindowSpacing < 1) {
-    			plantingWindowSpacing = 1;
-    		}
-
-    		// write out the DSSAT initialization file...
-    		FunTricks.writeStringToFile(magicInitializationContents, magicInitializationFilePath);
-
-    		// create giant arrays of the data and geog stuff
-    		String[] dataLinesArray = FunTricks.readTextFileToArray(gisTableBaseName + "_data.txt");
-    		String[] geogLinesArray = FunTricks.readTextFileToArray(gisTableBaseName + "_geog.txt");
-
-    		int nLinesInDataFile = dataLinesArray.length;
-
-
-    		// while loop that steps through the file...
-    		// initialize with the very first line
-    		String cliStuffToWrite = null;
-    		String XStuffToWrite = null;
-    		// start the timer for just DSSAT proper
-    		thisTimer.tic();
-    		for (int lineIndex = 0; lineIndex < nLinesInDataFile; lineIndex++) {
-
-    			// initialize the storage array / etc
-    			thisPixelYields = new int[nPlantingWindowsPerMonth][nRandomSeedsToUse];
-    			totalYield = 0L;
-    			totalYieldSquared = 0L;
-    			maxYield = Integer.MIN_VALUE;
-    			minYield = Integer.MAX_VALUE;
-
-    			cliStuffToWrite = DSSATHelperMethods.cliFileContents(dataLinesArray[lineIndex], geogLinesArray[lineIndex], SWmultiplier);
-    			nonClimateInfo  = DSSATHelperMethods.soilElevMonthDay(dataLinesArray[lineIndex]);
-
-    			FunTricks.writeStringToFile(cliStuffToWrite, magicWeatherStationNameToUsePath);
-
-    			soilType         = nonClimateInfo[0];
-    			// elevation        = nonClimateInfo[1]; // don't need this here...
-    			// plantingMonth    = nonClimateInfo[2]; // don't need this here...
-    			firstPlantingDay = nonClimateInfo[3];
-
-    			// brute force padding
-    			// Beware the MAGIC ASSUMPTION!!! assuming two digit soil codes
-    			if (soilType < 10 && soilType > 0) {
-    				soilTypeString = magicSoilPrefix + 0 + soilType;
-    			} else if (soilType < 100 && soilType > 0) {
-    				soilTypeString = magicSoilPrefix  + soilType;
-    			} else {
-    				System.out.println("soil type number did not meet our criteria: > 0 and < 100: " + soilType);
-    				throw new Exception();
-    			}
-
-    			// loop over the planting windows and random seeds
-    			for (int plantingWindowIndex = 0; plantingWindowIndex < nPlantingWindowsPerMonth ; plantingWindowIndex++) {
-    				// pick the starting day/etc for this window
-    				startingDayToPlantForThisWindow = firstPlantingDay + plantingWindowIndex * plantingWindowSpacing;
-    				initializationDayForThisWindow = startingDayToPlantForThisWindow - spinUpTimeDays;
-    				fakeInitializationYear = fakePlantingYear;
-
-    				// take care of the possibility that we will go before the beginning of this year
-    				while (initializationDayForThisWindow < 1) {
-    					initializationDayForThisWindow += nDaysInYear;
-    					fakeInitializationYear--;
-    				}
-
-    				endingDayToPlantForThisWindow = startingDayToPlantForThisWindow + plantingWindowLengthDays;
-    				fakePlantingYearEnd = fakePlantingYear;
-
-    				// take care of the possibility that we will go beyond the end of this year
-    				while (endingDayToPlantForThisWindow > nDaysInYear) {
-    					endingDayToPlantForThisWindow -= nDaysInYear;
-    					fakePlantingYearEnd++;
-    				}
-
-    				// format everything properly....
-    				startingDayToPlantCode = (DSSATHelperMethods.pad2CharactersZeros(fakePlantingYear)
-    						+	DSSATHelperMethods.pad3CharactersZeros(startingDayToPlantForThisWindow)); // YYddd
-    				endingDayToPlantCode   = (DSSATHelperMethods.pad2CharactersZeros(fakePlantingYearEnd)
-    						+ DSSATHelperMethods.pad3CharactersZeros(endingDayToPlantForThisWindow)); // YYddd
-    				initializationDayCode  = (DSSATHelperMethods.pad2CharactersZeros(fakeInitializationYear)
-    						+ DSSATHelperMethods.pad3CharactersZeros(initializationDayForThisWindow));   // YYddd
-
-
-    				for (int randomSeedIndex = 0; randomSeedIndex < nRandomSeedsToUse ; randomSeedIndex++) {
-    					// pick the random seed and format it
-    					randomSeedToUse = firstRandomSeed + randomSeedIndex;
-
-    					randomSeedCode = DSSATHelperMethods.padWithZeros(randomSeedToUse, 5);
-
-    					/////////////////////
-    					// make the X file //
-    					/////////////////////
-
-    					// do the search and replace thing
-    					XStuffToWrite = templateXFileContents.replaceAll(weatherPlaceholder            , magicWeatherStationNameToUse);
-    					XStuffToWrite =         XStuffToWrite.replaceAll(soilPlaceholder               , soilTypeString);
-    					XStuffToWrite =         XStuffToWrite.replaceAll(initializationStartPlaceholder, initializationDayCode);
-    					XStuffToWrite =         XStuffToWrite.replaceAll(plantingDateStartPlaceholder  , startingDayToPlantCode);
-    					XStuffToWrite =         XStuffToWrite.replaceAll(plantingDateEndPlaceholder    , endingDayToPlantCode);
-    					XStuffToWrite =         XStuffToWrite.replaceAll(randomSeedPlaceholder         , randomSeedCode);
-
-    					// overwrite the old file with the new contents
-
-    					FunTricks.writeStringToFile(XStuffToWrite, fullTempXFileName);
-
-    					///////////////
-    					// run DSSAT //
-    					///////////////
-
-    					Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
-
-    					//////////////////////////////////////////
-    					// extract the results & store to array //
-    					//////////////////////////////////////////
-
-    					readSuccessfully = false;
-    					nParsingTotalThisRun = 0;
-    					nParsingTries = 0;
-
-    					while (!readSuccessfully) {
-    						nParsingTries++;
-    						try {
-    							nParsingTotalThisRun++;
-    							if (nParsingTotalThisRun > this.hardLimitOnReReads) {
-    								System.out.println("breaking due to excessive read attempts;");
-    //								Thread.dumpStack();
-    								throw new Exception();
-    //								break;
-    							}
-
-    							DSSATSummaryStream = new FileReader(magicDSSATSummaryToReadPath);
-    							DSSATSummaryReader = new BufferedReader(DSSATSummaryStream);
-
-    							// read through the stuff we don't care about
-    							for (int junkLineIndex = 0; junkLineIndex < magicDSSATSummaryLineIndexToRead ; junkLineIndex++) {
-    								DSSATSummaryReader.readLine();
-    							}
-
-    							// grab the line with actual information
-    							goodSummaryLine = DSSATSummaryReader.readLine();
-    							DSSATSummaryReader.close();
-    							DSSATSummaryStream.close();
-
-    							// delete it so that we don't accidentally find it next time...
-    							summaryDSSATOutputAsFileObject.delete();
-
-    							readSuccessfully = true;
-    						} catch (NumberFormatException nfe) {
-    							// do nothing so that it will return and try again
-    							System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [number format exception ]; line index " + lineIndex + ", window = " + plantingWindowIndex + ", seed = " + randomSeedIndex);
-    							DSSATSummaryReader.close();
-    //							nfe.printStackTrace();
-    						} catch (NullPointerException npe) {
-    							// do nothing so that it will return and try again
-    							System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [null pointer exception  ]; line index " + lineIndex + ", window = " + plantingWindowIndex + ", seed = " + randomSeedIndex);
-    							DSSATSummaryReader.close();
-    							npe.printStackTrace();
-    						} catch (java.io.FileNotFoundException fnfe) {
-    //							System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [file not found exception] + (line " + nLines + ", window = " + plantingWindowIndex + ", seed = " + randomSeedIndex);
-    							if (nParsingTries > maxParsingTries) {
-    								System.out.println("re-running DSSAT after " + nParsingTries + "; line index " + lineIndex + ", window = " + plantingWindowIndex + ", seed = " + randomSeedIndex);
-    								System.out.println(dssatExecutionCommand[0] + " " + dssatExecutionCommand[1] + " " + dssatExecutionCommand[2]);
-    								Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
-    								nParsingTries = 0;
-    							} else {
-    								Thread.sleep(sleeptimeWaitForFileMillis);
-    							}
-    						} catch (StringIndexOutOfBoundsException sioobe) {
-    							Thread.sleep(sleeptimeWaitForFileMillis);
-    							Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
-    						}
-    					} // end while(!readSuccessfully)
-
-    					// pull out the harvest yield at harvest
-    					thisPixelYields[plantingWindowIndex][randomSeedIndex] = Integer.parseInt(goodSummaryLine.substring(magicHarvestedWeightAtHarvestStartIndex, magicHarvestedWeightAtHarvestEndIndex).trim());
-    					// we have successfully read it, so flip the flag
-
-    					// now accumulate various statistics
-    					totalYield        += thisPixelYields[plantingWindowIndex][randomSeedIndex];
-    					totalYieldSquared += thisPixelYields[plantingWindowIndex][randomSeedIndex] * thisPixelYields[plantingWindowIndex][randomSeedIndex];
-    					if (thisPixelYields[plantingWindowIndex][randomSeedIndex] > maxYield) {
-    						maxYield = thisPixelYields[plantingWindowIndex][randomSeedIndex];
-    					}
-    					if (thisPixelYields[plantingWindowIndex][randomSeedIndex] < minYield) {
-    						minYield = thisPixelYields[plantingWindowIndex][randomSeedIndex];
-    					}
-
-    				} // end randomSeedIndex
-    			} // end plantingWindowIndex
-
-
-    			//////////////////////////////////////////////////////////////////////////
-    			// when finished with a pixel, then write out a line to the output file //
-    			//////////////////////////////////////////////////////////////////////////
-
-    			meanYield = totalYield / ((double)nPlantingWindowsPerMonth * nRandomSeedsToUse);
-    			stdYield  = Math.sqrt(totalYieldSquared / ((double)nPlantingWindowsPerMonth * nRandomSeedsToUse) - meanYield * meanYield );
-
-    			if (allFlag) {
-    				allOutputLine = "";
-    				allCodesLine = "";
-    				for (int plantingWindowIndex = 0; plantingWindowIndex < nPlantingWindowsPerMonth; plantingWindowIndex++) {
-    					startingDayToPlantForThisWindow = firstPlantingDay + plantingWindowIndex * plantingWindowSpacing;
-    					sDTP = DSSATHelperMethods.pad3CharactersZeros(startingDayToPlantForThisWindow);
-
-    					for (int randomSeedIndex = 0; randomSeedIndex < nRandomSeedsToUse ; randomSeedIndex++) {
-    						randomSeedToUse = firstRandomSeed + randomSeedIndex;
-    						randomSeedCode = DSSATHelperMethods.padWithZeros(randomSeedToUse, 5);
-
-    						codeName = "pd" + sDTP + "_rs" + randomSeedCode;
-    						allCodesLine += codeName + "\t";
-    						allOutputLine += thisPixelYields[plantingWindowIndex][randomSeedIndex] + delimiter;
-
-    					} // randomSeedIndex
-    				} // plantingWindowIndex
-    				allOut.print(allOutputLine.substring(0,allOutputLine.length() - 1) + "\n");
-    				allCodesOut.print(allCodesLine.substring(0,allCodesLine.length() - 1) + "\n");
-    			} // if all
-
-    			// do the summary out stuff
-    			statisticsOut.print(minYield + delimiter + maxYield + delimiter + meanYield + delimiter + stdYield + "\n");
-    			statisticsOut.flush();
-
-    			// now we're ready to deal with the next pixel...
-
-    		} // end for for lineIndex // old end of while loop
-
-    		double totalDSSATTimeMillis = thisTimer.tocMillis();
-
-    		// close out the output files
-    		if (allFlag) {
-    			allOut.flush();
-    			allOut.close();
-
-    			allCodesOut.flush();
-    			allCodesOut.close();
-    		}
-    		statisticsOut.flush();
-    		statisticsOut.close();
-
-    		/////////////////////////////////////////
-    		// when all done, write out info files //
-    		/////////////////////////////////////////
-
-    		long nRows = nLinesInDataFile;
-    		long nCols = (nPlantingWindowsPerMonth * nRandomSeedsToUse);
-    		if (allFlag) {
-    			FunTricks.writeInfoFile(yieldOutputBaseName  + "_ALL", nRows, nCols, delimiter);
-    		}
-
-    		nCols = 4; // min / max/ mean / std
-    		FunTricks.writeInfoFile(yieldOutputBaseName  + "_STATS", nRows, nCols, delimiter);
-
-
-    		/////////////////////////////////////////// end new plan ///////////////////////////////////////////////
-    		thisTimer.sinceStartMessage("running DSSAT");
-    		double overallTimeMillis = thisTimer.sinceStartMillis();
-
-    		System.out.println(" total time in DSSAT loop = " + totalDSSATTimeMillis / 1000 / 60 + "min ; per run average = "
-    				+ totalDSSATTimeMillis / nLinesInDataFile / nRandomSeedsToUse / nPlantingWindowsPerMonth + "ms");
-    		System.out.println("overall per run average = " +
-    				overallTimeMillis/ nLinesInDataFile / nRandomSeedsToUse / nPlantingWindowsPerMonth + "ms"	);
-
-
-    	*/
+        //////////////////////////////////////////////////
+        // check if everything has been set up properly //
+        //////////////////////////////////////////////////
+        if (!this.readyToRun) {
+          System.out.println("DSSATRunner not ready to run... exiting...");
+          return;
+        }
+
+        // set up a timer for the fun of it...
+        TimerUtility thisTimer = new TimerUtility();
+
+        ///////////////////////////////////
+        // write out the provenance file //
+        ///////////////////////////////////
+        System.out.println("-- starting to write provenance file --");
+        this.writeProvenance();
+        System.out.println("== done writing provenance file ==");
+
+        ///////////////////////////////////////
+        // read in the whole template X file //
+        ///////////////////////////////////////
+        String templateXFileContents = FunTricks.readTextFileToString(templateXFile);
+
+        System.out.println("== done reading in template X file ==");
+
+        ///////////////////////////
+        // variable declarations //
+        ///////////////////////////
+
+        FileReader DSSATSummaryStream = null;
+        BufferedReader DSSATSummaryReader = null;
+        int[] nonClimateInfo = null; // {(int)soilType, (int)elevation, (int)plantingMonth, firstPlantingDay};
+        int soilType = -1, firstPlantingDay = -4;
+        int startingDayToPlantForThisWindow = -1;
+        int endingDayToPlantForThisWindow = -99;
+        int fakePlantingYearEnd = -101;
+        int initializationDayForThisWindow = -4;
+        int fakeInitializationYear = -5;
+        int randomSeedToUse = -13;
+
+        int[][] thisPixelYields = null;
+        long totalYield = -5;
+        long totalYieldSquared = -6;
+        int maxYield = -1;
+        int minYield = 100000001;
+        double meanYield = Double.NaN;
+        double stdYield = Double.NaN;
+
+        String goodSummaryLine = null;
+
+        String codeName = null;
+        String allOutputLine = null;
+        String allCodesLine = null;
+
+        String sDTP = null;
+
+        String startingDayToPlantCode = null;
+        String endingDayToPlantCode   = null;
+        String initializationDayCode  = null;
+
+        String randomSeedCode = null;
+
+        boolean readSuccessfully = false;
+        int nParsingTries = 0;
+        int nParsingTotalThisRun = 0;
+
+        String soilTypeString = null;
+
+        ////////////////////////////////////////
+        // set up stuff that we actually know //
+        ////////////////////////////////////////
+        String fullTempXFileName = pathToDSSATDirectory + tempXFileName;
+
+        // open up a writer for the statistics output file
+        File statisticsFileObject = new File(yieldOutputBaseName  + "_STATS.txt");
+        PrintWriter statisticsOut = new PrintWriter(statisticsFileObject);
+
+        // declare a writer for the ALL file and open up if necessary
+        File allFileObject = new File(yieldOutputBaseName  + "_ALL.txt");
+        PrintWriter allOut = null;
+        File allCodesFileObject = new File(yieldOutputBaseName  + "_ALL.codes.txt");
+        PrintWriter allCodesOut = null;
+        if (allFlag) {
+          allOut     = new PrintWriter(allFileObject);
+          allCodesOut = new PrintWriter(allCodesFileObject);
+        }
+
+
+
+        ///////////////////////////////
+        // start doing the real work //
+        ///////////////////////////////
+
+
+        int plantingWindowSpacing = nDaysInMonth / nPlantingWindowsPerMonth;
+        if (plantingWindowSpacing < 1) {
+          plantingWindowSpacing = 1;
+        }
+
+        // write out the DSSAT initialization file...
+        FunTricks.writeStringToFile(magicInitializationContents, magicInitializationFilePath);
+
+        // create giant arrays of the data and geog stuff
+        String[] dataLinesArray = FunTricks.readTextFileToArray(gisTableBaseName + "_data.txt");
+        String[] geogLinesArray = FunTricks.readTextFileToArray(gisTableBaseName + "_geog.txt");
+
+        int nLinesInDataFile = dataLinesArray.length;
+
+
+        // while loop that steps through the file...
+        // initialize with the very first line
+        String cliStuffToWrite = null;
+        String XStuffToWrite = null;
+        // start the timer for just DSSAT proper
+        thisTimer.tic();
+        for (int lineIndex = 0; lineIndex < nLinesInDataFile; lineIndex++) {
+
+          // initialize the storage array / etc
+          thisPixelYields = new int[nPlantingWindowsPerMonth][nRandomSeedsToUse];
+          totalYield = 0L;
+          totalYieldSquared = 0L;
+          maxYield = Integer.MIN_VALUE;
+          minYield = Integer.MAX_VALUE;
+
+          cliStuffToWrite = DSSATHelperMethods.cliFileContents(dataLinesArray[lineIndex], geogLinesArray[lineIndex], SWmultiplier);
+          nonClimateInfo  = DSSATHelperMethods.soilElevMonthDay(dataLinesArray[lineIndex]);
+
+          FunTricks.writeStringToFile(cliStuffToWrite, magicWeatherStationNameToUsePath);
+
+          soilType         = nonClimateInfo[0];
+          // elevation        = nonClimateInfo[1]; // don't need this here...
+          // plantingMonth    = nonClimateInfo[2]; // don't need this here...
+          firstPlantingDay = nonClimateInfo[3];
+
+          // brute force padding
+          // Beware the MAGIC ASSUMPTION!!! assuming two digit soil codes
+          if (soilType < 10 && soilType > 0) {
+            soilTypeString = magicSoilPrefix + 0 + soilType;
+          } else if (soilType < 100 && soilType > 0) {
+            soilTypeString = magicSoilPrefix  + soilType;
+          } else {
+            System.out.println("soil type number did not meet our criteria: > 0 and < 100: " + soilType);
+            throw new Exception();
+          }
+
+          // loop over the planting windows and random seeds
+          for (int plantingWindowIndex = 0; plantingWindowIndex < nPlantingWindowsPerMonth ; plantingWindowIndex++) {
+            // pick the starting day/etc for this window
+            startingDayToPlantForThisWindow = firstPlantingDay + plantingWindowIndex * plantingWindowSpacing;
+            initializationDayForThisWindow = startingDayToPlantForThisWindow - spinUpTimeDays;
+            fakeInitializationYear = fakePlantingYear;
+
+            // take care of the possibility that we will go before the beginning of this year
+            while (initializationDayForThisWindow < 1) {
+              initializationDayForThisWindow += nDaysInYear;
+              fakeInitializationYear--;
+            }
+
+            endingDayToPlantForThisWindow = startingDayToPlantForThisWindow + plantingWindowLengthDays;
+            fakePlantingYearEnd = fakePlantingYear;
+
+            // take care of the possibility that we will go beyond the end of this year
+            while (endingDayToPlantForThisWindow > nDaysInYear) {
+              endingDayToPlantForThisWindow -= nDaysInYear;
+              fakePlantingYearEnd++;
+            }
+
+            // format everything properly....
+            startingDayToPlantCode = (DSSATHelperMethods.pad2CharactersZeros(fakePlantingYear)
+                + DSSATHelperMethods.pad3CharactersZeros(startingDayToPlantForThisWindow)); // YYddd
+            endingDayToPlantCode   = (DSSATHelperMethods.pad2CharactersZeros(fakePlantingYearEnd)
+                + DSSATHelperMethods.pad3CharactersZeros(endingDayToPlantForThisWindow)); // YYddd
+            initializationDayCode  = (DSSATHelperMethods.pad2CharactersZeros(fakeInitializationYear)
+                + DSSATHelperMethods.pad3CharactersZeros(initializationDayForThisWindow));   // YYddd
+
+
+            for (int randomSeedIndex = 0; randomSeedIndex < nRandomSeedsToUse ; randomSeedIndex++) {
+              // pick the random seed and format it
+              randomSeedToUse = firstRandomSeed + randomSeedIndex;
+
+              randomSeedCode = DSSATHelperMethods.padWithZeros(randomSeedToUse, 5);
+
+              /////////////////////
+              // make the X file //
+              /////////////////////
+
+              // do the search and replace thing
+              XStuffToWrite = templateXFileContents.replaceAll(weatherPlaceholder            , magicWeatherStationNameToUse);
+              XStuffToWrite =         XStuffToWrite.replaceAll(soilPlaceholder               , soilTypeString);
+              XStuffToWrite =         XStuffToWrite.replaceAll(initializationStartPlaceholder, initializationDayCode);
+              XStuffToWrite =         XStuffToWrite.replaceAll(plantingDateStartPlaceholder  , startingDayToPlantCode);
+              XStuffToWrite =         XStuffToWrite.replaceAll(plantingDateEndPlaceholder    , endingDayToPlantCode);
+              XStuffToWrite =         XStuffToWrite.replaceAll(randomSeedPlaceholder         , randomSeedCode);
+
+              // overwrite the old file with the new contents
+
+              FunTricks.writeStringToFile(XStuffToWrite, fullTempXFileName);
+
+              ///////////////
+              // run DSSAT //
+              ///////////////
+
+              Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
+
+              //////////////////////////////////////////
+              // extract the results & store to array //
+              //////////////////////////////////////////
+
+              readSuccessfully = false;
+              nParsingTotalThisRun = 0;
+              nParsingTries = 0;
+
+              while (!readSuccessfully) {
+                nParsingTries++;
+                try {
+                  nParsingTotalThisRun++;
+                  if (nParsingTotalThisRun > this.hardLimitOnReReads) {
+                    System.out.println("breaking due to excessive read attempts;");
+    //                Thread.dumpStack();
+                    throw new Exception();
+    //                break;
+                  }
+
+                  DSSATSummaryStream = new FileReader(magicDSSATSummaryToReadPath);
+                  DSSATSummaryReader = new BufferedReader(DSSATSummaryStream);
+
+                  // read through the stuff we don't care about
+                  for (int junkLineIndex = 0; junkLineIndex < magicDSSATSummaryLineIndexToRead ; junkLineIndex++) {
+                    DSSATSummaryReader.readLine();
+                  }
+
+                  // grab the line with actual information
+                  goodSummaryLine = DSSATSummaryReader.readLine();
+                  DSSATSummaryReader.close();
+                  DSSATSummaryStream.close();
+
+                  // delete it so that we don't accidentally find it next time...
+                  summaryDSSATOutputAsFileObject.delete();
+
+                  readSuccessfully = true;
+                } catch (NumberFormatException nfe) {
+                  // do nothing so that it will return and try again
+                  System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [number format exception ]; line index " + lineIndex + ", window = " + plantingWindowIndex + ", seed = " + randomSeedIndex);
+                  DSSATSummaryReader.close();
+    //              nfe.printStackTrace();
+                } catch (NullPointerException npe) {
+                  // do nothing so that it will return and try again
+                  System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [null pointer exception  ]; line index " + lineIndex + ", window = " + plantingWindowIndex + ", seed = " + randomSeedIndex);
+                  DSSATSummaryReader.close();
+                  npe.printStackTrace();
+                } catch (java.io.FileNotFoundException fnfe) {
+    //              System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [file not found exception] + (line " + nLines + ", window = " + plantingWindowIndex + ", seed = " + randomSeedIndex);
+                  if (nParsingTries > maxParsingTries) {
+                    System.out.println("re-running DSSAT after " + nParsingTries + "; line index " + lineIndex + ", window = " + plantingWindowIndex + ", seed = " + randomSeedIndex);
+                    System.out.println(dssatExecutionCommand[0] + " " + dssatExecutionCommand[1] + " " + dssatExecutionCommand[2]);
+                    Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
+                    nParsingTries = 0;
+                  } else {
+                    Thread.sleep(sleeptimeWaitForFileMillis);
+                  }
+                } catch (StringIndexOutOfBoundsException sioobe) {
+                  Thread.sleep(sleeptimeWaitForFileMillis);
+                  Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
+                }
+              } // end while(!readSuccessfully)
+
+              // pull out the harvest yield at harvest
+              thisPixelYields[plantingWindowIndex][randomSeedIndex] = Integer.parseInt(goodSummaryLine.substring(magicHarvestedWeightAtHarvestStartIndex, magicHarvestedWeightAtHarvestEndIndex).trim());
+              // we have successfully read it, so flip the flag
+
+              // now accumulate various statistics
+              totalYield        += thisPixelYields[plantingWindowIndex][randomSeedIndex];
+              totalYieldSquared += thisPixelYields[plantingWindowIndex][randomSeedIndex] * thisPixelYields[plantingWindowIndex][randomSeedIndex];
+              if (thisPixelYields[plantingWindowIndex][randomSeedIndex] > maxYield) {
+                maxYield = thisPixelYields[plantingWindowIndex][randomSeedIndex];
+              }
+              if (thisPixelYields[plantingWindowIndex][randomSeedIndex] < minYield) {
+                minYield = thisPixelYields[plantingWindowIndex][randomSeedIndex];
+              }
+
+            } // end randomSeedIndex
+          } // end plantingWindowIndex
+
+
+          //////////////////////////////////////////////////////////////////////////
+          // when finished with a pixel, then write out a line to the output file //
+          //////////////////////////////////////////////////////////////////////////
+
+          meanYield = totalYield / ((double)nPlantingWindowsPerMonth * nRandomSeedsToUse);
+          stdYield  = Math.sqrt(totalYieldSquared / ((double)nPlantingWindowsPerMonth * nRandomSeedsToUse) - meanYield * meanYield );
+
+          if (allFlag) {
+            allOutputLine = "";
+            allCodesLine = "";
+            for (int plantingWindowIndex = 0; plantingWindowIndex < nPlantingWindowsPerMonth; plantingWindowIndex++) {
+              startingDayToPlantForThisWindow = firstPlantingDay + plantingWindowIndex * plantingWindowSpacing;
+              sDTP = DSSATHelperMethods.pad3CharactersZeros(startingDayToPlantForThisWindow);
+
+              for (int randomSeedIndex = 0; randomSeedIndex < nRandomSeedsToUse ; randomSeedIndex++) {
+                randomSeedToUse = firstRandomSeed + randomSeedIndex;
+                randomSeedCode = DSSATHelperMethods.padWithZeros(randomSeedToUse, 5);
+
+                codeName = "pd" + sDTP + "_rs" + randomSeedCode;
+                allCodesLine += codeName + "\t";
+                allOutputLine += thisPixelYields[plantingWindowIndex][randomSeedIndex] + delimiter;
+
+              } // randomSeedIndex
+            } // plantingWindowIndex
+            allOut.print(allOutputLine.substring(0,allOutputLine.length() - 1) + "\n");
+            allCodesOut.print(allCodesLine.substring(0,allCodesLine.length() - 1) + "\n");
+          } // if all
+
+          // do the summary out stuff
+          statisticsOut.print(minYield + delimiter + maxYield + delimiter + meanYield + delimiter + stdYield + "\n");
+          statisticsOut.flush();
+
+          // now we're ready to deal with the next pixel...
+
+        } // end for for lineIndex // old end of while loop
+
+        double totalDSSATTimeMillis = thisTimer.tocMillis();
+
+        // close out the output files
+        if (allFlag) {
+          allOut.flush();
+          allOut.close();
+
+          allCodesOut.flush();
+          allCodesOut.close();
+        }
+        statisticsOut.flush();
+        statisticsOut.close();
+
+        /////////////////////////////////////////
+        // when all done, write out info files //
+        /////////////////////////////////////////
+
+        long nRows = nLinesInDataFile;
+        long nCols = (nPlantingWindowsPerMonth * nRandomSeedsToUse);
+        if (allFlag) {
+          FunTricks.writeInfoFile(yieldOutputBaseName  + "_ALL", nRows, nCols, delimiter);
+        }
+
+        nCols = 4; // min / max/ mean / std
+        FunTricks.writeInfoFile(yieldOutputBaseName  + "_STATS", nRows, nCols, delimiter);
+
+
+        /////////////////////////////////////////// end new plan ///////////////////////////////////////////////
+        thisTimer.sinceStartMessage("running DSSAT");
+        double overallTimeMillis = thisTimer.sinceStartMillis();
+
+        System.out.println(" total time in DSSAT loop = " + totalDSSATTimeMillis / 1000 / 60 + "min ; per run average = "
+            + totalDSSATTimeMillis / nLinesInDataFile / nRandomSeedsToUse / nPlantingWindowsPerMonth + "ms");
+        System.out.println("overall per run average = " +
+            overallTimeMillis/ nLinesInDataFile / nRandomSeedsToUse / nPlantingWindowsPerMonth + "ms" );
+
+
+      */
   } // main
 
   public void doSimulationsMultipleYears() throws Exception {
@@ -2230,8 +2246,8 @@ public class DSSATRunner {
     int initializationDayForThisWindow = -4;
     int fakeInitializationYear = -5;
 
-    //		double meanYield = Double.NaN;
-    //		double stdYield = Double.NaN;
+    //    double meanYield = Double.NaN;
+    //    double stdYield = Double.NaN;
 
     String startingDayToPlantCode = null;
     String endingDayToPlantCode = null;
@@ -2243,7 +2259,7 @@ public class DSSATRunner {
     String nHappyYearsCode = null;
     String co2ppmCode = null;
 
-    //		double badStat = Double.NaN;
+    //    double badStat = Double.NaN;
 
     String soilTypeString = null;
 
@@ -2255,8 +2271,8 @@ public class DSSATRunner {
     // a couple magic numbers //
     ////////////////////////////
 
-    //		double magicOkBadStat = -1.0;
-    //		double magicBadYieldAll = -2.0;
+    //    double magicOkBadStat = -1.0;
+    //    double magicBadYieldAll = -2.0;
 
     ////////////////////////////////////////
     // set up stuff that we actually know //
@@ -2461,7 +2477,7 @@ public class DSSATRunner {
         //////////////////////////////////////////
 
         // mean yield / anthesis / maturity in days after planting...
-        //				phenologyInDays = this.grabHappyResults(nHappyPlantRunsForPhenology);
+        //        phenologyInDays = this.grabHappyResults(nHappyPlantRunsForPhenology);
         phenologyInDays = this.grabNewHappyResults(nHappyPlantRunsForPhenology);
 
         // keep track of the happy plant yields for the fun of it...
@@ -2514,8 +2530,8 @@ public class DSSATRunner {
           // extract the results & store to array //
           //////////////////////////////////////////
 
-          //					this.grabRealResults(lineIndex, plantingWindowIndex);
-          //					this.grabNewRealResults(this.nRandomSeedsToUse);
+          //          this.grabRealResults(lineIndex, plantingWindowIndex);
+          //          this.grabNewRealResults(this.nRandomSeedsToUse);
           this.grabNewManyResults(this.nRandomSeedsToUse);
 
           totalReadNanos += dssatTimer.TOCNanos();
@@ -2529,10 +2545,10 @@ public class DSSATRunner {
         else {
           // we need to set these things to zero artificially...
           for (int yearIndex = 0; yearIndex < nRandomSeedsToUse; yearIndex++) {
-            //						thisPixelYields[plantingWindowIndex][yearIndex] = 0;
+            //            thisPixelYields[plantingWindowIndex][yearIndex] = 0;
             realYieldsEntirePixel.useLongValue(0L);
 
-            //						thisPixelMaturities[plantingWindowIndex][yearIndex] = -1;
+            //            thisPixelMaturities[plantingWindowIndex][yearIndex] = -1;
             realMaturityEntirePixel.useLongValue(-500L);
 
             for (int extraIndex = 0; extraIndex < extraStartIndices.length; extraIndex++) {
@@ -2574,7 +2590,7 @@ public class DSSATRunner {
       statisticsOutLine += "\n";
 
       statisticsOut.print(statisticsOutLine);
-      //			statisticsOut.flush();
+      //      statisticsOut.flush();
 
       // now we're ready to deal with the next pixel...
       // Beware the MAGIC NUMBER!!! checking every one percent...
@@ -2669,1039 +2685,1039 @@ public class DSSATRunner {
     /*
 
 
-    		//////////////////////////////////////////////////
-    		// check if everything has been set up properly //
-    		//////////////////////////////////////////////////
-    		if (!this.readyToRun) {
-    			System.out.println("DSSATRunner not ready to run... exiting...");
-    			return;
-    		}
-
-    		// set up a timer for the fun of it...
-    		TimerUtility thisTimer = new TimerUtility();
-    		TimerUtility dssatTimer = new TimerUtility();
-
-    		realYieldsEntirePixel  = new DescriptiveStatisticsUtility(false);
-    		happyYieldsEntirePixel = new DescriptiveStatisticsUtility(false);
-    		realMaturityEntirePixel =  new DescriptiveStatisticsUtility(false);
-    		happyMaturityEntirePixel = new DescriptiveStatisticsUtility(false);
+        //////////////////////////////////////////////////
+        // check if everything has been set up properly //
+        //////////////////////////////////////////////////
+        if (!this.readyToRun) {
+          System.out.println("DSSATRunner not ready to run... exiting...");
+          return;
+        }
+
+        // set up a timer for the fun of it...
+        TimerUtility thisTimer = new TimerUtility();
+        TimerUtility dssatTimer = new TimerUtility();
+
+        realYieldsEntirePixel  = new DescriptiveStatisticsUtility(false);
+        happyYieldsEntirePixel = new DescriptiveStatisticsUtility(false);
+        realMaturityEntirePixel =  new DescriptiveStatisticsUtility(false);
+        happyMaturityEntirePixel = new DescriptiveStatisticsUtility(false);
 
-    		countStuff      = new DescriptiveStatisticsUtility(true);
-    		readingTimesHappy = new DescriptiveStatisticsUtility(true);
+        countStuff      = new DescriptiveStatisticsUtility(true);
+        readingTimesHappy = new DescriptiveStatisticsUtility(true);
 
-    		long totalDSSATNanos = 0;
-    		long totalReadNanos = 0;
-    		long totalWriteNanos = 0;
+        long totalDSSATNanos = 0;
+        long totalReadNanos = 0;
+        long totalWriteNanos = 0;
 
-    		///////////////////////////////////
-    		// write out the provenance file //
-    		///////////////////////////////////
-    		System.out.println("-- starting to write provenance file --");
-    		this.writeProvenance();
-    		System.out.println("== done writing provenance file ==");
-
-    		///////////////////////////////////////
-    		// read in the whole template X file //
-    		///////////////////////////////////////
-    		String templateXFileContents = FunTricks.readTextFileToString(templateXFile);
-
-    		System.out.println("== done reading in template X file ==");
-
-    		///////////////////////////
-    		// variable declarations //
-    		///////////////////////////
+        ///////////////////////////////////
+        // write out the provenance file //
+        ///////////////////////////////////
+        System.out.println("-- starting to write provenance file --");
+        this.writeProvenance();
+        System.out.println("== done writing provenance file ==");
+
+        ///////////////////////////////////////
+        // read in the whole template X file //
+        ///////////////////////////////////////
+        String templateXFileContents = FunTricks.readTextFileToString(templateXFile);
+
+        System.out.println("== done reading in template X file ==");
+
+        ///////////////////////////
+        // variable declarations //
+        ///////////////////////////
 
-    		int[] nonClimateInfo = null; // {(int)soilType, (int)elevation, (int)plantingMonth, firstPlantingDay};
-    		double nitrogenLevel = Double.NaN;
-    		int soilType = -1, firstPlantingDay = -4;
-    		int startingDayToPlantForThisWindow = -1;
-    		int endingDayToPlantForThisWindow = -99;
-    		int fakePlantingYearEnd = -101;
-    		int initializationDayForThisWindow = -4;
-    		int fakeInitializationYear = -5;
-    		int randomSeedToUse = -13;
-
-    		double meanYield = Double.NaN;
-    		double stdYield = Double.NaN;
-
-    		String codeName = null;
-    		String allOutputLine = null;
-    		String allCodesLine = null;
-
-    		String sDTP = null;
-
-    		String startingDayToPlantCode = null;
-    		String endingDayToPlantCode   = null;
-    		String initializationDayCode  = null;
-    		String fertilizerBlock  = null;
-
-    		String randomSeedCode = null;
-    		String nYearsCode = null;
-    		String nHappyYearsCode = null;
-    		String co2ppmCode = null;
-
-    		double badStat = Double.NaN;
-
-    		String soilTypeString = null;
-
-    		////////////////////////////
-    		// a couple magic numbers //
-    		////////////////////////////
-
-    		double magicOkBadStat = -1.0;
-    		double magicBadYieldAll = -2.0;
-
-    		int[] phenologyInDays = null;
-
-
-    		////////////////////////////////////////
-    		// set up stuff that we actually know //
-    		////////////////////////////////////////
-    		initialSleepTimeToUse = this.sleeptimeWaitForFileMillis;
-    		initialSleepTimeToUseHappy = this.sleeptimeWaitForFileMillis;
-
-    		String fullTempXFileName = pathToDSSATDirectory + tempXFileName;
-    		File fullTempXFile = new File(fullTempXFileName);
-
-    		File weatherStationFile = new File(magicWeatherStationNameToUsePath);
-
-    		// open up a writer for the statistics output file
-    		File statisticsFileObject = new File(yieldOutputBaseName  + "_STATS.txt");
-    		PrintWriter statisticsOut = new PrintWriter(statisticsFileObject);
-
-    		// declare a writer for the ALL file and open up if necessary
-    		File allFileObject = new File(yieldOutputBaseName  + "_ALL.txt");
-    		PrintWriter allOut = null;
-    		File allCodesFileObject = new File(yieldOutputBaseName  + "_ALL.codes.txt");
-    		PrintWriter allCodesOut = null;
-    		if (allFlag) {
-    			allOut     = new PrintWriter(allFileObject);
-    			allCodesOut = new PrintWriter(allCodesFileObject);
-    		}
-
-
-
-    		///////////////////////////////
-    		// start doing the real work //
-    		///////////////////////////////
-
-
-    		int plantingWindowSpacing = nDaysInMonth / nPlantingWindowsPerMonth;
-    		if (plantingWindowSpacing < 1) {
-    			plantingWindowSpacing = 1;
-    		}
-
-    		// write out the DSSAT initialization file...
-    		FunTricks.writeStringToFile(magicInitializationContents, magicInitializationFilePath);
-
-    		// initialize the fertilizer scheme
-    		// this could be done elsewhere, but just in case, i'm doing it here.
-    		// we're starting out with the defaults. but in the future this might
-    		// get extended....
-    		nitrogenFertilizerScheme.initialize();
-
-    		// read in the fundamental data
-    		// Beware the MAGIC NUMBER!!! gonna force these onto disk. for tiny stuff, it should run fast enough
-    		// that it doesn't matter. for big stuff, we'll want disk...
-    		int formatIndexToForce = 1;
-    		MultiFormatMatrix dataMatrix = MatrixOperations.read2DMFMfromTextForceFormat(gisTableBaseName + "_data",formatIndexToForce);
-    		MultiFormatMatrix geogMatrix = MatrixOperations.read2DMFMfromTextForceFormat(gisTableBaseName + "_geog",formatIndexToForce);
-
-    		int nLinesInDataFile = (int)dataMatrix.getDimensions()[0];
-
-
-    		String cliStuffToWrite = null;
-    		String XStuffToWrite = null;
-    		String XHappyStuffToWrite = null;
-
-    		// since this implementation (using the multiple years with a single random seed, rather
-    		// than multiple random seeds with a single year) has the seeds and years as invariants, do
-    		// them up front to save on a little search and replace overhead...
-    		randomSeedCode = DSSATHelperMethods.padWithZeros(firstRandomSeed, 5);
-    		nYearsCode = DSSATHelperMethods.padWithZeros(nRandomSeedsToUse, 5);
-    		nHappyYearsCode = DSSATHelperMethods.padWithZeros(nHappyPlantRunsForPhenology, 5);
-    		co2ppmCode = DSSATHelperMethods.padWithZeros(co2ppm, 4);
-
-    		String XHappyInvariantsReplaced = happyPlantX(templateXFileContents);
-    		XHappyInvariantsReplaced = XHappyInvariantsReplaced.replaceAll(randomSeedPlaceholder, randomSeedCode);
-    		XHappyInvariantsReplaced = XHappyInvariantsReplaced.replaceAll(nYearsOrRandomSeedsPlaceholder, nHappyYearsCode);
-    		XHappyInvariantsReplaced = XHappyInvariantsReplaced.replaceAll(weatherPlaceholder            , magicWeatherStationNameToUse);
-    		XHappyInvariantsReplaced = XHappyInvariantsReplaced.replaceAll(co2ppmPlaceholder             , co2ppmCode);
-    		// and put in a dummy set of fertilizer stuff
-    		XHappyInvariantsReplaced = XHappyInvariantsReplaced.replaceAll(fertilizerPlaceholder,
-    				"*FERTILIZERS (INORGANIC)\n" +
-    				"@F FDATE  FMCD  FACD  FDEP  FAMN  FAMP  FAMK  FAMC  FAMO  FOCD\n" +
-    				" 1     1 FE005 AP001     1 00000   -99   -99   -99   -99   -99\n"
-    		);
-
-
-
-    		String XInvariantsReplaced = templateXFileContents.replaceAll(randomSeedPlaceholder, randomSeedCode);
-    		XInvariantsReplaced = XInvariantsReplaced.replaceAll(nYearsOrRandomSeedsPlaceholder, nYearsCode);
-    		XInvariantsReplaced = XInvariantsReplaced.replaceAll(weatherPlaceholder            , magicWeatherStationNameToUse);
-    		XInvariantsReplaced = XInvariantsReplaced.replaceAll(co2ppmPlaceholder             , co2ppmCode);
-
-    		// start the timer for just DSSAT proper
-    		thisTimer.tic();
-    		dssatTimer.tic();
-
-    		// clear out the summary and error files if they exist...
-    		if (errorAsFileObject.exists()) {
-    			errorAsFileObject.delete();
-    		}
-    		if (summaryDSSATOutputAsFileObject.exists()) {
-    			summaryDSSATOutputAsFileObject.delete();
-    		}
-
-    		nTimesSuccessfullyReadFirstTime = 0;
-
-    		System.out.println("-- starting through data --");
-    		for (int lineIndex = 0; lineIndex < nLinesInDataFile; lineIndex++) {
-
-    			// initialize the descriptive statistics utility and storage array
-    			realYieldsEntirePixel.reset();
-    			happyYieldsEntirePixel.reset();
-    			realMaturityEntirePixel.reset();
-    			happyMaturityEntirePixel.reset();
-
-
-    			// we're not gonna initialize thisPixelsYields; we'll just re-use it repeatedly
-    			// it should have already been initialized in this.readInitFile(filename);
-
-    //			thisPixelYields = new int[nPlantingWindowsPerMonth][nRandomSeedsToUse];
-
-    //			for (int winIndex = 0; winIndex < nPlantingWindowsPerMonth; winIndex++) {
-    //				for (int yearIndex = 0; yearIndex < nRandomSeedsToUse; yearIndex++) {
-    //					// Beware the MAGIC NUMBER!!! initializing with an obviously bad value...
-    //					thisPixelYields[winIndex][yearIndex] = Integer.MIN_VALUE;
-    //				}
-    //			}
-
-    //			cliStuffToWrite = DSSATHelperMethods.cliFileContentsMFM(dataMatrix, geogMatrix, lineIndex, SWmultiplier);
-    //			nonClimateInfo  = DSSATHelperMethods.soilElevMonthDayMFM(dataMatrix,lineIndex);
-
-    			cliStuffToWrite = DSSATHelperMethods.cliFileContentsMFM(dataMatrix, geogMatrix, lineIndex, SWmultiplier);
-    			nonClimateInfo  = DSSATHelperMethods.soilElevMonthDayNitrogenMFM(dataMatrix, lineIndex);
-
-    			dssatTimer.tic();
-    			FunTricks.writeStringToFile(cliStuffToWrite, weatherStationFile);
-    			totalWriteNanos += dssatTimer.TOCNanos();
-
-    			soilType         = nonClimateInfo[0];
-    			// elevation        = nonClimateInfo[1]; // don't need this here...
-    			// plantingMonth    = nonClimateInfo[2]; // don't need this here...
-    			firstPlantingDay = nonClimateInfo[3];
-    			nitrogenLevel = nonClimateInfo[4];
-
-    			// brute force padding
-    			// Beware the MAGIC ASSUMPTION!!! assuming two digit soil codes
-    			if (soilType < 10 && soilType > 0) {
-    				soilTypeString = magicSoilPrefix + 0 + soilType;
-    			} else if (soilType < 100 && soilType > 0) {
-    				soilTypeString = magicSoilPrefix  + soilType;
-    			} else {
-    				System.out.println("soil type number did not meet our criteria: > 0 and < 100: " + soilType);
-    				throw new Exception();
-    			}
-
-    			// loop over the planting windows and random seeds
-    			for (int plantingWindowIndex = 0; plantingWindowIndex < nPlantingWindowsPerMonth ; plantingWindowIndex++) {
-    				// pick the starting day/etc for this window
-    				startingDayToPlantForThisWindow = firstPlantingDay + plantingWindowIndex * plantingWindowSpacing;
-    				initializationDayForThisWindow = startingDayToPlantForThisWindow - spinUpTimeDays;
-    				fakeInitializationYear = fakePlantingYear;
-
-    				// take care of the possibility that we will go before the beginning of this year
-    				while (initializationDayForThisWindow < 1) {
-    					initializationDayForThisWindow += nDaysInYear;
-    					fakeInitializationYear--;
-    				}
-
-    				endingDayToPlantForThisWindow = startingDayToPlantForThisWindow + plantingWindowLengthDays;
-    				fakePlantingYearEnd = fakePlantingYear;
-
-    				// take care of the possibility that we will go beyond the end of this year
-    				while (endingDayToPlantForThisWindow > nDaysInYear) {
-    					endingDayToPlantForThisWindow -= nDaysInYear;
-    					fakePlantingYearEnd++;
-    				}
-
-    				// format everything properly....
-    				startingDayToPlantCode = (DSSATHelperMethods.pad2CharactersZeros(fakePlantingYear)
-    						+	DSSATHelperMethods.pad3CharactersZeros(startingDayToPlantForThisWindow)); // YYddd
-    				endingDayToPlantCode   = (DSSATHelperMethods.pad2CharactersZeros(fakePlantingYearEnd)
-    						+ DSSATHelperMethods.pad3CharactersZeros(endingDayToPlantForThisWindow)); // YYddd
-    				initializationDayCode  = (DSSATHelperMethods.pad2CharactersZeros(fakeInitializationYear)
-    						+ DSSATHelperMethods.pad3CharactersZeros(initializationDayForThisWindow));   // YYddd
-
-    				//////////////////////////////////////
-    				// let's run a happy plant first... //
-    				//////////////////////////////////////
+        int[] nonClimateInfo = null; // {(int)soilType, (int)elevation, (int)plantingMonth, firstPlantingDay};
+        double nitrogenLevel = Double.NaN;
+        int soilType = -1, firstPlantingDay = -4;
+        int startingDayToPlantForThisWindow = -1;
+        int endingDayToPlantForThisWindow = -99;
+        int fakePlantingYearEnd = -101;
+        int initializationDayForThisWindow = -4;
+        int fakeInitializationYear = -5;
+        int randomSeedToUse = -13;
+
+        double meanYield = Double.NaN;
+        double stdYield = Double.NaN;
+
+        String codeName = null;
+        String allOutputLine = null;
+        String allCodesLine = null;
+
+        String sDTP = null;
+
+        String startingDayToPlantCode = null;
+        String endingDayToPlantCode   = null;
+        String initializationDayCode  = null;
+        String fertilizerBlock  = null;
+
+        String randomSeedCode = null;
+        String nYearsCode = null;
+        String nHappyYearsCode = null;
+        String co2ppmCode = null;
+
+        double badStat = Double.NaN;
+
+        String soilTypeString = null;
+
+        ////////////////////////////
+        // a couple magic numbers //
+        ////////////////////////////
+
+        double magicOkBadStat = -1.0;
+        double magicBadYieldAll = -2.0;
+
+        int[] phenologyInDays = null;
+
+
+        ////////////////////////////////////////
+        // set up stuff that we actually know //
+        ////////////////////////////////////////
+        initialSleepTimeToUse = this.sleeptimeWaitForFileMillis;
+        initialSleepTimeToUseHappy = this.sleeptimeWaitForFileMillis;
+
+        String fullTempXFileName = pathToDSSATDirectory + tempXFileName;
+        File fullTempXFile = new File(fullTempXFileName);
+
+        File weatherStationFile = new File(magicWeatherStationNameToUsePath);
+
+        // open up a writer for the statistics output file
+        File statisticsFileObject = new File(yieldOutputBaseName  + "_STATS.txt");
+        PrintWriter statisticsOut = new PrintWriter(statisticsFileObject);
+
+        // declare a writer for the ALL file and open up if necessary
+        File allFileObject = new File(yieldOutputBaseName  + "_ALL.txt");
+        PrintWriter allOut = null;
+        File allCodesFileObject = new File(yieldOutputBaseName  + "_ALL.codes.txt");
+        PrintWriter allCodesOut = null;
+        if (allFlag) {
+          allOut     = new PrintWriter(allFileObject);
+          allCodesOut = new PrintWriter(allCodesFileObject);
+        }
+
+
+
+        ///////////////////////////////
+        // start doing the real work //
+        ///////////////////////////////
+
+
+        int plantingWindowSpacing = nDaysInMonth / nPlantingWindowsPerMonth;
+        if (plantingWindowSpacing < 1) {
+          plantingWindowSpacing = 1;
+        }
+
+        // write out the DSSAT initialization file...
+        FunTricks.writeStringToFile(magicInitializationContents, magicInitializationFilePath);
+
+        // initialize the fertilizer scheme
+        // this could be done elsewhere, but just in case, i'm doing it here.
+        // we're starting out with the defaults. but in the future this might
+        // get extended....
+        nitrogenFertilizerScheme.initialize();
+
+        // read in the fundamental data
+        // Beware the MAGIC NUMBER!!! gonna force these onto disk. for tiny stuff, it should run fast enough
+        // that it doesn't matter. for big stuff, we'll want disk...
+        int formatIndexToForce = 1;
+        MultiFormatMatrix dataMatrix = MatrixOperations.read2DMFMfromTextForceFormat(gisTableBaseName + "_data",formatIndexToForce);
+        MultiFormatMatrix geogMatrix = MatrixOperations.read2DMFMfromTextForceFormat(gisTableBaseName + "_geog",formatIndexToForce);
+
+        int nLinesInDataFile = (int)dataMatrix.getDimensions()[0];
+
+
+        String cliStuffToWrite = null;
+        String XStuffToWrite = null;
+        String XHappyStuffToWrite = null;
+
+        // since this implementation (using the multiple years with a single random seed, rather
+        // than multiple random seeds with a single year) has the seeds and years as invariants, do
+        // them up front to save on a little search and replace overhead...
+        randomSeedCode = DSSATHelperMethods.padWithZeros(firstRandomSeed, 5);
+        nYearsCode = DSSATHelperMethods.padWithZeros(nRandomSeedsToUse, 5);
+        nHappyYearsCode = DSSATHelperMethods.padWithZeros(nHappyPlantRunsForPhenology, 5);
+        co2ppmCode = DSSATHelperMethods.padWithZeros(co2ppm, 4);
+
+        String XHappyInvariantsReplaced = happyPlantX(templateXFileContents);
+        XHappyInvariantsReplaced = XHappyInvariantsReplaced.replaceAll(randomSeedPlaceholder, randomSeedCode);
+        XHappyInvariantsReplaced = XHappyInvariantsReplaced.replaceAll(nYearsOrRandomSeedsPlaceholder, nHappyYearsCode);
+        XHappyInvariantsReplaced = XHappyInvariantsReplaced.replaceAll(weatherPlaceholder            , magicWeatherStationNameToUse);
+        XHappyInvariantsReplaced = XHappyInvariantsReplaced.replaceAll(co2ppmPlaceholder             , co2ppmCode);
+        // and put in a dummy set of fertilizer stuff
+        XHappyInvariantsReplaced = XHappyInvariantsReplaced.replaceAll(fertilizerPlaceholder,
+            "*FERTILIZERS (INORGANIC)\n" +
+            "@F FDATE  FMCD  FACD  FDEP  FAMN  FAMP  FAMK  FAMC  FAMO  FOCD\n" +
+            " 1     1 FE005 AP001     1 00000   -99   -99   -99   -99   -99\n"
+        );
+
+
+
+        String XInvariantsReplaced = templateXFileContents.replaceAll(randomSeedPlaceholder, randomSeedCode);
+        XInvariantsReplaced = XInvariantsReplaced.replaceAll(nYearsOrRandomSeedsPlaceholder, nYearsCode);
+        XInvariantsReplaced = XInvariantsReplaced.replaceAll(weatherPlaceholder            , magicWeatherStationNameToUse);
+        XInvariantsReplaced = XInvariantsReplaced.replaceAll(co2ppmPlaceholder             , co2ppmCode);
+
+        // start the timer for just DSSAT proper
+        thisTimer.tic();
+        dssatTimer.tic();
+
+        // clear out the summary and error files if they exist...
+        if (errorAsFileObject.exists()) {
+          errorAsFileObject.delete();
+        }
+        if (summaryDSSATOutputAsFileObject.exists()) {
+          summaryDSSATOutputAsFileObject.delete();
+        }
+
+        nTimesSuccessfullyReadFirstTime = 0;
+
+        System.out.println("-- starting through data --");
+        for (int lineIndex = 0; lineIndex < nLinesInDataFile; lineIndex++) {
+
+          // initialize the descriptive statistics utility and storage array
+          realYieldsEntirePixel.reset();
+          happyYieldsEntirePixel.reset();
+          realMaturityEntirePixel.reset();
+          happyMaturityEntirePixel.reset();
+
+
+          // we're not gonna initialize thisPixelsYields; we'll just re-use it repeatedly
+          // it should have already been initialized in this.readInitFile(filename);
+
+    //      thisPixelYields = new int[nPlantingWindowsPerMonth][nRandomSeedsToUse];
+
+    //      for (int winIndex = 0; winIndex < nPlantingWindowsPerMonth; winIndex++) {
+    //        for (int yearIndex = 0; yearIndex < nRandomSeedsToUse; yearIndex++) {
+    //          // Beware the MAGIC NUMBER!!! initializing with an obviously bad value...
+    //          thisPixelYields[winIndex][yearIndex] = Integer.MIN_VALUE;
+    //        }
+    //      }
+
+    //      cliStuffToWrite = DSSATHelperMethods.cliFileContentsMFM(dataMatrix, geogMatrix, lineIndex, SWmultiplier);
+    //      nonClimateInfo  = DSSATHelperMethods.soilElevMonthDayMFM(dataMatrix,lineIndex);
+
+          cliStuffToWrite = DSSATHelperMethods.cliFileContentsMFM(dataMatrix, geogMatrix, lineIndex, SWmultiplier);
+          nonClimateInfo  = DSSATHelperMethods.soilElevMonthDayNitrogenMFM(dataMatrix, lineIndex);
+
+          dssatTimer.tic();
+          FunTricks.writeStringToFile(cliStuffToWrite, weatherStationFile);
+          totalWriteNanos += dssatTimer.TOCNanos();
+
+          soilType         = nonClimateInfo[0];
+          // elevation        = nonClimateInfo[1]; // don't need this here...
+          // plantingMonth    = nonClimateInfo[2]; // don't need this here...
+          firstPlantingDay = nonClimateInfo[3];
+          nitrogenLevel = nonClimateInfo[4];
+
+          // brute force padding
+          // Beware the MAGIC ASSUMPTION!!! assuming two digit soil codes
+          if (soilType < 10 && soilType > 0) {
+            soilTypeString = magicSoilPrefix + 0 + soilType;
+          } else if (soilType < 100 && soilType > 0) {
+            soilTypeString = magicSoilPrefix  + soilType;
+          } else {
+            System.out.println("soil type number did not meet our criteria: > 0 and < 100: " + soilType);
+            throw new Exception();
+          }
+
+          // loop over the planting windows and random seeds
+          for (int plantingWindowIndex = 0; plantingWindowIndex < nPlantingWindowsPerMonth ; plantingWindowIndex++) {
+            // pick the starting day/etc for this window
+            startingDayToPlantForThisWindow = firstPlantingDay + plantingWindowIndex * plantingWindowSpacing;
+            initializationDayForThisWindow = startingDayToPlantForThisWindow - spinUpTimeDays;
+            fakeInitializationYear = fakePlantingYear;
+
+            // take care of the possibility that we will go before the beginning of this year
+            while (initializationDayForThisWindow < 1) {
+              initializationDayForThisWindow += nDaysInYear;
+              fakeInitializationYear--;
+            }
+
+            endingDayToPlantForThisWindow = startingDayToPlantForThisWindow + plantingWindowLengthDays;
+            fakePlantingYearEnd = fakePlantingYear;
+
+            // take care of the possibility that we will go beyond the end of this year
+            while (endingDayToPlantForThisWindow > nDaysInYear) {
+              endingDayToPlantForThisWindow -= nDaysInYear;
+              fakePlantingYearEnd++;
+            }
+
+            // format everything properly....
+            startingDayToPlantCode = (DSSATHelperMethods.pad2CharactersZeros(fakePlantingYear)
+                + DSSATHelperMethods.pad3CharactersZeros(startingDayToPlantForThisWindow)); // YYddd
+            endingDayToPlantCode   = (DSSATHelperMethods.pad2CharactersZeros(fakePlantingYearEnd)
+                + DSSATHelperMethods.pad3CharactersZeros(endingDayToPlantForThisWindow)); // YYddd
+            initializationDayCode  = (DSSATHelperMethods.pad2CharactersZeros(fakeInitializationYear)
+                + DSSATHelperMethods.pad3CharactersZeros(initializationDayForThisWindow));   // YYddd
+
+            //////////////////////////////////////
+            // let's run a happy plant first... //
+            //////////////////////////////////////
 
-    				// X file
-    				// do the search and replace thing; the invariants have already been done above...
-    				XHappyStuffToWrite =         XHappyInvariantsReplaced.replaceAll(soilPlaceholder , soilTypeString);
-    				XHappyStuffToWrite =         XHappyStuffToWrite.replaceAll(initializationStartPlaceholder, initializationDayCode);
-    				XHappyStuffToWrite =         XHappyStuffToWrite.replaceAll(plantingDateStartPlaceholder  , startingDayToPlantCode);
-    				XHappyStuffToWrite =         XHappyStuffToWrite.replaceAll(plantingDateEndPlaceholder    , endingDayToPlantCode);
-
-    				FunTricks.writeStringToFile(XHappyStuffToWrite, fullTempXFile);
-
-    				// run DSSAT with the happy plant
-
-
-    				Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
-
-    				//////////////////////////////////////////
-    				// extract the results & store to array //
-    				//////////////////////////////////////////
-
-    				// mean yield / anthesis / maturity in days after planting...
-    //				phenologyInDays = this.grabHappyResults(nHappyPlantRunsForPhenology);
-    				phenologyInDays = this.grabNewHappyResults(nHappyPlantRunsForPhenology);
-
-
-    				// keep track of the happy plant yields for the fun of it...
-    				happyYieldsEntirePixel.useLongValue(phenologyInDays[0]);
-    				happyMaturityEntirePixel.useLongValue(phenologyInDays[2]);
-
-
-    				// proceed, if the happy yield exceeds some theshold and the effective growing season isn't too long....
-    				if (phenologyInDays[0] >= this.happyYieldThresholdToDoRealRuns && phenologyInDays[2] <= this.happyMaturityThresholdToDoRealRuns) {
-
-
-    					/////////////////////
-    					// make the X file //
-    					/////////////////////
-
-    					// create the fertilizer block...
-    					fertilizerBlock = nitrogenFertilizerScheme.buildNitrogenOnlyBlock(
-    							phenologyInDays[1] + phenologyBufferInDays, phenologyInDays[2] + phenologyBufferInDays, nitrogenLevel
-    					);
-
-    					// do the search and replace thing; the invariants have already been done above...
-    					XStuffToWrite =         XInvariantsReplaced.replaceAll(soilPlaceholder , soilTypeString);
-    					XStuffToWrite =         XStuffToWrite.replaceAll(initializationStartPlaceholder, initializationDayCode);
-    					XStuffToWrite =         XStuffToWrite.replaceAll(plantingDateStartPlaceholder  , startingDayToPlantCode);
-    					XStuffToWrite =         XStuffToWrite.replaceAll(plantingDateEndPlaceholder    , endingDayToPlantCode);
-    					XStuffToWrite = XStuffToWrite.replaceAll(fertilizerPlaceholder, fertilizerBlock);
-
-    					// overwrite the old file with the new contents
-
-    					dssatTimer.tic();
-    					FunTricks.writeStringToFile(XStuffToWrite, fullTempXFile);
-    					totalWriteNanos += dssatTimer.TOCNanos();
-
-    					// recommend garbage collection
-    					System.gc();
-
-    					///////////////
-    					// run DSSAT //
-    					///////////////
-
-    					Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
-    					totalDSSATNanos += dssatTimer.TOCNanos();
-
-    					//////////////////////////////////////////
-    					// extract the results & store to array //
-    					//////////////////////////////////////////
-
-    					this.grabRealResults(lineIndex, plantingWindowIndex);
-
-    					totalReadNanos += dssatTimer.TOCNanos();
-
-    					// bail out if we have already encountered bad things for this pixel...
-    					if (badThingsHappened) {
-    						break;
-    					}
-
-    				} // end if happy yield threshold is met
-    				else {
-    					// we need to set these things to zero artificially...
-    					for (int yearIndex = 0; yearIndex < nRandomSeedsToUse; yearIndex++) {
-    						thisPixelYields[plantingWindowIndex][yearIndex] = 0;
-    						realYieldsEntirePixel.useLongValue(0L);
-
-    						thisPixelMaturities[plantingWindowIndex][yearIndex] = -1;
-    						realMaturityEntirePixel.useLongValue(-1L);
-    					}
-    				} // end of else concerning happy yield threshold being met...
-
-    			} // end plantingWindowIndex
-
-
-    			//////////////////////////////////////////////////////////////////////////
-    			// when finished with a pixel, then write out a line to the output file //
-    			//////////////////////////////////////////////////////////////////////////
-
-
-    			// do the summary out stuff
-    			if (badThingsHappened) {
-    				// set the values for the STATS...
-    				// Beware the MAGIC NUMBER!!! assuming no more than 10 planting windows per month...
-    				badStat = badThingsHappenedIndex + badPlantingWindow/10.0;
-    				meanYield = magicBadYieldAll;
-    				stdYield  = magicBadYieldAll;
-    			} else {
-    				// set the values for the STATS...
-    				badStat = magicOkBadStat;
-    //				meanYield = totalYield / ((double)nPlantingWindowsPerMonth * nRandomSeedsToUse);
-    //				stdYield  = Math.sqrt(totalYieldSquared / ((double)nPlantingWindowsPerMonth * nRandomSeedsToUse) - meanYield * meanYield );
-    				meanYield = realYieldsEntirePixel.getMean();
-    				stdYield  = realYieldsEntirePixel.getStd();
-    //				System.out.println(realYieldsEntirePixel.getAllPretty());
-    			}
-
-    			statisticsOut.print(
-    					realYieldsEntirePixel.getMinAsLong() + delimiter
-    					+ realYieldsEntirePixel.getMaxAsLong() + delimiter
-    					+ meanYield + delimiter
-    					+ stdYield + delimiter
-    					+ badStat + delimiter
-    					+ realMaturityEntirePixel.getMean() + delimiter
-    					+ realMaturityEntirePixel.getStd() + delimiter
-    					+ happyYieldsEntirePixel.getMean() + delimiter
-    					+ happyYieldsEntirePixel.getStd() + delimiter
-    					+ happyMaturityEntirePixel.getMean() + delimiter
-    					+ happyMaturityEntirePixel.getStd() + delimiter
-    					+ "\n"
-    					);
-    //			statisticsOut.flush();
-
-
-    			if (allFlag) {
-    				allOutputLine = "";
-    				allCodesLine = "";
-    				// put "bad things happened" back in here...
-    				if (!badThingsHappened) {
-    					for (int plantingWindowIndex = 0; plantingWindowIndex < nPlantingWindowsPerMonth; plantingWindowIndex++) {
-    						startingDayToPlantForThisWindow = firstPlantingDay + plantingWindowIndex * plantingWindowSpacing;
-    						sDTP = DSSATHelperMethods.pad3CharactersZeros(startingDayToPlantForThisWindow);
-
-    						for (int randomSeedIndex = 0; randomSeedIndex < nRandomSeedsToUse ; randomSeedIndex++) {
-    //							randomSeedToUse = firstRandomSeed + randomSeedIndex;
-    							randomSeedToUse = randomSeedIndex;
-    							randomSeedCode = DSSATHelperMethods.padWithZeros(randomSeedToUse, 5);
-
-    							codeName = "pday" + sDTP + "_yr" + randomSeedCode;
-    							allCodesLine += codeName + "\t";
-
-    							allOutputLine += thisPixelYields[plantingWindowIndex][randomSeedIndex] + delimiter;
-
-    						} // randomSeedIndex
-    					} // plantingWindowIndex
-    				} else {
-    					// ok, i'm being stupid here. presumeably, we should have it write out as much as we actually know.
-    					// but i'm going to be silly and have it just write down bad values for everything since finding
-    					// and solving the problem will need more than merely knowing the yields that actually worked....
-    					for (int plantingWindowIndex = 0; plantingWindowIndex < nPlantingWindowsPerMonth; plantingWindowIndex++) {
-    						startingDayToPlantForThisWindow = firstPlantingDay + plantingWindowIndex * plantingWindowSpacing;
-    						sDTP = DSSATHelperMethods.pad3CharactersZeros(startingDayToPlantForThisWindow);
-
-    						for (int randomSeedIndex = 0; randomSeedIndex < nRandomSeedsToUse ; randomSeedIndex++) {
-    //							randomSeedToUse = firstRandomSeed + randomSeedIndex;
-    							randomSeedToUse = randomSeedIndex;
-    							randomSeedCode = DSSATHelperMethods.padWithZeros(randomSeedToUse, 5);
-
-    							codeName = "pday" + sDTP + "_yr" + randomSeedCode;
-    							allCodesLine += codeName + "\t";
-
-    							allOutputLine += Integer.MIN_VALUE + delimiter;
-
-    						} // randomSeedIndex
-    					}
-    				}
-    				allOut.print(     allOutputLine.substring(0,allOutputLine.length() - 1) + "\n");
-    				allCodesOut.print( allCodesLine.substring(0,allCodesLine.length()  - 1) + "\n");
-    			} // if all
-
-
-    			// now we're ready to deal with the next pixel...
-    			// Beware the MAGIC NUMBER!!! checking every one percent...
-    			if (lineIndex % (nLinesInDataFile / 400 + 1) == 0) {
-    				System.out.println("prog: " + lineIndex + "/" + nLinesInDataFile + " = " +
-    						(float)(100 * (lineIndex + 1.0)/nLinesInDataFile) + "% sleep now = " +
-    						this.initialSleepTimeToUse + "/" + this.initialSleepTimeToUseHappy + " ; " +
-    						(float)countStuff.getMean() + "/" + (float)readingTimesHappy.getMean()
-    				);
-    			}
-    		} // end for for lineIndex // old end of while loop
-
-    		double totalDSSATTimeMillis = thisTimer.tocMillis();
-
-    		// close out the output files
-    		if (allFlag) {
-    			allOut.flush();
-    			allOut.close();
-
-    			allCodesOut.flush();
-    			allCodesOut.close();
-    		}
-    		statisticsOut.flush();
-    		statisticsOut.close();
-
-    		/////////////////////////////////////////
-    		// when all done, write out info files //
-    		/////////////////////////////////////////
-
-    		long nRows = nLinesInDataFile;
-    		long nCols = (nPlantingWindowsPerMonth * nRandomSeedsToUse);
-    		if (allFlag) {
-    			FunTricks.writeInfoFile(yieldOutputBaseName  + "_ALL", nRows, nCols, delimiter);
-    		}
-
-    		// Beware the MAGIC NUMBER!!!
-    		nCols = 11; // min / max/ mean / std / bad / happy mean / happy std / real maturity mean / real maturity std / happy maturity mean / happy maturity std
-    		FunTricks.writeInfoFile(yieldOutputBaseName  + "_STATS", nRows, nCols, delimiter);
-
-
-    		/////////////////////////////////////////// end new plan ///////////////////////////////////////////////
-    		thisTimer.sinceStartMessage("running DSSAT");
-    		double overallTimeMillis = thisTimer.sinceStartMillis();
-
-    		System.out.println("total DSSAT = " + (float)(totalDSSATNanos/1000000000.0));
-    		System.out.println("total read  = " + (float)(totalReadNanos /1000000000.0));
-    		System.out.println("total write = " + (float)(totalWriteNanos/1000000000.0));
-
-    		System.out.println();
-    		System.out.println("reading: " + countStuff.getAllPretty());
-    		System.out.println();
-
-
-    		System.out.println(" total time in DSSAT loop = " + totalDSSATTimeMillis / 1000 / 60 + "min ; per run average = "
-    				+ totalDSSATTimeMillis / nLinesInDataFile / nRandomSeedsToUse / nPlantingWindowsPerMonth + "ms");
-    		System.out.println("overall per run average = " +
-    				overallTimeMillis/ nLinesInDataFile / nRandomSeedsToUse / nPlantingWindowsPerMonth + "ms"	);
-
-
-
-    	*/
+            // X file
+            // do the search and replace thing; the invariants have already been done above...
+            XHappyStuffToWrite =         XHappyInvariantsReplaced.replaceAll(soilPlaceholder , soilTypeString);
+            XHappyStuffToWrite =         XHappyStuffToWrite.replaceAll(initializationStartPlaceholder, initializationDayCode);
+            XHappyStuffToWrite =         XHappyStuffToWrite.replaceAll(plantingDateStartPlaceholder  , startingDayToPlantCode);
+            XHappyStuffToWrite =         XHappyStuffToWrite.replaceAll(plantingDateEndPlaceholder    , endingDayToPlantCode);
+
+            FunTricks.writeStringToFile(XHappyStuffToWrite, fullTempXFile);
+
+            // run DSSAT with the happy plant
+
+
+            Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
+
+            //////////////////////////////////////////
+            // extract the results & store to array //
+            //////////////////////////////////////////
+
+            // mean yield / anthesis / maturity in days after planting...
+    //        phenologyInDays = this.grabHappyResults(nHappyPlantRunsForPhenology);
+            phenologyInDays = this.grabNewHappyResults(nHappyPlantRunsForPhenology);
+
+
+            // keep track of the happy plant yields for the fun of it...
+            happyYieldsEntirePixel.useLongValue(phenologyInDays[0]);
+            happyMaturityEntirePixel.useLongValue(phenologyInDays[2]);
+
+
+            // proceed, if the happy yield exceeds some theshold and the effective growing season isn't too long....
+            if (phenologyInDays[0] >= this.happyYieldThresholdToDoRealRuns && phenologyInDays[2] <= this.happyMaturityThresholdToDoRealRuns) {
+
+
+              /////////////////////
+              // make the X file //
+              /////////////////////
+
+              // create the fertilizer block...
+              fertilizerBlock = nitrogenFertilizerScheme.buildNitrogenOnlyBlock(
+                  phenologyInDays[1] + phenologyBufferInDays, phenologyInDays[2] + phenologyBufferInDays, nitrogenLevel
+              );
+
+              // do the search and replace thing; the invariants have already been done above...
+              XStuffToWrite =         XInvariantsReplaced.replaceAll(soilPlaceholder , soilTypeString);
+              XStuffToWrite =         XStuffToWrite.replaceAll(initializationStartPlaceholder, initializationDayCode);
+              XStuffToWrite =         XStuffToWrite.replaceAll(plantingDateStartPlaceholder  , startingDayToPlantCode);
+              XStuffToWrite =         XStuffToWrite.replaceAll(plantingDateEndPlaceholder    , endingDayToPlantCode);
+              XStuffToWrite = XStuffToWrite.replaceAll(fertilizerPlaceholder, fertilizerBlock);
+
+              // overwrite the old file with the new contents
+
+              dssatTimer.tic();
+              FunTricks.writeStringToFile(XStuffToWrite, fullTempXFile);
+              totalWriteNanos += dssatTimer.TOCNanos();
+
+              // recommend garbage collection
+              System.gc();
+
+              ///////////////
+              // run DSSAT //
+              ///////////////
+
+              Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
+              totalDSSATNanos += dssatTimer.TOCNanos();
+
+              //////////////////////////////////////////
+              // extract the results & store to array //
+              //////////////////////////////////////////
+
+              this.grabRealResults(lineIndex, plantingWindowIndex);
+
+              totalReadNanos += dssatTimer.TOCNanos();
+
+              // bail out if we have already encountered bad things for this pixel...
+              if (badThingsHappened) {
+                break;
+              }
+
+            } // end if happy yield threshold is met
+            else {
+              // we need to set these things to zero artificially...
+              for (int yearIndex = 0; yearIndex < nRandomSeedsToUse; yearIndex++) {
+                thisPixelYields[plantingWindowIndex][yearIndex] = 0;
+                realYieldsEntirePixel.useLongValue(0L);
+
+                thisPixelMaturities[plantingWindowIndex][yearIndex] = -1;
+                realMaturityEntirePixel.useLongValue(-1L);
+              }
+            } // end of else concerning happy yield threshold being met...
+
+          } // end plantingWindowIndex
+
+
+          //////////////////////////////////////////////////////////////////////////
+          // when finished with a pixel, then write out a line to the output file //
+          //////////////////////////////////////////////////////////////////////////
+
+
+          // do the summary out stuff
+          if (badThingsHappened) {
+            // set the values for the STATS...
+            // Beware the MAGIC NUMBER!!! assuming no more than 10 planting windows per month...
+            badStat = badThingsHappenedIndex + badPlantingWindow/10.0;
+            meanYield = magicBadYieldAll;
+            stdYield  = magicBadYieldAll;
+          } else {
+            // set the values for the STATS...
+            badStat = magicOkBadStat;
+    //        meanYield = totalYield / ((double)nPlantingWindowsPerMonth * nRandomSeedsToUse);
+    //        stdYield  = Math.sqrt(totalYieldSquared / ((double)nPlantingWindowsPerMonth * nRandomSeedsToUse) - meanYield * meanYield );
+            meanYield = realYieldsEntirePixel.getMean();
+            stdYield  = realYieldsEntirePixel.getStd();
+    //        System.out.println(realYieldsEntirePixel.getAllPretty());
+          }
+
+          statisticsOut.print(
+              realYieldsEntirePixel.getMinAsLong() + delimiter
+              + realYieldsEntirePixel.getMaxAsLong() + delimiter
+              + meanYield + delimiter
+              + stdYield + delimiter
+              + badStat + delimiter
+              + realMaturityEntirePixel.getMean() + delimiter
+              + realMaturityEntirePixel.getStd() + delimiter
+              + happyYieldsEntirePixel.getMean() + delimiter
+              + happyYieldsEntirePixel.getStd() + delimiter
+              + happyMaturityEntirePixel.getMean() + delimiter
+              + happyMaturityEntirePixel.getStd() + delimiter
+              + "\n"
+              );
+    //      statisticsOut.flush();
+
+
+          if (allFlag) {
+            allOutputLine = "";
+            allCodesLine = "";
+            // put "bad things happened" back in here...
+            if (!badThingsHappened) {
+              for (int plantingWindowIndex = 0; plantingWindowIndex < nPlantingWindowsPerMonth; plantingWindowIndex++) {
+                startingDayToPlantForThisWindow = firstPlantingDay + plantingWindowIndex * plantingWindowSpacing;
+                sDTP = DSSATHelperMethods.pad3CharactersZeros(startingDayToPlantForThisWindow);
+
+                for (int randomSeedIndex = 0; randomSeedIndex < nRandomSeedsToUse ; randomSeedIndex++) {
+    //              randomSeedToUse = firstRandomSeed + randomSeedIndex;
+                  randomSeedToUse = randomSeedIndex;
+                  randomSeedCode = DSSATHelperMethods.padWithZeros(randomSeedToUse, 5);
+
+                  codeName = "pday" + sDTP + "_yr" + randomSeedCode;
+                  allCodesLine += codeName + "\t";
+
+                  allOutputLine += thisPixelYields[plantingWindowIndex][randomSeedIndex] + delimiter;
+
+                } // randomSeedIndex
+              } // plantingWindowIndex
+            } else {
+              // ok, i'm being stupid here. presumeably, we should have it write out as much as we actually know.
+              // but i'm going to be silly and have it just write down bad values for everything since finding
+              // and solving the problem will need more than merely knowing the yields that actually worked....
+              for (int plantingWindowIndex = 0; plantingWindowIndex < nPlantingWindowsPerMonth; plantingWindowIndex++) {
+                startingDayToPlantForThisWindow = firstPlantingDay + plantingWindowIndex * plantingWindowSpacing;
+                sDTP = DSSATHelperMethods.pad3CharactersZeros(startingDayToPlantForThisWindow);
+
+                for (int randomSeedIndex = 0; randomSeedIndex < nRandomSeedsToUse ; randomSeedIndex++) {
+    //              randomSeedToUse = firstRandomSeed + randomSeedIndex;
+                  randomSeedToUse = randomSeedIndex;
+                  randomSeedCode = DSSATHelperMethods.padWithZeros(randomSeedToUse, 5);
+
+                  codeName = "pday" + sDTP + "_yr" + randomSeedCode;
+                  allCodesLine += codeName + "\t";
+
+                  allOutputLine += Integer.MIN_VALUE + delimiter;
+
+                } // randomSeedIndex
+              }
+            }
+            allOut.print(     allOutputLine.substring(0,allOutputLine.length() - 1) + "\n");
+            allCodesOut.print( allCodesLine.substring(0,allCodesLine.length()  - 1) + "\n");
+          } // if all
+
+
+          // now we're ready to deal with the next pixel...
+          // Beware the MAGIC NUMBER!!! checking every one percent...
+          if (lineIndex % (nLinesInDataFile / 400 + 1) == 0) {
+            System.out.println("prog: " + lineIndex + "/" + nLinesInDataFile + " = " +
+                (float)(100 * (lineIndex + 1.0)/nLinesInDataFile) + "% sleep now = " +
+                this.initialSleepTimeToUse + "/" + this.initialSleepTimeToUseHappy + " ; " +
+                (float)countStuff.getMean() + "/" + (float)readingTimesHappy.getMean()
+            );
+          }
+        } // end for for lineIndex // old end of while loop
+
+        double totalDSSATTimeMillis = thisTimer.tocMillis();
+
+        // close out the output files
+        if (allFlag) {
+          allOut.flush();
+          allOut.close();
+
+          allCodesOut.flush();
+          allCodesOut.close();
+        }
+        statisticsOut.flush();
+        statisticsOut.close();
+
+        /////////////////////////////////////////
+        // when all done, write out info files //
+        /////////////////////////////////////////
+
+        long nRows = nLinesInDataFile;
+        long nCols = (nPlantingWindowsPerMonth * nRandomSeedsToUse);
+        if (allFlag) {
+          FunTricks.writeInfoFile(yieldOutputBaseName  + "_ALL", nRows, nCols, delimiter);
+        }
+
+        // Beware the MAGIC NUMBER!!!
+        nCols = 11; // min / max/ mean / std / bad / happy mean / happy std / real maturity mean / real maturity std / happy maturity mean / happy maturity std
+        FunTricks.writeInfoFile(yieldOutputBaseName  + "_STATS", nRows, nCols, delimiter);
+
+
+        /////////////////////////////////////////// end new plan ///////////////////////////////////////////////
+        thisTimer.sinceStartMessage("running DSSAT");
+        double overallTimeMillis = thisTimer.sinceStartMillis();
+
+        System.out.println("total DSSAT = " + (float)(totalDSSATNanos/1000000000.0));
+        System.out.println("total read  = " + (float)(totalReadNanos /1000000000.0));
+        System.out.println("total write = " + (float)(totalWriteNanos/1000000000.0));
+
+        System.out.println();
+        System.out.println("reading: " + countStuff.getAllPretty());
+        System.out.println();
+
+
+        System.out.println(" total time in DSSAT loop = " + totalDSSATTimeMillis / 1000 / 60 + "min ; per run average = "
+            + totalDSSATTimeMillis / nLinesInDataFile / nRandomSeedsToUse / nPlantingWindowsPerMonth + "ms");
+        System.out.println("overall per run average = " +
+            overallTimeMillis/ nLinesInDataFile / nRandomSeedsToUse / nPlantingWindowsPerMonth + "ms" );
+
+
+
+      */
   }
 
   public void doSimulationsMultipleYearsOriginal() throws Exception {
     /*
 
-    		//////////////////////////////////////////////////
-    		// check if everything has been set up properly //
-    		//////////////////////////////////////////////////
-    		if (!this.readyToRun) {
-    			System.out.println("DSSATRunner not ready to run... exiting...");
-    			return;
-    		}
-
-    		// set up a timer for the fun of it...
-    		TimerUtility thisTimer = new TimerUtility();
-    		TimerUtility dssatTimer = new TimerUtility();
-    		TimerUtility extraTimer = new TimerUtility();
-
-    		DescriptiveStatisticsUtility countStuff = new DescriptiveStatisticsUtility(true);
-
-    		long totalDSSATNanos = 0;
-    		long totalReadNanos = 0;
-    		long totalWriteNanos = 0;
-    		double singleReadTime = 0;
-    		///////////////////////////////////
-    		// write out the provenance file //
-    		///////////////////////////////////
-    		System.out.println("-- starting to write provenance file --");
-    		this.writeProvenance();
-    		System.out.println("== done writing provenance file ==");
-
-    		///////////////////////////////////////
-    		// read in the whole template X file //
-    		///////////////////////////////////////
-    		String templateXFileContents = FunTricks.readTextFileToString(templateXFile);
-
-    		System.out.println("== done reading in template X file ==");
-
-    		///////////////////////////
-    		// variable declarations //
-    		///////////////////////////
-
-    		FileReader DSSATSummaryStream = null;
-    		BufferedReader DSSATSummaryReader = null;
-
-    		int[] nonClimateInfo = null; // {(int)soilType, (int)elevation, (int)plantingMonth, firstPlantingDay};
-    		int soilType = -1, firstPlantingDay = -4;
-    		int startingDayToPlantForThisWindow = -1;
-    		int endingDayToPlantForThisWindow = -99;
-    		int fakePlantingYearEnd = -101;
-    		int initializationDayForThisWindow = -4;
-    		int fakeInitializationYear = -5;
-    		int randomSeedToUse = -13;
-
-    //		int[][] thisPixelYields = null;
-    		long totalYield = -5;
-    		long totalYieldSquared = -6;
-    		int maxYield = -1;
-    		int minYield = 100000001;
-    		double meanYield = Double.NaN;
-    		double stdYield = Double.NaN;
-
-    		String goodSummaryLine = null;
-
-    		String codeName = null;
-    		String allOutputLine = null;
-    		String allCodesLine = null;
-
-    		String sDTP = null;
-
-    		String startingDayToPlantCode = null;
-    		String endingDayToPlantCode   = null;
-    		String initializationDayCode  = null;
-
-    		String randomSeedCode = null;
-    		String nYearsCode = null;
-    		String co2ppmCode = null;
-
-    		boolean readSuccessfully = false;
-    		boolean badThingsHappened = false;
-    		double badStat = Double.NaN;
-    		int badThingsHappenedIndex = 0;
-    //		int badRandomSeed = -5;
-    		int badPlantingWindow = -6;
-    		int nParsingTries = 0;
-    		int nParsingTotalThisRun = 0;
-
-    		String soilTypeString = null;
-
-    		////////////////////////////
-    		// a couple magic numbers //
-    		////////////////////////////
-
-    		double magicOkBadStat = -100.0;
-    		double magicBadYieldAll = -200.0;
-
-
-    		////////////////////////////////////////
-    		// set up stuff that we actually know //
-    		////////////////////////////////////////
-    		long initialSleepTimeToUse = this.sleeptimeWaitForFileMillis;
-    		long retrySleepTimeToUse = 2; // Beware the MAGIC NUMBER!!!
-    //		long previousSleepTime = sleepTimeToUse;
-    		int nTimesSuccessfullyReadFirstTime = 0;
-
-    		int timeCheckNumber = 2;
-
-    		String fullTempXFileName = pathToDSSATDirectory + tempXFileName;
-    		File fullTempXFile = new File(fullTempXFileName);
-
-    		File weatherStationFile = new File(magicWeatherStationNameToUsePath);
-
-    		// open up a writer for the statistics output file
-    		File statisticsFileObject = new File(yieldOutputBaseName  + "_STATS.txt");
-    		PrintWriter statisticsOut = new PrintWriter(statisticsFileObject);
-
-    		// declare a writer for the ALL file and open up if necessary
-    		File allFileObject = new File(yieldOutputBaseName  + "_ALL.txt");
-    		PrintWriter allOut = null;
-    		File allCodesFileObject = new File(yieldOutputBaseName  + "_ALL.codes.txt");
-    		PrintWriter allCodesOut = null;
-    		if (allFlag) {
-    			allOut     = new PrintWriter(allFileObject);
-    			allCodesOut = new PrintWriter(allCodesFileObject);
-    		}
-
-
-
-    		///////////////////////////////
-    		// start doing the real work //
-    		///////////////////////////////
-
-
-    		int plantingWindowSpacing = nDaysInMonth / nPlantingWindowsPerMonth;
-    		if (plantingWindowSpacing < 1) {
-    			plantingWindowSpacing = 1;
-    		}
-
-    		// write out the DSSAT initialization file...
-    		FunTricks.writeStringToFile(magicInitializationContents, magicInitializationFilePath);
-
-    		// create giant arrays of the data and geog stuff
-    		String[] dataLinesArray = FunTricks.readTextFileToArray(gisTableBaseName + "_data.txt");
-    		String[] geogLinesArray = FunTricks.readTextFileToArray(gisTableBaseName + "_geog.txt");
-
-    		int nLinesInDataFile = dataLinesArray.length;
-
-
-    		// while loop that steps through the file...
-    		// initialize with the very first line
-    		String cliStuffToWrite = null;
-    		String XStuffToWrite = null;
-
-    		// since this implementation (using the multiple years with a single random seed, rather
-    		// than multiple random seeds with a single year) has the seeds and years as invariants, do
-    		// them up front to save on a little search and replace overhead...
-    		randomSeedCode = DSSATHelperMethods.padWithZeros(firstRandomSeed, 5);
-    		nYearsCode = DSSATHelperMethods.padWithZeros(nRandomSeedsToUse, 5);
-    		co2ppmCode = DSSATHelperMethods.padWithZeros(co2ppm, 4);
-
-    		String XInvariantsReplaced = templateXFileContents.replaceAll(randomSeedPlaceholder, randomSeedCode);
-    		XInvariantsReplaced = XInvariantsReplaced.replaceAll(nYearsOrRandomSeedsPlaceholder, nYearsCode);
-    		XInvariantsReplaced = XInvariantsReplaced.replaceAll(weatherPlaceholder            , magicWeatherStationNameToUse);
-    		XInvariantsReplaced = XInvariantsReplaced.replaceAll(co2ppmPlaceholder             , co2ppmCode);
-
-    		// start the timer for just DSSAT proper
-    		thisTimer.tic();
-    		dssatTimer.tic();
-
-    		// clear out the summary and error files if they exist...
-    		if (errorAsFileObject.exists()) {
-    			errorAsFileObject.delete();
-    		}
-    		if (summaryDSSATOutputAsFileObject.exists()) {
-    			summaryDSSATOutputAsFileObject.delete();
-    		}
-
-    		for (int lineIndex = 0; lineIndex < nLinesInDataFile; lineIndex++) {
-
-    			// initialize the storage array / etc
-    			thisPixelYields = new int[nPlantingWindowsPerMonth][nRandomSeedsToUse];
-    			totalYield = 0L;
-    			totalYieldSquared = 0L;
-    			maxYield = Integer.MIN_VALUE;
-    			minYield = Integer.MAX_VALUE;
-
-    			cliStuffToWrite = DSSATHelperMethods.cliFileContents(dataLinesArray[lineIndex], geogLinesArray[lineIndex], SWmultiplier);
-    			nonClimateInfo  = DSSATHelperMethods.soilElevMonthDay(dataLinesArray[lineIndex]);
-
-    			dssatTimer.tic();
-    			FunTricks.writeStringToFile(cliStuffToWrite, weatherStationFile);
-    			totalWriteNanos += dssatTimer.TOCNanos();
-
-    			soilType         = nonClimateInfo[0];
-    			// elevation        = nonClimateInfo[1]; // don't need this here...
-    			// plantingMonth    = nonClimateInfo[2]; // don't need this here...
-    			firstPlantingDay = nonClimateInfo[3];
-
-    			// brute force padding
-    			// Beware the MAGIC ASSUMPTION!!! assuming two digit soil codes
-    			if (soilType < 10 && soilType > 0) {
-    				soilTypeString = magicSoilPrefix + 0 + soilType;
-    			} else if (soilType < 100 && soilType > 0) {
-    				soilTypeString = magicSoilPrefix  + soilType;
-    			} else {
-    				System.out.println("soil type number did not meet our criteria: > 0 and < 100: " + soilType);
-    				throw new Exception();
-    			}
-
-    			// loop over the planting windows and random seeds
-    			for (int plantingWindowIndex = 0; plantingWindowIndex < nPlantingWindowsPerMonth ; plantingWindowIndex++) {
-    				// pick the starting day/etc for this window
-    				startingDayToPlantForThisWindow = firstPlantingDay + plantingWindowIndex * plantingWindowSpacing;
-    				initializationDayForThisWindow = startingDayToPlantForThisWindow - spinUpTimeDays;
-    				fakeInitializationYear = fakePlantingYear;
-
-    				// take care of the possibility that we will go before the beginning of this year
-    				while (initializationDayForThisWindow < 1) {
-    					initializationDayForThisWindow += nDaysInYear;
-    					fakeInitializationYear--;
-    				}
-
-    				endingDayToPlantForThisWindow = startingDayToPlantForThisWindow + plantingWindowLengthDays;
-    				fakePlantingYearEnd = fakePlantingYear;
-
-    				// take care of the possibility that we will go beyond the end of this year
-    				while (endingDayToPlantForThisWindow > nDaysInYear) {
-    					endingDayToPlantForThisWindow -= nDaysInYear;
-    					fakePlantingYearEnd++;
-    				}
-
-    				// format everything properly....
-    				startingDayToPlantCode = (DSSATHelperMethods.pad2CharactersZeros(fakePlantingYear)
-    						+	DSSATHelperMethods.pad3CharactersZeros(startingDayToPlantForThisWindow)); // YYddd
-    				endingDayToPlantCode   = (DSSATHelperMethods.pad2CharactersZeros(fakePlantingYearEnd)
-    						+ DSSATHelperMethods.pad3CharactersZeros(endingDayToPlantForThisWindow)); // YYddd
-    				initializationDayCode  = (DSSATHelperMethods.pad2CharactersZeros(fakeInitializationYear)
-    						+ DSSATHelperMethods.pad3CharactersZeros(initializationDayForThisWindow));   // YYddd
-
-
-    				/////////////////////
-    				// make the X file //
-    				/////////////////////
-
-    				// do the search and replace thing; the invariants have already been done above...
-    				XStuffToWrite =         XInvariantsReplaced.replaceAll(soilPlaceholder , soilTypeString);
-    				XStuffToWrite =         XStuffToWrite.replaceAll(initializationStartPlaceholder, initializationDayCode);
-    				XStuffToWrite =         XStuffToWrite.replaceAll(plantingDateStartPlaceholder  , startingDayToPlantCode);
-    				XStuffToWrite =         XStuffToWrite.replaceAll(plantingDateEndPlaceholder    , endingDayToPlantCode);
-
-    				// do a "happy plant" version of the X-file
-    				// run as happy plant
-
-
-
-    				/////////////////////////////////////////////////////////////////////
-    				// this is where we would append irrigation and nitrogen schedules //
-    				/////////////////////////////////////////////////////////////////////
-
-    				// overwrite the old file with the new contents
-
-    				dssatTimer.tic();
-    				FunTricks.writeStringToFile(XStuffToWrite, fullTempXFile);
-    				totalWriteNanos += dssatTimer.TOCNanos();
-
-    				///////////////
-    				// run DSSAT //
-    				///////////////
-
-    				Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
-
-    				//////////////////////////////////////////
-    				// extract the results & store to array //
-    				//////////////////////////////////////////
-    				totalDSSATNanos += dssatTimer.TOCNanos();
-
-    				readSuccessfully = false;
-    				nParsingTries = 0;
-    				nParsingTotalThisRun = 0;
-    				badThingsHappened = false;
-    				badThingsHappenedIndex = -1;
-    				badPlantingWindow = 9;
-    				extraTimer.tic();
-    				while (!readSuccessfully) {
-
-    					// determine whether we want to increase the initial wait time:
-    					if (nTimesSuccessfullyReadFirstTime == 0 && nParsingTries == 1) {
-    						initialSleepTimeToUse = Math.min(initialSleepTimeToUse + 1, countStuff.getMinAsLong());
-    						initialSleepTimeToUse++;
-    						System.out.println(lineIndex + ", window=" + plantingWindowIndex + "; new sleep time = " + initialSleepTimeToUse);
-    					}
-
-    					// determine whether we want to decrease the initial wait time:
-    					if (nTimesSuccessfullyReadFirstTime > 0 && nTimesSuccessfullyReadFirstTime % timeCheckNumber == 0 && nParsingTries == 0) {
-    						initialSleepTimeToUse--;
-    						System.out.println(lineIndex + ", window=" + plantingWindowIndex + "; new sleep time = " + initialSleepTimeToUse);
-    					}
-
-    					if (nParsingTries == 0) {
-    						Thread.sleep(initialSleepTimeToUse);
-    					} else {
-    						Thread.sleep(retrySleepTimeToUse);
-    					}
-
-    					nParsingTries++;
-
-    					try {
-    						nParsingTotalThisRun++;
-    						if (nParsingTotalThisRun > this.hardLimitOnReReads) {
-
-    							System.out.println("breaking due to excessive read attempts; seed = " + badThingsHappenedIndex + "; window = " + plantingWindowIndex);
-    							badThingsHappenedIndex++; // bump up the badThingsHappenedIndex
-    							badThingsHappened = true;
-    							badPlantingWindow = plantingWindowIndex;
-    							break;
-    						}
-
-    						DSSATSummaryStream = new FileReader(magicDSSATSummaryToReadPath);
-    						DSSATSummaryReader = new BufferedReader(DSSATSummaryStream);
-
-    						// read through the stuff we don't care about
-    						for (int junkLineIndex = 0; junkLineIndex < magicDSSATSummaryLineIndexToRead ; junkLineIndex++) {
-    							DSSATSummaryReader.readLine();
-    						}
-
-    						///////////////////////////////
-    						// begin reading output file //
-    						///////////////////////////////
-
-    						for (int fakeYearIndex = 0; fakeYearIndex < nRandomSeedsToUse; fakeYearIndex++) {
-    							badThingsHappenedIndex = fakeYearIndex;
-    							// grab the line with actual information
-    							goodSummaryLine = DSSATSummaryReader.readLine();
-    							// pull out the harvest yield at harvest
-    							thisPixelYields[plantingWindowIndex][fakeYearIndex] =
-    								Integer.parseInt(goodSummaryLine.substring(magicHarvestedWeightAtHarvestStartIndex,
-    										magicHarvestedWeightAtHarvestEndIndex).trim());
-    						}
-
-    						// now accumulate various statistics
-    						// we will do this in a separate loop to make sure everything has been read in before doing
-    						// the accumulation. otherwise, we get non-deterministic computing due to partial file reads...
-    						for (int fakeYearIndex = 0; fakeYearIndex < nRandomSeedsToUse; fakeYearIndex++) {
-    							totalYield        += thisPixelYields[plantingWindowIndex][fakeYearIndex];
-    							totalYieldSquared += thisPixelYields[plantingWindowIndex][fakeYearIndex]
-    							                                                          * thisPixelYields[plantingWindowIndex][fakeYearIndex];
-    							if (thisPixelYields[plantingWindowIndex][fakeYearIndex] > maxYield) {
-    								maxYield = thisPixelYields[plantingWindowIndex][fakeYearIndex];
-    							}
-    							if (thisPixelYields[plantingWindowIndex][fakeYearIndex] < minYield) {
-    								minYield = thisPixelYields[plantingWindowIndex][fakeYearIndex];
-    							}
-    						}
-
-    						///////////////////////////////
-    						// end reading output file //
-    						///////////////////////////////
-
-    						// we have successfully read it, so flip the flag
-    						// delete it so that we don't accidentally find it next time...
-    						readSuccessfully = true;
-    						nTimesSuccessfullyReadFirstTime++;
-
-    						DSSATSummaryReader.close();
-    						DSSATSummaryStream.close();
-
-    						summaryDSSATOutputAsFileObject.delete();
-
-    					} catch (NumberFormatException nfe) {
-    						// do nothing so that it will return and try again
-    						System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [number format exception]; line index " + lineIndex + ", window = " + plantingWindowIndex);
-    						DSSATSummaryReader.close();
-    						nTimesSuccessfullyReadFirstTime = 0;
-    					} catch (NullPointerException npe) {
-    						// do nothing so that it will return and try again
-    						DSSATSummaryReader.close();
-    						nTimesSuccessfullyReadFirstTime = 0;
-
-    						// check for error file.
-    						if (errorAsFileObject.exists()) {
-    							// something bad happened
-    							badThingsHappened = true;
-
-    							badThingsHappenedIndex++; // bump up the badThingsHappenedIndex
-    							badPlantingWindow = plantingWindowIndex;
-
-    							errorAsFileObject.delete();
-    							break;
-    						}
-    						// otherwise, we just wait for the rest of the file to be written out...
-    					} catch (java.io.FileNotFoundException fnfe) {
-    						System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [file not found exception] + (line " + lineIndex + ", window = " + plantingWindowIndex + ")");
-
-    						// wait another moment and then check for the error file...
-    						Thread.sleep(initialSleepTimeToUse);
-    						// check for error file
-    						if (errorAsFileObject.exists()) {
-    							badThingsHappened = true;
-
-    							badThingsHappenedIndex++; // bump up the badThingsHappenedIndex
-    							badPlantingWindow = plantingWindowIndex;
-
-    							errorAsFileObject.delete();
-    							break;
-    						}
-
-    						if (nParsingTries > maxParsingTries) {
-    							System.out.println("re-running DSSAT after " + nParsingTries + "; line index " + lineIndex + ", window = " + plantingWindowIndex);
-    //							System.out.println(dssatExecutionCommand[0] + " " + dssatExecutionCommand[1] + " " + dssatExecutionCommand[2]);
-    							Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
-    							nParsingTries = 0;
-    						}
-    						nTimesSuccessfullyReadFirstTime = 0;
-    					} catch (StringIndexOutOfBoundsException sioobe) {
-    						System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [string index out of bounds exception]; line index " + lineIndex + ", window = " + plantingWindowIndex);
-    						nTimesSuccessfullyReadFirstTime = 0;
-    					}
-    				} // end while(!readSuccessfully)
-    				totalReadNanos += dssatTimer.TOCNanos();
-    				singleReadTime = extraTimer.tocMillis();
-    				countStuff.useDoubleValue(singleReadTime);
-    				System.out.println("\t\tline " + lineIndex + ", window " + plantingWindowIndex + " time = " + singleReadTime + " min = " + countStuff.getMinAsDouble());
-    			} // end plantingWindowIndex
-
-
-    			//////////////////////////////////////////////////////////////////////////
-    			// when finished with a pixel, then write out a line to the output file //
-    			//////////////////////////////////////////////////////////////////////////
-
-    			meanYield = totalYield / ((double)nPlantingWindowsPerMonth * nRandomSeedsToUse);
-    			stdYield  = Math.sqrt(totalYieldSquared / ((double)nPlantingWindowsPerMonth * nRandomSeedsToUse) - meanYield * meanYield );
-
-    			// do the summary out stuff
-    			if (badThingsHappened) {
-    				badStat = badThingsHappenedIndex + badPlantingWindow/10.0;
-    			} else {
-    				badStat = magicOkBadStat;
-    			}
-
-    			if (allFlag) {
-    				allOutputLine = "";
-    				allCodesLine = "";
-    				for (int plantingWindowIndex = 0; plantingWindowIndex < nPlantingWindowsPerMonth; plantingWindowIndex++) {
-    					startingDayToPlantForThisWindow = firstPlantingDay + plantingWindowIndex * plantingWindowSpacing;
-    					sDTP = DSSATHelperMethods.pad3CharactersZeros(startingDayToPlantForThisWindow);
-
-    					for (int randomSeedIndex = 0; randomSeedIndex < nRandomSeedsToUse ; randomSeedIndex++) {
-    //						randomSeedToUse = firstRandomSeed + randomSeedIndex;
-    						randomSeedToUse = randomSeedIndex;
-    						randomSeedCode = DSSATHelperMethods.padWithZeros(randomSeedToUse, 5);
-
-    						codeName = "pday" + sDTP + "_yr" + randomSeedCode;
-    						allCodesLine += codeName + "\t";
-
-    						// badThingsHappenedIndex is initialized at -1...
-    						if ( (!badThingsHappened) || ((badThingsHappened) && (randomSeedIndex < badThingsHappenedIndex))) {
-    							allOutputLine += thisPixelYields[plantingWindowIndex][randomSeedIndex] + delimiter;
-    						} else {
-    							allOutputLine += magicBadYieldAll + delimiter;
-    						}
-
-    					} // randomSeedIndex
-    				} // plantingWindowIndex
-    				allOut.print(     allOutputLine.substring(0,allOutputLine.length() - 1) + "\n");
-    				allCodesOut.print( allCodesLine.substring(0,allCodesLine.length()  - 1) + "\n");
-    			} // if all
-
-    			if (badThingsHappened) {
-    				statisticsOut.print(-1 + delimiter + -1 + delimiter + -1 + delimiter + -1 + delimiter + badStat + "\n");
-    			} else {
-    				statisticsOut.print(minYield + delimiter + maxYield + delimiter + meanYield + delimiter + stdYield + delimiter + badStat + "\n");
-    			}
-    			statisticsOut.flush();
-
-    			// now we're ready to deal with the next pixel...
-
-    		} // end for for lineIndex // old end of while loop
-
-    		double totalDSSATTimeMillis = thisTimer.tocMillis();
-
-    		// close out the output files
-    		if (allFlag) {
-    			allOut.flush();
-    			allOut.close();
-
-    			allCodesOut.flush();
-    			allCodesOut.close();
-    		}
-    		statisticsOut.flush();
-    		statisticsOut.close();
-
-    		/////////////////////////////////////////
-    		// when all done, write out info files //
-    		/////////////////////////////////////////
-
-    		long nRows = nLinesInDataFile;
-    		long nCols = (nPlantingWindowsPerMonth * nRandomSeedsToUse);
-    		if (allFlag) {
-    			FunTricks.writeInfoFile(yieldOutputBaseName  + "_ALL", nRows, nCols, delimiter);
-    		}
-
-    		// Beware the MAGIC NUMBER!!!
-    		nCols = 5; // min / max/ mean / std / bad
-    		FunTricks.writeInfoFile(yieldOutputBaseName  + "_STATS", nRows, nCols, delimiter);
-
-
-    		/////////////////////////////////////////// end new plan ///////////////////////////////////////////////
-    		thisTimer.sinceStartMessage("running DSSAT");
-    		double overallTimeMillis = thisTimer.sinceStartMillis();
-
-    		System.out.println("total DSSAT = " + (float)(totalDSSATNanos/1000000000.0));
-    		System.out.println("total read  = " + (float)(totalReadNanos /1000000000.0));
-    		System.out.println("total write = " + (float)(totalWriteNanos/1000000000.0));
-
-    		System.out.println();
-    		System.out.println("reading: " + countStuff.getAllPretty());
-    		System.out.println();
-
-
-    		System.out.println(" total time in DSSAT loop = " + totalDSSATTimeMillis / 1000 / 60 + "min ; per run average = "
-    				+ totalDSSATTimeMillis / nLinesInDataFile / nRandomSeedsToUse / nPlantingWindowsPerMonth + "ms");
-    		System.out.println("overall per run average = " +
-    				overallTimeMillis/ nLinesInDataFile / nRandomSeedsToUse / nPlantingWindowsPerMonth + "ms"	);
-
-
-    	*/
+        //////////////////////////////////////////////////
+        // check if everything has been set up properly //
+        //////////////////////////////////////////////////
+        if (!this.readyToRun) {
+          System.out.println("DSSATRunner not ready to run... exiting...");
+          return;
+        }
+
+        // set up a timer for the fun of it...
+        TimerUtility thisTimer = new TimerUtility();
+        TimerUtility dssatTimer = new TimerUtility();
+        TimerUtility extraTimer = new TimerUtility();
+
+        DescriptiveStatisticsUtility countStuff = new DescriptiveStatisticsUtility(true);
+
+        long totalDSSATNanos = 0;
+        long totalReadNanos = 0;
+        long totalWriteNanos = 0;
+        double singleReadTime = 0;
+        ///////////////////////////////////
+        // write out the provenance file //
+        ///////////////////////////////////
+        System.out.println("-- starting to write provenance file --");
+        this.writeProvenance();
+        System.out.println("== done writing provenance file ==");
+
+        ///////////////////////////////////////
+        // read in the whole template X file //
+        ///////////////////////////////////////
+        String templateXFileContents = FunTricks.readTextFileToString(templateXFile);
+
+        System.out.println("== done reading in template X file ==");
+
+        ///////////////////////////
+        // variable declarations //
+        ///////////////////////////
+
+        FileReader DSSATSummaryStream = null;
+        BufferedReader DSSATSummaryReader = null;
+
+        int[] nonClimateInfo = null; // {(int)soilType, (int)elevation, (int)plantingMonth, firstPlantingDay};
+        int soilType = -1, firstPlantingDay = -4;
+        int startingDayToPlantForThisWindow = -1;
+        int endingDayToPlantForThisWindow = -99;
+        int fakePlantingYearEnd = -101;
+        int initializationDayForThisWindow = -4;
+        int fakeInitializationYear = -5;
+        int randomSeedToUse = -13;
+
+    //    int[][] thisPixelYields = null;
+        long totalYield = -5;
+        long totalYieldSquared = -6;
+        int maxYield = -1;
+        int minYield = 100000001;
+        double meanYield = Double.NaN;
+        double stdYield = Double.NaN;
+
+        String goodSummaryLine = null;
+
+        String codeName = null;
+        String allOutputLine = null;
+        String allCodesLine = null;
+
+        String sDTP = null;
+
+        String startingDayToPlantCode = null;
+        String endingDayToPlantCode   = null;
+        String initializationDayCode  = null;
+
+        String randomSeedCode = null;
+        String nYearsCode = null;
+        String co2ppmCode = null;
+
+        boolean readSuccessfully = false;
+        boolean badThingsHappened = false;
+        double badStat = Double.NaN;
+        int badThingsHappenedIndex = 0;
+    //    int badRandomSeed = -5;
+        int badPlantingWindow = -6;
+        int nParsingTries = 0;
+        int nParsingTotalThisRun = 0;
+
+        String soilTypeString = null;
+
+        ////////////////////////////
+        // a couple magic numbers //
+        ////////////////////////////
+
+        double magicOkBadStat = -100.0;
+        double magicBadYieldAll = -200.0;
+
+
+        ////////////////////////////////////////
+        // set up stuff that we actually know //
+        ////////////////////////////////////////
+        long initialSleepTimeToUse = this.sleeptimeWaitForFileMillis;
+        long retrySleepTimeToUse = 2; // Beware the MAGIC NUMBER!!!
+    //    long previousSleepTime = sleepTimeToUse;
+        int nTimesSuccessfullyReadFirstTime = 0;
+
+        int timeCheckNumber = 2;
+
+        String fullTempXFileName = pathToDSSATDirectory + tempXFileName;
+        File fullTempXFile = new File(fullTempXFileName);
+
+        File weatherStationFile = new File(magicWeatherStationNameToUsePath);
+
+        // open up a writer for the statistics output file
+        File statisticsFileObject = new File(yieldOutputBaseName  + "_STATS.txt");
+        PrintWriter statisticsOut = new PrintWriter(statisticsFileObject);
+
+        // declare a writer for the ALL file and open up if necessary
+        File allFileObject = new File(yieldOutputBaseName  + "_ALL.txt");
+        PrintWriter allOut = null;
+        File allCodesFileObject = new File(yieldOutputBaseName  + "_ALL.codes.txt");
+        PrintWriter allCodesOut = null;
+        if (allFlag) {
+          allOut     = new PrintWriter(allFileObject);
+          allCodesOut = new PrintWriter(allCodesFileObject);
+        }
+
+
+
+        ///////////////////////////////
+        // start doing the real work //
+        ///////////////////////////////
+
+
+        int plantingWindowSpacing = nDaysInMonth / nPlantingWindowsPerMonth;
+        if (plantingWindowSpacing < 1) {
+          plantingWindowSpacing = 1;
+        }
+
+        // write out the DSSAT initialization file...
+        FunTricks.writeStringToFile(magicInitializationContents, magicInitializationFilePath);
+
+        // create giant arrays of the data and geog stuff
+        String[] dataLinesArray = FunTricks.readTextFileToArray(gisTableBaseName + "_data.txt");
+        String[] geogLinesArray = FunTricks.readTextFileToArray(gisTableBaseName + "_geog.txt");
+
+        int nLinesInDataFile = dataLinesArray.length;
+
+
+        // while loop that steps through the file...
+        // initialize with the very first line
+        String cliStuffToWrite = null;
+        String XStuffToWrite = null;
+
+        // since this implementation (using the multiple years with a single random seed, rather
+        // than multiple random seeds with a single year) has the seeds and years as invariants, do
+        // them up front to save on a little search and replace overhead...
+        randomSeedCode = DSSATHelperMethods.padWithZeros(firstRandomSeed, 5);
+        nYearsCode = DSSATHelperMethods.padWithZeros(nRandomSeedsToUse, 5);
+        co2ppmCode = DSSATHelperMethods.padWithZeros(co2ppm, 4);
+
+        String XInvariantsReplaced = templateXFileContents.replaceAll(randomSeedPlaceholder, randomSeedCode);
+        XInvariantsReplaced = XInvariantsReplaced.replaceAll(nYearsOrRandomSeedsPlaceholder, nYearsCode);
+        XInvariantsReplaced = XInvariantsReplaced.replaceAll(weatherPlaceholder            , magicWeatherStationNameToUse);
+        XInvariantsReplaced = XInvariantsReplaced.replaceAll(co2ppmPlaceholder             , co2ppmCode);
+
+        // start the timer for just DSSAT proper
+        thisTimer.tic();
+        dssatTimer.tic();
+
+        // clear out the summary and error files if they exist...
+        if (errorAsFileObject.exists()) {
+          errorAsFileObject.delete();
+        }
+        if (summaryDSSATOutputAsFileObject.exists()) {
+          summaryDSSATOutputAsFileObject.delete();
+        }
+
+        for (int lineIndex = 0; lineIndex < nLinesInDataFile; lineIndex++) {
+
+          // initialize the storage array / etc
+          thisPixelYields = new int[nPlantingWindowsPerMonth][nRandomSeedsToUse];
+          totalYield = 0L;
+          totalYieldSquared = 0L;
+          maxYield = Integer.MIN_VALUE;
+          minYield = Integer.MAX_VALUE;
+
+          cliStuffToWrite = DSSATHelperMethods.cliFileContents(dataLinesArray[lineIndex], geogLinesArray[lineIndex], SWmultiplier);
+          nonClimateInfo  = DSSATHelperMethods.soilElevMonthDay(dataLinesArray[lineIndex]);
+
+          dssatTimer.tic();
+          FunTricks.writeStringToFile(cliStuffToWrite, weatherStationFile);
+          totalWriteNanos += dssatTimer.TOCNanos();
+
+          soilType         = nonClimateInfo[0];
+          // elevation        = nonClimateInfo[1]; // don't need this here...
+          // plantingMonth    = nonClimateInfo[2]; // don't need this here...
+          firstPlantingDay = nonClimateInfo[3];
+
+          // brute force padding
+          // Beware the MAGIC ASSUMPTION!!! assuming two digit soil codes
+          if (soilType < 10 && soilType > 0) {
+            soilTypeString = magicSoilPrefix + 0 + soilType;
+          } else if (soilType < 100 && soilType > 0) {
+            soilTypeString = magicSoilPrefix  + soilType;
+          } else {
+            System.out.println("soil type number did not meet our criteria: > 0 and < 100: " + soilType);
+            throw new Exception();
+          }
+
+          // loop over the planting windows and random seeds
+          for (int plantingWindowIndex = 0; plantingWindowIndex < nPlantingWindowsPerMonth ; plantingWindowIndex++) {
+            // pick the starting day/etc for this window
+            startingDayToPlantForThisWindow = firstPlantingDay + plantingWindowIndex * plantingWindowSpacing;
+            initializationDayForThisWindow = startingDayToPlantForThisWindow - spinUpTimeDays;
+            fakeInitializationYear = fakePlantingYear;
+
+            // take care of the possibility that we will go before the beginning of this year
+            while (initializationDayForThisWindow < 1) {
+              initializationDayForThisWindow += nDaysInYear;
+              fakeInitializationYear--;
+            }
+
+            endingDayToPlantForThisWindow = startingDayToPlantForThisWindow + plantingWindowLengthDays;
+            fakePlantingYearEnd = fakePlantingYear;
+
+            // take care of the possibility that we will go beyond the end of this year
+            while (endingDayToPlantForThisWindow > nDaysInYear) {
+              endingDayToPlantForThisWindow -= nDaysInYear;
+              fakePlantingYearEnd++;
+            }
+
+            // format everything properly....
+            startingDayToPlantCode = (DSSATHelperMethods.pad2CharactersZeros(fakePlantingYear)
+                + DSSATHelperMethods.pad3CharactersZeros(startingDayToPlantForThisWindow)); // YYddd
+            endingDayToPlantCode   = (DSSATHelperMethods.pad2CharactersZeros(fakePlantingYearEnd)
+                + DSSATHelperMethods.pad3CharactersZeros(endingDayToPlantForThisWindow)); // YYddd
+            initializationDayCode  = (DSSATHelperMethods.pad2CharactersZeros(fakeInitializationYear)
+                + DSSATHelperMethods.pad3CharactersZeros(initializationDayForThisWindow));   // YYddd
+
+
+            /////////////////////
+            // make the X file //
+            /////////////////////
+
+            // do the search and replace thing; the invariants have already been done above...
+            XStuffToWrite =         XInvariantsReplaced.replaceAll(soilPlaceholder , soilTypeString);
+            XStuffToWrite =         XStuffToWrite.replaceAll(initializationStartPlaceholder, initializationDayCode);
+            XStuffToWrite =         XStuffToWrite.replaceAll(plantingDateStartPlaceholder  , startingDayToPlantCode);
+            XStuffToWrite =         XStuffToWrite.replaceAll(plantingDateEndPlaceholder    , endingDayToPlantCode);
+
+            // do a "happy plant" version of the X-file
+            // run as happy plant
+
+
+
+            /////////////////////////////////////////////////////////////////////
+            // this is where we would append irrigation and nitrogen schedules //
+            /////////////////////////////////////////////////////////////////////
+
+            // overwrite the old file with the new contents
+
+            dssatTimer.tic();
+            FunTricks.writeStringToFile(XStuffToWrite, fullTempXFile);
+            totalWriteNanos += dssatTimer.TOCNanos();
+
+            ///////////////
+            // run DSSAT //
+            ///////////////
+
+            Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
+
+            //////////////////////////////////////////
+            // extract the results & store to array //
+            //////////////////////////////////////////
+            totalDSSATNanos += dssatTimer.TOCNanos();
+
+            readSuccessfully = false;
+            nParsingTries = 0;
+            nParsingTotalThisRun = 0;
+            badThingsHappened = false;
+            badThingsHappenedIndex = -1;
+            badPlantingWindow = 9;
+            extraTimer.tic();
+            while (!readSuccessfully) {
+
+              // determine whether we want to increase the initial wait time:
+              if (nTimesSuccessfullyReadFirstTime == 0 && nParsingTries == 1) {
+                initialSleepTimeToUse = Math.min(initialSleepTimeToUse + 1, countStuff.getMinAsLong());
+                initialSleepTimeToUse++;
+                System.out.println(lineIndex + ", window=" + plantingWindowIndex + "; new sleep time = " + initialSleepTimeToUse);
+              }
+
+              // determine whether we want to decrease the initial wait time:
+              if (nTimesSuccessfullyReadFirstTime > 0 && nTimesSuccessfullyReadFirstTime % timeCheckNumber == 0 && nParsingTries == 0) {
+                initialSleepTimeToUse--;
+                System.out.println(lineIndex + ", window=" + plantingWindowIndex + "; new sleep time = " + initialSleepTimeToUse);
+              }
+
+              if (nParsingTries == 0) {
+                Thread.sleep(initialSleepTimeToUse);
+              } else {
+                Thread.sleep(retrySleepTimeToUse);
+              }
+
+              nParsingTries++;
+
+              try {
+                nParsingTotalThisRun++;
+                if (nParsingTotalThisRun > this.hardLimitOnReReads) {
+
+                  System.out.println("breaking due to excessive read attempts; seed = " + badThingsHappenedIndex + "; window = " + plantingWindowIndex);
+                  badThingsHappenedIndex++; // bump up the badThingsHappenedIndex
+                  badThingsHappened = true;
+                  badPlantingWindow = plantingWindowIndex;
+                  break;
+                }
+
+                DSSATSummaryStream = new FileReader(magicDSSATSummaryToReadPath);
+                DSSATSummaryReader = new BufferedReader(DSSATSummaryStream);
+
+                // read through the stuff we don't care about
+                for (int junkLineIndex = 0; junkLineIndex < magicDSSATSummaryLineIndexToRead ; junkLineIndex++) {
+                  DSSATSummaryReader.readLine();
+                }
+
+                ///////////////////////////////
+                // begin reading output file //
+                ///////////////////////////////
+
+                for (int fakeYearIndex = 0; fakeYearIndex < nRandomSeedsToUse; fakeYearIndex++) {
+                  badThingsHappenedIndex = fakeYearIndex;
+                  // grab the line with actual information
+                  goodSummaryLine = DSSATSummaryReader.readLine();
+                  // pull out the harvest yield at harvest
+                  thisPixelYields[plantingWindowIndex][fakeYearIndex] =
+                    Integer.parseInt(goodSummaryLine.substring(magicHarvestedWeightAtHarvestStartIndex,
+                        magicHarvestedWeightAtHarvestEndIndex).trim());
+                }
+
+                // now accumulate various statistics
+                // we will do this in a separate loop to make sure everything has been read in before doing
+                // the accumulation. otherwise, we get non-deterministic computing due to partial file reads...
+                for (int fakeYearIndex = 0; fakeYearIndex < nRandomSeedsToUse; fakeYearIndex++) {
+                  totalYield        += thisPixelYields[plantingWindowIndex][fakeYearIndex];
+                  totalYieldSquared += thisPixelYields[plantingWindowIndex][fakeYearIndex]
+                                                                            * thisPixelYields[plantingWindowIndex][fakeYearIndex];
+                  if (thisPixelYields[plantingWindowIndex][fakeYearIndex] > maxYield) {
+                    maxYield = thisPixelYields[plantingWindowIndex][fakeYearIndex];
+                  }
+                  if (thisPixelYields[plantingWindowIndex][fakeYearIndex] < minYield) {
+                    minYield = thisPixelYields[plantingWindowIndex][fakeYearIndex];
+                  }
+                }
+
+                ///////////////////////////////
+                // end reading output file //
+                ///////////////////////////////
+
+                // we have successfully read it, so flip the flag
+                // delete it so that we don't accidentally find it next time...
+                readSuccessfully = true;
+                nTimesSuccessfullyReadFirstTime++;
+
+                DSSATSummaryReader.close();
+                DSSATSummaryStream.close();
+
+                summaryDSSATOutputAsFileObject.delete();
+
+              } catch (NumberFormatException nfe) {
+                // do nothing so that it will return and try again
+                System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [number format exception]; line index " + lineIndex + ", window = " + plantingWindowIndex);
+                DSSATSummaryReader.close();
+                nTimesSuccessfullyReadFirstTime = 0;
+              } catch (NullPointerException npe) {
+                // do nothing so that it will return and try again
+                DSSATSummaryReader.close();
+                nTimesSuccessfullyReadFirstTime = 0;
+
+                // check for error file.
+                if (errorAsFileObject.exists()) {
+                  // something bad happened
+                  badThingsHappened = true;
+
+                  badThingsHappenedIndex++; // bump up the badThingsHappenedIndex
+                  badPlantingWindow = plantingWindowIndex;
+
+                  errorAsFileObject.delete();
+                  break;
+                }
+                // otherwise, we just wait for the rest of the file to be written out...
+              } catch (java.io.FileNotFoundException fnfe) {
+                System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [file not found exception] + (line " + lineIndex + ", window = " + plantingWindowIndex + ")");
+
+                // wait another moment and then check for the error file...
+                Thread.sleep(initialSleepTimeToUse);
+                // check for error file
+                if (errorAsFileObject.exists()) {
+                  badThingsHappened = true;
+
+                  badThingsHappenedIndex++; // bump up the badThingsHappenedIndex
+                  badPlantingWindow = plantingWindowIndex;
+
+                  errorAsFileObject.delete();
+                  break;
+                }
+
+                if (nParsingTries > maxParsingTries) {
+                  System.out.println("re-running DSSAT after " + nParsingTries + "; line index " + lineIndex + ", window = " + plantingWindowIndex);
+    //              System.out.println(dssatExecutionCommand[0] + " " + dssatExecutionCommand[1] + " " + dssatExecutionCommand[2]);
+                  Runtime.getRuntime().exec(dssatExecutionCommand , null , pathToDSSATDirectoryAsFile);
+                  nParsingTries = 0;
+                }
+                nTimesSuccessfullyReadFirstTime = 0;
+              } catch (StringIndexOutOfBoundsException sioobe) {
+                System.out.println("Failed to read summary properly on try #" + nParsingTries + ", trying again [string index out of bounds exception]; line index " + lineIndex + ", window = " + plantingWindowIndex);
+                nTimesSuccessfullyReadFirstTime = 0;
+              }
+            } // end while(!readSuccessfully)
+            totalReadNanos += dssatTimer.TOCNanos();
+            singleReadTime = extraTimer.tocMillis();
+            countStuff.useDoubleValue(singleReadTime);
+            System.out.println("\t\tline " + lineIndex + ", window " + plantingWindowIndex + " time = " + singleReadTime + " min = " + countStuff.getMinAsDouble());
+          } // end plantingWindowIndex
+
+
+          //////////////////////////////////////////////////////////////////////////
+          // when finished with a pixel, then write out a line to the output file //
+          //////////////////////////////////////////////////////////////////////////
+
+          meanYield = totalYield / ((double)nPlantingWindowsPerMonth * nRandomSeedsToUse);
+          stdYield  = Math.sqrt(totalYieldSquared / ((double)nPlantingWindowsPerMonth * nRandomSeedsToUse) - meanYield * meanYield );
+
+          // do the summary out stuff
+          if (badThingsHappened) {
+            badStat = badThingsHappenedIndex + badPlantingWindow/10.0;
+          } else {
+            badStat = magicOkBadStat;
+          }
+
+          if (allFlag) {
+            allOutputLine = "";
+            allCodesLine = "";
+            for (int plantingWindowIndex = 0; plantingWindowIndex < nPlantingWindowsPerMonth; plantingWindowIndex++) {
+              startingDayToPlantForThisWindow = firstPlantingDay + plantingWindowIndex * plantingWindowSpacing;
+              sDTP = DSSATHelperMethods.pad3CharactersZeros(startingDayToPlantForThisWindow);
+
+              for (int randomSeedIndex = 0; randomSeedIndex < nRandomSeedsToUse ; randomSeedIndex++) {
+    //            randomSeedToUse = firstRandomSeed + randomSeedIndex;
+                randomSeedToUse = randomSeedIndex;
+                randomSeedCode = DSSATHelperMethods.padWithZeros(randomSeedToUse, 5);
+
+                codeName = "pday" + sDTP + "_yr" + randomSeedCode;
+                allCodesLine += codeName + "\t";
+
+                // badThingsHappenedIndex is initialized at -1...
+                if ( (!badThingsHappened) || ((badThingsHappened) && (randomSeedIndex < badThingsHappenedIndex))) {
+                  allOutputLine += thisPixelYields[plantingWindowIndex][randomSeedIndex] + delimiter;
+                } else {
+                  allOutputLine += magicBadYieldAll + delimiter;
+                }
+
+              } // randomSeedIndex
+            } // plantingWindowIndex
+            allOut.print(     allOutputLine.substring(0,allOutputLine.length() - 1) + "\n");
+            allCodesOut.print( allCodesLine.substring(0,allCodesLine.length()  - 1) + "\n");
+          } // if all
+
+          if (badThingsHappened) {
+            statisticsOut.print(-1 + delimiter + -1 + delimiter + -1 + delimiter + -1 + delimiter + badStat + "\n");
+          } else {
+            statisticsOut.print(minYield + delimiter + maxYield + delimiter + meanYield + delimiter + stdYield + delimiter + badStat + "\n");
+          }
+          statisticsOut.flush();
+
+          // now we're ready to deal with the next pixel...
+
+        } // end for for lineIndex // old end of while loop
+
+        double totalDSSATTimeMillis = thisTimer.tocMillis();
+
+        // close out the output files
+        if (allFlag) {
+          allOut.flush();
+          allOut.close();
+
+          allCodesOut.flush();
+          allCodesOut.close();
+        }
+        statisticsOut.flush();
+        statisticsOut.close();
+
+        /////////////////////////////////////////
+        // when all done, write out info files //
+        /////////////////////////////////////////
+
+        long nRows = nLinesInDataFile;
+        long nCols = (nPlantingWindowsPerMonth * nRandomSeedsToUse);
+        if (allFlag) {
+          FunTricks.writeInfoFile(yieldOutputBaseName  + "_ALL", nRows, nCols, delimiter);
+        }
+
+        // Beware the MAGIC NUMBER!!!
+        nCols = 5; // min / max/ mean / std / bad
+        FunTricks.writeInfoFile(yieldOutputBaseName  + "_STATS", nRows, nCols, delimiter);
+
+
+        /////////////////////////////////////////// end new plan ///////////////////////////////////////////////
+        thisTimer.sinceStartMessage("running DSSAT");
+        double overallTimeMillis = thisTimer.sinceStartMillis();
+
+        System.out.println("total DSSAT = " + (float)(totalDSSATNanos/1000000000.0));
+        System.out.println("total read  = " + (float)(totalReadNanos /1000000000.0));
+        System.out.println("total write = " + (float)(totalWriteNanos/1000000000.0));
+
+        System.out.println();
+        System.out.println("reading: " + countStuff.getAllPretty());
+        System.out.println();
+
+
+        System.out.println(" total time in DSSAT loop = " + totalDSSATTimeMillis / 1000 / 60 + "min ; per run average = "
+            + totalDSSATTimeMillis / nLinesInDataFile / nRandomSeedsToUse / nPlantingWindowsPerMonth + "ms");
+        System.out.println("overall per run average = " +
+            overallTimeMillis/ nLinesInDataFile / nRandomSeedsToUse / nPlantingWindowsPerMonth + "ms" );
+
+
+      */
   } // main
 
   public void doSimulationsMultipleYearsAllClimateSupplied() throws Exception {
@@ -3758,8 +3774,8 @@ public class DSSATRunner {
     int initializationDayForThisWindow = -4;
     int fakeInitializationYear = -5;
 
-    //	double meanYield = Double.NaN;
-    //	double stdYield = Double.NaN;
+    //  double meanYield = Double.NaN;
+    //  double stdYield = Double.NaN;
 
     String startingDayToPlantCode = null;
     String endingDayToPlantCode = null;
@@ -3771,7 +3787,7 @@ public class DSSATRunner {
     String nHappyYearsCode = null;
     String co2ppmCode = null;
 
-    //	double badStat = Double.NaN;
+    //  double badStat = Double.NaN;
 
     String soilTypeString = null;
 
@@ -3783,8 +3799,8 @@ public class DSSATRunner {
     // a couple magic numbers //
     ////////////////////////////
 
-    //	double magicOkBadStat = -1.0;
-    //	double magicBadYieldAll = -2.0;
+    //  double magicOkBadStat = -1.0;
+    //  double magicBadYieldAll = -2.0;
 
     ////////////////////////////////////////
     // set up stuff that we actually know //
@@ -3902,7 +3918,8 @@ public class DSSATRunner {
       }
 
       // figure out the climate file...
-      //		cliStuffToWrite = DSSATHelperMethods.cliFileContentsMFM(dataMatrix, geogMatrix, lineIndex,
+      //    cliStuffToWrite = DSSATHelperMethods.cliFileContentsMFM(dataMatrix, geogMatrix,
+      // lineIndex,
       // SWmultiplier);
 
       cliStuffToWrite =
@@ -3993,7 +4010,7 @@ public class DSSATRunner {
         //////////////////////////////////////////
 
         // mean yield / anthesis / maturity in days after planting...
-        //			phenologyInDays = this.grabHappyResults(nHappyPlantRunsForPhenology);
+        //      phenologyInDays = this.grabHappyResults(nHappyPlantRunsForPhenology);
         phenologyInDays = this.grabNewHappyResults(nHappyPlantRunsForPhenology);
 
         // keep track of the happy plant yields for the fun of it...
@@ -4046,8 +4063,8 @@ public class DSSATRunner {
           // extract the results & store to array //
           //////////////////////////////////////////
 
-          //				this.grabRealResults(lineIndex, plantingWindowIndex);
-          //				this.grabNewRealResults(this.nRandomSeedsToUse);
+          //        this.grabRealResults(lineIndex, plantingWindowIndex);
+          //        this.grabNewRealResults(this.nRandomSeedsToUse);
           this.grabNewManyResults(this.nRandomSeedsToUse);
 
           totalReadNanos += dssatTimer.TOCNanos();
@@ -4061,10 +4078,10 @@ public class DSSATRunner {
         else {
           // we need to set these things to zero artificially...
           for (int yearIndex = 0; yearIndex < nRandomSeedsToUse; yearIndex++) {
-            //					thisPixelYields[plantingWindowIndex][yearIndex] = 0;
+            //          thisPixelYields[plantingWindowIndex][yearIndex] = 0;
             realYieldsEntirePixel.useLongValue(0L);
 
-            //					thisPixelMaturities[plantingWindowIndex][yearIndex] = -1;
+            //          thisPixelMaturities[plantingWindowIndex][yearIndex] = -1;
             realMaturityEntirePixel.useLongValue(-500L);
 
             for (int extraIndex = 0; extraIndex < extraStartIndices.length; extraIndex++) {
@@ -4106,7 +4123,7 @@ public class DSSATRunner {
       statisticsOutLine += "\n";
 
       statisticsOut.print(statisticsOutLine);
-      //		statisticsOut.flush();
+      //    statisticsOut.flush();
 
       // now we're ready to deal with the next pixel...
       // Beware the MAGIC NUMBER!!! checking every one percent...
