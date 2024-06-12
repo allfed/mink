@@ -1,5 +1,19 @@
 # mink gridded crop model
 
+Ricky Robertson has been working on a crop model based on DSSAT for over a decade at IFPRI. Although Ricky's mink [is documented](https://sylabs.io/guides/3.0/user-guide/installation.html), the code is not open source. Furthermore, the coding practices were not suitable for continued work.
+
+This repository, developed at [ALLFED](allfed.info), is an attempt to make his hard work open to the public, accessible, better validated, and easier to run, as well as more reliable, faster, and more flexible in application. Rather than focusing on the effects of co2 induced climate change, this code was developed to assess the effects of ASRS (Abrupt Sunlight Reduction Scenario) using climate models that were developed at the University of Colorado Boulder from the Toon group. More specifically, this codebase has been used to assess the effects of 150 tg soot scenarios on global crop production, at the relatively low resolution of ~1.5 by ~2 degrees, and to assess the crop yield potential for relocated crops, more suitable for the new colder climate. It has also been used to assess the expansion of cropland area to increase production where it is still possible to grow crops. 
+
+This additionally codebase features portability speed readability and accuracy.
+ - it has been developed to run in parallel on multiple core machines)
+ - it has been validated against SPAM and FAOSTAT crop yields in climate conditions of circa 2005)
+ - it has been majorly refactored and minimized from its original code footprint)
+ - you can run it on any linux machine, and it will work without error, using the singularity virtual machine
+
+This crop model is designed to work with daily weather data produced from the CLM5 climate model, but historical climate conditions can also be assessed, as long as they are in the WTH format (see example_weather folder for an example of such a format).
+
+Please note that the underlying crop model is DSSAT version 4.7.5.11 is being used, which is somewhat out of date (DSSAT is now at the version v4.8.2.10 as of June 2024). Also note that this is not the only (or even necessarily the easiest) way to run crop models with DSSAT. Before embarking on a crop modelling project with this codebase, it would be wise to investigate the range of crop models that are available to you, notably including pDSSAT from the AGMIP project run by the University of Potdam.
+
 
 ## Quick Start
 
@@ -294,6 +308,14 @@ You may also need to add your crop at the beginning of the basics_15jun22/small_
 
 SPAM is necessary as it loads in our crops. You can go to grassdata/world/spam/  to see what the crop 4 letter code would be.
 
+### A Note about years
+
+The specific list of years listed in the scenarios file should be selected with the following in mind:
+ - The number of years run by DSSAT is equal to the last year selected in scenarios, plus two. So if you go from year 3 to 9, 11 years will be run (using WTH file years 1 through 11). See next point. 
+ - The WTH files need two years of aclimatization before DSSAT is able to accurately report results. Therefore, you must add two years to the weather file number in order to get the number that is shown in the processed results. That's also why the number of years plus two is the number of years actually run by DSSAT. 
+     - For example, let's say WTH files run from year 01xxx to 15xxx where xxx is the 3 digit day number (from day 1 to day 365)
+     - Let's say for the climate run you're interested in, you want to look at yields which were planting on calendar year 5.
+     - In that case, you would enter year 3 as the first year in your scenario file, as year 1 and 2 are both years where there is no nuclear winter during any crop's growing season.
 
 
 ## Development
