@@ -120,8 +120,110 @@ to_DSSAT/catdailyB__1_noGCMcalendar_p0_maize__eitherN250_nonCLIMATE
 0..4..8..11..15..18..22..25..29..33..36..40..43..47..50..54..58..61..65..68..72..75..79..83..86..90..93..97..100
 Removing raster <MASK>
 ```
+## Simple Tutorial: Running the example single pixel
+
+Note: ensure you have set up singularity and imported relevant SPAM data for this tutorial.
+
+In order to run a single point of the model, you can run the following commands after entering the singularity virtual machine.
+
+Let's now run a dummy program that should finish in under a minute of compute: a single pixel of wheat wh076rf. In this case, we're running a single rainfed pixel. The planting was attempted in all 12 months, but we're having the program select the best planting month by choosing the highest yielding month in that pixel to plant. We're also running on all cropland that is not currently planted (expanded cropped area), imagining a successful scale-up of crop area. We're running in the 150tg nuclear winter climate due to a full scale nuclear war starting May of year 5 (as seen in the WTH file `example_weather/150Tg_biasCorrected_-23.4375_133.125.WTH`), meaning a very severe climate catastrophe has just occurred. We have selected to test a single area of approximately 200 square kilometers in the australian outback.
+
+Please note: The first year in the results (listed as processed year 3) actually represents year 5 due to the subtraction of two years of acclimitization in the crop model. 
+
+
+#### step 0: compile java
+You need all the java programs compiled to actually run mink. To do so, navigate to `basics_15jun22/sge_Mink3daily/scenarios`:
+```bash
+cd basics_15jun22/sge_Mink3daily/scenarios
+```
+Next, run the java compile:
+```bash
+./compile_java.sh
+```
+
+May take a few minutes. Finally, navigate back to root dir:
+```bash
+cd -
+```
+
+#### step 1: converting SPAM
+
+
+It's wise at the outset to generate a spam map of the whole world, so you don't run into problems later on trying to access SPAM where it was not generated. You need to do this once when you start out, and then again every time your resolution changes.
+
+(You don't actually need any of the weather files listed in this particular yaml. It's just for importing Wheat for SPAM and because it has a global latitude/longitude extent at the proper resolution.)
+
+```bash
+./generate_scenarios_csv.sh --spam scenarios/world/wheat_relocated.yaml
+```
+
+That will take a few minutes.
+
+You could have also added the `--compile` flag to compile relevant java files in the `generate_scenarios_csv.sh` script, but I left that out because we just ran compile for all files in the previous step.
+
+#### step 2: generate scenarios before running DSSAT
+
+Next, let's generate the scenarios csv for the single pixel we want by rerunning the command without the `--spam` flag using the yaml I wrote for this purpose:
+```bash
+./generate_scenarios_csv.sh scenarios/example_singlepoint/wheat_baseline.yaml
+
+```
+
+It's helpful for your understanding to take a look at that `scenarios/example_singlepoint/wheat_baseline.yaml` file as well, to see which data sources are being used.
+
+Again, you could have also added the `--compile` flag to compile relevant java files in the `generate_scenarios_csv.sh`script, but I left that out because we just ran compile for all files in the previous step.
+
+#### step 3: run DSSAT
+
+Finally, let's compute the crop yields.
+
+```bash
+./run_from_csv.sh scenarios/example_singlepoint/wheat_baseline.yaml DSSAT 
+```
+And again, you could have also added the `--compile` flag to compile relevant java files in the `run_from_csv.sh` script, but I left that out because we just ran compile for all files in the compile step above.
+
+#### step 4: process the DSSAT run
+
+Now, we actually want to take a look at the resulting yields!
+```bash
+./run_from_csv.sh scenarios/example_singlepoint/wheat_baseline.yaml process
+```
+
+A bunch of interesting stuff should now reside in `example_results_control`. If that didn't work, try running
+```bash
+mkdir example_results_control
+```
+... and run from csv again.
+
+#### step 6: revel in our success (by looking at resulting yield heat maps and csv outputs)
+
+Congratulations, you made it quite a long way from cloning the repo!
+
+Now let's take a look at example_results_control to see what our hard work to get this crop model working has earned us:
+```bash
+cd example_results_control
+ls -ltr
+```
+
+Please note: The first year in the results (listed as processed year 3) actually represents year 5 due to the subtraction of two years of acclimitization in the crop model. 
+
+We just showed a bunch of interesting data about what resides in this folder, like when it was made, and sorted in reversed order of when created. Notably, you can see there are a bunch of png's which show images of what the yields are. You can see the yields by country as well! This required a lot of high resolution raster work, etc.
+
+Don't forget to go back to the root repo when complete:
+```bash
+cd -
+```
+
+#### more useful things you can do
+The majority of the work done at ALLFED was to create more workable and useful processing and rendering/export tools. You can navigate to 
+```bash
+cd basics_15jun22/sge_Mink3daily/export_scripts
+```
+
+and run various export scripts, notably including an export to ascii (`save_ascii.sh`), heatmap generator (`quick_display.sh`) and export to geotiff format (`save_tif.sh`) 
+
 ## Running a gridded crop model run
-There are a couple steps involved in trying out the software for the first time.
+There are a couple steps involved in trying out the software for a full gridded run.
 You need to take a look at a few places in the repository to alter the physical parameters for crop modelling:
 
 ```

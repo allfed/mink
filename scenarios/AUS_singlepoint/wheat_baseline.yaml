@@ -82,11 +82,11 @@ physical_parameters:
   run_descriptor: Jan21_relocated_cat_wh076
   irrigation_to_try: [RF]
   weather_prefix: NASA_baseline
-  weather_folder: control_mink
+  weather_folder: single_pixel_weather_control
   results_folder: singlepoint_AUS_results_control
   #typically below is [1, 3, 5, 7, 9, 11]
   planting_months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-  years: [3, 4, 5, 6, 7, 8]
+  years: [3, 4, 5, 6, 7, 8, 9]
 
     
 crops:
