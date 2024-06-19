@@ -916,6 +916,14 @@ public class BashScripts {
     callProcess(pb, export_script_folder);
   }
 
+  public static void runPythonWeatherFilesChecker(String run_script_folder, String weather_folder)
+      throws InterruptedException, IOException {
+    ProcessBuilder pb =
+        new ProcessBuilder("python3", "test_alignment.py", "/mnt/data/" + weather_folder);
+    String grass_script_folder = run_script_folder + "../more_GRASS_scripts/universal/";
+    callProcess(pb, grass_script_folder);
+  }
+
   public static void callProcess(ProcessBuilder pb, String run_script_folder)
       throws InterruptedException, IOException {
     pb.inheritIO();

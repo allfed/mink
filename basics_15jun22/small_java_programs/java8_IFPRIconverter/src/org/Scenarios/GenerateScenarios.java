@@ -49,6 +49,26 @@ public class GenerateScenarios {
 
     HashMap<String, String> crop_name_to_short_code_dictionary = getCropCodeMap();
 
+    // Make the results folder if doesnt exist
+    File resultsFolder = new File(config.physical_parameters.results_folder);
+    if (!resultsFolder.exists()) {
+      if (resultsFolder.mkdirs()) {
+        System.out.println(
+            "Results folder "
+                + config.physical_parameters.results_folder
+                + " created successfully.");
+      } else {
+        System.err.println(
+            "Error: Failed to create results folder "
+                + config.physical_parameters.results_folder
+                + ".");
+        System.exit(1);
+      }
+    } else {
+      System.out.println(
+          "Results folder " + config.physical_parameters.results_folder + " already exists.");
+    }
+
     // Make all the rasters needed for crop models
     for (Config.Crop crop : config.crops) {
       // make by-crop crop area rasters and present-day yield rasters
@@ -80,6 +100,9 @@ public class GenerateScenarios {
         config.physical_parameters.region_to_use_w,
         config.physical_parameters.nsres,
         config.physical_parameters.ewres);
+
+    BashScripts.runPythonWeatherFilesChecker(
+        run_script_folder, config.physical_parameters.weather_folder);
 
     generateScenariosCSV(
         run_script_folder,

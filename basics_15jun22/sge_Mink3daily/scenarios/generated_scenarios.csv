@@ -1,2 +1,2 @@
 snx_name,co2_level,crop_name,weather_prefix,weather_folder,results_folder,run_descriptor,nitrogen,region_to_use_n,region_to_use_s,region_to_use_e,region_to_use_w,nsres,ewres,mask_for_this_snx,fertilizer_scheme
-whK076RF,410,wheat,150Tg_biasCorrected,bias_corrected_catastrophe,results_bias_corrected_catastrophe,Jan21_relocated_cat_wh076,N_for_wheat_RF_12aug13,-9.375,-43.125,152.5,112.5,1.875,1.25,LAND_AREA_NO_CROPS_rainfed_cropland,winterwheat
+whK076RF,410,wheat,150Tg_biasCorrected,global_bias_corrected_catastrophe,global_results_bias_corrected_catastrophe,Jan21_relocated_cat_wh076,N_for_wheat_RF_12aug13,65.625,-65.625,176.25,-170.0,1.875,1.25,LAND_AREA_NO_CROPS_rainfed_cropland,winterwheat

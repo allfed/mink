@@ -1,0 +1,514 @@
+Trying to fix issue:
+   at org.DSSATRunner.Mink3p2daily.doSimulationsOnExistingWeather(Mink3p2daily.java:3903)
+   at org.DSSATRunner.MinkRunner3p2daily.main(MinkRunner3p2daily.java:30)
+REAL: had trouble reading one of the following (data line 171; fakeYear 4 planting window index 0):
+yield [-99]
+starting  [2005276]
+planting  [*******]
+emergence  [-99]
+anthesis  [-99]
+maturity  [-99]
+     -> something bad happened with the essentials, skipping this line (index = 171)... <-
+172/893 FSWinterWheat: unlikely flowering: -1; resetting to 3 for lack of better option
+FSWinterWheat: unlikely flowering: -1; resetting to 3 for lack of better option
+154/893 FSWinterWheat: unlikely flowering: -1; resetting to 3 for lack of better option
+166/893 java.lang.NumberFormatException: For input string: "*******"
+   at java.base/jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:2054)
+   at java.base/jdk.internal.math.FloatingDecimal.parseDouble(FloatingDecimal.java:110)
+   at java.base/java.lang.Double.parseDouble(Double.java:543)
+   at org.DSSATRunner.Mink3p2daily.pullValueUsingName(Mink3p2daily.java:2015)
+   at org.DSSATRunner.Mink3p2daily.grabRealResultsByName(Mink3p2daily.java:2445)
+   at org.DSSATRunner.Mink3p2daily.doSimulationsOnExistingWeather(Mink3p2daily.java:3903)
+   at org.DSSATRunner.MinkRunner3p2daily.main(MinkRunner3p2daily.java:30)
+REAL: had trouble reading one of the following (data line 172; fakeYear 4 planting window index 0):
+yield [-99]
+starting  [2005276]
+planting  [*******]
+emergence  [-99]
+anthesis  [-99]
+maturity  [-99]
+     -> something bad happened with the essentials, skipping this line (index = 172)... <-
+FSWinterWheat: unlikely flowering: -1; resetting to 3 for lack of better option
+FSWinterWheat: unlikely flowering: -1; resetting to 3 for lack of better option
+FSWinterWheat: unlikely flowering: -1; resetting to 3 for lack of better option
+java.lang.NumberFormatException: For input string: "*******"
+   at java.base/jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:2054)
+   at java.base/jdk.internal.math.FloatingDecimal.parseDouble(FloatingDecimal.java:110)
+   at java.base/java.lang.Double.parseDouble(Double.java:543)
+   at org.DSSATRunner.Mink3p2daily.pullValueUsingName(Mink3p2daily.java:2015)
+   at org.DSSATRunner.Mink3p2daily.grabRealResultsByName(Mink3p2daily.java:2445)
+   at org.DSSATRunner.Mink3p2daily.doSimulationsOnExistingWeather(Mink3p2daily.java:3903)
+   at org.DSSATRunner.MinkRunner3p2daily.main(MinkRunner3p2daily.java:30)
+REAL: had trouble reading one of the following (data line 173; fakeYear 4 planting window index 0):
+yield [-99]
+starting  [2005276]
+planting  [*******]
+emergence  [-99]
+anthesis  [-99]
+maturity  [-99]
+     -> something bad happened with the essentials, skipping this line (index = 173)... <-
+142/893 FSWinterWheat: unlikely flowering: -1; resetting to 3 for lack of better option
+133/893 FSWinterWheat: unlikely flowering: -1; resetting to 3 for lack of better option
+^C
+
+
+
+very wierd...
+
+
+
+RUNNING NORMAL OUTDOOR CROPS RELOCATED WITHOUT BIAS CORRECTION:
+
+
+Outdoor_crops_catastrophe_-2.8125_-49.375.WTH   Outdoor_crops_catastrophe_8.4375_-81.875.WTH
+Outdoor_crops_catastrophe_-2.8125_-50.625.WTH   Outdoor_crops_catastrophe_8.4375_-83.125.WTH
+Outdoor_crops_catastrophe_-2.8125_-51.875.WTH   Outdoor_crops_catastrophe_8.4375_-9.375.WTH
+Outdoor_crops_catastrophe_2.8125_-51.875.WTH Outdoor_crops_catastrophe_8.4375_9.375.WTH
+Outdoor_crops_catastrophe_-2.8125_-53.125.WTH   Outdoor_crops_catastrophe_8.4375_99.375.WTH
+Singularity mink_sandbox:~/Code/mink/on_node_home1921_904312606/DSSAT> ./run_dssat.sh dscsm047_debug
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RUN    TRT FLO MAT TOPWT HARWT  RAIN  TIRR   CET  PESW  TNUP  TNLF   TSON TSOC
+           dap dap kg/ha kg/ha    mm    mm    mm    mm kg/ha kg/ha  kg/ha t/ha
+  1 WH   1  87 113   205   120   100     0    90   123     6    32    13   4926   35
+
+     Conditions not met during defined window for planting                         
+     between DAY 2003   1 and DAY 2003  29                                         
+
+  2 WH   1 -99 -99   -99   -99     1     0    10   104   -99    24     4   4935   35
+
+     Conditions not met during defined window for planting                         
+     between DAY 2004   1 and DAY 2004  29                                         
+
+  3 WH   1 -99 -99   -99   -99    21     0    30   104   -99    26     6   4934   35
+
+     Conditions not met during defined window for planting                         
+     between DAY 2005   1 and DAY 2005  29                                         
+
+  4 WH   1 -99 -99   -99   -99    15     0    24   104   -99    25     5   4935   35
+  5 WH   1 116 159   468   219   108     0   101   119     8    39     8   4932   35
+
+     Conditions not met during defined window for planting                         
+     between DAY 2007   1 and DAY 2007  29                                         
+
+  6 WH   1 -99 -99   -99   -99    17     0    26   104   -99    22     2   4938   35
+
+     Conditions not met during defined window for planting                         
+     between DAY 2008   1 and DAY 2008  29                                         
+
+  7 WH   1 -99 -99   -99   -99     0     0    10   104   -99    22     2   4937   35
+
+     Conditions not met during defined window for planting                         
+     between DAY 2009   1 and DAY 2009  29                                         
+
+  8 WH   1 -99 -99   -99   -99    29     0    39   103   -99    23     3   4937   35
+  9 WH   1 115 155   662   191   109     0   110   111    10    36     8   4932   35
+
+     Conditions not met during defined window for planting                         
+     between DAY 2011   1 and DAY 2011  29                                         
+
+ 10 WH   1 -99 -99   -99   -99    12     0    20   104   -99    23     3   4937   35
+ Total time taken for segment           1 :   0.00000000     ms
+ Total time taken for segment           2 :   0.00000000     ms
+ Total time taken for segment           3 :   0.00000000     ms
+ Total time taken for segment           4 :   2.00000000     ms
+ Total time taken for segment           5 :   0.00000000     ms
+ Total time taken for segment           6 :   11.0000000     ms
+ Total time taken for segment           7 :   6.00000000     ms
+ Total time taken for segment           8 :   0.00000000     ms
+Singularity mink_sandbox:~/Code/mink/on_node_home1921_904312606/DSSAT> cat Summary.OUT 
+*SUMMARY : deletemeSN ed SNX template for wheat K076 rainfed RRWW00 alt WW low     DSSAT Cropping System Model Ver. 4.7.5.012 -bugfix-in    JUN 16, 2024; 11:17:07
+
+!IDENTIFIERS......................... EXPERIMENT AND TREATMENT.......... SITE INFORMATION............ DATES..........................................  DRY WEIGHT, YIELD AND YIELD COMPONENTS........................................  WATER...............................................  NITROGEN..................................................  PHOSPHORUS............  POTASSIUM.............  ORGANIC MATTER..........................................    WATER PRODUCTIVITY..................................................    NITROGEN PRODUCTIVITY...........  SEASONAL ENVIRONMENTAL DATA (Planting to harvest)..............
+@   RUNNO   TRNO R# O# P# CR MODEL... EXNAME.. TNAM..................... FNAM.... WSTA.... SOIL_ID...    SDAT    PDAT    EDAT    ADAT    MDAT    HDAT  DWAP    CWAM    HWAM    HWAH    BWAH  PWAM    HWUM    H#AM    H#UM  HIAM  LAIX  IR#M  IRCM  PRCM  ETCM  EPCM  ESCM  ROCM  DRCM  SWXM  NI#M  NICM  NFXM  NUCM  NLCM  NIAM NMINC  CNAM  GNAM N2OEC  PI#M  PICM  PUPC  SPAM  KI#M  KICM  KUPC  SKAM  RECM  ONTAM   ONAM  OPTAM   OPAM   OCTAM    OCAM   CO2EC    DMPPM    DMPEM    DMPTM    DMPIM     YPPM     YPEM     YPTM     YPIM    DPNAM    DPNUM    YPNAM    YPNUM  NDCH TMAXA TMINA SRADA DAYLA   CO2A   PRCP   ETCP   ESCP   EPCP
+        1      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0026 2001276 2002001 2002004 2002088 2002114 2002114    71     205     120     120       0   123  0.0384     312     1.2 0.583   0.3     0     0   100    90    19    71     0     0   123     1    20   -99     6     0    32    13     4     4 0.017   -99   -99   -99   -99   -99   -99   -99   -99     0   4928   4926      0      0   35241   35205     271      4.7      4.4     10.8      -99      2.8      2.6      6.3      -99      -99     34.7      -99     20.2   110  32.3  20.9  22.2  12.6  410.0   43.4   47.0    -99    -99
+        2      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0026 2002276     -99     -99     -99     -99 2003029   -99     -99     -99     -99     -99   -99    -99.     -99   -99.0  -99. -99.0     0     0     1    10     0    10     0     0   104     0     0   -99   -99     0    24     4   -99   -99 0.003   -99   -99   -99   -99   -99   -99   -99   -99     0   4935   4935      0      0   35354   35354     106      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99   -99 -99.9 -99.9   -99   -99    -99    -99    -99    -99    -99
+        3      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0026 2003276     -99     -99     -99     -99 2004029   -99     -99     -99     -99     -99   -99    -99.     -99   -99.0  -99. -99.0     0     0    21    30     0    30     0     0   104     0     0   -99   -99     0    26     6   -99   -99 0.005   -99   -99   -99   -99   -99   -99   -99   -99     0   4934   4934      0      0   35309   35309     151      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99   -99 -99.9 -99.9   -99   -99    -99    -99    -99    -99    -99
+        4      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0026 2004276     -99     -99     -99     -99 2005029   -99     -99     -99     -99     -99   -99    -99.     -99   -99.0  -99. -99.0     0     0    15    24     0    24     0     0   104     0     0   -99   -99     0    25     5   -99   -99 0.004   -99   -99   -99   -99   -99   -99   -99   -99     0   4935   4935      0      0   35324   35324     136      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99   -99 -99.9 -99.9   -99   -99    -99    -99    -99    -99    -99
+        5      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0026 2005276 2006001 2006010 2006117 2006160 2006160    71     468     219     219       0   244  0.0394     556     1.8 0.469   0.4     0     0   108   101    19    83     0     0   119     1    20   -99     8     0    39     8     7     6 0.026   -99   -99   -99   -99   -99   -99   -99   -99     0   4933   4932      0      0   35301   35278     191     11.2      8.9     25.1      -99      5.3      4.2     11.7      -99      -99     60.0      -99     28.1   150  16.1  10.9   7.8  12.9  410.0   41.7   52.7    -99    -99
+        6      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0026 2006276     -99     -99     -99     -99 2007029   -99     -99     -99     -99     -99   -99    -99.     -99   -99.0  -99. -99.0     0     0    17    26     0    26     0     0   104     0     0   -99   -99     0    22     2   -99   -99 0.001   -99   -99   -99   -99   -99   -99   -99   -99     0   4938   4938      0      0   35397   35397      63      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99   -99 -99.9 -99.9   -99   -99    -99    -99    -99    -99    -99
+        7      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0026 2007276     -99     -99     -99     -99 2008029   -99     -99     -99     -99     -99   -99    -99.     -99   -99.0  -99. -99.0     0     0     0    10     0    10     0     0   104     0     0   -99   -99     0    22     2   -99   -99 0.002   -99   -99   -99   -99   -99   -99   -99   -99     0   4937   4937      0      0   35403   35403      57      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99   -99 -99.9 -99.9   -99   -99    -99    -99    -99    -99    -99
+        8      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0026 2008276     -99     -99     -99     -99 2009029   -99     -99     -99     -99     -99   -99    -99.     -99   -99.0  -99. -99.0     0     0    29    39     0    39     0     0   103     0     0   -99   -99     0    23     3   -99   -99 0.002   -99   -99   -99   -99   -99   -99   -99   -99     0   4937   4937      0      0   35368   35368      92      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99   -99 -99.9 -99.9   -99   -99    -99    -99    -99    -99    -99
+        9      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0026 2009276 2010001 2010006 2010116 2010156 2010156    71     662     191     191       0   199  0.0400     479     1.5 0.289   0.4     0     0   109   110    21    89     0     0   111     1    20   -99    10     0    36     8     7     6 0.025   -99   -99   -99   -99   -99   -99   -99   -99     0   4933   4932      0      0   35298   35273     203      9.9      8.8     31.6      -99      2.9      2.5      9.1      -99      -99     63.9      -99     18.5   150  19.2  13.1  11.8  12.8  410.0   67.1   75.4    -99    -99
+       10      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0026 2010276     -99     -99     -99     -99 2011029   -99     -99     -99     -99     -99   -99    -99.     -99   -99.0  -99. -99.0     0     0    12    20     0    20     0     0   104     0     0   -99   -99     0    23     3   -99   -99 0.002   -99   -99   -99   -99   -99   -99   -99   -99     0   4937   4937      0      0   35372   35372      88      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99   -99 -99.9 -99.9   -99   -99    -99    -99    -99    -99    -99
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RUNNING WITH BIAS CORRECTION
+
+
+
+
+
+150Tg_biasCorrected_60.9375_59.375.WTH   150Tg_biasCorrected_64.6875_98.125.WTH
+150Tg_biasCorrected_60.9375_60.625.WTH   150Tg_biasCorrected_64.6875_-99.375.WTH
+150Tg_biasCorrected_60.9375_61.875.WTH   150Tg_biasCorrected_64.6875_99.375.WTH
+150Tg_biasCorrected_60.9375_63.125.WTH
+Singularity mink_sandbox:~/Code/mink/on_node_home6777_289707557/DSSAT> ./run_dssat.sh dscsm047_debug
+
+     Conditions not met during defined window for planting                         
+     between DAY 2002   1 and DAY 2002  29                                         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RUN    TRT FLO MAT TOPWT HARWT  RAIN  TIRR   CET  PESW  TNUP  TNLF   TSON TSOC
+           dap dap kg/ha kg/ha    mm    mm    mm    mm kg/ha kg/ha  kg/ha t/ha
+  1 WH   1 -99 -99   -99   -99   129     0     3   246   -99    31     1  21520  155
+
+     Conditions not met during defined window for planting                         
+     between DAY 2003   1 and DAY 2003  29                                         
+
+  2 WH   1 -99 -99   -99   -99   166     0     6   280   -99    31     1  21519  155
+
+     Conditions not met during defined window for planting                         
+     between DAY 2004   1 and DAY 2004  29                                         
+
+  3 WH   1 -99 -99   -99   -99   186     0     7   287   -99    31     1  21519  155
+
+     Conditions not met during defined window for planting                         
+     between DAY 2005   1 and DAY 2005  29                                         
+
+  4 WH   1 -99 -99   -99   -99   199     0     6   252   -99    31     1  21520  155
+  5 WH   1 -99 -99   -99   -99   -99   -99   -99   -99   -99   -99   -99    -99    0
+  6 WH   1 -99 -99   -99   -99   -99   -99   -99   -99   -99   -99   -99    -99    0
+  7 WH   1 -99 -99   -99   -99   -99   -99   -99   -99   -99   -99   -99    -99    0
+  8 WH   1 -99 -99   -99   -99   -99   -99   -99   -99   -99   -99   -99    -99    0
+  9 WH   1 -99 -99   -99   -99   -99   -99   -99   -99   -99   -99   -99    -99    0
+ 10 WH   1 -99 -99   -99   -99   -99   -99   -99   -99   -99   -99   -99    -99    0
+ Total time taken for segment           1 :   0.00000000     ms
+ Total time taken for segment           2 :   0.00000000     ms
+ Total time taken for segment           3 :   0.00000000     ms
+ Total time taken for segment           4 :   2.00000000     ms
+ Total time taken for segment           5 :   0.00000000     ms
+ Total time taken for segment           6 :   11.0000000     ms
+ Total time taken for segment           7 :   0.00000000     ms
+ Total time taken for segment           8 :   0.00000000     ms
+Singularity mink_sandbox:~/Code/mink/on_node_home6777_289707557/DSSAT> cat Summary.OUT 
+*SUMMARY : deletemeSN ed SNX template for wheat K076 rainfed RRWW00 alt WW low     DSSAT Cropping System Model Ver. 4.7.5.012 -bugfix-in    JUN 16, 2024; 11:19:10
+
+!IDENTIFIERS......................... EXPERIMENT AND TREATMENT.......... SITE INFORMATION............ DATES..........................................  DRY WEIGHT, YIELD AND YIELD COMPONENTS........................................  WATER...............................................  NITROGEN..................................................  PHOSPHORUS............  POTASSIUM.............  ORGANIC MATTER..........................................    WATER PRODUCTIVITY..................................................    NITROGEN PRODUCTIVITY...........  SEASONAL ENVIRONMENTAL DATA (Planting to harvest)..............
+@   RUNNO   TRNO R# O# P# CR MODEL... EXNAME.. TNAM..................... FNAM.... WSTA.... SOIL_ID...    SDAT    PDAT    EDAT    ADAT    MDAT    HDAT  DWAP    CWAM    HWAM    HWAH    BWAH  PWAM    HWUM    H#AM    H#UM  HIAM  LAIX  IR#M  IRCM  PRCM  ETCM  EPCM  ESCM  ROCM  DRCM  SWXM  NI#M  NICM  NFXM  NUCM  NLCM  NIAM NMINC  CNAM  GNAM N2OEC  PI#M  PICM  PUPC  SPAM  KI#M  KICM  KUPC  SKAM  RECM  ONTAM   ONAM  OPTAM   OPAM   OCTAM    OCAM   CO2EC    DMPPM    DMPEM    DMPTM    DMPIM     YPPM     YPEM     YPTM     YPIM    DPNAM    DPNUM    YPNAM    YPNUM  NDCH TMAXA TMINA SRADA DAYLA   CO2A   PRCP   ETCP   ESCP   EPCP
+        1      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0011 2001276     -99     -99     -99     -99 2002029   -99     -99     -99     -99     -99   -99    -99.     -99   -99.0  -99. -99.0     0     0   129     3     0     3     0     0   246     0     0   -99   -99     0    31     1   -99   -99 0.000   -99   -99   -99   -99   -99   -99   -99   -99     0  21520  21520      0      0  154844  154844      76      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99   -99 -99.9 -99.9   -99   -99    -99    -99    -99    -99    -99
+        2      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0011 2002276     -99     -99     -99     -99 2003029   -99     -99     -99     -99     -99   -99    -99.     -99   -99.0  -99. -99.0     0     0   166     6     0     6     0     0   280     0     0   -99   -99     0    31     1   -99   -99 0.001   -99   -99   -99   -99   -99   -99   -99   -99     0  21519  21519      0      0  154798  154798     122      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99   -99 -99.9 -99.9   -99   -99    -99    -99    -99    -99    -99
+        3      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0011 2003276     -99     -99     -99     -99 2004029   -99     -99     -99     -99     -99   -99    -99.     -99   -99.0  -99. -99.0     0     0   186     7     0     7     1     0   287     0     0   -99   -99     0    31     1   -99   -99 0.001   -99   -99   -99   -99   -99   -99   -99   -99     0  21519  21519      0      0  154793  154793     127      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99   -99 -99.9 -99.9   -99   -99    -99    -99    -99    -99    -99
+        4      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0011 2004276     -99     -99     -99     -99 2005029   -99     -99     -99     -99     -99   -99    -99.     -99   -99.0  -99. -99.0     0     0   199     6     0     6     0     0   252     0     0   -99   -99     0    31     1   -99   -99 0.001   -99   -99   -99   -99   -99   -99   -99   -99     0  21520  21520      0      0  154818  154818     102      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99   -99 -99.9 -99.9   -99   -99    -99    -99    -99    -99    -99
+        5      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0011 2005276 *******     -99     -99     -99 2005276   -99     -99     -99     -99     -99   -99    -99.     -99   -99.0  -99. -99.0   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99    -99    -99    -99    -99     -99     -99     -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99   -99 -99.9 -99.9   -99   -99    -99    -99    -99    -99    -99
+        6      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0011 2006276 9999999     -99     -99     -99 2006300   -99     -99     -99     -99     -99   -99    -99.     -99   -99.0  -99. -99.0   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99    -99    -99    -99    -99     -99     -99     -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99   -99 -99.9 -99.9   -99   -99    -99    -99    -99    -99    -99
+        7      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0011 2007276 9999999     -99     -99     -99 2007308   -99     -99     -99     -99     -99   -99    -99.     -99   -99.0  -99. -99.0   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99    -99    -99    -99    -99     -99     -99     -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99   -99 -99.9 -99.9   -99   -99    -99    -99    -99    -99    -99
+        8      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0011 2008276 9999999     -99     -99     -99 2008326   -99     -99     -99     -99     -99   -99    -99.     -99   -99.0  -99. -99.0   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99    -99    -99    -99    -99     -99     -99     -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99   -99 -99.9 -99.9   -99   -99    -99    -99    -99    -99    -99
+        9      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0011 2009276 *******     -99     -99     -99 2009276   -99     -99     -99     -99     -99   -99    -99.     -99   -99.0  -99. -99.0   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99    -99    -99    -99    -99     -99     -99     -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99   -99 -99.9 -99.9   -99   -99    -99    -99    -99    -99    -99
+       10      1  1  1  1 WH CSCER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0011 2010276 *******     -99     -99     -99 2010276   -99     -99     -99     -99     -99   -99    -99.     -99   -99.0  -99. -99.0   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99    -99    -99    -99    -99     -99     -99     -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99      -99   -99 -99.9 -99.9   -99   -99    -99    -99    -99    -99    -99
+Singularity mink_sandbox:~/Code/mink/on_node_home6777_289707557/DSSAT> 
+
+
+
+
+
+
+6777 is the messed up pdate no bias one.
+
+
+
+
+the DIFFERENCE in SNX:
+Singularity mink_sandbox:~/Code/mink/on_node_home6777_289707557/DSSAT> diff deleteme.SNX ../../on_node_home1921_904312606/DSSAT/deleteme.SNX 
+23c23
+<  1 GRID     RRRR       -99   -99   -99   -99   -99   -99  -99   -99  HN_GEN0011 NONE
+---
+>  1 GRID     RRRR       -99   -99   -99   -99   -99   -99  -99   -99  HN_GEN0026 NONE
+29c29
+<  1   -99 01276 1000.   -99   -99   -99   -99 3000.   0.6 -99.0 100.0   5.0 to reflect some basic previous crop
+---
+>  1   -99 01276 500.0   -99   -99   -99   -99 250.0   0.6 -99.0 100.0   5.0 to reflect some basic previous crop
+31,35c31,35
+<  1  10.0 0.203   0.0 5.357
+<  1  30.0 0.213   0.0 5.357
+<  1  60.0 0.220   0.0 1.786
+<  1  90.0 0.240   0.0   0.0
+<  1 100.0 0.267   0.0   0.0
+---
+>  1  10.0 0.086   0.0 3.125
+>  1  30.0 0.095   0.0 3.125
+>  1  60.0 0.111   0.0 1.042
+>  1  90.0 0.126   0.0   0.0
+>  1 100.0 0.142   0.0   0.0
+42,46c42,46
+<  1  10.0 1.400   2.0 -99.0 -99.0 -99.0 -99.0 -99.0  1.86
+<  1  30.0 1.400 1.240 -99.0 -99.0 -99.0 -99.0 -99.0 1.184
+<  1  60.0 1.400 0.980 -99.0 -99.0 -99.0 -99.0 -99.0 0.960
+<  1  90.0 1.400 0.900 -99.0 -99.0 -99.0 -99.0 -99.0 0.882
+<  1 100.0 1.400 0.860 -99.0 -99.0 -99.0 -99.0 -99.0 0.843
+---
+>  1  10.0 1.600 0.400 -99.0 -99.0 -99.0 -99.0 -99.0 0.372
+>  1  30.0 1.600  0.25 -99.0 -99.0 -99.0 -99.0 -99.0 0.239
+>  1  60.0 1.600 0.200 -99.0 -99.0 -99.0 -99.0 -99.0 0.196
+>  1  90.0 1.600 0.180 -99.0 -99.0 -99.0 -99.0 -99.0 0.176
+>  1 100.0 1.600 0.170 -99.0 -99.0 -99.0 -99.0 -99.0 0.167
+62,64c62
+<  1 00001 FE005 AP001 00001 00030   -99   -99   -99   -99   -99
+<  1 00002 FE005 AP002 00005 00010   -99   -99   -99   -99   -99
+<  1 00003 FE005 AP002 00005 00010   -99   -99   -99   -99   -99
+---
+>  1 00001 FE005 AP001 00001 00020   -99   -99   -99   -99   -99
+Singularity mink_sandbox:~/Code/mink/on_node_home6777_289707557/DSSAT> cat deleteme.SNX 
+*EXP.DETAILS: autogenerated SNX template for wheat K076 rainfed RRWW00 alt WW low
+
+*GENERAL
+@PEOPLE
+ Ricky Robertson, Morgan Rivers, Rubi Raymundo, Ines Jimenez, many others!
+@ADDRESS
+ NOTE: usually unneccesary things marked as -99 (the "this is not a constraint marker").
+@SITE
+ Usually things to fill in marked with ###'s.
+@ PAREA  PRNO  PLEN  PLDR  PLSP  PLAY HAREA  HRNO  HLEN  HARM.........
+    -99   -99   -99   -99   -99   -99   -99   -99   -99   -99
+
+*TREATMENTS                        -------------FACTOR LEVELS------------
+@N R O C TNAME.................... CU FL SA IC MP MI MF MR MC MT ME MH SM
+ 1 1 1 0 GENERATED                  1  1  1  1  1  0  1  0  0  0  1  0  1
+
+*CULTIVARS
+@C CR INGENO CNAME
+ 1 WH RRWW00 alt WW low
+
+*FIELDS
+@L ID_FIELD WSTA....  FLSA  FLOB  FLDT  FLDD  FLDS  FLST SLTX  SLDP  ID_SOIL    FLNAME
+ 1 GRID     RRRR       -99   -99   -99   -99   -99   -99  -99   -99  HN_GEN0011 NONE
+@L ...........XCRD ...........YCRD .....ELEV .............AREA .SLEN .FLWR .SLAS
+ 1             -99             -99       -99               -99   -99   -99   -99
+
+*INITIAL CONDITIONS
+@C   PCR ICDAT  ICRT  ICND  ICRN  ICRE  ICWD ICRES ICREN ICREP ICRIP ICRID ICNAME
+ 1   -99 01276 1000.   -99   -99   -99   -99 3000.   0.6 -99.0 100.0   5.0 to reflect some basic previous crop
+@C  ICBL  SH2O  SNH4  SNO3
+ 1  10.0 0.203   0.0 5.357
+ 1  30.0 0.213   0.0 5.357
+ 1  60.0 0.220   0.0 1.786
+ 1  90.0 0.240   0.0   0.0
+ 1 100.0 0.267   0.0   0.0
+
+
+*SOIL ANALYSIS
+@A SADAT  SMHB  SMPX  SMKE  SANAME
+ 1 01276   -99   -99   -99  -99
+@A  SABL  SADM  SAOC  SANI SAPHW SAPHB  SAPX  SAKE  SASC
+ 1  10.0 1.400   2.0 -99.0 -99.0 -99.0 -99.0 -99.0  1.86
+ 1  30.0 1.400 1.240 -99.0 -99.0 -99.0 -99.0 -99.0 1.184
+ 1  60.0 1.400 0.980 -99.0 -99.0 -99.0 -99.0 -99.0 0.960
+ 1  90.0 1.400 0.900 -99.0 -99.0 -99.0 -99.0 -99.0 0.882
+ 1 100.0 1.400 0.860 -99.0 -99.0 -99.0 -99.0 -99.0 0.843
+
+
+*PLANTING DETAILS
+@P PDATE EDATE  PPOP  PPOE  PLME  PLDS  PLRS  PLRD  PLDP  PLWT  PAGE  PENV  PLPH  SPRL
+ 1 02001   -99   250   250     S     R    16     0     5   -99   -99   -99   -99   -99
+
+*IRRIGATION AND WATER MANAGEMENT
+@I  EFIR  IDEP  ITHR  IEPT  IOFF  IAME  IAMT IRNAME
+ 1   -99   -99   -99   -99   -99   -99   -99 -99
+@I IDATE  IROP IRVAL
+ 1   -99   -99   -99
+ 1   -99   -99   -99
+
+*FERTILIZERS (INORGANIC)
+@F FDATE  FMCD  FACD  FDEP  FAMN  FAMP  FAMK  FAMC  FAMO  FOCD
+ 1 00001 FE005 AP001 00001 00030   -99   -99   -99   -99   -99
+ 1 00002 FE005 AP002 00005 00010   -99   -99   -99   -99   -99
+ 1 00003 FE005 AP002 00005 00010   -99   -99   -99   -99   -99
+
+
+
+*ENVIRONMENT MODIFICATIONS
+@E ODATE EDAY  ERAD  EMAX  EMIN  ERAIN ECO2  EDEW  EWIND ENVNAME
+ 1 01276 A 0.0 A0000 A0000 A0000 A0000 R0410 A 0.0 A 0.0 ENVMOD
+
+*HARVEST DETAILS
+@H HDATE  HSTG  HCOM HSIZE   HPC  HBPC HNAME
+ 1   -99   -99   -99   -99 100.0   0.0
+
+*SIMULATION CONTROLS
+@N GENERAL     NYERS NREPS START SDATE RSEED SNAME....................
+ 1 GE          00010     1     S 01276 01234 template simulation name
+@N OPTIONS     WATER NITRO SYMBI PHOSP POTAS DISES  CHEM  TILL
+ 1 OP              Y     Y     Y     N     N     N     N     N
+@N METHODS     WTHER INCON LIGHT EVAPO INFIL PHOTO HYDRO NSWIT MESOM MESEV MESOL
+ 1 ME              G     M     E     R     S     C     R     1     P     S     2
+@N MANAGEMENT  PLANT IRRIG FERTI RESID HARVS
+ 1 MA              A     N     D     N     M
+@N OUTPUTS     FNAME OVVEW SUMRY FROPT GROUT CAOUT WAOUT NIOUT MIOUT DIOUT  LONG CHOUT OPOUT
+ 1 OU              N     N     Y     1     N     N     N     N     N     N     N     N     N
+@  AUTOMATIC MANAGEMENT
+@N PLANTING    PFRST PLAST PH2OL PH2OU PH2OD PSTMX PSTMN
+ 1 PL          02001 02029    30    95    70    50     7
+@N IRRIGATION  IMDEP ITHRL ITHRU IROFF IMETH IRAMT IREFF
+ 1 IR             20    70   100   -99 IR001     0     0
+@N NITROGEN    NMDEP NMTHR NAMNT NCODE NAOFF
+ 1 NI            -99   -99   -99   -99   -99
+@N RESIDUES    RIPCN RTIME RIDEP
+ 1 RE            -99   -99   -99
+@N HARVEST     HFRST HLAST HPCNP HPCNR
+ 1 HA            -99   -99   -99   -99
+Singularity mink_sandbox:~/Code/mink/on_node_home6777_289707557/DSSAT> 
+
+
+
+
+Aha!
+Looks like the RRRR.WTH is too short for some reason:
+Singularity mink_sandbox:~/Code/mink/on_node_home6777_289707557/DSSAT> cat RRRR.WTH 
+@ INSI      LAT     LONG  ELEV   TAV   AMP REFHT WNDHT
+  MRAR   64.688 -158.750     0  -18.0  37.1 -99.9 -99.9
+@DATE  SRAD  TMAX  TMIN  RAIN  DEWP  WIND   PAR  EVAP  RHUM
+01001   0.2 -19.9 -22.0   1.0 -99.9   1.5 -99.9 -99.9  95.6
+01002   0.3 -19.4 -24.9   1.0 -99.9   2.6 -99.9 -99.9 100.0
+01003   0.3 -16.6 -24.3   0.5 -99.9   3.9 -99.9 -99.9  93.1
+01004   0.2 -20.3 -22.3   0.3 -99.9   2.4 -99.9 -99.9  98.0
+01005   0.3 -21.0 -22.7   0.5 -99.9   3.1 -99.9 -99.9  96.7
+01006   0.3 -21.9 -24.4   0.8 -99.9   6.0 -99.9 -99.9  94.5
+01007   0.2 -11.9 -22.2   8.8 -99.9   6.6 -99.9 -99.9  99.1
+01008   0.3 -11.6 -17.9   2.1 -99.9   2.1 -99.9 -99.9  97.5
+01009   0.4 -17.2 -28.5   0.3 -99.9   1.7 -99.9 -99.9  93.2
+01010   0.4 -19.4 -29.4   0.8 -99.9   2.5 -99.9 -99.9 100.0
+01011   0.3 -20.6 -26.6   0.2 -99.9   5.0 -99.9 -99.9  92.8
+01012   0.4 -12.8 -20.4   0.7 -99.9   4.3 -99.9 -99.9  92.7
+01013   0.5 -10.2 -14.9   1.6 -99.9   2.9 -99.9 -99.9  94.6
+01014   0.4  -5.8  -9.6   5.5 -99.9   3.5 -99.9 -99.9  91.7
+01015   0.5  -0.8 -13.9   4.6 -99.9   4.2 -99.9 -99.9 100.0
+01016   0.5 -12.6 -15.8   0.3 -99.9   2.3 -99.9 -99.9  97.9
+01017   0.5 -14.6 -16.5   0.2 -99.9   5.0 -99.9 -99.9  94.2
+01018   0.5  -9.0 -14.8   0.3 -99.9   3.7 -99.9 -99.9  94.0
+01019   0.5  -1.9 -10.9   0.6 -99.9   3.2 -99.9 -99.9  92.0
+01020   0.6  -6.1 -11.5   0.0 -99.9   3.1 -99.9 -99.9  98.9
+01021   0.7  -9.4 -14.4   0.3 -99.9   2.2 -99.9 -99.9  93.7
+01022   0.9 -11.7 -17.8   0.3 -99.9   1.8 -99.9 -99.9  94.5
+01023   0.6 -10.9 -14.9   3.4 -99.9   1.1 -99.9 -99.9  96.8
+...
+08265   3.5 -25.3 -30.5   0.0 -99.9   0.9 -99.9 -99.9 100.0
+08266   3.9 -26.3 -30.8   0.0 -99.9   1.3 -99.9 -99.9  97.3
+08267   4.6 -24.4 -30.7   0.0 -99.9   2.3 -99.9 -99.9  95.4
+08268   3.9 -25.2 -31.8   0.0 -99.9   1.7 -99.9 -99.9  97.9
+08269   5.5 -25.1 -33.4   0.0 -99.9   1.9 -99.9 -99.9  93.8
+08270   6.0 -25.2 -33.9   0.0 -99.9   1.1 -99.9 -99.9  88.4
+08271   3.4 -27.1 -35.0   0.0 -99.9   1.7 -99.9 -99.9  98.3
+08272   6.0 -29.0 -35.6   0.0 -99.9   1.6 -99.9 -99.9  84.5
+08273   4.8 -29.1 -35.5   0.0 -99.9   2.2 -99.9 -99.9  89.1
+08274   4.9 -31.0 -37.4   0.0 -99.9   1.7 -99.9 -99.9 100.0
+08275   1.2 -36.6 -44.0   0.0 -99.9   2.8 -99.9 -99.9  67.6
+08276   1.1 -36.3 -41.4   0.0 -99.9   4.5 -99.9 -99.9  66.5
+08277   1.5 -37.1 -43.8   0.0 -99.9   2.1 -99.9 -99.9  62.2
+08278   1.2 -36.5 -41.6   0.0 -99.9   1.1 -99.9 -99.9  61.7
+08279   1.0 -38.3 -42.1   0.0 -99.9   2.6 -99.9 -99.9  68.4
+08280   0.8 -37.6 -41.9   0.0 -99.9   1.3 -99.9 -99.9  63.6
+08281   1.4 -38.1 -44.8   0.0 -99.9   2.4 -99.9 -99.9  69.0
+08282   0.9 -38.6 -42.5   0.0 -99.9   1.2 -99.9 -99.9  66.2
+08283   1.4 -39.7 -43.0   0.0 -99.9   5.7 -99.9 -99.9  65.9
+08284   0.6 -40.3 -42.2   0.0 -99.9   4.1 -99.9 -99.9  70.3
+08285   0.9 -40.1 -45.6   0.0 -99.9   3.6 -99.9 -99.9  72.3
+08286   1.1 -40.3 -49.3   0.0 -99.9   3.1 -99.9 -99.9  79.3
+08287   1.4 -44.2 -50.2   0.0 -99.9   2.6 -99.9 -99.9  77.1
+08288   1.1 -45.9 -53.3   0.0 -99.9   3.6 -99.9 -99.9  91.7
+08289   1.4 -44.9 -53.5   0.0 -99.9   3.0 -99.9 -99.9  76.3
+08290   1.3 -44.3 -52.7   0.0 -99.9   2.3 -99.9 -99.9  75.2
+08291   1.3 -45.2 -53.3   0.0 -99.9   2.3 -99.9 -99.9  79.2
+08292   0.9 -46.4 -52.5   0.0 -99.9   2.7 -99.9 -99.9  80.5
+08293   0.7 -47.2 -51.9   0.0 -99.9   3.2 -99.9 -99.9  86.6
+08294   0.6 -46.4 -48.2   0.0 -99.9   2.0 -99.9 -99.9  76.0
+08295   0.9 -44.3 -51.1   0.0 -99.9   0.9 -99.9 -99.9  83.1
+08296   0.7 -45.7 -49.7   0.0 -99.9   0.9 -99.9 -99.9  82.9
+08297   0.6 -47.4 -54.2   0.0 -99.9   2.1 -99.9 -99.9  96.6
+08298   1.0 -48.0 -54.6   0.0 -99.9   2.0 -99.9 -99.9  89.7
+08299   0.8 -48.2 -53.0   0.0 -99.9   1.7 -99.9 -99.9  90.3
+08300   0.8 -51.0 -56.4   0.0 -99.9   1.2 -99.9 -99.9  95.9
+08301   0.4 -50.5 -54.5   0.0 -99.9   2.5 -99.9 -99.9 100.0
+08302   0.6 -50.2 -54.6   0.0 -99.9   2.4 -99.9 -99.9  96.8
+08303   0.5 -48.8 -52.4   0.0 -99.9   1.6 -99.9 -99.9  81.7
+08304   0.6 -50.3 -54.6   0.0 -99.9   0.5 -99.9 -99.9  90.9
+08305   0.4 -48.9 -55.1   0.0 -99.9   2.2 -99.9 -99.9  96.0
+08306   0.2 -43.1 -47.4   0.0 -99.9   1.3 -99.9 -99.9 100.0
+08307   0.2 -42.8 -48.3   0.0 -99.9   1.3 -99.9 -99.9 100.0
+08308   0.2 -40.9 -47.7   0.0 -99.9   1.3 -99.9 -99.9 100.0
+08309   0.1 -38.7 -42.7   0.1 -99.9   1.7 -99.9 -99.9 100.0
+08310   0.1 -39.4 -44.1   0.0 -99.9   1.8 -99.9 -99.9 100.0
+08311   0.2 -38.2 -44.0   0.0 -99.9   2.0 -99.9 -99.9 100.0
+08312   0.1 -41.4 -44.1   0.0 -99.9   1.7 -99.9 -99.9 100.0
+08313   0.1 -44.1 -46.0   0.0 -99.9   1.6 -99.9 -99.9 100.0
+08314   0.1 -42.8 -45.2   0.0 -99.9   4.0 -99.9 -99.9 100.0
+08315   0.1 -40.6 -43.3   0.0 -99.9   3.1 -99.9 -99.9 100.0
+08316   0.1 -38.9 -42.7   0.0 -99.9   1.8 -99.9 -99.9 100.0
+08317   0.1 -38.9 -41.4   0.0 -99.9   1.0 -99.9 -99.9 100.0
+08318   0.1 -37.2 -40.6   0.0 -99.9   1.0 -99.9 -99.9 100.0
+08319   0.1 -38.4 -42.5   0.0 -99.9   0.7 -99.9 -99.9 100.0
+08320   0.1 -40.2 -42.7   0.0 -99.9   0.9 -99.9 -99.9 100.0
+08321   0.1 -40.4 -43.0   0.1 -99.9   2.0 -99.9 -99.9 100.0
+08322   0.1 -43.6 -49.3   0.0 -99.9   2.1 -99.9 -99.9 100.0
+08323   0.1 -48.5 -51.7   0.0 -99.9   1.6 -99.9 -99.9 100.0
+08324   0.1 -45.7 -51.0   0.0 -99.9   1.4 -99.9 -99.9 100.0
+08325   0.1 -50.9 -53.6   0.0 -99.9   3.0 -99.9 -99.9 100.0
+08326   0.1 -44.8 -51.1  Singularity mink_sandbox:~/Code/mink/on_node_home6777_289707557/DSSAT> 

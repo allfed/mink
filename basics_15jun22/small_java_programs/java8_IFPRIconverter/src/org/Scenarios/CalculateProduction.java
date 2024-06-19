@@ -361,18 +361,18 @@ public class CalculateProduction {
     if (calculate_rf_or_ir_specific_average_yield) {
       if (crop.equals("soybeans") || crop_area_type.equals("no_crops")) {
 
-        System.out.println("average rasters USING max value");
-        System.out.println();
-        System.out.println("raster_names_to_combine");
-        System.out.println(raster_names_to_combine);
-        System.out.println("combined_yield_name_rf_or_ir");
-        System.out.println(combined_yield_name_rf_or_ir);
+        // System.out.println("average rasters USING max value");
+        // System.out.println();
+        // System.out.println("raster_names_to_combine");
+        // System.out.println(raster_names_to_combine);
+        // System.out.println("combined_yield_name_rf_or_ir");
+        // System.out.println(combined_yield_name_rf_or_ir);
 
-        System.out.println("combined_planting_month_name_rf_or_ir");
-        System.out.println(combined_planting_month_name_rf_or_ir);
-        System.out.println("(Not used for pm) planting_months_to_combine");
-        System.out.println(planting_months_to_combine);
-        System.out.println();
+        // System.out.println("combined_planting_month_name_rf_or_ir");
+        // System.out.println(combined_planting_month_name_rf_or_ir);
+        // System.out.println("(Not used for pm) planting_months_to_combine");
+        // System.out.println(planting_months_to_combine);
+        // System.out.println();
 
         // gets the max of all available yields in each cell (all regions)
         BashScripts.compositeRaster(

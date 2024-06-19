@@ -2320,6 +2320,8 @@ public class Mink3p2daily {
     // attempt to read
     // System.out.println("magicDSSATSummaryLineIndexToRead");
     // System.out.println(magicDSSATSummaryLineIndexToRead);
+    // System.out.println("the summary file path");
+    // System.out.println(magicDSSATSummaryToReadPath);
     // System.out.println("the summary file");
     // System.out.println(FunTricks.readTextFileToString(magicDSSATSummaryToReadPath));
 
@@ -2680,6 +2682,12 @@ public class Mink3p2daily {
                     splitUpNamesHere,
                     endingIndicesForSplitUpNamesHere)
                 + "]");
+        // System.out.println(
+        //     candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead]);
+        // System.out.println(plantingDateColumnName);
+        // System.out.println(splitUpNamesHere);
+        // System.out.println(endingIndicesForSplitUpNamesHere);
+
         System.out.println(
             "planting  ["
                 + pullStringValueUsingName(

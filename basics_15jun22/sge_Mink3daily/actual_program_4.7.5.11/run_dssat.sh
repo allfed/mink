@@ -7,7 +7,7 @@
  # echo "running dscsm047_fast n deleteme.v45" >> /mnt/data/log.txt
  # ./dscsm_compiled_fast.exe n deleteme.v45
 
-
+#sleep 1
  # time_start=$(date +%s%3N)
   nameOfDSSATExecutable=$1
 

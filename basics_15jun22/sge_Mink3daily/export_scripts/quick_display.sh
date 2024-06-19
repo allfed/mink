@@ -59,9 +59,9 @@ apply_color_value() {
   local overall_max_int="$1"
   local raster="$2"
   # calculate the different values for the colors
-  local quartermax=`echo "scale=0; $overall_max_int / 4" | bc`
-  local halfmax=`echo "scale=0; $overall_max_int / 2" | bc`
-  local threequartersmax=`echo "scale=0; ($overall_max_int * 3 + 2) / 4" | bc`
+  local quartermax=`echo "scale=2; $overall_max_int / 4" | bc`
+  local halfmax=`echo "scale=2; $overall_max_int / 2" | bc`
+  local threequartersmax=`echo "scale=2; ($overall_max_int * 3 + 2) / 4" | bc`
 
   # corresponds to -2,  magicValueToUseWithBadMaturities in Mink3p2daily.java
   # this means maturity time was crazy or negative.
@@ -75,7 +75,6 @@ apply_color_value() {
   # apply the color rule to the raster
   # remove a useless warning message
   printf -- "$classic_color_string" | r.colors --quiet $raster rules=- 2>&1 | grep -v "Color table of raster map"
-  
 }
 
 
@@ -88,8 +87,21 @@ generate_raster_image() {
   local raster="$1"
   local min="$2"
   local max="$3"
-  
-  d.rast --quiet $raster vallist=$min-$max
+  raster_type=`r.info -t $raster | cut -d= -f2`
+
+  if [ $raster_type = "CELL" ]; then
+    n_categories=`r.category $raster | wc -l`
+
+    if [ $n_categories -lt 2 ]; then
+      d.rast --quiet $raster catlist=$min
+    else
+      # d.rast --quiet $raster catlist=$min
+      d.rast --quiet $raster catlist=$min-$max
+    fi
+  else
+    d.rast --quiet $raster vallist=$min-$max
+  fi
+
   cp $GRASS_PNGFILE $tmp_dir/heatmap.png
 }
 
@@ -106,6 +118,9 @@ generate_legend_image() {
 
   if [ $raster_type = "CELL" ]; then
     n_categories=`r.category $raster | wc -l`
+    # if [ $n_categories -lt 2 ]; then
+    #   eval d.legend --quiet map=$raster range=$min,$max at=1,50,2,5 2>&1 | grep -v "Color range exceeds"
+    # el
     if [ $n_categories -lt 12 ]; then
       eval d.legend --quiet map=$raster range=$min,$max at=1,50,2,5 2>&1 | grep -v "Color range exceeds"
     else
@@ -185,7 +200,6 @@ generate_images() {
 
     # Determine min and max values
     if [ -z $max_value ]; then
-      echo $raster
       
       output_lines=$(r.univar -g map=${raster} | wc -l)
       if [ "$output_lines" -eq 0 ]; then

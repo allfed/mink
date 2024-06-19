@@ -709,6 +709,9 @@ public class ScenariosProcessor {
         combined_maturity_means, // input raster to get the values to choose from
         best_planting_month_maturity_name); // output raster with days to maturity of best planting
     // month in each cell png
+    System.out.println("best_planting_month_name");
+    System.out.println(best_planting_month_name);
+    System.exit(1);
     BashScripts.createPNG(script_folder, new String[] {best_planting_month_name}, results_folder);
     // maturity days png
     BashScripts.createPNG(
