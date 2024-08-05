@@ -212,10 +212,11 @@ generate_images() {
     original_max=$max
     max=$(echo "scale=5; $max + 0.01" | bc)
     if [ -z $min_value ]; then
-      min=$(r.univar -g map=$raster | grep min | awk -F "=" '{print $2}')
+      output_lines=$(r.univar -g map=${raster} | wc -l)
       if [ "$output_lines" -eq 0 ]; then
         throw_all_null_error
       fi
+      min=$(r.univar -g map=$raster | grep min | awk -F "=" '{print $2}')
     else
       min=$min_value
     fi

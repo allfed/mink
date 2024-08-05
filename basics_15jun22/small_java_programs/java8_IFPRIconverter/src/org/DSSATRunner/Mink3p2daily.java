@@ -2289,6 +2289,7 @@ public class Mink3p2daily {
   private void grabRealResultsByName(
       int nYears,
       long lineIndex,
+      MultiFormatMatrix geogMatrix,
       int plantingWindowIndex,
       String[] splitUpNamesHere,
       int[] endingIndicesForSplitUpNamesHere)
@@ -2687,6 +2688,8 @@ public class Mink3p2daily {
         // System.out.println(plantingDateColumnName);
         // System.out.println(splitUpNamesHere);
         // System.out.println(endingIndicesForSplitUpNamesHere);
+        System.out.println(geogMatrix.getValue(lineIndex, 2)); // Beware the MAGIC NUMBER!!!
+        System.out.println(geogMatrix.getValue(lineIndex, 3)); // Beware the MAGIC NUMBER!!!
 
         System.out.println(
             "planting  ["
@@ -3903,6 +3906,7 @@ public class Mink3p2daily {
           grabRealResultsByName(
               nFakeYears,
               lineIndex,
+              geogMatrix,
               plantingWindowIndex,
               splitUpNamesHere,
               endingIndicesForSplitUpNamesHere);

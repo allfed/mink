@@ -762,36 +762,24 @@ public class BashScripts {
     // Takes a subset of the initial mask which contains nonnull megaenvironments,
     // and returns the resulting mask.
 
-    // System.out.println("");
-    // System.out.println("");
-    // System.out.println("getIntersectionWithMegaenvironmentMasks creates raster with name:");
-    // System.out.println(mask_for_this_snx);
-    // System.out.println("");
-    // System.out.println("");
-    // System.out.println("initial_mask");
-    // System.out.println(initial_mask);
-    // System.out.println("list_of_megaenvironment_masks");
-    // System.out.println(megaEnvMasks);
-    // System.out.println("final_mask");
-    // System.out.println(mask_for_this_snx);
-    // System.out.println(
-    //     "python3"
-    //         + " "
-    //         + "make_weather_file_mask.py"
-    //         + " "
-    //         + weather_folder
-    //         + " "
-    //         + String.valueOf(n)
-    //         + " "
-    //         + String.valueOf(s)
-    //         + " "
-    //         + String.valueOf(e)
-    //         + " "
-    //         + String.valueOf(w)
-    //         + " "
-    //         + String.valueOf(nsres)
-    //         + " "
-    //         + String.valueOf(ewres));
+    System.out.println(
+        "python3"
+            + " "
+            + "make_weather_file_mask.py"
+            + " "
+            + weather_folder
+            + " "
+            + String.valueOf(n)
+            + " "
+            + String.valueOf(s)
+            + " "
+            + String.valueOf(e)
+            + " "
+            + String.valueOf(w)
+            + " "
+            + String.valueOf(nsres)
+            + " "
+            + String.valueOf(ewres));
 
     ProcessBuilder pb =
         new ProcessBuilder(

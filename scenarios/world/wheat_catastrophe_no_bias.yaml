@@ -64,10 +64,14 @@ physical_parameters:
   # calc "151.875 + 1.25/2"
   # calc "113.125 - 1.25/2"
   physical_parameters:
-  region_to_use_n: 65.625
-  region_to_use_s: -65.625
-  region_to_use_e: 176.25
-  region_to_use_w: -170
+  # region_to_use_n: 65.625
+  # region_to_use_s: -65.625
+  # region_to_use_e: 176.25
+  # region_to_use_w: -170
+  region_to_use_n: -9.375
+  region_to_use_s: -43.125
+  region_to_use_e: 152.5
+  region_to_use_w: 112.5
   nsres: 1.875
   ewres: 1.25
   co2_level: 410
@@ -89,7 +93,7 @@ physical_parameters:
   run_descriptor: Jan21_relocated_cat_wh076
   irrigation_to_try: [RF]
   weather_prefix: 150Tg_biasCorrected
-  weather_folder: global_bias_corrected_catastrophe
+  weather_folder: test_dir_with_errors
   results_folder: global_results_bias_corrected_catastrophe
   #typically below is [1, 3, 5, 7, 9, 11]
   planting_months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]

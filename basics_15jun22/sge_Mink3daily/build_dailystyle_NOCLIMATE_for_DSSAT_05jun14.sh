@@ -25,7 +25,7 @@ sleep 0.1
 # 
 # it gets these details by importing them from GRASS GIS maps, and the details passed in from the 
 
-# echo ""
+# echo ""+
 # echo "running build_dailystyle"
 # echo ""
 
