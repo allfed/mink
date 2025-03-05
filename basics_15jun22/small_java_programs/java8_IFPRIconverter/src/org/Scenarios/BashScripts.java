@@ -591,6 +591,16 @@ public class BashScripts {
     callProcess(pb, export_script_folder);
   } // end saveAscii
 
+  // export raster as ascii file
+  public static void makeDir(String run_script_folder, String results_folder)
+      throws InterruptedException, IOException {
+
+    ProcessBuilder pb = new ProcessBuilder("bash", "./makedir.sh", results_folder);
+
+    String export_script_folder = run_script_folder + "export_scripts/";
+    callProcess(pb, export_script_folder);
+  } // end makeDir
+
   // copy ascii for model result and historical and move to results folder
   public static void exportToCountries(
       String run_script_folder,
@@ -601,15 +611,32 @@ public class BashScripts {
       String days_to_maturity_raster,
       String results_folder)
       throws InterruptedException, IOException {
-    // System.out.println("");
+    System.out.println("");
 
-    // System.out.println("");
-    // System.out.println("");
-    // System.out.println("copy results to "+results_folder);
-    // System.out.println(overall_yield_raster+".asc");
-    // System.out.println(crop_caps_name+"_yield.asc");
-    // System.out.println("");
-    // System.out.println("");
+    System.out.println("");
+    System.out.println("");
+    System.out.println("copy results to " + results_folder);
+    System.out.println(overall_yield_raster + ".asc");
+    System.out.println(crop_caps_name + "_yield.asc");
+    System.out.println("");
+    System.out.println("");
+
+    System.out.println(
+        "bash "
+            + "./export_by_country_data.sh "
+            + crop_caps_name
+            + " "
+            + overall_yield_raster
+            + " "
+            + highres_cropland_area
+            + " "
+            + planting_month_raster
+            + " "
+            + days_to_maturity_raster
+            + " "
+            + results_folder);
+
+    System.out.println("");
 
     ProcessBuilder pb =
         new ProcessBuilder(

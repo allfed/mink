@@ -103,6 +103,16 @@ public class CalculateProduction {
         // rainfed separately
       }
     }
+    // Extract and save yield for the single best planting month for all years
+    extractYieldForBestPlantingMonthAllYears(
+        script_folder,
+        scenarios,
+        scenarios
+            .best_planting_month_name, // array of raster names for best planting month per scenario
+        scenarios.raster_names_all_years_wet_or_dry, // [scenario][planting_month][year]
+        scenarios.years,
+        scenarios.scenario_tag,
+        scenarios.results_folder);
   } // end CalculateProduction function
 
   private static <T> T getVerifiedFirst(List<T> list) {
@@ -426,7 +436,6 @@ public class CalculateProduction {
             );
 
         if (calculate_maturity) {
-          // TODO: write script that can get the maturity group based on either a mask or average
           BashScripts.useKeyRasterAndMaskForGettingMaxOrAverage(
               script_folder,
               days_to_maturity_to_combine, // input
@@ -576,8 +585,9 @@ public class CalculateProduction {
         if (!crop_area_to_sum.equals("")) {
           crop_area_to_sum = crop_area_to_sum + ",";
         }
-
         raster_names_to_sum = raster_names_to_sum + combined_production_name_rf_or_ir[i];
+        System.out.println("raster_names_to_sum");
+        System.out.println(raster_names_to_sum);
 
         String crop_area_raster =
             getCropAreaRaster(scenarios, scenarios.crop_name[i], scenarios.rf_or_ir[i]);
@@ -627,6 +637,7 @@ public class CalculateProduction {
               scenarios.results_folder[i]);
         }
         last_index_of_crop = i;
+        // System.exit(1);
       }
 
       // the above is just a (unfortunately messy) way to add irrigated and rainfed for a given crop
@@ -730,4 +741,53 @@ public class CalculateProduction {
           scenarios.results_folder[last_index_of_crop]);
     }
   } // end processAverageYield function
+
+  public static void extractYieldForBestPlantingMonthAllYears(
+      String script_folder,
+      Scenarios scenarios,
+      String[]
+          best_planting_month_rasters, // array of raster names for best planting month per scenario
+      String[][][] raster_names_all_years_wet_or_dry, // [scenario][planting_month][year]
+      String[] years,
+      String[] scenario_tags,
+      String[] results_folder)
+      throws InterruptedException, IOException {
+
+    for (int i = 0; i < scenarios.n_scenarios; i++) {
+      String best_planting_month_raster = best_planting_month_rasters[i];
+      for (int year_index = 0; year_index < scenarios.years.length; year_index++) {
+        // Get the yield rasters for all planting months for this scenario and year
+        String[] yield_rasters_for_year = new String[scenarios.planting_months.length];
+        for (int planting_month_index = 0;
+            planting_month_index < scenarios.planting_months.length;
+            planting_month_index++) {
+          yield_rasters_for_year[planting_month_index] =
+              raster_names_all_years_wet_or_dry[i][planting_month_index][year_index];
+        }
+        // Combine the yield rasters for all planting months into a comma-separated string
+        String yield_rasters_for_year_str = String.join(",", yield_rasters_for_year);
+        // Define output raster name
+        String output_raster_name = scenario_tags[i] + "_stablemonth_y" + years[year_index];
+        System.out.println("RESULTS FOLDER");
+        System.out.println("script_folder");
+        System.out.println(script_folder);
+        System.out.println("best_planting_month_raster");
+        System.out.println(best_planting_month_raster);
+        System.out.println("yield_rasters_for_year_str");
+        System.out.println(yield_rasters_for_year_str);
+        System.out.println("output_raster_name");
+        System.out.println(output_raster_name);
+        System.out.println("results_folder");
+        System.out.println(results_folder[i]);
+        // Use the best planting month raster to select the yield raster for each grid cell
+        BashScripts.useKeyRasterToMapToValueRaster(
+            script_folder,
+            best_planting_month_raster, // key raster (best planting month indices)
+            yield_rasters_for_year_str, // value rasters (yield rasters for all months in this year)
+            output_raster_name);
+        // Save as ASCII
+        BashScripts.saveAscii(script_folder, output_raster_name, results_folder[i]);
+      }
+    }
+  }
 } // class CalculateProduction
