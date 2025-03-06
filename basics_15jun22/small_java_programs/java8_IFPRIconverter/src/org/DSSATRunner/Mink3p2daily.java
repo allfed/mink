@@ -2007,6 +2007,11 @@ public class Mink3p2daily {
 
     String extractedStringValue = summaryLine.substring(endPrevious, endThis);
 
+    if (extractedStringValue.trim().matches("\\*+")) {
+      System.out.println("DSSAT returned stars, indicating crop failure");
+      return -99.0; // Use a standard missing value indicator
+    }
+
     // ok, now the problem is that we need to check for all sorts of problems...
 
     // look for stars

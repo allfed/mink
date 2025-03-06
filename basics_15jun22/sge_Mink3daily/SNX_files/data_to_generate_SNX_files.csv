@@ -1,44 +1,44 @@
 SNX_filename,manual_harvest_binary,two_letter_crop_code,details,m_group_info,crop_specific_planting_details,harvest_date_if_potatoes_otherwise_n99,photo_L_if_soybean_C_otherwise,A_if_automatic_planting_R_otherwise,A_if_irrigated_N_otherwise,D_if_potatoes_M_otherwise,irrigation_depth,irrigation_threshold
-cnINVIGOR5440IR,0,CN,canola/rapeseed INVIGOR5440 irrigated CA0001 Invigor5440,CA0001 Invigor5440,    80    80     S     R    17     0     2   -99   -99   -99   -99   -99,-99,L,A,A,M,20,70
-cnINVIGOR5440RF,0,CN,canola/rapeseed INVIGOR5440 rainfed CA0001 Invigor5440,CA0001 Invigor5440,    80    80     S     R    17     0     2   -99   -99   -99   -99   -99,-99,L,A,N,M,20,70
-mzDEKALBXL71IR,0,MZ,maize DEKALBXL71 irrigated IB0009 DEKALB XL71,IB0009 DEKALB XL71,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzDEKALBXL71RF,0,MZ,maize DEKALBXL71 rainfed IB0009 DEKALB XL71,IB0009 DEKALB XL71,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-mzGARST8808IR,0,MZ,maize GARST8808 irrigated IB0041 Garst 8808,IB0041 Garst 8808,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzGARST8808RF,0,MZ,maize GARST8808 rainfed IB0041 Garst 8808,IB0041 Garst 8808,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-mzK013IR,0,MZ,maize K013 irrigated CYMA01 WH403,CYMA01 WH403,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzK013RF,0,MZ,maize K013 rainfed CYMA01 WH403,CYMA01 WH403,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-mzK014IR,0,MZ,maize K014 irrigated CYMA02 ZM521,CYMA02 ZM521,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzK014RF,0,MZ,maize K014 rainfed CYMA02 ZM521,CYMA02 ZM521,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-mzK015IR,0,MZ,maize K015 irrigated CYMA03 BH660,CYMA03 BH660,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzK015RF,0,MZ,maize K015 rainfed CYMA03 BH660,CYMA03 BH660,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-mzK016IR,0,MZ,maize K016 irrigated CYMA04 SC513,CYMA04 SC513,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzK016RF,0,MZ,maize K016 rainfed CYMA04 SC513,CYMA04 SC513,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-mzK017IR,0,MZ,maize K017 irrigated CYMA05 SC403,CYMA05 SC403,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzK017RF,0,MZ,maize K017 rainfed CYMA05 SC403,CYMA05 SC403,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-mzK018IR,0,MZ,maize K018 irrigated CYMA06 PIO 30F32,CYMA06 PIO 30F32,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzK018RF,0,MZ,maize K018 rainfed CYMA06 PIO 30F32,CYMA06 PIO 30F32,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-mzK021IR,0,MZ,maize K021 irrigated IB0026 A632 x W117,IB0026 A632 x W117,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzK021RF,0,MZ,maize K021 rainfed IB0026 A632 x W117,IB0026 A632 x W117,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-mzK023IR,0,MZ,maize K023 irrigated CT0001 CF1505,CT0001 CF1505,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzK023RF,0,MZ,maize K023 rainfed CT0001 CF1505,CT0001 CF1505,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-mzK024IR,0,MZ,maize K024 irrigated CT0002 PIO 31R88,CT0002 PIO 31R88,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzK024RF,0,MZ,maize K024 rainfed CT0002 PIO 31R88,CT0002 PIO 31R88,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-mzK025IR,0,MZ,maize K025 irrigated CT0003 Suwan 3851,CT0003 Suwan 3851,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzK025RF,0,MZ,maize K025 rainfed CT0003 Suwan 3851,CT0003 Suwan 3851,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-mzK026IR,0,MZ,maize K026 irrigated CT0004 DEKALB XL82,CT0004 DEKALB XL82,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzK026RF,0,MZ,maize K026 rainfed CT0004 DEKALB XL82,CT0004 DEKALB XL82,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-mzK027IR,0,MZ,maize K027 irrigated IB0035 McCurdy 84aa,IB0035 McCurdy 84aa,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzK027RF,0,MZ,maize K027 rainfed IB0035 McCurdy 84aa,IB0035 McCurdy 84aa,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-mzK029IR,0,MZ,maize K029 irrigated IB0185 JACKSON HYBRI,IB0185 JACKSON HYBRI,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzK029RF,0,MZ,maize K029 rainfed IB0185 JACKSON HYBRI,IB0185 JACKSON HYBRI,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-mzMCCURDY84AAIR,0,MZ,maize MCCURDY84AA irrigated IB0035 McCurdy 84aa,IB0035 McCurdy 84aa,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzMCCURDY84AARF,0,MZ,maize MCCURDY84AA rainfed IB0035 McCurdy 84aa,IB0035 McCurdy 84aa,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-mzPIO31G98IR,0,MZ,maize PIO31G98 irrigated IB0071 PIO 31G98,IB0071 PIO 31G98,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzPIO31G98RF,0,MZ,maize PIO31G98 rainfed IB0071 PIO 31G98,IB0071 PIO 31G98,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-mzPIO3489IR,0,MZ,maize PIO3489 irrigated IB1066 PIO 3489,IB1066 PIO 3489,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-mzPIO3489RF,0,MZ,maize PIO3489 rainfed IB1066 PIO 3489,IB1066 PIO 3489,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-ptATLANTICIR,1,PT,potato ATLANTIC irrigated IB0005 ATLANTIC,IB0005 ATLANTIC,   5.7   5.7     S     R    70     0     6  1000   -99   -99   -99     1,110,C,A,A,D,20,70
-ptATLANTICRF,1,PT,potato ATLANTIC rainfed IB0005 ATLANTIC,IB0005 ATLANTIC,   5.7   5.7     S     R    70     0     6  1000   -99   -99   -99     1,110,C,A,N,D,20,70
+cnINVIGOR5440IR,0,CN,canola/rapeseed INVIGOR5440 irrigated CA0001 Invigor5440,CA0001 Invigor5440,    80    80     S     R    17     0     2   -99   -99   -99   -99   -99,-99,L,F,A,M,20,70
+cnINVIGOR5440RF,0,CN,canola/rapeseed INVIGOR5440 rainfed CA0001 Invigor5440,CA0001 Invigor5440,    80    80     S     R    17     0     2   -99   -99   -99   -99   -99,-99,L,F,N,M,20,70
+mzDEKALBXL71IR,0,MZ,maize DEKALBXL71 irrigated IB0009 DEKALB XL71,IB0009 DEKALB XL71,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzDEKALBXL71RF,0,MZ,maize DEKALBXL71 rainfed IB0009 DEKALB XL71,IB0009 DEKALB XL71,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+mzGARST8808IR,0,MZ,maize GARST8808 irrigated IB0041 Garst 8808,IB0041 Garst 8808,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzGARST8808RF,0,MZ,maize GARST8808 rainfed IB0041 Garst 8808,IB0041 Garst 8808,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+mzK013IR,0,MZ,maize K013 irrigated CYMA01 WH403,CYMA01 WH403,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzK013RF,0,MZ,maize K013 rainfed CYMA01 WH403,CYMA01 WH403,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+mzK014IR,0,MZ,maize K014 irrigated CYMA02 ZM521,CYMA02 ZM521,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzK014RF,0,MZ,maize K014 rainfed CYMA02 ZM521,CYMA02 ZM521,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+mzK015IR,0,MZ,maize K015 irrigated CYMA03 BH660,CYMA03 BH660,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzK015RF,0,MZ,maize K015 rainfed CYMA03 BH660,CYMA03 BH660,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+mzK016IR,0,MZ,maize K016 irrigated CYMA04 SC513,CYMA04 SC513,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzK016RF,0,MZ,maize K016 rainfed CYMA04 SC513,CYMA04 SC513,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+mzK017IR,0,MZ,maize K017 irrigated CYMA05 SC403,CYMA05 SC403,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzK017RF,0,MZ,maize K017 rainfed CYMA05 SC403,CYMA05 SC403,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+mzK018IR,0,MZ,maize K018 irrigated CYMA06 PIO 30F32,CYMA06 PIO 30F32,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzK018RF,0,MZ,maize K018 rainfed CYMA06 PIO 30F32,CYMA06 PIO 30F32,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+mzK021IR,0,MZ,maize K021 irrigated IB0026 A632 x W117,IB0026 A632 x W117,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzK021RF,0,MZ,maize K021 rainfed IB0026 A632 x W117,IB0026 A632 x W117,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+mzK023IR,0,MZ,maize K023 irrigated CT0001 CF1505,CT0001 CF1505,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzK023RF,0,MZ,maize K023 rainfed CT0001 CF1505,CT0001 CF1505,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+mzK024IR,0,MZ,maize K024 irrigated CT0002 PIO 31R88,CT0002 PIO 31R88,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzK024RF,0,MZ,maize K024 rainfed CT0002 PIO 31R88,CT0002 PIO 31R88,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+mzK025IR,0,MZ,maize K025 irrigated CT0003 Suwan 3851,CT0003 Suwan 3851,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzK025RF,0,MZ,maize K025 rainfed CT0003 Suwan 3851,CT0003 Suwan 3851,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+mzK026IR,0,MZ,maize K026 irrigated CT0004 DEKALB XL82,CT0004 DEKALB XL82,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzK026RF,0,MZ,maize K026 rainfed CT0004 DEKALB XL82,CT0004 DEKALB XL82,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+mzK027IR,0,MZ,maize K027 irrigated IB0035 McCurdy 84aa,IB0035 McCurdy 84aa,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzK027RF,0,MZ,maize K027 rainfed IB0035 McCurdy 84aa,IB0035 McCurdy 84aa,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+mzK029IR,0,MZ,maize K029 irrigated IB0185 JACKSON HYBRI,IB0185 JACKSON HYBRI,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzK029RF,0,MZ,maize K029 rainfed IB0185 JACKSON HYBRI,IB0185 JACKSON HYBRI,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+mzMCCURDY84AAIR,0,MZ,maize MCCURDY84AA irrigated IB0035 McCurdy 84aa,IB0035 McCurdy 84aa,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzMCCURDY84AARF,0,MZ,maize MCCURDY84AA rainfed IB0035 McCurdy 84aa,IB0035 McCurdy 84aa,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+mzPIO31G98IR,0,MZ,maize PIO31G98 irrigated IB0071 PIO 31G98,IB0071 PIO 31G98,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzPIO31G98RF,0,MZ,maize PIO31G98 rainfed IB0071 PIO 31G98,IB0071 PIO 31G98,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+mzPIO3489IR,0,MZ,maize PIO3489 irrigated IB1066 PIO 3489,IB1066 PIO 3489,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+mzPIO3489RF,0,MZ,maize PIO3489 rainfed IB1066 PIO 3489,IB1066 PIO 3489,   5.3   5.3     S     R    75     0     3   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+ptATLANTICIR,1,PT,potato ATLANTIC irrigated IB0005 ATLANTIC,IB0005 ATLANTIC,   5.7   5.7     S     R    70     0     6  1000   -99   -99   -99     1,110,C,F,A,D,20,70
+ptATLANTICRF,1,PT,potato ATLANTIC rainfed IB0005 ATLANTIC,IB0005 ATLANTIC,   5.7   5.7     S     R    70     0     6  1000   -99   -99   -99     1,110,C,F,N,D,20,70
 ptH001IR,1,PT,potato H001 irrigated RUBY01 Russet Bur [145],RUBY01 Russet Bur [145],   4.8   4.8     S     R    71     0    06   960   -99   -99   -99    02,145,C,R,A,D,30,40
 ptH001RF,1,PT,potato H001 rainfed RUBY01 Russet Bur [145],RUBY01 Russet Bur [145],   4.8   4.8     S     R    71     0    06   960   -99   -99   -99    02,145,C,R,N,D,30,40
 ptH002IR,1,PT,potato H002 irrigated RUBY02 Bintje     [150],RUBY02 Bintje     [150],   4.0   4.0     S     R    75     0    06   960   -99   -99   -99    02,150,C,R,A,D,30,40
@@ -63,49 +63,49 @@ riK001IR,0,RI,rice K001 irrigated IB0118 IR 72,IB0118 IR 72,    30    30     T  
 riK001RF,0,RI,rice K001 rainfed IB0118 IR 72,IB0118 IR 72,    30    30     T     R    20     0     5   -99    25    25     3   -99,-99,C,R,N,M,20,70
 riK002IR,0,RI,rice K002 irrigated 990003 JAPANESE,990003 JAPANESE,    30    30     T     R    20     0     5   -99    25    25     3   -99,-99,C,R,A,M,20,70
 riK002RF,0,RI,rice K002 rainfed 990003 JAPANESE,990003 JAPANESE,    30    30     T     R    20     0     5   -99    25    25     3   -99,-99,C,R,N,M,20,70
-sbMGROUP11IR,0,SB,soybean maturity group 11 irrigated 990011 M GROUP  11,990011 M GROUP  11,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,A,A,M,20,70
-sbMGROUP11RF,0,SB,soybean maturity group 11 rainfed 990011 M GROUP  11,990011 M GROUP  11,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,A,N,M,20,70
-sbMGROUP13IR,0,SB,soybean maturity group 13 irrigated 990013 M GROUP  13,990013 M GROUP  13,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,A,A,M,20,70
-sbMGROUP13RF,0,SB,soybean maturity group 13 rainfed 990013 M GROUP  13,990013 M GROUP  13,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,A,N,M,20,70
-sbMGROUP15IR,0,SB,soybean maturity group 15 irrigated 990015 M GROUP  15,990015 M GROUP  15,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,A,A,M,20,70
-sbMGROUP15RF,0,SB,soybean maturity group 15 rainfed 990015 M GROUP  15,990015 M GROUP  15,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,A,N,M,20,70
-sbMGROUP1IR,0,SB,soybean maturity group 1 irrigated 990001 M GROUP  01,990001 M GROUP  01,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,A,A,M,20,70
-sbMGROUP1RF,0,SB,soybean maturity group 1 rainfed 990001 M GROUP   1,990001 M GROUP   1,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,A,N,M,20,70
-sbMGROUP3IR,0,SB,soybean maturity group 3 irrigated 990003 M GROUP  03,990003 M GROUP  03,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,A,A,M,20,70
-sbMGROUP3RF,0,SB,soybean maturity group 3 rainfed 990003 M GROUP   3,990003 M GROUP   3,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,A,N,M,20,70
-sbMGROUP5IR,0,SB,soybean maturity group 5 irrigated 990005 M GROUP   5,990005 M GROUP   5,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,A,A,M,20,70
-sbMGROUP5RF,0,SB,soybean maturity group 5 rainfed 990005 M GROUP   5,990005 M GROUP   5,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,A,N,M,20,70
-sbMGROUP7IR,0,SB,soybean maturity group 7 irrigated 990007 M GROUP   7,990007 M GROUP   7,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,A,A,M,20,70
-sbMGROUP7RF,0,SB,soybean maturity group 7 rainfed 990007 M GROUP   7,990007 M GROUP   7,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,A,N,M,20,70
-sbMGROUP9IR,0,SB,soybean maturity group 9 irrigated 990009 M GROUP   9,990009 M GROUP   9,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,A,A,M,20,70
-sbMGROUP9RF,0,SB,soybean maturity group 9 rainfed 990009 M GROUP   9,990009 M GROUP   9,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,A,N,M,20,70
-whDFAULTIR,0,WH,wheat DFAULT irrigated DFAULT DEFAULT,DFAULT DEFAULT,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-whDFAULTRF,0,WH,wheat DFAULT rainfed DFAULT DEFAULT,DFAULT DEFAULT,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-whK001IR,0,WH,wheat K001 irrigated IB0100 Seri82BA ME1N,IB0100 Seri82BA ME1N,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-whK001RF,0,WH,wheat K001 rainfed IB0100 Seri82BA ME1,IB0100 Seri82BA ME1,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-whK002IR,0,WH,wheat K002 irrigated IB0200 PBW343BA ME1N,IB0200 PBW343BA ME1N,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-whK002RF,0,WH,wheat K002 rainfed IB0200 PBW343BA ME1,IB0200 PBW343BA ME1,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-whK006IR,0,WH,wheat K006 irrigated IB0600 BacanoraBA ME4AN,IB0600 BacanoraBA ME4AN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-whK006RF,0,WH,wheat K006 rainfed IB0600 BacanoraBA ME4A,IB0600 BacanoraBA ME4A,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-whK007IR,0,WH,wheat K007 irrigated IB0700 DonErnestoBA ME4BN,IB0700 DonErnestoBA ME4BN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-whK007RF,0,WH,wheat K007 rainfed IB0700 DonErnestoBA ME4B,IB0700 DonErnestoBA ME4B,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-whK009IR,0,WH,wheat K009 irrigated IB0900 KanchanBA ME5AN,IB0900 KanchanBA ME5AN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-whK009RF,0,WH,wheat K009 rainfed IB0900 KanchanBA ME5A,IB0900 KanchanBA ME5A,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-whK010IR,0,WH,wheat K010 irrigated IB1000 DebieraBA ME 5BN,IB1000 DebieraBA ME 5BN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-whK010RF,0,WH,wheat K010 rainfed IB1000 DebieraBA ME 5B,IB1000 DebieraBA ME 5B,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-whK011IR,0,WH,wheat K011 irrigated IB1100 SaratovBA ME6N,IB1100 SaratovBA ME6N,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-whK011RF,0,WH,wheat K011 rainfed IB1100 SaratovBA ME6,IB1100 SaratovBA ME6,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-whK012IR,0,WH,wheat K012 irrigated IB1200 PehlivanBA ME7N,IB1200 PehlivanBA ME7N,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-whK012RF,0,WH,wheat K012 rainfed IB1200 PehlivanBA ME7,IB1200 PehlivanBA ME7,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-whK013IR,0,WH,wheat K013 irrigated IB1300 HalconsnaBA ME8AN,IB1300 HalconsnaBA ME8AN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-whK013RF,0,WH,wheat K013 rainfed IB1300 HalconsnaBA ME8A,IB1300 HalconsnaBA ME8A,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-whK015IR,0,WH,wheat K015 irrigated IB1500 Bacanora modified ME9N,IB1500 Bacanora modified ME9N,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-whK015RF,0,WH,wheat K015 rainfed IB1500 Bacanora modified ME9,IB1500 Bacanora modified ME9,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-whK016IR,0,WH,wheat K016 irrigated IB1600 ChinaBBA ME10AN,IB1600 ChinaBBA ME10AN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-whK016RF,0,WH,wheat K016 rainfed IB1600 ChinaBBA ME10A,IB1600 ChinaBBA ME10A,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-whK076IR,0,WH,wheat K076 irrigated RRWW00 alt WW lowN,RRWW00 alt WW lowN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-whK076RF,0,WH,wheat K076 rainfed RRWW00 alt WW low,RRWW00 alt WW low,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-whMANITOUIR,0,WH,wheat MANITOU irrigated IB1500 MANITOU,IB1500 MANITOU,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-whMANITOURF,0,WH,wheat MANITOU rainfed IB1500 MANITOU,IB1500 MANITOU,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
-whNEWTONIR,0,WH,wheat NEWTON irrigated IB0488 NEWTON,IB0488 NEWTON,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,A,M,20,70
-whNEWTONRF,0,WH,wheat NEWTON rainfed IB0488 NEWTON,IB0488 NEWTON,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,A,N,M,20,70
+sbMGROUP11IR,0,SB,soybean maturity group 11 irrigated 990011 M GROUP  11,990011 M GROUP  11,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,A,M,20,70
+sbMGROUP11RF,0,SB,soybean maturity group 11 rainfed 990011 M GROUP  11,990011 M GROUP  11,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,N,M,20,70
+sbMGROUP13IR,0,SB,soybean maturity group 13 irrigated 990013 M GROUP  13,990013 M GROUP  13,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,A,M,20,70
+sbMGROUP13RF,0,SB,soybean maturity group 13 rainfed 990013 M GROUP  13,990013 M GROUP  13,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,N,M,20,70
+sbMGROUP15IR,0,SB,soybean maturity group 15 irrigated 990015 M GROUP  15,990015 M GROUP  15,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,A,M,20,70
+sbMGROUP15RF,0,SB,soybean maturity group 15 rainfed 990015 M GROUP  15,990015 M GROUP  15,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,N,M,20,70
+sbMGROUP1IR,0,SB,soybean maturity group 1 irrigated 990001 M GROUP  01,990001 M GROUP  01,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,A,M,20,70
+sbMGROUP1RF,0,SB,soybean maturity group 1 rainfed 990001 M GROUP   1,990001 M GROUP   1,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,N,M,20,70
+sbMGROUP3IR,0,SB,soybean maturity group 3 irrigated 990003 M GROUP  03,990003 M GROUP  03,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,A,M,20,70
+sbMGROUP3RF,0,SB,soybean maturity group 3 rainfed 990003 M GROUP   3,990003 M GROUP   3,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,N,M,20,70
+sbMGROUP5IR,0,SB,soybean maturity group 5 irrigated 990005 M GROUP   5,990005 M GROUP   5,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,A,M,20,70
+sbMGROUP5RF,0,SB,soybean maturity group 5 rainfed 990005 M GROUP   5,990005 M GROUP   5,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,N,M,20,70
+sbMGROUP7IR,0,SB,soybean maturity group 7 irrigated 990007 M GROUP   7,990007 M GROUP   7,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,A,M,20,70
+sbMGROUP7RF,0,SB,soybean maturity group 7 rainfed 990007 M GROUP   7,990007 M GROUP   7,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,N,M,20,70
+sbMGROUP9IR,0,SB,soybean maturity group 9 irrigated 990009 M GROUP   9,990009 M GROUP   9,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,A,M,20,70
+sbMGROUP9RF,0,SB,soybean maturity group 9 rainfed 990009 M GROUP   9,990009 M GROUP   9,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,N,M,20,70
+whDFAULTIR,0,WH,wheat DFAULT irrigated DFAULT DEFAULT,DFAULT DEFAULT,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+whDFAULTRF,0,WH,wheat DFAULT rainfed DFAULT DEFAULT,DFAULT DEFAULT,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+whK001IR,0,WH,wheat K001 irrigated IB0100 Seri82BA ME1N,IB0100 Seri82BA ME1N,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+whK001RF,0,WH,wheat K001 rainfed IB0100 Seri82BA ME1,IB0100 Seri82BA ME1,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+whK002IR,0,WH,wheat K002 irrigated IB0200 PBW343BA ME1N,IB0200 PBW343BA ME1N,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+whK002RF,0,WH,wheat K002 rainfed IB0200 PBW343BA ME1,IB0200 PBW343BA ME1,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+whK006IR,0,WH,wheat K006 irrigated IB0600 BacanoraBA ME4AN,IB0600 BacanoraBA ME4AN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+whK006RF,0,WH,wheat K006 rainfed IB0600 BacanoraBA ME4A,IB0600 BacanoraBA ME4A,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+whK007IR,0,WH,wheat K007 irrigated IB0700 DonErnestoBA ME4BN,IB0700 DonErnestoBA ME4BN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+whK007RF,0,WH,wheat K007 rainfed IB0700 DonErnestoBA ME4B,IB0700 DonErnestoBA ME4B,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+whK009IR,0,WH,wheat K009 irrigated IB0900 KanchanBA ME5AN,IB0900 KanchanBA ME5AN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+whK009RF,0,WH,wheat K009 rainfed IB0900 KanchanBA ME5A,IB0900 KanchanBA ME5A,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+whK010IR,0,WH,wheat K010 irrigated IB1000 DebieraBA ME 5BN,IB1000 DebieraBA ME 5BN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+whK010RF,0,WH,wheat K010 rainfed IB1000 DebieraBA ME 5B,IB1000 DebieraBA ME 5B,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+whK011IR,0,WH,wheat K011 irrigated IB1100 SaratovBA ME6N,IB1100 SaratovBA ME6N,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+whK011RF,0,WH,wheat K011 rainfed IB1100 SaratovBA ME6,IB1100 SaratovBA ME6,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+whK012IR,0,WH,wheat K012 irrigated IB1200 PehlivanBA ME7N,IB1200 PehlivanBA ME7N,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+whK012RF,0,WH,wheat K012 rainfed IB1200 PehlivanBA ME7,IB1200 PehlivanBA ME7,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+whK013IR,0,WH,wheat K013 irrigated IB1300 HalconsnaBA ME8AN,IB1300 HalconsnaBA ME8AN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+whK013RF,0,WH,wheat K013 rainfed IB1300 HalconsnaBA ME8A,IB1300 HalconsnaBA ME8A,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+whK015IR,0,WH,wheat K015 irrigated IB1500 Bacanora modified ME9N,IB1500 Bacanora modified ME9N,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+whK015RF,0,WH,wheat K015 rainfed IB1500 Bacanora modified ME9,IB1500 Bacanora modified ME9,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+whK016IR,0,WH,wheat K016 irrigated IB1600 ChinaBBA ME10AN,IB1600 ChinaBBA ME10AN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+whK016RF,0,WH,wheat K016 rainfed IB1600 ChinaBBA ME10A,IB1600 ChinaBBA ME10A,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+whK076IR,0,WH,wheat K076 irrigated RRWW00 alt WW lowN,RRWW00 alt WW lowN,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+whK076RF,0,WH,wheat K076 rainfed RRWW00 alt WW low,RRWW00 alt WW low,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+whMANITOUIR,0,WH,wheat MANITOU irrigated IB1500 MANITOU,IB1500 MANITOU,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+whMANITOURF,0,WH,wheat MANITOU rainfed IB1500 MANITOU,IB1500 MANITOU,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
+whNEWTONIR,0,WH,wheat NEWTON irrigated IB0488 NEWTON,IB0488 NEWTON,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,A,M,20,70
+whNEWTONRF,0,WH,wheat NEWTON rainfed IB0488 NEWTON,IB0488 NEWTON,   250   250     S     R    16     0     5   -99   -99   -99   -99   -99,-99,C,F,N,M,20,70
