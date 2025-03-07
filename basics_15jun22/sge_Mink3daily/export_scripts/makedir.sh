@@ -15,7 +15,4 @@ folder=$1
 
 location="$git_root/${folder}"
 
-#  save the result as ascii
-echo "mkdir -p $location"
-
 mkdir -p "$location"

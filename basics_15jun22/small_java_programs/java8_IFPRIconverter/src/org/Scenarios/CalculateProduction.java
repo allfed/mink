@@ -586,8 +586,6 @@ public class CalculateProduction {
           crop_area_to_sum = crop_area_to_sum + ",";
         }
         raster_names_to_sum = raster_names_to_sum + combined_production_name_rf_or_ir[i];
-        System.out.println("raster_names_to_sum");
-        System.out.println(raster_names_to_sum);
 
         String crop_area_raster =
             getCropAreaRaster(scenarios, scenarios.crop_name[i], scenarios.rf_or_ir[i]);
@@ -768,17 +766,20 @@ public class CalculateProduction {
         String yield_rasters_for_year_str = String.join(",", yield_rasters_for_year);
         // Define output raster name
         String output_raster_name = scenario_tags[i] + "_stablemonth_y" + years[year_index];
-        System.out.println("RESULTS FOLDER");
-        System.out.println("script_folder");
-        System.out.println(script_folder);
-        System.out.println("best_planting_month_raster");
-        System.out.println(best_planting_month_raster);
-        System.out.println("yield_rasters_for_year_str");
-        System.out.println(yield_rasters_for_year_str);
-        System.out.println("output_raster_name");
-        System.out.println(output_raster_name);
-        System.out.println("results_folder");
-        System.out.println(results_folder[i]);
+        // System.out.println("RESULTS FOLDER");
+        // System.out.println("years[year_index]");
+        // System.out.println(year_index);
+        // System.out.println(years[year_index]);
+        // System.out.println("script_folder");
+        // System.out.println(script_folder);
+        // System.out.println("best_planting_month_raster");
+        // System.out.println(best_planting_month_raster);
+        // System.out.println("yield_rasters_for_year_str");
+        // System.out.println(yield_rasters_for_year_str);
+        // System.out.println("output_raster_name");
+        // System.out.println(output_raster_name);
+        // System.out.println("results_folder");
+        // System.out.println(results_folder[i]);
         // Use the best planting month raster to select the yield raster for each grid cell
         BashScripts.useKeyRasterToMapToValueRaster(
             script_folder,

@@ -43,9 +43,11 @@
 
             firstRandomSeed=1 
        
-       # (fake_planting_year - 1)+ n_real_years = nfakeyears    
-       fakePlantingYear=2 # 1 is the first year, so to allow for spinup, we need to start in #2
-             nFakeYears=20 # 99 #100 # 
+       #DMR this was removed, and is now specified in the Config and passed through directly!
+       # These values are now set dynamically in ScenariosRunner.java and passed through all scripts
+       # # (fake_planting_year - 1)+ n_real_years = nfakeyears    
+       # fakePlantingYear=2 # 1 is the first year, so to allow for spinup, we need to start in #2
+       #       nFakeYears=20 # 99 #100 # 
 
 
 

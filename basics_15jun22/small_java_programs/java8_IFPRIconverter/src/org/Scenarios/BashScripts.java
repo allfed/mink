@@ -282,7 +282,9 @@ public class BashScripts {
       String fertilizer_scheme,
       String chunks_per_case,
       String lat_res,
-      String lon_res)
+      String lon_res,
+      int fakePlantingYear,
+      int nFakeYears)
       throws InterruptedException, IOException {
 
     // System.out.println("");
@@ -316,7 +318,11 @@ public class BashScripts {
     //         + " "
     //         + lat_res
     //         + " "
-    //         + lon_res);
+    //         + lon_res
+    //         + " "
+    //         + fakePlantingYear
+    //         + " "
+    //         + nFakeYears);
 
     ProcessBuilder pb =
         new ProcessBuilder(
@@ -335,7 +341,9 @@ public class BashScripts {
             "RUN_DESCRIPTOR_NOT_USED_FOR_RUN_DSSAT", // run descriptor is not used, trying to make
             // it obvious if someone tries
             lat_res,
-            lon_res);
+            lon_res,
+            String.valueOf(fakePlantingYear),
+            String.valueOf(nFakeYears));
     callProcess(pb, script_folder);
   } // end runScenario
 

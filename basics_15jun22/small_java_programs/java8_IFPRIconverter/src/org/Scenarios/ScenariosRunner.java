@@ -96,6 +96,19 @@ public class ScenariosRunner {
 
       System.out.println("==================");
 
+      // this is the NYERS placeholder value in DSSAT. The number of years run in the simulation.
+      // Calculate nFakeYears as last year - first year + 1
+      int nFakeYears =
+          Integer.parseInt(scenarios.years[scenarios.years.length - 1])
+              - Integer.parseInt(scenarios.years[0])
+              + 1;
+
+      // this determines the first year for PFRST, the planting year in DSSAT. It's the first
+      // planting year
+      // the first year is being removed from the simulation for reasons I don't understand.
+      // that's why I set the year to start as the given first weather year - 1, to maintain
+      // consistency with the weather data.
+      int fakePlantingYear = Integer.parseInt(scenarios.years[0]) - 1;
       BashScripts.runScenario(
           script_folder,
           scenarios.snx_name[scenario_and_pm.scenarioNumber],
@@ -111,7 +124,9 @@ public class ScenariosRunner {
           scenarios.fertilizer_scheme[scenario_and_pm.scenarioNumber],
           scenarios.n_chunks,
           scenarios.nsres[scenario_and_pm.scenarioNumber],
-          scenarios.ewres[scenario_and_pm.scenarioNumber]);
+          scenarios.ewres[scenario_and_pm.scenarioNumber],
+          fakePlantingYear,
+          nFakeYears);
 
       System.out.println("");
       System.out.println("");

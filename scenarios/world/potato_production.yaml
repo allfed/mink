@@ -7,6 +7,10 @@ model_configuration:
   # number of parallel chunks to run DSSAT at once with (multithreaded handled through linux bash script)
   n_chunks: 6
 
+  # # which folder and DSSAT exectutable to run, located in basics_15jun22/sge_Mink3daily folder
+  # dssat_folder: actual_program_4.6_whpt_08jul16
+  # dssat_executable: dscsm046.exe
+
   # which folder and DSSAT exectutable to run, located in basics_15jun22/sge_Mink3daily folder
   dssat_folder: actual_program_4.7.5.11
   dssat_executable: dscsm047_debug
@@ -55,28 +59,18 @@ model_configuration:
   # countries where we enforce max yields rather than average for wheat specifically
   # this allows us to allow winter wheat to be dominant in those countries
   winter_wheat_countries_csv: Luxembourg,Belgium,Denmark,France,Germany,Ireland,Netherlands,United Kingdom
-  
+
 physical_parameters:
   region_to_use_n: 69.375
-
   region_to_use_s: -69.375
-
   region_to_use_e: 176.25
-
   region_to_use_w: -170
-
   nsres: 1.875
-
   ewres: 1.25
-
   co2_level: 419
-
   # minimum area cropland in a pixel to consider, in hectares. Any smaller pixel is ignored.
-
   minimum_physical_area: 0
-
   # minimum yield to average in kg/ha
-
   minimum_yield: -3
 
 
@@ -88,20 +82,19 @@ physical_parameters:
   crop_area_type: specific
 
 
-  run_descriptor: Mar05_ProductionTestOffset1
+  run_descriptor: Mar07_ProductionRun
   irrigation_to_try: [RF, IR]
   weather_prefix: weather_150TgBC_mink
   weather_folder: 150TgBC
-  results_folder: results_production_wheat_newyears_offset1
-  planting_months: [1, 6]
+  results_folder: results_production_potatoes
+  planting_months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
   years: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
     
+
+    
 crops:
-- name: wheat
-  fertilizer_scheme: winterwheat
-  nitrogen_irrigated: N_for_wheat_IR_12aug13
-  nitrogen_rainfed: N_for_wheat_RF_12aug13
-  # snx_names: [whK001]
-  # snx_names: [whK001, whK002, whK006, whK007, whK009, whK010, whK011, whK012, whK013, whK015, whK016, whK076]
-  snx_names: [whK001, whK002, whK006, whK007, whK009, whK010, whK011, whK012, whK015, whK016, whK076]
+- name: potatoes
+  fertilizer_scheme: potatoes3
+  nitrogen_irrigated: N_for_potatoes_IR_12aug13
+  nitrogen_rainfed: N_for_potatoes_RF_12aug13

@@ -7,6 +7,10 @@ model_configuration:
   # number of parallel chunks to run DSSAT at once with (multithreaded handled through linux bash script)
   n_chunks: 6
 
+  # # which folder and DSSAT exectutable to run, located in basics_15jun22/sge_Mink3daily folder
+  # dssat_folder: actual_program_4.6_whpt_08jul16
+  # dssat_executable: dscsm046.exe
+
   # which folder and DSSAT exectutable to run, located in basics_15jun22/sge_Mink3daily folder
   dssat_folder: actual_program_4.7.5.11
   dssat_executable: dscsm047_debug
@@ -55,28 +59,43 @@ model_configuration:
   # countries where we enforce max yields rather than average for wheat specifically
   # this allows us to allow winter wheat to be dominant in those countries
   winter_wheat_countries_csv: Luxembourg,Belgium,Denmark,France,Germany,Ireland,Netherlands,United Kingdom
-  
+
 physical_parameters:
-  region_to_use_n: 69.375
+  # # region_to_use_n: 65.625
+  # # region_to_use_s: -65.625
+  # region_to_use_n: 69.375
+  # region_to_use_s: -69.375
+  # region_to_use_e: 176.25
+  # region_to_use_w: -170
 
-  region_to_use_s: -69.375
-
-  region_to_use_e: 176.25
-
-  region_to_use_w: -170
-
+  # southern india
+  # region_to_use_n: 31.875
+  # region_to_use_s: 11.25
+  # region_to_use_e: 85
+  # region_to_use_w: 71.25
+  
+  region_to_use_n: 60
+  region_to_use_s: -1.875
+    #39.375
+  region_to_use_e: -73.75
+    #-98.75
+  #-98.125
+  region_to_use_w: -112.5
+  #-99.375
   nsres: 1.875
-
   ewres: 1.25
+
+  # region_to_use_e: 180
+  # region_to_use_w: -180
+  # nsres: 1.875
+  # ewres: 2.5
 
   co2_level: 419
 
   # minimum area cropland in a pixel to consider, in hectares. Any smaller pixel is ignored.
-
   minimum_physical_area: 0
 
   # minimum yield to average in kg/ha
-
   minimum_yield: -3
 
 
@@ -92,16 +111,17 @@ physical_parameters:
   irrigation_to_try: [RF, IR]
   weather_prefix: weather_150TgBC_mink
   weather_folder: 150TgBC
-  results_folder: results_production_wheat_newyears_offset1
+  results_folder: results_production_potato_newyears_offset1
   planting_months: [1, 6]
   years: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
     
+
+    
 crops:
-- name: wheat
-  fertilizer_scheme: winterwheat
-  nitrogen_irrigated: N_for_wheat_IR_12aug13
-  nitrogen_rainfed: N_for_wheat_RF_12aug13
-  # snx_names: [whK001]
-  # snx_names: [whK001, whK002, whK006, whK007, whK009, whK010, whK011, whK012, whK013, whK015, whK016, whK076]
-  snx_names: [whK001, whK002, whK006, whK007, whK009, whK010, whK011, whK012, whK015, whK016, whK076]
+- name: potatoes
+  fertilizer_scheme: potatoes3
+  nitrogen_irrigated: N_for_potatoes_IR_12aug13
+  nitrogen_rainfed: N_for_potatoes_RF_12aug13
+  # snx_names: [ptH001, ptH002, ptH003, ptH004, ptH007, ptH008]
+  # snx_names: [ptH001, ptH002, ptH004, ptH007, ptH008]

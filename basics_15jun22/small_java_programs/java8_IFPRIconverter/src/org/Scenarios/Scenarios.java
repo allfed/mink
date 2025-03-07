@@ -374,7 +374,9 @@ public class Scenarios {
                   + "_"
                   + this.real_or_happy
                   + "_"
-                  + this.years[year_index];
+                  + String.valueOf(year_index);
+          // + this.years[year_index]; // we're using the years to set the actual simulation period
+          // now
 
           // SPECIFIC TO THE CULTIVAR AND WATERING STRATEGY AND MONTH AND YEAR AND
           // WHETHER WET WEIGHT OR DRY WEIGHT
@@ -391,7 +393,9 @@ public class Scenarios {
                   + "_"
                   + wet_or_dry
                   + "_"
-                  + this.years[year_index];
+                  + this.years[
+                      year_index]; // we rename the years back to what the weather file would call
+          // the year.
         }
       }
       for (int year_index = 0; year_index < this.years.length; year_index++) {

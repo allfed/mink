@@ -290,7 +290,7 @@ public class ScenariosProcessor {
     String[] outputs_to_save = new String[years.length + non_yield_parameters_to_save.length];
 
     for (int i = 0; i < years.length; i++) {
-      outputs_to_save[i] = real_or_happy + "_" + years[i];
+      outputs_to_save[i] = real_or_happy + "_" + i; // years[i];
     }
 
     // add the non-year data to make the outputs that aren't just the yield

@@ -47,6 +47,8 @@ nameOfDSSATExecutable=$4
           n_before_me=${11}
   latitude_resolution=${12}
  longitude_resolution=${13}
+   fakePlantingYear=${14}
+         nFakeYears=${15}
 
   # this is likely have a full path on it, so we need to strip the path
   # in order to refer to it in its new location on the compute node

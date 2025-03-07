@@ -233,6 +233,8 @@ The cultivar-specific values will be replaced in the template found in shared_SN
 SNX files are generated in the generated_SNX_files directory.
 StableCarbonTable can also be modified.
 scenarios/ contains many config yaml files which are used to specify a given run. Be sure to take a look and customize as you wish. Physical crop-specific information is set in the physical_parameters settings. It's also probably improtant to modify the n_chunks to match the number of physical cores on your machine, for efficient DSSAT runs.
+
+**Important Note**: There is a known bug that the simulation does not work if running more parallel processes than the minimum number of grid cells of any cultivar in a given crop model run in the region.
 These generate the actual distinct DSSAT runs which can be found in the generated_scenarios.csv.
 This file should not be modified directly, but demonstrates exactly which SNX files are being run under which settings. this provides the scenario_number for the java runs. If multiple planting months are attempted, the planting months (and years) are run several times for each scenario number.
 

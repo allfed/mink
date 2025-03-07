@@ -45,6 +45,8 @@ fi
 days_to_shift_planting=${10}
    latitude_resolution=${11}
   longitude_resolution=${12}
+     fakePlantingYear=${13}
+           nFakeYears=${14}
 
   # this is likely have a full path on it, so we need to strip the path
   # in order to refer to it in its new location on the compute node
@@ -165,10 +167,10 @@ do
   if [[ "$crop_nitro_name" =~ "wheat" ]]; then
 
     ran_suspected_wheat=true
-    ./mink3daily_run_DSSAT_tile.sh  $script_path $new_chunk_here $daily_to_use $nameOfDSSATExecutable $dssat_folder $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter $latitude_resolution $longitude_resolution USE_CIMMYT_BETA
+    ./mink3daily_run_DSSAT_tile.sh  $script_path $new_chunk_here $daily_to_use $nameOfDSSATExecutable $dssat_folder $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter $latitude_resolution $longitude_resolution $fakePlantingYear $nFakeYears USE_CIMMYT_BETA
   else
     # create all bash scripts that will be run in parallel
-    ./mink3daily_run_DSSAT_tile.sh $script_path $new_chunk_here $daily_to_use $nameOfDSSATExecutable $dssat_folder $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter $latitude_resolution $longitude_resolution
+    ./mink3daily_run_DSSAT_tile.sh $script_path $new_chunk_here $daily_to_use $nameOfDSSATExecutable $dssat_folder $X_template $crop_nitro_name $co2_level $crop_irri_name $days_to_shift_planting $counter $latitude_resolution $longitude_resolution $fakePlantingYear $nFakeYears
   fi
   counter=$((counter + 1))
 done
