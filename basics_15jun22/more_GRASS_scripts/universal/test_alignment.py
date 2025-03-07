@@ -7,7 +7,7 @@ import os
 import sys
 
 NUM_CHARS_IGNORED_AT_BEGINNING = 2
-ACTUALLY_ALTER = True
+ACTUALLY_ALTER = False
 
 
 def find_indices_of_last_char_before_whitespace(line):
