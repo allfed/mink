@@ -413,11 +413,10 @@ SPAM is necessary as it loads in our crops. You can go to grassdata/world/spam/ 
 ### A Note about years
 
 The specific list of years listed in the scenarios file should be selected with the following in mind:
- - The number of years run by DSSAT is equal to the last year selected in scenarios, plus two. So if you go from year 3 to 9, 11 years will be run (using WTH file years 1 through 11). See next point. 
- - The WTH files need two years of aclimatization before DSSAT is able to accurately report results. Therefore, you must add two years to the weather file number in order to get the number that is shown in the processed results. That's also why the number of years plus two is the number of years actually run by DSSAT. 
-     - For example, let's say WTH files run from year 01xxx to 15xxx where xxx is the 3 digit day number (from day 1 to day 365)
-     - Let's say for the climate run you're interested in, you want to look at yields which were planting on calendar year 5.
-     - In that case, you would enter year 3 as the first year in your scenario file, as year 1 and 2 are both years where there is no nuclear winter during any crop's growing season.
+ - The number of years run by DSSAT is dynamically calculated based on the years array in your scenario configuration. It is calculated as `nFakeYears = last year - first year + 1`. For example, if you specify years [3, 4, 5, 6, 7, 8, 9], DSSAT will run 7 years (9-3+1).
+ - The starting planting year is set to the first year in your years array (e.g., 3 in the example above).
+ - The years in the config correspond directly to the years of the weather file.
+ - DSSAT requires a 90-day spinup/acclimatization period before planting. Because of this requirement, you should never set the first year as year 1 in your scenario configuration, as this would not allow for the full spinup period. Instead, year 2 of the weather files or later should be used as the starting year.
 
 
 ## Development

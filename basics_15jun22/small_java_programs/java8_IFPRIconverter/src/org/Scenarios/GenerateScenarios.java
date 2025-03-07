@@ -45,6 +45,9 @@ public class GenerateScenarios {
 
     Config config = Config.importConfigCSV(config_file);
 
+    // System.out.println("config parameters");
+    // System.out.println(config.physical_parameters);
+    // System.out.println(config.model_configuration);
     BashScripts.setGRASSRegion(run_script_folder, config);
 
     HashMap<String, String> crop_name_to_short_code_dictionary = getCropCodeMap();

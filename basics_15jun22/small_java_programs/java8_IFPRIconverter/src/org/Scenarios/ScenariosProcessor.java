@@ -324,11 +324,11 @@ public class ScenariosProcessor {
         FunTricks.readTextFileToArray(script_folder + "to_GRASS/" + fileToProcess + "_STATS.txt");
     String[][] stats_data_col_then_row = extractDataAs2DArray(statsFile);
 
-    // System.out.println(script_folder+"to_GRASS/" + fileToProcess + "_STATS.cols.txt");
+    // System.out.println(script_folder + "to_GRASS/" + fileToProcess + "_STATS.cols.txt");
     // System.out.println(String.join("\n", statsColsFile));
 
     // System.out.println("statsFile");
-    // System.out.println(script_folder+"to_GRASS/" + fileToProcess + "_STATS.txt");
+    // System.out.println(script_folder + "to_GRASS/" + fileToProcess + "_STATS.txt");
     // System.out.println(String.join("\n", statsFile));
 
     // Extract latitude and longitude
@@ -348,7 +348,6 @@ public class ScenariosProcessor {
 
     // System.out.println("columnsArray: " + Arrays.toString(columnsArray));
     // System.out.println("column_titles: " + Arrays.toString(column_titles));
-    // System.out.println("column_titles: " + Arrays.toString(latLonData));
 
     // Concatenate the latitude and longitude data columns as a single string (if needed)
     String stringWithLatLonDataColumns = String.join("\n", latLonData);

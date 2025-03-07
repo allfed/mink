@@ -2983,7 +2983,6 @@ public class Mink3p2daily {
             gisTableBaseName + "_geog", formatIndexToForce);
 
     int nLinesInDataFile = (int) dataMatrix.getDimensions()[0];
-
     // since this implementation (using the multiple years with a single random seed, rather
     // than multiple random seeds with a single year) has the seeds and years as invariants, do
     // them up front to save on a little search and replace overhead...
