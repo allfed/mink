@@ -87,9 +87,10 @@ physical_parameters:
   years: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
     
-    
+  
 crops:
-- name: potatoes
-  fertilizer_scheme: potatoes3
-  nitrogen_irrigated: N_for_potatoes_IR_12aug13
-  nitrogen_rainfed: N_for_potatoes_RF_12aug13
+- name: soybeans
+  fertilizer_scheme: soybeans
+  snx_names: [sbMGROUP1, sbMGROUP3, sbMGROUP5, sbMGROUP7, sbMGROUP9, sbMGROUP11, sbMGROUP13, sbMGROUP15]
+  nitrogen_irrigated: N_for_soybean_irrigated_grown
+  nitrogen_rainfed: N_for_soybean_rainfed_grown
