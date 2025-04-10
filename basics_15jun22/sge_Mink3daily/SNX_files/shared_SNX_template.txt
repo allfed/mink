@@ -73,12 +73,7 @@ NEW BLOCK crop_specific_planting_details_line
 
 NEW BLOCK water_fertilizer_placeholder_block
 
-*IRRIGATION AND WATER MANAGEMENT
-@I  EFIR  IDEP  ITHR  IEPT  IOFF  IAME  IAMT IRNAME
- 1   -99   -99   -99   -99   -99   -99   -99 -99
-@I IDATE  IROP IRVAL
- 1   -99   -99   -99
- 1   -99   -99   -99
+___place irrigation here___
 
 ___place fertilizers here___
 
