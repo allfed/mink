@@ -59,10 +59,6 @@ ptRUSSETBURBANKIR,1,PT,potato RUSSETBURBANK irrigated IB0003 Russet Burbank,IB00
 ptRUSSETBURBANKRF,1,PT,potato RUSSETBURBANK rainfed IB0003 Russet Burbank,IB0003 Russet Burbank,   5.7   5.7     S     R    70     0     6  1000   -99   -99   -99     1,110,C,R,N,D,20,70
 ptSEBAGOIR,1,PT,potato SEBAGO irrigated IB0002 SEBAGO,IB0002 SEBAGO,   5.7   5.7     S     R    70     0     6  1000   -99   -99   -99     1,110,C,R,A,D,20,70
 ptSEBAGORF,1,PT,potato SEBAGO rainfed IB0002 SEBAGO,IB0002 SEBAGO,   5.7   5.7     S     R    70     0     6  1000   -99   -99   -99     1,110,C,R,N,D,20,70
-riK001IR,0,RI,rice K001 irrigated IB0118 IR 72,IB0118 IR 72,    30    30     T     R    20     0     5   -99    25    25     3   -99,-99,C,R,A,M,20,70
-riK001RF,0,RI,rice K001 rainfed IB0118 IR 72,IB0118 IR 72,    30    30     T     R    20     0     5   -99    25    25     3   -99,-99,C,R,N,M,20,70
-riK002IR,0,RI,rice K002 irrigated 990003 JAPANESE,990003 JAPANESE,    30    30     T     R    20     0     5   -99    25    25     3   -99,-99,C,R,A,M,20,70
-riK002RF,0,RI,rice K002 rainfed 990003 JAPANESE,990003 JAPANESE,    30    30     T     R    20     0     5   -99    25    25     3   -99,-99,C,R,N,M,20,70
 sbMGROUP11IR,0,SB,soybean maturity group 11 irrigated 990011 M GROUP  11,990011 M GROUP  11,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,A,M,20,70
 sbMGROUP11RF,0,SB,soybean maturity group 11 rainfed 990011 M GROUP  11,990011 M GROUP  11,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,N,M,20,70
 sbMGROUP13IR,0,SB,soybean maturity group 13 irrigated 990013 M GROUP  13,990013 M GROUP  13,    25    25     S     R    40     0     4   -99   -99   -99   -99   -99,-99,L,F,A,M,20,70

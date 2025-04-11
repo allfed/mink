@@ -1,0 +1,14 @@
+SNX_filename,manual_irrigation_binary,manual_harvest_binary,two_letter_crop_code,details,m_group_info,field_extra_options,field_extra_options_values,crop_specific_planting_details,MESOM_p_or_G,A_if_automatic_planting_R_otherwise,A_if_irrigated_N_otherwise,irrigation_details
+riK001RF,0,0,RI,rice K001 rainfed IB0118 IR 72,IB0118 IR 72,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,N,20    70   100   -99 IR001     0     0
+riK002RF,0,0,RI,rice K002 rainfed 990003 JAPANESE,990003 JAPANESE,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,N,20    70   100   -99 IR001     0     0
+riK0t1IR,1,0,RI,rice K0t1 irrigated GF0001 IR64 normal,GF0001 IR64 normal,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,R,20    70   100   -99 IR001     0     0
+riK0t3IR,1,0,RI,rice K0t3 irrigated IB0118 indica IR72,IB0118 indica IR72,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,R,20    70   100   -99 IR001     0     0
+riK0t3IR,1,0,RI,rice K0t5 irrigated GF0002 IR64 drought,GF0002 IR64 drought,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,R,20    70   100   -99 IR001     0     0
+riIR43IR,1,0,RI,rice IR43 irrigated IB0004 IR 43,IB0004 IR 43,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,R,20    70   100   -99 IR001     0     0
+riCL00IFIR,0,0,RI,rice CL00IF irrigated IB0001 ?IR 8,IB0001 ?IR 8, FLHSI FHDUR, FH101 00020,    20    20     T     H    20     0     2   -99    25    25     3   -99,G,R,A,20    70   100   -99 IR001     0     0
+riK002IR,0,0,RI,rice K002 irrigated 990003 JAPANESE,990003 JAPANESE,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,A,20    70   100   -99 IR001     0     0
+riMMMirriga005IR,0,0,RI,rice MMM005 irrigated IB0015 indica,IB0015 indica,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,F,20    40   100   -99 IR001     5     0
+riK001IR,0,0,RI,rice K001 irrigated IB0118 IR 72,IB0118 IR 72,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,A,20    70   100   -99 IR001     0     0
+riMMMirriga1o2IR,0,0,RI,rice MMM1o2 irrigated IB0015 indica,IB0015 indica,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,F,20    40   100   -99 IR001   0.5     0
+riceceresfloodedIR,1,0,RI,rice ceres irrigated IB0118 IR72 try,IB0118 IR72 try,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,R,20    70   100   -99 IR001     0     0
+riCL00IR,1,0,RI,rice CL00 irrigated IB0001 ?IR 8,IB0001 ?IR 8, FLHSI FHDUR, FH101 00020,    20    20     T     H    20     0     2   -99    25    25     3   -99,G,R,R,20    70   100   -99 IR001     0     0
