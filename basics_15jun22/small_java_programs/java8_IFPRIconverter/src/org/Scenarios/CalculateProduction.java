@@ -25,12 +25,17 @@ public class CalculateProduction {
         scenarios.combined_yield_name,
         scenarios.combined_production_name,
         true);
+    
+    String[] average_best_combined_production_name = new String[scenarios.n_scenarios];
+    for (int i = 0; i < scenarios.n_scenarios; i++) {
+        average_best_combined_production_name[i] = scenarios.combined_production_name[i] + "_avgbest";
+    }
 
     loopOverRainfedAndIrrigated(
         script_folder,
         scenarios,
         scenarios.combined_production_name_rf_or_ir,
-        scenarios.combined_production_name,
+        average_best_combined_production_name,
         scenarios.combined_yield_name,
         scenarios.combined_yield_name_rf_or_ir,
         scenarios.combined_planting_month_name_rf_or_ir,
@@ -112,7 +117,20 @@ public class CalculateProduction {
         scenarios.raster_names_all_years_wet_or_dry, // [scenario][planting_month][year]
         scenarios.years,
         scenarios.scenario_tag,
-        scenarios.results_folder);
+        scenarios.results_folder,
+        "_using_avgbest_month"
+      );
+    if (scenarios.calculate_each_year_best_month) {
+        extractYieldForBestPlantingMonthAllYearsUsingYearSpecificBest(
+            script_folder,
+            scenarios,
+            scenarios.best_planting_month_name_all_years, // Use YEAR-SPECIFIC best planting months
+            scenarios.raster_names_all_years_wet_or_dry,
+            scenarios.years,
+            scenarios.scenario_tag,
+            scenarios.results_folder
+        );
+    }
   } // end CalculateProduction function
 
   private static <T> T getVerifiedFirst(List<T> list) {
@@ -592,6 +610,10 @@ public class CalculateProduction {
 
         crop_area_to_sum = crop_area_to_sum + crop_area_raster;
 
+        // Add before calling BashScripts.saveAscii in loopOverRainfedAndIrrigated:
+        System.out.println("DEBUG: Saving production calculation for " + combined_production_name[last_index_of_crop]);
+        System.out.println("DEBUG: Using planting month from " + combined_planting_month_name_rf_or_ir[last_index_of_crop]);
+
         BashScripts.saveAscii(
             script_folder,
             scenarios.combined_planting_month_name_rf_or_ir[i],
@@ -748,9 +770,9 @@ public class CalculateProduction {
       String[][][] raster_names_all_years_wet_or_dry, // [scenario][planting_month][year]
       String[] years,
       String[] scenario_tags,
-      String[] results_folder)
+      String[] results_folder,
+      String output_suffix)
       throws InterruptedException, IOException {
-
     for (int i = 0; i < scenarios.n_scenarios; i++) {
       String best_planting_month_raster = best_planting_month_rasters[i];
       for (int year_index = 0; year_index < scenarios.years.length; year_index++) {
@@ -765,7 +787,7 @@ public class CalculateProduction {
         // Combine the yield rasters for all planting months into a comma-separated string
         String yield_rasters_for_year_str = String.join(",", yield_rasters_for_year);
         // Define output raster name
-        String output_raster_name = scenario_tags[i] + "_stablemonth_y" + years[year_index];
+        String output_raster_name = scenario_tags[i] + "_stablemonth_y" + years[year_index] + output_suffix;
         // System.out.println("RESULTS FOLDER");
         // System.out.println("years[year_index]");
         // System.out.println(year_index);
