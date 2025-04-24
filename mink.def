@@ -8,6 +8,8 @@ From: centos:7
 %files
     ./GRASS_modules/* /build/grass_modules
     ./GRASS_program/* /build/grass_program
+    #./GRASS_modules /build/grass_modules
+    #./GRASS_program /build/grass_program
 
 %environment
     # this is what is needed to set grass up properly
@@ -81,7 +83,22 @@ export JAVA_HOME=/usr/bin/java
 
 
 %post
+    # Fix all yum repos to point to CentOS Vault
+    sed -i \
+        -e 's|^mirrorlist=|#mirrorlist=|' \
+        -e 's|^#baseurl=http://mirror.centos.org/centos/\$releasever|baseurl=http://vault.centos.org/7.9.2009|' \
+        -e 's|http://mirror.centos.org/centos/\$releasever|http://vault.centos.org/7.9.2009|' \
+        -e '$a skip_if_unavailable=1' \
+        /etc/yum.repos.d/*.repo
+    yum clean all
+    yum makecache
+    yum repolist
+    mkdir -p /etc/yum/pluginconf.d
+    echo -e "[main]\nenabled=0" > /etc/yum/pluginconf.d/fastestmirror.conf
+
+    echo "nameserver 8.8.8.8" > /etc/resolv.conf
     mkdir /mnt/data
+
 
     # install GRASS dependencies
 
@@ -96,43 +113,176 @@ export JAVA_HOME=/usr/bin/java
     geos-devel blas-devel lapack-devel xorg-x11-xauth python3
 
     ## add okay repo, install gpg key and then ffmpeg
-    rpm -ivh http://repo.okay.com.mx/centos/7/x86_64/release/okay-release-1-5.el7.noarch.rpm \
-    && yum install -y ffmpeg-devel
+    #rpm -ivh http://repo.okay.com.mx/centos/7/x86_64/release/okay-release-1-5.el7.noarch.rpm \
+    #&& yum install -y ffmpeg-devel
+
+    # Add OKay repo + import its GPG key
+    rpm -ivh http://repo.okay.com.mx/centos/7/x86_64/release/okay-release-1-5.el7.noarch.rpm
+    #rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-okayinc
+    sed -i 's/gpgcheck=1/gpgcheck=0/' /etc/yum.repos.d/okay.repo
+
+    # Now safe to install packages from it
+    yum install -y ffmpeg-devel
+
 
     yum -y install ImageMagick
     yum install -y java-11-openjdk-devel
+    yum install -y java-11-openjdk java-11-openjdk-devel
 
     curl -L https://services.gradle.org/distributions/gradle-5.0-bin.zip > /tmp/gradle-5.0-bin.zip
     unzip -d /opt/gradle /tmp/gradle-5.0-bin.zip
 
+
+    # 1. Move ALL old CentOS repo files out of the way
+    mkdir -p /etc/yum.repos.d/backup
+    mv /etc/yum.repos.d/CentOS-*.repo /etc/yum.repos.d/backup/ 2>/dev/null || true
+
+    # 2. Overwrite with just the working vault repo
+    cat > /etc/yum.repos.d/centos-vault.repo <<'EOF'
+    [base]
+    name=CentOS-7.9 Vault - Base
+    baseurl=http://vault.centos.org/7.9.2009/os/$basearch/
+    enabled=1
+    gpgcheck=0
+
+    [updates]
+    name=CentOS-7.9 Vault - Updates
+    baseurl=http://vault.centos.org/7.9.2009/updates/$basearch/
+    enabled=1
+    gpgcheck=0
+
+    [extras]
+    name=CentOS-7.9 Vault - Extras
+    baseurl=http://vault.centos.org/7.9.2009/extras/$basearch/
+    enabled=1
+    gpgcheck=0
+    EOF
+
+    # 3. Clean cache and rebuild metadata
+    yum clean all
+    yum makecache
+    yum --nogpgcheck install -y gcc gcc-c++ make bison flex ncurses-devel which
+    yum --nogpgcheck install -y zlib-devel
+
+
+    # we're now getting ready to install grass:
+
+    cd /build
+    curl -O https://download.osgeo.org/proj/proj-9.0.0.tar.gz
+    tar -xf proj-9.0.0.tar.gz
+    yum groupinstall "Development Tools"
+    yum install sqlite-devel libcurl-devel libtiff-devel
+    yum install -y openssl-devel
+
+
+    cd /tmp
+    curl -LO https://github.com/Kitware/CMake/releases/download/v3.24.4/cmake-3.24.4.tar.gz
+    tar -xzf cmake-3.24.4.tar.gz
+    cd cmake-3.24.4
+    ./bootstrap --prefix=/usr
+    make -j$(nproc)
+    make install
+    
+    curl -O https://download.osgeo.org/proj/proj-4.8.0.tar.gz
+    tar -xzf proj-4.8.0.tar.gz 
+    cd /proj-4.8.0
+    mkdir build
+    cd build
+    cmake ..
+    make -j$(nproc)
+    make install
+
+    yum install -y epel-release
+    yum install -y gdal gdal-devel
+    yum install -y \
+        gcc gcc-c++ make \
+        flex bison \
+        ncurses-devel \
+        readline-devel \
+        zlib-devel \
+        libpng-devel \
+        libjpeg-turbo-devel \
+        libtiff-devel \
+        freetype-devel \
+        proj-devel \
+        geos-devel \
+        sqlite-devel \
+        fftw-devel \
+        blas-devel \
+        lapack-devel \
+        wxGTK3-devel \
+        python-devel \
+        python-config \
+        gettext-devel
+    yum install -y libXmu-devel
+    yum install -y \
+        flex bison \
+        ncurses-devel \
+        libtirpc-devel \
+        glibc-common \
+        zlib-devel \
+        proj-devel \
+        readline-devel \
+        gdal-devel \
+        geos-devel \
+        libtiff-devel \
+        libpng-devel \
+        postgresql-devel \
+        mysql-devel \
+        sqlite-devel \
+        ffmpeg-devel \
+        mesa-libGL-devel \
+        mesa-libGLU-devel \
+        lesstif-devel \
+        cairo-devel \
+        freetype-devel \
+        gettext-devel \
+        python3-devel \
+        wxGTK3-devel \
+        tcl-devel \
+        tk-devel \
+        libXmu-devel \
+        libX11-devel \
+        fftw-devel \
+        blas-devel \
+        lapack-devel \
+        libjpeg-turbo-devel \
+        xml2 \
+        xorg-x11-xauth \
+        which \
+        openssl-devel \
+        libcurl-devel
 
     ## build GRASS
     cd /build/grass_program
     ./configure \
         --with-cxx \
     --with-gdal=/usr/bin/gdal-config \
-    --with-proj --with-proj-share=/usr/share/proj \
+    --with-proj --with-proj-share=/usr/local/share/proj \
     --with-sqlite \
     --with-nls \
     --with-geos \
-    --with-wxwidgets=/usr/bin/wx-config \
     --with-python=/usr/bin/python-config \
     --with-freetype --with-freetype-includes=/usr/include/freetype2 \
     --enable-largefile \
     --without-odbc \
     --with-fftw \
     --with-blas \
-    --with-lapack 
+    --with-lapack \
+    --prefix=/usr/local
     make -j$(nproc) && make -j$(nproc) install
 
     ## Create generic GRASS GIS binary name regardless of version number
     ln -sf `find /usr/local/bin -name "grass??" | sort | tail -n 1` /usr/local/bin/grass
 
+    rm -f /usr/local/grass-6.5.svn/include/Make/Module.make
+    ln -s /usr/local/grass-6.5.svn/grass-6.5.svn/include/Make/Module.make /usr/local/grass-6.5.svn/include/Make/Module.make
 
     ## build custom modules
     cd /build/grass_modules
     ## enter each module directory and make
-    export GRASS_PREFIX=/usr/local/grass-6.5.svn/
+    #export GRASS_PREFIX=/usr/local/grass-6.5.svn
+    export GRASS_PREFIX=/usr/local/grass-6.5.svn
     for m in {r.in.new,r.intersection,r.out.new,r.pixelarea}; do
         cd $m; make; cd ../
     done
@@ -140,85 +290,6 @@ export JAVA_HOME=/usr/bin/java
     ## # clean up
     #cd 
     #rm -rf /build
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

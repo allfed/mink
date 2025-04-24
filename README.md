@@ -65,6 +65,17 @@ There are some custom grass data files to be included in your repository.
 These can be downloaded from here:
 https://drive.google.com/drive/folders/1uWCqUG5vt9ETtpb0sWbIXzcTtBFqCmUv
 You will need to unzip this folder and place it in the root of the mink/ git directory. The folder should be called "grassdata"
+### GRASS_program
+you will need to download GRASS gis 6.
+```
+git clone https://github.com/OSGeo/grass-legacy
+cd grass-legacy
+git checkout develbranch_6
+cd ..
+mv grass-legacy GRASS_program
+```
+now, use the `mv` command to move GRASS_program inside the `mink/` github repo.
+
 ### Grass permissions table
 There are a few permission modifications needed to run grass.
 To make these modifications, you first need to know your username.
@@ -92,8 +103,39 @@ Next, run the sandbox as a writable image:
 ```bash
 singularity shell --writable --bind $PWD:/mnt/data mink_sandbox
 ```
+
+If the command g.mlist -r does not list any grass rasters, grass is not in shell mode.
+First, run enviroment.sh
+```
+./environment.sh
+```
+If g.mlist -r doesn't work, you can still enter grass like this:
+```
+grass65 /mnt/data/grassdata/world/DSSAT_essentials_12may11
+```
+
+Some further commands I had to run to get things working:
+Outside the container:
+```
+mkdir -p mink_sandbox/mnt/data
+mkdir -p basics_15jun22/sge_Mink3daily/chunks_to_GRASS
+mkdir -p basics_15jun22/sge_Mink3daily/chunks_from_GRASS
+mkdir -p basics_15jun22/sge_Mink3daily/staging_area
+mkdir -p basics_15jun22/sge_Mink3daily/staging_area
+mkdir -p basics_15jun22/sge_Mink3daily/interrupted_run_locations
+sudo chown -R $USER:$USER /mnt/data/basics_15jun22/small_java_programs
+```
+inside the container (run `sudo singularity shell --writable --bind $PWD:/mnt/data mink_sandbox`):
+
+```
+yum -y install ImageMagick # Sometimes "convert" isn't installed, despite this being in mink.def. Unsure why.
+```
+
 This will allow you to interactively try each command to see where the problem arises without having to redo all the commands each container build. 
-You should now be in a shell. To test out whether everything worked, run the following within the shell:
+
+#### Entering the shell and running custom codebase
+
+You should now be in a grass shell. To test out whether everything worked, run the following within the shell:
 ```bash
 cd /mnt/data
 ./build_dailystyle_NOCLIMATE_for_DSSAT_05jun14.sh

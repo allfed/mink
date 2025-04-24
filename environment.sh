@@ -81,3 +81,4 @@ export GRASS_VERBOSE=0
 # test a command
 #g.list rast
 #v.info zipcodes_wake
+grass65 /mnt/data/grassdata/world/DSSAT_essentials_12may11
