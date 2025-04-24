@@ -6,7 +6,10 @@ if [ $# -eq 0 ]; then
   exit
 fi
 
-. ../default_paths_etc.sh
+echo "current dir image script"
+echo $PWD
+
+. ../../sge_Mink3daily/default_paths_etc.sh
 
 raster=$1
 save_loc=$2
@@ -22,8 +25,8 @@ else
   location="$git_root/${save_loc}"
 fi
 
-# Create a unique temporary directory for this script instance
-tmp_dir="$git_root/image_dump_${RANDOM}_`date +%N`"
+tmp_dir="/tmp/image_dump_${RANDOM}_$(date +%N)"
+
 
 mkdir -p $tmp_dir
 export GRASS_PNGFILE=${tmp_dir}/${raster}.png

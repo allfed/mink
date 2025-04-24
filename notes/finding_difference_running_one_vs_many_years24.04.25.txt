@@ -1,0 +1,641 @@
+./generate_scenarios_csv.sh scenarios/world/rice_riCL00IF_150Tg_bug.yaml ;./run_from_csv.sh scenarios/world/rice_riCL00IF_150Tg_bug.yaml DSSAT ; ./run_from_csv.sh scenarios/world/rice_riCL00IF_150Tg_bug.yaml process
+
+
+527343 - Seminar-Präsentation - [Prüfungsleistung]
+Art 	Datum 	Prüfer 	online / Präsenz 	Prüfungsverwaltung
+Logo für Modulprüfung Modulprüfung 	15.04.2025 	Prof. Dr. Jan Härter 	findet in Präsenz statt 	
+
+
+GRASS 6.5.svn (world):~/Code/mink > r.univar -g 400_weather_150TgBC_mink_BestYield_noGCMcalendar_p0_rice__Apr11_CheckingRice_riCL00IF_wet_yearspecific_y2
+n=90
+null_cells=31
+cells=121
+min=0
+max=7539.6224304
+range=7539.6224304
+mean=5719.077408
+mean_of_abs=5719.077408
+stddev=1653.21011630532
+variance=2733103.68865424
+coeff_var=28.9069372271962
+sum=514716.96672
+GRASS 6.5.svn (world):~/Code/mink > r.univar --help^C
+GRASS 6.5.svn (world):~/Code/mink > r.univar -g 400_weather_150TgBC_mink_BestYield_noGCMcalendar_p0_rice__Apr11_CheckingRice_riCL00IF_wet_stablemonth_y2_using_avgbest_month
+n=90
+null_cells=31
+cells=121
+min=0
+max=7539.6224304
+range=7539.6224304
+mean=5388.93066672
+mean_of_abs=5388.93066672
+stddev=1546.38544759336
+variance=2391307.9525285
+coeff_var=28.6955899645035
+sum=485003.7600048
+
+
+
+
+r.univar -g 400_weather_150TgBC_mink_BestYield_noGCMcalendar_p0_rice__Apr11_CheckingRice_bug2_riCL00IF_wet_stablemonth_y2_using_avgbest_month
+
+r.univar -g 400_weather_150TgBC_mink_BestYield_noGCMcalendar_p0_rice__Apr11_CheckingRice_bug1_riCL00IF_wet_yearspecific_y2
+
+
+
+
+
+
+
+
+
+
+
+
+
+cd results_production_rice_riCL00IF_150Tg_apr15_bug
+ls 400_weather_150TgBC_mink_BestYield_noGCMcalendar_p0_rice__Apr11_CheckingRice_bug1*
+r.univar -g 400_weather_150TgBC_mink_BestYield_noGCMcalendar_p0_rice__Apr11_CheckingRice_bug1_riCL00IF_wet_stablemonth_y2_using_avgbest_month
+r.univar -g 400_weather_150TgBC_mink_BestYield_noGCMcalendar_p0_rice__Apr11_CheckingRice_bug1_riCL00IF_wet_yearspecific_y2
+cd -
+cd results_production_rice_riCL00IF_150Tg_apr15_bug2
+r.univar -g 400_weather_150TgBC_mink_BestYield_noGCMcalendar_p0_rice__Apr11_CheckingRice_bug2_riCL00IF_wet_yearspecific_y2
+r.univar -g 400_weather_150TgBC_mink_BestYield_noGCMcalendar_p0_rice__Apr11_CheckingRice_bug2_riCL00IF_wet_stablemonth_y2_using_avgbest_month
+
+
+
+
+
+from claude:
+
+Based on the logs and code, the original DSSAT-generated yields appear to follow this path:
+Based on the logs and code, the original DSSAT-generated yields appear to follow this path:
+
+1. **Initial DSSAT Output Generation**: 
+   - DSSAT runs produce raw output for each grid cell in chunked format
+   - These are processed and assembled into collective output files
+
+2. **Main Output Assembly Points**:
+   ```
+   input_file=${chunked_output_data_dir}${data_file_short_name}
+   ```
+   
+   The DSSAT outputs are likely saved with names like:
+   ```
+   /mnt/data/basics_15jun22/sge_Mink3daily/to_DSSAT/riCL00IFIR_400_weather_150TgBC_mink_2_noGCMcalendar_p0_rice__Apr11_CheckingRice_bug2_riCL00IF_STATS.txt
+   ```
+   
+   Where `mink_2` indicates year 2, `riCL00IFIR` indicates irrigated rice, etc.
+
+3. **Reassembly Process**:
+   The Java class `org.DSSATRunner.ReassembleSplitTextMatrices` handles merging the chunked output files together.
+
+4. **Conversion to GRASS Rasters**:
+   The assembled text files are then imported into GRASS GIS to create rasters.
+
+The key issue may be that when running with just year 2, the system might still be looking for files from other years, or might initialize differently when only handling one year vs. multiple years.
+
+Based on the error logs and the debug output you shared, I believe the problem occurs during the raster creation process after DSSAT runs. In multi-year mode, the system processes years 1-3 with high error rates (90%), but these errors don't occur in single-year mode.
+
+To pinpoint the issue:
+
+1. Compare the actual DSSAT output files for year 2 between both runs
+2. Check if file naming conventions differ between single and multi-year runs
+3. Look for any conditional logic in `Scenarios.java` that might handle single vs. multi-year runs differently
+4. Examine how `scenarios.raster_names_all_years_wet_or_dry` is populated, as this array contains the core yield data that's being used differently between runs
+
+The fundamental difference is likely happening during the initial loading or transformation of the DSSAT outputs, before they're processed by your `CalculateProduction` class.
+
+
+
+OKAY
+
+So i need to figure out how the *input* files and settings differ at the point of DSSAT runs, if it's true there are different error percentages for the different years.
+
+it turns out these differ:
+diff sge_Mink3daily/chunks_to_GRASS/riCL00IFIR_400_weather_150TgBC_mink_1_noGCMcalendar_p0_rice__Apr11_CheckingRice_bug2_riCL00IF_2_STATS.txt sge_Mink3daily/chunks_to_GRASS/riCL00IFIR_400_weather_150TgBC_mink_1_noGCMcalendar_p0_rice__Apr11_CheckingRice_bug1_riCL00IF_2_STATS.txt
+
+the first one is full of errors, but the second one looks alright.
+
+its for january. maybe lets look at june.
+
+This 
+~/C/m/basics_15jun22 (main|✚5) [1] $ diff sge_Mink3daily/chunks_to_GRASS/riCL00IFIR_400_weather_150TgBC_mink_1_noGCMcalendar_p0_rice__Apr11_CheckingRice_bug2_riCL00IF_2_STATS.txt sge_Mink3daily/chunks_to_GRASS/riCL00IFIR_400_weather_150TgBC_mink_1_noGCMcalendar_p0_rice__Apr11_CheckingRice_bug1_riCL00IF_2_STATS.txt 
+1,11c1,11
+           1    2  3    4  5    6   7             8     9        10       11    12   13    14  15  16  17  18   19  20  21  22  23
+< 9009009000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	9	9	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1
+< 9009009000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	9	9	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1
+< 9009009000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	9	9	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1
+< 9009009000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	9	9	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1
+< 9009009000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	9	9	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1
+< 9009009000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	9	9	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1
+< 9009009000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	9	9	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1
+< 9009009000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	9	9	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1
+< 9009009000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	9	9	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1
+< 9009009000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	9	9	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1
+< 9009009000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	9	9	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1
+---
+> 1001001000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	1	1	-2	-1	-2	-2	-1
+> 1001001000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	1	1	-2	-1	-2	-2	-1
+> 1001001000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	1	1	-2	-1	-2	-2	-1
+> 1001001000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	1	1	-2	-1	-2	-2	-1
+> 1001001000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	1	1	-2	-1	-2	-2	-1
+> 1001001000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	1	1	-2	-1	-2	-2	-1
+> 1001001000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	1	1	-2	-1	-2	-2	-1
+> 1001001000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	1	1	-2	-1	-2	-2	-1
+> 1001001000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	1	1	-2	-1	-2	-2	-1
+> 1001001000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	1	1	-2	-1	-2	-2	-1
+> 1001001000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	-0.01	-0.01	-1	-0.01	0	0	0	1	1	-2	-1	-2	-2	-1
+
+1n_bad_things
+2yield_min
+3yield_max
+4yield_mean
+5yield_std
+6real_emergence_mean
+7real_emergence_std
+8real_anthesis_mean
+9real_anthesis_std
+10real_maturity_mean
+11real_maturity_std
+12happy_yield_mean
+13happy_maturity_mean
+14time_to_planting
+15n_no_planting
+16n_real_exactly_zero
+17n_contributing_real
+19n_contributing_happy
+19real_0
+20real_1
+21real_2
+22real_3
+23real_4	real_5	real_6	real_7	real_8	happy_0	happy_1	happy_2	happy_3	happy_4	happy_5	happy_6	happy_7	happy_8	emergence_0	emergence_1	emergence_2	emergence_3	emergence_4	emergence_5	emergence_6	emergence_7	emergence_8	anthesis_0	anthesis_1	anthesis_2	anthesis_3	anthesis_4	anthesis_5	anthesis_6	anthesis_7	anthesis_8	maturity_0	maturity_1	maturity_2	maturity_3	maturity_4	maturity_5	maturity_6	maturity_7	maturity_8
+
+
+well.
+looks like a bunch of zero yields, then 
+
+
+~/C/m/basics_15jun22 (main|✚5) $ diff sge_Mink3daily/chunks_to_GRASS/riCL00IFIR_400_weather_150TgBC_mink_6_noGCMcalendar_p0_rice__Apr11_CheckingRice_bug2_riCL00IF_1_STATS.txt sge_Mink3daily/chunks_to_GRASS/riCL00IFIR_400_weather_150TgBC_mink_6_noGCMcalendar_p0_rice__Apr11_CheckingRice_bug1_riCL00IF_1_STATS.txt
+1,11c1,11
+1    2  3    4  5    6   7             8     9        10       11    12   13    14  15  16  17  18   19  20  21  22  23
+< 0	-2	4142	2233	1738.506	0	0	231.778	217.382	287.778	213.149	2986.222	287.667	0	0	0	9	9	4142	3488	3599	3923	-2	-2	-2	1437	3514	5175	3958	4494	4246	0	0	1470	2395	5138	0	0	0	0	0	0	0	0	0	72	90	74	80	714	453	374	150	79	112	132	112	122	758	477	403	337	137
+< 0	-2	4326	2206.222	1804.764	0	0	240.222	191.364	315.222	243.267	2628.889	315.333	0	0	0	9	9	3813	3607	3778	4326	-2	-2	-2	909	3429	4322	4030	4613	4664	0	0	0	1572	4459	0	0	0	0	0	0	0	0	0	69	82	73	71	531	495	426	335	80	107	121	110	109	737	696	441	362	154
+< 0	-2	4388	2160.889	1781.999	0	0	240.222	191.364	315.111	243.246	2628.889	315.333	0	0	0	9	9	3888	3642	3724	4388	-2	-2	-2	948	2864	4322	4030	4613	4664	0	0	0	1572	4459	0	0	0	0	0	0	0	0	0	69	82	73	71	531	495	426	335	80	107	121	110	109	737	696	441	361	154
+< 0	-2	4934	2112	2368.071	0	0	593.444	567.188	635.444	567.33	2530.889	635.556	0	0	0	9	9	4828	4379	4934	4877	-2	-2	-2	-2	-2	5449	4882	5563	6026	0	0	0	0	858	0	0	0	0	0	0	0	0	0	73	68	72	76	1551	1393	1038	690	380	119	114	116	123	1589	1442	1083	734	399
+< 0	-2	5111	2155.222	2422.689	0	0	593.444	567.188	635.556	567.228	2530.889	635.556	0	0	0	9	9	4911	4274	5111	5111	-2	-2	-2	-2	-2	5449	4882	5563	6026	0	0	0	0	858	0	0	0	0	0	0	0	0	0	73	68	72	76	1551	1393	1038	690	380	119	114	117	123	1589	1442	1083	734	399
+< 9009000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	3864	942.426	-1	3864	0	0	0	9	9	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	5324	4959	4594	4229	3864	3499	3134	2769	2404
+< 9009000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	3864	942.426	-1	3864	0	0	0	9	9	-2	-2	-2	-2	-2	-2	-2	-2	-2	-1	-1	-1	-1	-1	-1	-1	-1	-1	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	-2	5324	4959	4594	4229	3864	3499	3134	2769	2404
+< 0	-2	4687	2209.556	2059.887	0	0	299.444	272.898	338.222	266.992	2869.222	338.556	0	0	0	9	9	4010	4687	4407	4291	-2	-2	-2	-2	2499	5195	5078	4666	5126	0	0	0	1356	4402	0	0	0	0	0	0	0	0	0	69	84	70	75	772	725	449	348	103	107	128	109	115	800	768	468	371	178
+< 0	-2	3930	1907.889	1756.712	0	0	303.333	275.762	342.222	270.311	2458.111	342.556	0	0	0	9	9	3930	3648	3473	3751	-2	-2	-2	-2	2377	4496	4189	4168	4488	0	0	0	849	3933	0	0	0	0	0	0	0	0	0	68	82	71	75	769	737	460	366	102	107	123	108	114	802	776	485	383	182
+< 0	-2	4100	2060.556	1896.93	0	0	303.333	275.762	342.778	269.868	2458.111	342.556	0	0	0	9	9	4067	3862	3987	4100	-2	-2	-2	-2	2537	4496	4189	4168	4488	0	0	0	849	3933	0	0	0	0	0	0	0	0	0	68	82	71	75	769	737	460	366	102	108	124	109	115	802	776	485	383	183
+< 0	-2	4154	2116.222	1758.547	0	0	217.889	160.73	253.667	154.437	2634.889	253.556	0	0	0	9	9	3932	3285	3912	4154	-2	-2	-2	830	2939	4331	3614	4126	4397	0	0	1147	1620	4479	0	0	0	0	0	0	0	0	0	71	88	75	75	444	440	366	324	78	112	128	111	114	477	461	396	355	129
+---
+> 0	4904	4904	4904	0	0	0	72	0	112	0	5175	112	0	0	0	1	1	4904	5175	0	72	112
+> 0	4071	4071	4071	0	0	0	69	0	107	0	4322	107	0	0	0	1	1	4071	4322	0	69	107
+> 0	4071	4071	4071	0	0	0	69	0	107	0	4322	107	0	0	0	1	1	4071	4322	0	69	107
+> 0	5276	5276	5276	0	0	0	73	0	119	0	5449	119	0	0	0	1	1	5276	5449	0	73	119
+> 0	5287	5287	5287	0	0	0	73	0	119	0	5449	119	0	0	0	1	1	5287	5449	0	73	119
+> 1001000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	5324	0	-1	5324	0	0	0	1	1	-2	-1	-2	-2	5324
+> 1001000	-2	-2	-2	0	-0.01	-0.01	-0.01	-0.01	5324	0	-1	5324	0	0	0	1	1	-2	-1	-2	-2	5324
+> 0	4900	4900	4900	0	0	0	69	0	108	0	5195	110	0	0	0	1	1	4900	5195	0	69	108
+> 0	4326	4326	4326	0	0	0	68	0	108	0	4496	108	0	0	0	1	1	4326	4496	0	68	108
+> 0	4330	4330	4330	0	0	0	68	0	108	0	4496	108	0	0	0	1	1	4330	4496	0	68	108
+> 0	4172	4172	4172	0	0	0	71	0	112	0	4331	112	0	0	0	1	1	4172	4331	0	71	112
+~/C/m/basics_15jun22 (main|✚5) [1] $ 
+
+
+
+
+okay.
+
+Looking at the diff between the on_node_home folders generated for the two, everything seems quite fine. there is no really suspicious diff in the inputs!
+But the outputs clearly are looking different :/
+
+crucially, the summary.out with this example ARE the same!
+
+so i am processing and getting errors in the only-year-2 crop model, yet with the same summary.out file?
+
+I will now investigate my recent addition of year selection.
+Maybe the issue is that I am trying to grab crop model runs that don't exist. For example, I only ever noticed one year being run when we get to year 2. Yet I would have expected that there would be a dummy year that is thrown away for warming / cooling the soil.
+
+So the question is, what are we grabbing exactly to generate these:
+riCL00IFIR_400_weather_150TgBC_mink_6_noGCMcalendar_p0_rice__Apr11_CheckingRice_bug2_riCL00IF_1_STATS
+
+
+I guess i see something somewhat suspicious in Scenarios.java:
+
++ this.years[year_index];
+became
++ String.valueOf(year_index);
+
+
+
+okay.
+so somehow i'm to believe that raster_names_all_years_wet_or_dry is not a "retrieval" type variable, but instead is being assigned from raster_names_all_years_dry.
+Well, that seems true - wet weight is caluclated after dry weight.
+But this strategy -           + String.valueOf(year_index); - this will probbaly pick up 0 right?
+but does 0 exist? isn't it supposed to be 1?
+i guess that would happen for both...
+
+
+for (int year_index = 0; year_index < this.years.length; year_index++) {
+
+  // CAN'T BE CHANGED:
+  // (PREDETERMINED BY DSSAT AND READ_DSSAT_outputs_from_cols_FEW SCRIPT)
+  // SPECIFIC TO THE CULTIVAR AND WATERING STRATEGY AND MONTH AND YEAR
+  this.raster_names_all_years_dry[i][planting_month_index][year_index] =
+      this.snx_name[i]
+          + "_"
+          + this.co2_level[i]
+          + "_"
+          + this.weather_prefix[i]
+          + "_"
+          + this.yield_names[i][planting_month_index]
+          + "_"
+          + this.real_or_happy
+          + "_"
+          + String.valueOf(year_index);
+  // + this.years[year_index]; // we're using the years to set the actual simulation period
+  // now
+
+  // SPECIFIC TO THE CULTIVAR AND WATERING STRATEGY AND MONTH AND YEAR AND
+  // WHETHER WET WEIGHT OR DRY WEIGHT
+  this.raster_names_all_years_wet_or_dry[i][planting_month_index][year_index] =
+      this.snx_name[i]
+          + "_"
+          + this.co2_level[i]
+          + "_"
+          + this.weather_prefix[i]
+          + "_"
+          + this.yield_names[i][planting_month_index]
+          + "_"
+          + this.real_or_happy
+          + "_"
+          + wet_or_dry
+          + "_"
+          + this.years[
+              year_index]; // we rename the years back to what the weather file would call
+  // the year.
+}
+essentially, the above is not currently very promising way that errors could be introduced. The years should definitely be identically taken from the processed results...
+we can go bac kto it if needed.
+i think the strategy would be to try to revert the github changes and see if the problem goes away.
+
+this became:
+	
+	public static String[] generateColumnsToMakeRastersFromDataFiles(
+	    String[] years, String real_or_happy, String[] non_yield_parameters_to_save) {
+	  String[] outputs_to_save = new String[years.length + non_yield_parameters_to_save.length];
+
+	  for (int i = 0; i < years.length; i++) {
+	    outputs_to_save[i] = real_or_happy + "_" + i; // years[i];
+	  }
+
+	  // add the non-year data to make the outputs that aren't just the yield
+	  for (int i = 0; i < non_yield_parameters_to_save.length; i++) {
+	    outputs_to_save[i + years.length] = non_yield_parameters_to_save[i];
+	  }
+
+	  return outputs_to_save;
+	}
+
+
+
+
+
+I know! I will rerun DSSAT and take a look at summary.out if i change the number of years.
+but ideall I am looking at a point where there is some nonzero yield
+
+
+
+ack..
+
+it's really hard to find actually matching examples of deleteme.snx files between 1 year and 9 year conditions.
+
+There are subtle differences.. multiple weather files in the dailyweather, lots of pixels. on_node_homes are named randomly. thingare running in parallell.
+
+okay so what if I just do one pixel?
+
+
+so i managed to do just one pixel.
+
+looks like there is an interesting difference in fertilizer, but otherwise SNX files are identical.
+Wierd.
+but if I choose the 6th one for both bug1 and bug2, everything including weather and all the rest of the SNX is exactly the same.
+
+~/C/mink (main|✚8) [1] $ diff on_node_home22774_343744575/DSSAT/Summary.OUT on_node_home8828_123116621/DSSAT/Summary.OUT 
+1c1
+< *SUMMARY : deletemeSN ed SNX template for rice CL00IF irrigated IB0001 ?IR 8       DSSAT Cropping System Model Ver. 4.7.5.012 -bugfix-in    APR 24, 2025; 20:36:48
+---
+> *SUMMARY : deletemeSN ed SNX template for rice CL00IF irrigated IB0001 ?IR 8       DSSAT Cropping System Model Ver. 4.7.5.012 -bugfix-in    APR 24, 2025; 20:49:56
+5c5,13
+<         1      1  1  1  1 RI RICER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0006 2001062 2001152 2001152 2001219 2001260 2001260    21   11712    4189    4189       0  5022  0.0280   14959   264.9 0.358   5.5     2    52   844   425   196   226   217   149   340     3   170     0   119     8    43    67   119    65  1.15   -99   -99   -99   -99   -99   -99   -99   -99     0   4584   4550      0      0   57399   56497    2363     15.3     35.3     59.9    226.4      5.5     12.6     21.4     81.0     68.9     98.4     24.6     35.2   108  30.3  23.0  14.8  12.9  400.0  766.8  331.5  135.1  195.6
+---
+>         1      1  1  1  1 RI RICER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0006 2001062 2001152 2001152 2001219 2001260 2001260    21    9238    3495    3495       0  4162  0.0280   12480   222.8 0.378   2.9     1    35   844   425   172   247   203   160   326     2   115     0    91     5    38    52    91    49 0.819   -99   -99   -99   -99   -99   -99   -99   -99     0   4549   4504      0      0   56200   55202    1258     12.0     27.9     53.8    260.3      4.6     10.5     20.4     98.5     80.3    101.5     30.4     38.4   108  30.3  23.0  14.8  12.9  400.0  766.8  331.5  156.4  171.7
+>         2      1  1  1  1 RI RICER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0006 2002062 2002152 2002152 2002220 2002261 2002261    21    9559    3877    3877       0  4628  0.0280   13845   248.6 0.406   3.2     4    85   858   404   178   220   203   237   334     2   115     0   103     7    32    52   103    60 0.627   -99   -99   -99   -99   -99   -99   -99   -99     0   4559   4507      0      0   56469   55340    1257     12.2     28.7     53.7    111.9      5.0     11.6     21.8     45.4     83.1     92.8     33.7     37.6   109  32.1  23.9  15.3  12.9  400.0  780.8  333.3  151.2  177.9
+>         3      1  1  1  1 RI RICER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0006 2003062 2003152 2003152 2003221 2003262 2003262    21    9019    3315    3315       0  3978  0.0280   11840   213.7 0.368   3.3     3    78  1017   378   171   198   277   316   358     2   115     0    88    11    46    53    88    47  1.05   -99   -99   -99   -99   -99   -99   -99   -99     0   4552   4507      0      0   56401   55304    1300      9.3     28.3     52.6    115.5      3.4     10.4     19.3     42.5     78.4    102.5     28.8     37.7   110  31.3  24.0  15.0  12.9  400.0  970.2  318.5  140.8  171.4
+>         4      1  1  1  1 RI RICER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0006 2004062 2004152 2004152 2004219 2004260 2004260    21    9561    3520    3520       0  4183  0.0280   12572   223.2 0.368   3.2     2    66   657   395   194   194   127   137   299     2   115     0    97     5    37    50    97    53 0.622   -99   -99   -99   -99   -99   -99   -99   -99     0   4557   4510      0      0   56424   55352    1303     15.1     27.4     49.4    143.8      5.5     10.1     18.2     52.9     83.1     98.6     30.6     36.3   108  32.5  23.9  16.4  12.9  400.0  634.6  348.9  151.0  193.7
+>         5      1  1  1  1 RI RICER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0006 2005062 2005152 2005152 2006096 2006137 2006137    24    7401    1192    1192       0  1828  0.0322    3701   221.9 0.161   4.1    15   281   354   352   150   153    37   146   332     3   170     0   166    17    71    91   166    21 0.885   -99   -99   -99   -99   -99   -99   -99   -99     0   5395   4584      0      0   69974   55980    2012     21.6     22.7     49.3     26.3      3.5      3.7      7.9      4.2     43.5     44.6      7.0      7.2   350  16.0   2.9   6.8  12.0  400.0  343.0  325.8  126.4  150.1
+>         6      1  1  1  1 RI RICER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0006 2006062 2006152 2006152 2007197 2007227 2007227    23    4038       0       0       0     0  0.0305       0    35.7 0.000   2.9     5    82   901   461   106   248   182   247   332     3   170     0   151    28   155   166   151     0  3.15   -99   -99   -99   -99   -99   -99   -99   -99     0   5560   4582      0      0   65618   55634    2842      9.0     11.4     38.0     49.2      -99      -99      -99      -99     23.8     26.7      -99      -99   440  15.6   4.0   6.7  12.2  400.0  449.3  355.0  142.9  106.1
+>         7      1  1  1  1 RI RICER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0006 2007062 2007152 2007152 2008151 2008185 2008185    22    4576       0       0       0     0  0.0300       0    40.6 0.000   2.6     6   108   601   426   110   234   107    76   332     3   170     0   151     6   116   114   151     0  2.05   -99   -99   -99   -99   -99   -99   -99   -99     0   5664   4573      0      0   67763   55643    2085     11.7     13.7     41.7     42.4      -99      -99      -99      -99     26.9     30.3      -99      -99   398  16.1   3.5   7.0  12.1  400.0  392.6  332.9  141.8  109.9
+>         8      1  1  1  1 RI RICER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0006 2008062 2008152 2008152 2009054 2009089 2009089    24    5780     510     510       0   779  0.0322    1583   141.8 0.088   3.0     5    84   400   378   124   223    67     0   275     3   170     0   171     0    81    88   171    10 0.764   -99   -99   -99   -99   -99   -99   -99   -99     0   5379   4580      0      0   66630   56394    2020     29.6     20.3     46.6     68.6      2.6      1.8      4.1      6.1     34.0     33.8      3.0      3.0   303  17.4   5.2   7.3  11.8  400.0  195.0  285.4  131.9  124.2
+>         9      1  1  1  1 RI RICER047 deleteme GENERATED                 GRID     RRRR.WTH HN_GEN0006 2009062 2009152 2009152 2009276 2010004 2010004    24   10911    2211    2211       0  3261  0.0322    6867   269.4 0.203   2.0    10   168   360   456   196   231     7     0   300     3   170     0   115     0    81    44   115    37 0.350   -99   -99   -99   -99   -99   -99   -99   -99     0   4918   4578      0      0   62559   57027    1569     43.4     30.8     55.6     64.8      8.8      6.2     11.3     13.1     64.2     94.9     13.0     19.2   217  19.8   9.4   9.6  12.0  400.0  251.4  354.1  129.8  196.3
+
+~/C/mink (main|✚8) $ diff on_node_home22774_343744575/DSSAT/deleteme.SNX on_node_home8828_123116621/DSSAT/deleteme.SNX
+70,71c70,71
+<  1 00022 FE005 AP002 00005 00055   -99   -99   -99   -99   -99
+<  1 00052 FE005 AP002 00005 00055   -99   -99   -99   -99   -99
+---
+>  1 00085 FE005 AP002 00005 00055   -99   -99   -99   -99   -99
+>  1 00178 FE005 AP002 00005 00055   -99   -99   -99   -99   -99
+85c85
+<  1 GE          00001     1     S 01062 01234 template simulation name
+---
+>  1 GE          00009     1     S 01062 01234 template simulation name
+~/C/mink (main|✚8) [1] $ 
+
+
+85 and 178 vs 22 and 55. intersting. that could be significant.
+let's try running a single year with those differences in fertilizer...
+
+ALRIGHT! I think I found the culprit.
+Setting the *fertilizer* to the same value is what is allowing me to get the same value in!
+So why the hell is fertilizer being set differenly based on the number of years???
+so... why?
+
+
+
+alright so Mink3p2daily.java:
+// create the fertilizer block...
+fertilizerBlock =
+    nitrogenFertilizerScheme.buildNitrogenOnlyBlock(
+        phenologyInDays[1] + phenologyBufferInDays,
+        phenologyInDays[2] + phenologyBufferInDays,
+        nitrogenLevel);
+
+
+
+fertilizeronlyscheme.java or smthing like that
+package org.DSSATRunner;
+
+public interface NitrogenOnlyFertilizerScheme {
+
+  //	private int nApplications;
+  //	private int[] timeForApplication = null; // jawoo's column 0
+  //	private int[] rateApplied = null; // jawoo's column 1
+
+  public abstract void initialize();
+
+  public abstract void initialize(
+      String initialFertilizerType,
+      String initialFertilizerApplicationMethod,
+      int initialFertilizerDepth,
+      String subsequentFertilizerType,
+      String subsequentFertilizerApplicationMethod,
+      int subsequentFertilizerDepth);
+
+  public abstract String buildNitrogenOnlyBlock(
+      int daysAfterPlantingAnthesis, int daysAfterPlantingMaturity, double nitrogenFertilizerAmount)
+      throws Exception;
+}
+
+
+and in FSRice:
+
+    ////////////////////////////////////////////////////////////////
+    // build up the string representing the fertilizer rule block //
+    ////////////////////////////////////////////////////////////////
+
+    // the header lines
+    outString = "*FERTILIZERS (INORGANIC)\n";
+    outString += "@F FDATE  FMCD  FACD  FDEP  FAMN  FAMP  FAMK  FAMC  FAMO  FOCD\n";
+
+    // now, brute force the remaining applications
+    // do the initial one first, then use a loop for the rest...
+    outString +=
+        " 1 "
+            + DSSATHelperMethods.padWithZeros(daysAfterPlantingForApplication[0], 5)
+            + " "
+            + this.initialFertilizerType
+            + " "
+            + this.initialFertilizerApplicationMethod
+            + " "
+            + DSSATHelperMethods.padWithZeros(this.initialFertilizerDepth, 5)
+            + " "
+            + DSSATHelperMethods.padWithZeros(rateAppliedKgPerHa[0], 5);
+
+    // ok, now the non nitrogen stuff which we are putting in a missing value for.
+    outString += "   -99   -99   -99   -99   -99\n";
+
+    for (int applicationIndex = 1; applicationIndex < maxNumberOfApplications; applicationIndex++) {
+      // the nitrogen stuff...
+      outString +=
+          " 1 "
+              + DSSATHelperMethods.padWithZeros(
+                  daysAfterPlantingForApplication[applicationIndex], 5)
+              + " "
+              + this.subsequentFertilizerType
+              + " "
+              + this.subsequentFertilizerApplicationMethod
+              + " "
+              + DSSATHelperMethods.padWithZeros(this.subsequentFertilizerDepth, 5)
+              + " "
+              + DSSATHelperMethods.padWithZeros(rateAppliedKgPerHa[applicationIndex], 5);
+
+      // ok, now the non nitrogen stuff which we are putting in a missing value for.
+      outString += "   -99   -99   -99   -99   -99\n";
+    }
+
+    // tack on a final newline just to make it look nice
+    outString += "\n";
+
+    return outString;
+  }
+}
+
+
+alright so now i am trying to print out nitrogen levels. maybe thats the issue?
+
+
+
+okayy... things are starting to make sense
+
+DescriptiveStatisticsUtility is used to construct an array and get its mean. uselongvalue adds numbers to that array, and get mean gets the mean of all numbers added.
+
+
+phenologyInDays =
+    this.grabHappyResultsByName(
+        nFakeYears, splitUpNamesHere, endingIndicesForSplitUpNamesHere);
+
+        private int[] grabHappyResultsByName(
+            int nYears, String[] splitUpNamesHere, int[] endingIndicesForSplitUpNamesHere)
+            throws InterruptedException, Exception {
+          //      private int[] grabHappyResultsByName(int nYears) throws InterruptedException, Exception
+          // {
+
+          //   String[] splitUpNamesHere, int[] endingIndicesForSplitUpNamesHere
+          // if we wait properly using .waitFor(), we shouldn't have to check if things exist...
+
+          // declarations
+          int plantingDate = -1, eventDate = -2, daysSincePlantingForEvent = -3;
+          int yieldToUse = -3;
+          int anthesisToUse = -3, maturityToUse = -3;
+          boolean everythingIsValid = true;
+
+          // declarations with initializations
+          int nLinesToRead = nYears + magicDSSATSummaryLineIndexToRead;
+          String[] candidateSummaryContents = new String[nLinesToRead];
+          try {
+            candidateSummaryContents =
+                FunTricks.readSomeLinesOfTextFileToArray(magicDSSATSummaryToReadPath, nLinesToRead);
+          } catch (FileNotFoundException fnfe) {
+		...
+          // parse the output file for the necessary goodies...
+          DescriptiveStatisticsUtility happyYields = new DescriptiveStatisticsUtility(false);
+          DescriptiveStatisticsUtility happyAnthesisDates = new DescriptiveStatisticsUtility(false);
+          DescriptiveStatisticsUtility happyMaturityDates = new DescriptiveStatisticsUtility(false);
+
+          String[] splitUpNamesHereToUse = splitUpNamesHere;
+          int[] endingIndicesForSplitUpNamesHereToUse = endingIndicesForSplitUpNamesHere;
+
+          if (splitUpNamesHere == null) {
+            Object[] spacingFindings = findSummarySpacing();
+            splitUpNamesHereToUse = (String[]) spacingFindings[0];
+            endingIndicesForSplitUpNamesHereToUse = (int[]) spacingFindings[1];
+          }
+
+          boolean somethingWasNullInYearlyPreviously = false;
+
+          for (int fakeYearIndex = 0; fakeYearIndex < nYears; fakeYearIndex++) {
+			...
+            everythingIsValid = true;
+            try {
+              // here is where we try the dynamic way based on whatever was in the header line...
+
+              // yield
+              yieldToUse =
+                  (int)
+                      Math.round(
+                          pullValueUsingName(
+                              candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead],
+                              yieldColumnName,
+                              splitUpNamesHereToUse,
+                              endingIndicesForSplitUpNamesHereToUse));
+
+              // planting / anthesis / maturity dates
+              plantingDate =
+                  (int)
+                      Math.round(
+                          pullValueUsingName(
+                              candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead],
+                              plantingDateColumnName,
+                              splitUpNamesHereToUse,
+                              endingIndicesForSplitUpNamesHereToUse));
+              anthesisToUse =
+                  (int)
+                      Math.round(
+                          pullValueUsingName(
+                              candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead],
+                              anthesisColumnName,
+                              splitUpNamesHereToUse,
+                              endingIndicesForSplitUpNamesHereToUse));
+              maturityToUse =
+                  (int)
+                      Math.round(
+                          pullValueUsingName(
+                              candidateSummaryContents[fakeYearIndex + magicDSSATSummaryLineIndexToRead],
+                              maturityColumnName,
+                              splitUpNamesHereToUse,
+                              endingIndicesForSplitUpNamesHereToUse));
+
+              // now need to check whether maturity exists, if not, just go with harvest date if that
+              // exists...
+              if (maturityToUse < 0) {
+                maturityToUse =
+                    (int)
+                        Math.round(
+                            pullValueUsingName(
+                                candidateSummaryContents[
+                                    fakeYearIndex + magicDSSATSummaryLineIndexToRead],
+                                harvestColumnName,
+                                splitUpNamesHereToUse,
+                                endingIndicesForSplitUpNamesHereToUse));
+              }
+
+              // something funny could happen and we end up with a -99 yield; i haven't seen it because i
+              // haven't looked for it,
+              // but i have seen it with the "real" yields. so, let's just censor the yields here...
+              // guess: bad weather data, say tmin > tmax
+              if (yieldToUse < 0) {
+                // System.out.println("    HAPPY: negative yield: [" + yieldToUse + "], censoring to " +
+                // magicValueToUseWithNegativeYields + "; fakeYearIndex=" + fakeYearIndex);
+                yieldToUse = magicValueToUseWithNegativeYields;
+              }
+              happyYearlyYields[fakeYearIndex].useLongValue(yieldToUse);
+           ....
+
+            if (everythingIsValid) {
+              // yearly yields are already taken care of above...., but we still need to do the overall...
+              // yield
+              //      if (yieldToUse > 0) {
+              happyYields.useLongValue(yieldToUse);
+              happyYieldsEntirePixel.useLongValue(yieldToUse);
+              //      } else {
+              //          // i think we should force it to zero
+              //          // Beware the MAGIC NUMBER!!! mapping "no results" yields to zero
+              //          happyYields.useLongValue(0L);
+              //          happyYieldsEntirePixel.useLongValue(0L);
+              //      }
+
+              // anthesis
+              eventDate = anthesisToUse;
+              daysSincePlantingForEvent =
+                  DSSATHelperMethods.yyyyDDDdifferencerIgnoreLeap(plantingDate, eventDate);
+              // check to make sure we got something real. for example, if flowering failed, we will get
+              // -99 for anthesis
+              // so when we do the differencing, we will get a -1 or -2 code from the differencer. that
+              // means we want
+              // to skip over it and not use it for the accumulator
+              if (daysSincePlantingForEvent > 0) {
+                happyAnthesisDates.useLongValue(daysSincePlantingForEvent);
+              }
+
+              // pull out the bits we want
+              // maturity
+              eventDate = maturityToUse;
+              if (maturityToUse > 0 && plantingDate > 0) {
+                daysSincePlantingForEvent =
+                    DSSATHelperMethods.yyyyDDDdifferencerIgnoreLeap(plantingDate, eventDate);
+                // checking for reasonableness...
+                if (daysSincePlantingForEvent > 0) {
+                  happyMaturityDates.useLongValue(daysSincePlantingForEvent);
+                  happyMaturityEntirePixel.useLongValue(daysSincePlantingForEvent);
+                }
+              }
+            } // everything is valid
+          } // for fake year
+
+          return new int[] {
+            (int) Math.floor(happyYields.getMean()),
+            (int) Math.floor(happyAnthesisDates.getMean()),
+            (int) Math.floor(happyMaturityDates.getMean())
+          };
+        }
+
+
+
+so. the happyYields.getMean() is why we are seeing different values for the yield from the happy runs.
+why isn't this just using the value from each year then?
+
+
+public String buildNitrogenOnlyBlock(
+    int daysAfterPlantingAnthesis, int daysAfterPlantingMaturity, double nitrogenFertilizerAmount)
+    throws Exception 
+
+
+ah. grabhappyresultsbyname is gettingnfakeyears as its argument!
+
+but really, what we want is for it to be run once for the years, and then be used to generate a different fertilizer application rate *for each year*.
+
+However... this is impossible right? DSSAT probably only supports a single year...

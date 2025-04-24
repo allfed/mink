@@ -118,13 +118,25 @@ Some further commands I had to run to get things working:
 Outside the container:
 ```
 mkdir -p mink_sandbox/mnt/data
+mkdir -p basics_15jun22/sge_Mink3daily/to_GRASS
 mkdir -p basics_15jun22/sge_Mink3daily/chunks_to_GRASS
 mkdir -p basics_15jun22/sge_Mink3daily/chunks_from_GRASS
 mkdir -p basics_15jun22/sge_Mink3daily/staging_area
 mkdir -p basics_15jun22/sge_Mink3daily/staging_area
 mkdir -p basics_15jun22/sge_Mink3daily/interrupted_run_locations
 sudo chown -R $USER:$USER /mnt/data/basics_15jun22/small_java_programs
+
 ```
+set your display:
+```
+d.mon -l
+```
+most likely you'll see "PNG" on the list. use that one.
+
+```
+d.mon start=PNG
+```
+
 inside the container (run `sudo singularity shell --writable --bind $PWD:/mnt/data mink_sandbox`):
 
 ```
