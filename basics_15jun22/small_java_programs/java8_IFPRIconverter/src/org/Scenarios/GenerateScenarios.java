@@ -85,15 +85,12 @@ public class GenerateScenarios {
     // conditions
     // to reflect current planting patterns
     if (!config.physical_parameters.crop_area_type.equals("no_crops")) {
-      System.out.println(
-          "WARNING WARNING: Wheat won't work properly!!! need to edit GenerateScenarios.java to put"
-              + " back in makeCountryMask");
       // make masks for winter wheat dominant countries
-      // BashScripts.makeCountryMask(
-      //     run_script_folder,
-      //     config.model_configuration.winter_wheat_countries_csv,
-      //     "ALL_CROPS_cropland",
-      //     "winter_wheat_countries_mask");
+      BashScripts.makeCountryMask(
+          run_script_folder,
+          config.model_configuration.winter_wheat_countries_csv,
+          "ALL_CROPS_cropland",
+          "winter_wheat_countries_mask");
     }
     // make masks for megaenvironments (regions where certain megaenvironments are)
     BashScripts.makeMegaEnvironmentMasks(run_script_folder);

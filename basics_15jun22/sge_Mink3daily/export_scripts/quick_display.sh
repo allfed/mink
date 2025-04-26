@@ -6,8 +6,31 @@ if [ $# -eq 0 ]; then
   exit
 fi
 
-echo "current dir image script"
-echo $PWD
+start_png_monitor() {
+  if d.mon -L | grep -q 'running (selected)'; then
+      # a monitor is already active
+      return
+  fi
+  d.mon start=PNG   --quiet 
+}
+
+stop_png_monitor() {
+  if d.mon -L | grep -q '^png '; then
+     d.mon stop=PNG --quiet
+  fi
+}
+
+safe_cp() {
+  # $1 = src   $2 = dest
+  if [ ! -f "$1" ]; then
+     echo "ERROR: expected image $1 was not created – aborting." >&2
+     rm -rf "$tmp_dir"
+     exit 1
+  fi
+  cp "$1" "$2"
+}
+
+
 
 . ../../sge_Mink3daily/default_paths_etc.sh
 
@@ -16,6 +39,7 @@ save_loc=$2
 max_value=$3
 min_value=$4
 extra_description="${@:5}"
+
 
 if [[ $save_loc == /* ]]; then
   location="${save_loc}"
@@ -29,8 +53,9 @@ tmp_dir="/tmp/image_dump_${RANDOM}_$(date +%N)"
 
 
 mkdir -p $tmp_dir
+export GRASS_RENDER_IMMEDIATE=png
 export GRASS_PNGFILE=${tmp_dir}/${raster}.png
-
+start_png_monitor
 
 
 check_raster_exists() {
@@ -102,15 +127,16 @@ generate_raster_image() {
       d.rast --quiet $raster catlist=$min-$max
     fi
   else
-    d.rast --quiet $raster vallist=$min-$max
+    d.rast $raster vallist=$min-$max
   fi
 
-  cp $GRASS_PNGFILE $tmp_dir/heatmap.png
+  safe_cp "$GRASS_PNGFILE" "$tmp_dir/heatmap.png"
+
 }
 
 generate_vector_image() {
   d.vect cntry05 type=boundary bgcolor=none --quiet
-  cp $GRASS_PNGFILE $tmp_dir/vect.png
+  safe_cp "$GRASS_PNGFILE" "$tmp_dir/vect.png"
 }
 
 generate_legend_image() {
@@ -133,7 +159,7 @@ generate_legend_image() {
     eval d.legend --quiet map=$raster range=$min,$max at=1,50,2,5 2>&1 | grep -v "Color range exceeds"
   fi
   
-  cp $GRASS_PNGFILE $tmp_dir/legend.png
+  safe_cp "$GRASS_PNGFILE" "$tmp_dir/legend.png"
 }
 
 generate_text_image() {
@@ -145,13 +171,13 @@ generate_text_image() {
     # show the raster name as text at the top
     echo -e ".C black\n.S 2.0\n$raster" \
     | d.text at=98,95 align=lr --quiet
-    cp $GRASS_PNGFILE $tmp_dir/text.png
+    safe_cp "$GRASS_PNGFILE" "$tmp_dir/text.png"
   else
     # show the raster name as text at the top
     # add the extra description as additional text to the displayed image, if description is specified
     echo -e ".C black\n.S 2.0\n$raster : $extra_description" \
     | d.text at=98,95 align=lr --quiet
-    cp $GRASS_PNGFILE $tmp_dir/text.png
+    safe_cp "$GRASS_PNGFILE" "$tmp_dir/text.png"
   fi
 
   # zero is included in the image, include the note
@@ -159,7 +185,7 @@ generate_text_image() {
     # add a note about zero values at bottom left
     echo -e ".C black\n.S 2.0\nNote: black or grey is exactly zero" \
     | d.text at=40,2 align=lr --quiet
-    cp $GRASS_PNGFILE $tmp_dir/note.png
+    safe_cp "$GRASS_PNGFILE" "$tmp_dir/note.png"
   fi
 
 
