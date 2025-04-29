@@ -162,9 +162,9 @@ public class CalculateProduction {
       boolean calculate_maturity)
       throws InterruptedException, IOException {
     // System.out.println("DEBUG: Processing best_planting_month_name:");
-    for (String name : best_planting_month_name) {
-      System.out.println("  " + name);
-    }
+    // for (String name : best_planting_month_name) {
+    //   System.out.println("  " + name);
+    // }
 
     // average yield results for each crop and irrigation grouping (regardless of cultivar)
 
@@ -510,7 +510,12 @@ public class CalculateProduction {
     // use averaged yields to calculate production for either rainfed or irrigated yield.
     // area raster refers to rainfed or irrigated area of a crop, but is not specific to a
     // cultivar (or variety)
-
+    // System.out.println("PRODUCTION CALCULATION combined_yield_name_rf_or_ir");
+    // System.out.println(combined_yield_name_rf_or_ir);
+    // System.out.println(
+    //     "PRODUCTION CALCULATION crop_area_raster for calculating production (should be"
+    //         + " RICE_irrigated_cropland");
+    // System.out.println(crop_area_raster);
     if (calculate_rf_or_ir_specific_production) {
       BashScripts.calculateProduction(
           script_folder,
@@ -578,14 +583,15 @@ public class CalculateProduction {
 
     Set<String> unique_combined_production_name = new TreeSet<String>();
     unique_combined_production_name.addAll(Arrays.asList(combined_production_name));
-    System.out.println("unique_combined_production_name");
-    System.out.println(unique_combined_production_name);
+    // System.out.println("unique_combined_production_name");
+    // System.out.println(unique_combined_production_name);
     assert unique_combined_production_name.size() == 1
         : "ERROR: only one crop (e.g. wheat, maize) processing allowed at a time";
 
     for (String tag : unique_combined_production_name) {
       // loop through the unique crops
-      System.out.println(tag);
+      // System.out.println("tag");
+      // System.out.println(tag);
       String raster_names_to_sum = "";
       String crop_area_to_sum = "";
 
@@ -629,7 +635,10 @@ public class CalculateProduction {
         // System.out.println(
         //     "DEBUG: Using planting month from "
         //         + combined_planting_month_name_rf_or_ir[last_index_of_crop]);
-
+        // System.out.println("scenario i");
+        // System.out.println(i);
+        // System.out.println("crop_area_to_sum");
+        // System.out.println(crop_area_to_sum);
         BashScripts.saveAscii(
             script_folder,
             scenarios.combined_planting_month_name_rf_or_ir[i],
@@ -673,7 +682,6 @@ public class CalculateProduction {
               scenarios.results_folder[i]);
         }
         last_index_of_crop = i;
-        // System.exit(1);
       }
 
       // the above is just a (unfortunately messy) way to add irrigated and rainfed for a given crop
@@ -806,6 +814,8 @@ public class CalculateProduction {
         String using_avg_best_raster_name =
             scenario_tags[i]
                 + scenarios.rf_or_ir[i]
+                + "_"
+                + scenarios.snx_name[i]
                 + "_stablemonth_y"
                 + years[year_index]
                 + output_suffix;
@@ -871,11 +881,16 @@ public class CalculateProduction {
 
         // Define output raster name with a suffix to distinguish from the other method
         String output_raster_name =
-            scenario_tags[i] + scenarios.rf_or_ir[i] + "_yearspecific_y" + years[year_index];
+            scenario_tags[i]
+                + scenarios.rf_or_ir[i]
+                + "_"
+                + scenarios.snx_name[i]
+                + "_yearspecific_y"
+                + years[year_index];
 
-        System.out.println("Creating year-specific optimal yield raster: " + output_raster_name);
-        System.out.println(
-            "Using year-specific best month raster: " + best_planting_month_raster_for_year);
+        // System.out.println("Creating year-specific optimal yield raster: " + output_raster_name);
+        // System.out.println(
+        //     "Using year-specific best month raster: " + best_planting_month_raster_for_year);
 
         // Use the best planting month raster to select the yield raster for each grid cell
         BashScripts.useKeyRasterToMapToValueRaster(
@@ -883,6 +898,9 @@ public class CalculateProduction {
             best_planting_month_raster_for_year, // Year-specific best month
             yield_rasters_for_year_str, // Value rasters (yield rasters for all months)
             output_raster_name);
+
+        // System.out.println("YEARSPECIFIC yield_rasters_for_year_str");
+        // System.out.println(yield_rasters_for_year_str);
 
         // Save as ASCII
         BashScripts.saveAscii(script_folder, output_raster_name, results_folder[i]);
