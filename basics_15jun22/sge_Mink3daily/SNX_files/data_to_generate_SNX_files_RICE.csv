@@ -12,3 +12,12 @@ riK001IR,0,0,RI,rice K001 irrigated IB0118 IR 72,IB0118 IR 72,,,    30    30    
 riMMMirriga1o2IR,0,0,RI,rice MMM1o2 irrigated IB0015 indica,IB0015 indica,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,F,20    40   100   -99 IR001   0.5     0
 riceceresfloodedIR,1,0,RI,rice ceres irrigated IB0118 IR72 try,IB0118 IR72 try,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,R,20    70   100   -99 IR001     0     0
 riCL00IR,1,0,RI,rice CL00 irrigated IB0001 ?IR 8,IB0001 ?IR 8, FLHSI FHDUR, FH101 00020,    20    20     T     H    20     0     2   -99    25    25     3   -99,G,R,R,20    70   100   -99 IR001     0     0
+riK0t1RF,0,0,RI,rice K0t1 rainfed GF0001 IR64 normal,GF0001 IR64 normal,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,N,20    70   100   -99 IR001     0     0
+riK0t3RF,0,0,RI,rice K0t3 rainfed IB0118 indica IR72,IB0118 indica IR72,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,N,20    70   100   -99 IR001     0     0
+riK0t3RF,0,0,RI,rice K0t5 rainfed GF0002 IR64 drought,GF0002 IR64 drought,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,N,20    70   100   -99 IR001     0     0
+riIR43RF,0,0,RI,rice IR43 rainfed IB0004 IR 43,IB0004 IR 43,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,N,20    70   100   -99 IR001     0     0
+riCL00IFRF,0,0,RI,rice CL00IF rainfed IB0001 ?IR 8,IB0001 ?IR 8, FLHSI FHDUR, FH101 00020,    20    20     T     H    20     0     2   -99    25    25     3   -99,G,R,N,20    70   100   -99 IR001     0     0
+riMMMirriga005RF,0,0,RI,rice MMM005 rainfed IB0015 indica,IB0015 indica,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,N,20    40   100   -99 IR001     5     0
+riMMMirriga1o2RF,0,0,RI,rice MMM1o2 rainfed IB0015 indica,IB0015 indica,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,N,20    40   100   -99 IR001   0.5     0
+riceceresfloodedRF,0,0,RI,rice ceres rainfed IB0118 IR72 try,IB0118 IR72 try,,,    30    30     T     R    20     0     5   -99    25    25     3   -99,P,R,N,20    70   100   -99 IR001     0     0
+riCL00RF,0,0,RI,rice CL00 rainfed IB0001 ?IR 8,IB0001 ?IR 8, FLHSI FHDUR, FH101 00020,    20    20     T     H    20     0     2   -99    25    25     3   -99,G,R,N,20    70   100   -99 IR001     0     0

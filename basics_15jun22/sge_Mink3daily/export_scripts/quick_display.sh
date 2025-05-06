@@ -6,31 +6,6 @@ if [ $# -eq 0 ]; then
   exit
 fi
 
-start_png_monitor() {
-  if d.mon -L | grep -q 'running (selected)'; then
-      # a monitor is already active
-      return
-  fi
-  d.mon start=PNG   --quiet 
-}
-
-stop_png_monitor() {
-  if d.mon -L | grep -q '^png '; then
-     d.mon stop=PNG --quiet
-  fi
-}
-
-safe_cp() {
-  # $1 = src   $2 = dest
-  if [ ! -f "$1" ]; then
-     echo "ERROR: expected image $1 was not created – aborting." >&2
-     rm -rf "$tmp_dir"
-     exit 1
-  fi
-  cp "$1" "$2"
-}
-
-
 
 . ../../sge_Mink3daily/default_paths_etc.sh
 
@@ -53,8 +28,37 @@ tmp_dir="/tmp/image_dump_${RANDOM}_$(date +%N)"
 
 
 mkdir -p $tmp_dir
-export GRASS_RENDER_IMMEDIATE=png
+# export GRASS_RENDER_IMMEDIATE=png
 export GRASS_PNGFILE=${tmp_dir}/${raster}.png
+
+
+start_png_monitor() {
+  if d.mon -L | grep -q 'running (selected)'; then
+      # a monitor is already active
+      return
+  fi
+  d.mon start=x0   --quiet 
+}
+
+stop_png_monitor() {
+  if d.mon -L | grep -q '^png '; then
+     d.mon stop=x0 --quiet
+  fi
+}
+
+safe_cp() {
+  # $1 = src   $2 = dest
+  if [ ! -f "$1" ]; then
+     echo "ERROR: expected image $1 was not created – aborting." >&2
+     rm -rf "$tmp_dir"
+     exit 1
+  fi
+  cp "$1" "$2"
+}
+
+
+
+
 start_png_monitor
 
 
@@ -122,21 +126,32 @@ generate_raster_image() {
 
     if [ $n_categories -lt 2 ]; then
       d.rast --quiet $raster catlist=$min
+      d.out.file --quiet output=$tmp_dir/heatmap format=png
     else
       # d.rast --quiet $raster catlist=$min
       d.rast --quiet $raster catlist=$min-$max
+      d.out.file --quiet output=$tmp_dir/heatmap format=png
     fi
   else
     d.rast $raster vallist=$min-$max
+    d.out.file --quiet output=$tmp_dir/heatmap format=png
   fi
 
-  safe_cp "$GRASS_PNGFILE" "$tmp_dir/heatmap.png"
+  # safe_cp "$GRASS_PNGFILE" "$tmp_dir/heatmap.png"
 
 }
 
 generate_vector_image() {
   d.vect cntry05 type=boundary bgcolor=none --quiet
-  safe_cp "$GRASS_PNGFILE" "$tmp_dir/vect.png"
+  # echo 'safe_cp "$GRASS_PNGFILE" "$tmp_dir/vect.png"'
+  d.out.file --quiet output=$tmp_dir/vect format=png
+  if [ ! -f "$tmp_dir/vect.png" ]; then
+     echo "ERROR: expected image $tmp_dir/vect.png was not created – aborting." >&2
+     rm -rf "$tmp_dir"
+     exit 1
+  fi
+
+  # safe_cp "$GRASS_PNGFILE" "$tmp_dir/vect.png"
 }
 
 generate_legend_image() {
@@ -152,14 +167,18 @@ generate_legend_image() {
     # el
     if [ $n_categories -lt 12 ]; then
       eval d.legend --quiet map=$raster range=$min,$max at=1,50,2,5 2>&1 | grep -v "Color range exceeds"
+      d.out.file --quiet output=$tmp_dir/legend format=png
     else
       eval d.legend --quiet map=$raster range=$min,$max at=1,80,2,10 2>&1 | grep -v "Color range exceeds"
+      d.out.file --quiet output=$tmp_dir/legend format=png
     fi
   else
     eval d.legend --quiet map=$raster range=$min,$max at=1,50,2,5 2>&1 | grep -v "Color range exceeds"
+    d.out.file --quiet output=$tmp_dir/legend format=png
   fi
   
-  safe_cp "$GRASS_PNGFILE" "$tmp_dir/legend.png"
+  # echo 'safe_cp "$GRASS_PNGFILE" "$tmp_dir/legend.png"'
+  # safe_cp "$GRASS_PNGFILE" "$tmp_dir/legend.png"
 }
 
 generate_text_image() {
@@ -171,13 +190,19 @@ generate_text_image() {
     # show the raster name as text at the top
     echo -e ".C black\n.S 2.0\n$raster" \
     | d.text at=98,95 align=lr --quiet
-    safe_cp "$GRASS_PNGFILE" "$tmp_dir/text.png"
+    d.out.file --quiet output=$tmp_dir/text format=png
+
+    # echo 'safe_cp "$GRASS_PNGFILE" "$tmp_dir/text.png"'
+    # safe_cp "$GRASS_PNGFILE" "$tmp_dir/text.png"
   else
     # show the raster name as text at the top
     # add the extra description as additional text to the displayed image, if description is specified
     echo -e ".C black\n.S 2.0\n$raster : $extra_description" \
     | d.text at=98,95 align=lr --quiet
-    safe_cp "$GRASS_PNGFILE" "$tmp_dir/text.png"
+    d.out.file --quiet output=$tmp_dir/text format=png
+
+    # echo 'safe_cp "$GRASS_PNGFILE" "$tmp_dir/text.png"'
+    # safe_cp "$GRASS_PNGFILE" "$tmp_dir/text.png"
   fi
 
   # zero is included in the image, include the note
@@ -185,7 +210,10 @@ generate_text_image() {
     # add a note about zero values at bottom left
     echo -e ".C black\n.S 2.0\nNote: black or grey is exactly zero" \
     | d.text at=40,2 align=lr --quiet
-    safe_cp "$GRASS_PNGFILE" "$tmp_dir/note.png"
+    # echo 'safe_cp "$GRASS_PNGFILE" "$tmp_dir/note.png"'
+    # safe_cp "$GRASS_PNGFILE" "$tmp_dir/note.png"
+    d.out.file --quiet output=$tmp_dir/note format=png
+
   fi
 
 
@@ -258,7 +286,7 @@ generate_images() {
 
 
     # Generate various images
-    apply_color_value $max $raster
+    # apply_color_value $max $raster
     generate_raster_image $raster $min $max
     generate_vector_image
 
@@ -287,15 +315,15 @@ display_output_and_cleanup() {
   echo $location/$raster.png
   echo ""
 
-  if [ -d $tmp_dir ]; then
-    rm -rf $tmp_dir
-  fi
+  # if [ -d $tmp_dir ]; then
+  #   rm -rf $tmp_dir
+  # fi
 }
 
 main() {
   check_raster_exists
   generate_images
-  display_output_and_cleanup
+  # display_output_and_cleanup
 }
 
 # call all the functions that use the variables initially defined

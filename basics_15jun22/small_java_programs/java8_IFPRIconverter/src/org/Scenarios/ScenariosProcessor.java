@@ -284,18 +284,21 @@ public class ScenariosProcessor {
 
     return coefficient;
   }
-
   public static String[] generateColumnsToMakeRastersFromDataFiles(
       String[] years, String real_or_happy, String[] non_yield_parameters_to_save) {
-    String[] outputs_to_save = new String[years.length + non_yield_parameters_to_save.length];
+    String[] outputs_to_save = new String[2*years.length + non_yield_parameters_to_save.length];
 
     for (int i = 0; i < years.length; i++) {
       outputs_to_save[i] = real_or_happy + "_" + i; // years[i];
     }
 
+    for (int i = 0; i < years.length; i++) {
+      outputs_to_save[i+years.length] = "maturity_" + i; // years[i];
+    }
+
     // add the non-year data to make the outputs that aren't just the yield
     for (int i = 0; i < non_yield_parameters_to_save.length; i++) {
-      outputs_to_save[i + years.length] = non_yield_parameters_to_save[i];
+      outputs_to_save[i + 2*years.length] = non_yield_parameters_to_save[i];
     }
 
     return outputs_to_save;

@@ -26,16 +26,11 @@ public class CalculateProduction {
         scenarios.combined_production_name,
         true);
 
-    String[] average_best_combined_production_name = new String[scenarios.n_scenarios];
-    for (int i = 0; i < scenarios.n_scenarios; i++) {
-      average_best_combined_production_name[i] = scenarios.combined_production_name[i] + "_avgbest";
-    }
-
     loopOverRainfedAndIrrigated(
         script_folder,
         scenarios,
         scenarios.combined_production_name_rf_or_ir,
-        average_best_combined_production_name,
+        scenarios.combined_production_name,
         scenarios.combined_yield_name,
         scenarios.combined_yield_name_rf_or_ir,
         scenarios.combined_planting_month_name_rf_or_ir,
@@ -391,6 +386,19 @@ public class CalculateProduction {
       String results_folder)
       throws InterruptedException, IOException {
 
+    //  So when we are trying to grow crops with relocated area, we would use "food_crops" in the
+    // yaml file.  The model works exactly as it would when the crop area is given as just the
+    // currently planted area.
+    //  So this is how it works. Excepting soybean which is chosen purely on max yield and is grown
+    // everywhere the crop is normally grown (or all food crop areas if using "food_crops" setting),
+    // and canola which is just one cultivar:
+    //    When multiple cultivars are suitable for the same region, the system handles it
+    //    differently based on the crop:
+    //    - For wheat in winter wheat countries: takes the highest-yielding cultivar and in other
+    // countries averages it
+    //    - For other crops (rice, potatoes, maize): averages the yields of all cultivars
+    //    - For planting dates: uses the most frequently occurring planting month
+
     // average or find max of all the cultivars for the crop to estimate the crop's overall yield
     // this is specific to whether IR or RF
     // For soybean we get the best cultivar's (maturity group's) yield
@@ -515,7 +523,12 @@ public class CalculateProduction {
     // System.out.println(
     //     "PRODUCTION CALCULATION crop_area_raster for calculating production (should be"
     //         + " RICE_irrigated_cropland");
+    // System.out.println("crop_area_raster");
     // System.out.println(crop_area_raster);
+    // System.out.println("combined_yield_name_rf_or_ir");
+    // System.out.println(combined_yield_name_rf_or_ir);
+    // System.out.println("combined_production_name_rf_or_ir");
+    // System.out.println(combined_production_name_rf_or_ir);
     if (calculate_rf_or_ir_specific_production) {
       BashScripts.calculateProduction(
           script_folder,
@@ -693,6 +706,10 @@ public class CalculateProduction {
         // note that the last_index_of_crop is the last index where the tag matched and we had a new
         // IR or RF specific production.
         // but combined_production_name is not specific to ir or rf
+        // System.out.println("raster_names_to_sum");
+        // System.out.println(raster_names_to_sum);
+        // System.out.println("combined_production_name[last_index_of_crop]");
+        // System.out.println(combined_production_name[last_index_of_crop]);
         BashScripts.sumRasters(
             script_folder,
             raster_names_to_sum, // input rasters
@@ -706,6 +723,12 @@ public class CalculateProduction {
       }
 
       if (scenarios.calculate_average_yield_rf_and_ir) {
+        // System.out.println("AVGING PRODUCTION combined_production_name");
+        // System.out.println(combined_production_name[last_index_of_crop]);
+        // System.out.println("AVGING PRODUCTION combined_yield_name");
+        // System.out.println(combined_yield_name[last_index_of_crop]);
+        // System.out.println("AVGING PRODUCTION crop_area_to_sum");
+        // System.out.println(crop_area_to_sum);
         processAverageYield(
             script_folder,
             scenarios,

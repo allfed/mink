@@ -3732,6 +3732,14 @@ public class Mink3p2daily {
           /////////////////////
           // make the X file //
           /////////////////////
+          // System.out.println("phenologyBufferInDays");
+          // System.out.println(phenologyBufferInDays);
+          // System.out.println("phenologyInDays[1] + phenologyBufferInDays");
+          // System.out.println(phenologyInDays[1] + phenologyBufferInDays);
+          // System.out.println("phenologyInDays[2] + phenologyBufferInDays");
+          // System.out.println(phenologyInDays[2] + phenologyBufferInDays);
+          // System.out.println("nitrogenLevel");
+          // System.out.println(nitrogenLevel);
 
           time12 = System.currentTimeMillis();
           // create the fertilizer block...
@@ -3833,6 +3841,10 @@ public class Mink3p2daily {
 
           time14 = System.currentTimeMillis();
           process = pb.start();
+          // System.out.println("DEBUG: Exiting");
+          // System.err.println("DEBUG: Exiting");
+          // System.exit(1);
+
           reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
           output = new StringBuilder();

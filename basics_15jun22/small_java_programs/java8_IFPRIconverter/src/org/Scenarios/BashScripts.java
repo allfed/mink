@@ -507,6 +507,35 @@ public class BashScripts {
   } // end useKeyRasterToMapToValueRaster
 
   // average the crop yield with a script
+  public static void TESTuseKeyRasterToMapToValueRaster(
+      String script_folder, String key_raster, String list_of_value_rasters)
+      throws InterruptedException, IOException {
+    // System.out.println("");
+
+    // System.out.println("");
+    // System.out.println("");
+    // System.out.println("useKeyRasterToMapToValueRaster creates raster with name:");
+    // System.out.println(scenario_tag);
+    // System.out.println("");
+    // System.out.println("useKeyRasterToMapToValueRaster uses rasters with names:");
+    // System.out.println(raster_names_to_average);
+    // System.out.println("");
+    // System.out.println("");
+
+    // TODO: make average_rasters also save the key for which rasters were averaged
+    ProcessBuilder pb =
+        new ProcessBuilder(
+            "bash",
+            "./TESTuse_key_raster_to_map_to_value_raster.sh",
+            key_raster, // input
+            list_of_value_rasters // input
+            );
+
+    String grass_script_folder = script_folder + "../more_GRASS_scripts/universal/";
+    callProcess(pb, grass_script_folder);
+  } // end useKeyRasterToMapToValueRaster
+
+  // average the crop yield with a script
   public static void useKeyRasterAndMaskForGettingMaxOrAverage(
       String script_folder,
       String to_combine_int_rasters,
