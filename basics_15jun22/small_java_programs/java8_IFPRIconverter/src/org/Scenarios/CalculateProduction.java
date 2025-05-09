@@ -523,12 +523,12 @@ public class CalculateProduction {
     // System.out.println(
     //     "PRODUCTION CALCULATION crop_area_raster for calculating production (should be"
     //         + " RICE_irrigated_cropland");
-    // System.out.println("crop_area_raster");
-    // System.out.println(crop_area_raster);
-    // System.out.println("combined_yield_name_rf_or_ir");
-    // System.out.println(combined_yield_name_rf_or_ir);
-    // System.out.println("combined_production_name_rf_or_ir");
-    // System.out.println(combined_production_name_rf_or_ir);
+    System.out.println("RF_OR_IR PRODUCTION crop_area_raster");
+    System.out.println(crop_area_raster);
+    System.out.println("RF_OR_IR PRODUCTION combined_yield_name_rf_or_ir");
+    System.out.println(combined_yield_name_rf_or_ir);
+    System.out.println("RF_OR_IR PRODUCTION combined_production_name_rf_or_ir");
+    System.out.println(combined_production_name_rf_or_ir);
     if (calculate_rf_or_ir_specific_production) {
       BashScripts.calculateProduction(
           script_folder,
@@ -706,10 +706,10 @@ public class CalculateProduction {
         // note that the last_index_of_crop is the last index where the tag matched and we had a new
         // IR or RF specific production.
         // but combined_production_name is not specific to ir or rf
-        // System.out.println("raster_names_to_sum");
-        // System.out.println(raster_names_to_sum);
-        // System.out.println("combined_production_name[last_index_of_crop]");
-        // System.out.println(combined_production_name[last_index_of_crop]);
+        System.out.println("SUMMING IR AND RF raster_names_to_sum");
+        System.out.println(raster_names_to_sum);
+        System.out.println("SUMMING IR AND RF combined_production_name[last_index_of_crop]");
+        System.out.println(combined_production_name[last_index_of_crop]);
         BashScripts.sumRasters(
             script_folder,
             raster_names_to_sum, // input rasters
@@ -723,12 +723,12 @@ public class CalculateProduction {
       }
 
       if (scenarios.calculate_average_yield_rf_and_ir) {
-        // System.out.println("AVGING PRODUCTION combined_production_name");
-        // System.out.println(combined_production_name[last_index_of_crop]);
-        // System.out.println("AVGING PRODUCTION combined_yield_name");
-        // System.out.println(combined_yield_name[last_index_of_crop]);
-        // System.out.println("AVGING PRODUCTION crop_area_to_sum");
-        // System.out.println(crop_area_to_sum);
+        System.out.println("AVGING PRODUCTION combined_production_name");
+        System.out.println(combined_production_name[last_index_of_crop]);
+        System.out.println("AVGING PRODUCTION combined_yield_name");
+        System.out.println(combined_yield_name[last_index_of_crop]);
+        System.out.println("AVGING PRODUCTION crop_area_to_sum");
+        System.out.println(crop_area_to_sum);
         processAverageYield(
             script_folder,
             scenarios,
