@@ -313,29 +313,6 @@ moisture_contents multiplies the DSSAT supplied dry yields to their wet weight e
 
 ```
 
-## Feeling Confident (Run Directly)
-If you are feeling extremely confident, you can run MINK singularity container without testing slowly with the sandbox:
-To run MINK use `singularity exec -B ~/.Xauthority mink.sif grass` and hit ENTER.
-TODO: add more details and a toy dataset?
-## Troubleshooting
-### ~/.Xauthority issues
-If this file doesn't exist, the dedicated location may be stored in the `$XAUTHORITY` variable and `-B $XAUTHORITY` must be used instead ([reference](https://pawseysc.github.io/singularity-containers/42-x11-gnuplot/index.html)).
-Certainly! Here's the corrected version of the additional README content, with appropriate formatting for the underscores and other minor adjustments.
-
-```markdown
-## Feeling Confident (Run Directly)
-
-If you are feeling extremely confident, you can run MINK singularity container without testing slowly with the sandbox:
-To run MINK, use the command:
-
-```bash
-singularity exec -B ~/.Xauthority mink.sif grass
-```
-
-and hit ENTER.
-
-TODO: add more details and a toy dataset?
-
 ## Troubleshooting
 
 ### ~/.Xauthority issues
@@ -415,7 +392,7 @@ You can see what SNX files exist in basics_15jun22/sge_Mink3daily/SNX_files/data
 
 Once you've either generated or placed your SNX file in generated_SNX_files, you can either just run the cultivar for the whole region, or create maps that run for a certain region. You would need to create a GRASS gis raster that covered the region and export it as a .pack file to grassdata/world/megaenvironments_packed. You can also just specify the maps according to the megaenvironments -- you can always take a look at the rasters, they should be loaded in whenever scenarios are generated. (hint: to display a raster, use the basics_15jun22/sge_Mink3daily/export_scripts/quick_display.sh script. You can also render multiple rasters with the same scale in a heat map with ./render_all_rasters_same_scale.sh in the same folder). 
 
-To specify which cultivars are run for which megaenvironment maps dfined in the previous step, go to default_cultivar_mappings.csv. Also add in the wet weight moisture content in moisture_contents.csv in the same folder if it's not there.
+To specify which cultivars are run for which megaenvironment maps defined in the previous step, go to default_cultivar_mappings.csv. Also add in the wet weight moisture content in moisture_contents.csv in the same folder if it's not there.
 
 To run for the whole region, you need to create the scenario file. The scenario file should be placed in scenarios/ folder. 
 
